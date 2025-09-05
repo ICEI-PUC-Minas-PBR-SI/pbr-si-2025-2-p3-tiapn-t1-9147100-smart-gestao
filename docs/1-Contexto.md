@@ -1,46 +1,51 @@
 # Introdução
+Inspirado no aplicativo Web e Mobile “Brainly”, uma comunidade de compartilhamento de conhecimentos entre especialistas e estudantes dos mais diversos assuntos, idealizamos um projeto que visa promover a interação e a cooperação entre membros da comunidade acadêmica da PUC Minas, aliando tecnologia, inovação e metodologias de aprendizagem colaborativa. Assim, espera-se que o acesso ao conhecimento, bem como a construção coletiva do aprendizado no ambiente universitário sejam fortalecidos e garantidos.
 
-Texto descritivo com a visão geral do projeto abordado. Inclui o contexto, o problema, os objetivos, a justificativa e o público-alvo do projeto.
+## Contextualização
+A crescente digitalização dos processos presentes no cotidiano das pessoas, mais especificamente no
+âmbito educacional, bem como a ampliação do uso de plataformas e aplicativos que apoiam e auxiliam
+o processo de estudos, têm modificado significativamente a forma como os alunos aprendem, se
+comunicam, interagem e colaboram entre si. Dados da pesquisa do Cetic.br, realizada em 2023, apontam
+que 93% dos estudantes universitários brasileiros adotam o uso da internet como principal fonte de
+estudo e pesquisas. Além disso, cerca de 70% recorrem às redes sociais, fóruns e plataformas de
+perguntas e respostas como um recurso que complementa e acompanha o ensino formal.
+Sob este viés, percebe-se a relevância das ferramentas tecnológicas que impulsionam a colaboração
+mútua em tempo real, o feedback em pares e o acesso rápido (e quase instantâneo) aos mais diversos
+tipos de conteúdo e conhecimento. No entanto, muitas dessas soluções não contemplam amplamente as
+necessidades específicas de uma comunidade acadêmica, como acontece com a comunidade da PUC
+Minas, isto é, não existe nenhuma solução que integre disciplinas, eventos internos, regras acadêmicas
+da universidade e bibliografia institucional da própria PUC Minas.
+A partir desta lacuna, surge a proposta de desenvolver uma plataforma colaborativa, intuitiva e estilizada conforme as padronizações estéticas da PUC, oferecendo um espaço seguro, conhecido e direcionado à troca de conhecimento, suporte entre alunos e incentivo à participação na vida acadêmica.
 
 ## Problema
-Nesse momento você deve apresentar o problema que a sua aplicação deve  resolver. No entanto, não é a hora de comentar sobre a aplicação.
+Apesar da existência de plataformas globais de perguntas e respostas, como o Brainly, é evidente que estas não atendem e contemplam plenamente às necessidades especificas e individuais da Pontifícia Universidade Católica de Minas Gerais, pois carecem de uma personalização que abranja o contexto acadêmico, a cultura da universidade, integração com o calendário acadêmico. Além disso, percebe-se, no cenário da PUC Minas, a ausência de ferramentas oficiais que incentivem a colaboração mútua entre
+membros da comunidade das mais diversas áreas do conhecimento, que respeitem as normas internas e que sigam o padrão de qualidade da universidade. 
 
-Descreva também o contexto em que essa aplicação será usada, se  houver: empresa, tecnologias, etc. Novamente, descreva apenas o que de  fato existir, pois ainda não é a hora de apresentar requisitos  detalhados ou projetos.
+## Objetivo Geral
+Desenvolver um sistema web colaborativo, inspirado em modelos como o Brainly, voltado para o
+contexto institucional da Pontifícia Universidade Católica de Minas Gerais, com recursos que permitam
+a interação entre usuários, a avaliação e/ou verificação de conteúdos e conhecimentos.
 
-Nesse momento, o grupo pode optar por fazer uso  de ferramentas como Design Thinking, que permite um olhar de ponta a ponta para o problema.
-
-> **Links Úteis**:
-> - [Objetivos, Problema de pesquisa e Justificativa](https://medium.com/@versioparole/objetivos-problema-de-pesquisa-e-justificativa-c98c8233b9c3)
-> - [Matriz Certezas, Suposições e Dúvidas](https://medium.com/educa%C3%A7%C3%A3o-fora-da-caixa/matriz-certezas-suposi%C3%A7%C3%B5es-e-d%C3%BAvidas-fa2263633655)
-> - [Brainstorming](https://www.euax.com.br/2018/09/brainstorming/)
-
-## Objetivos
-
-Aqui você deve descrever os objetivos do trabalho indicando que o objetivo geral é desenvolver um software para solucionar o problema apresentado acima. 
-
-Apresente também alguns (pelo menos 2) objetivos específicos dependendo de onde você vai querer concentrar a sua prática investigativa, ou como você vai aprofundar no seu trabalho.
- 
-> **Links Úteis**:
-> - [Objetivo geral e objetivo específico: como fazer e quais verbos utilizar](https://blog.mettzer.com/diferenca-entre-objetivo-geral-e-objetivo-especifico/)
+### Objetivos Específicos
+* Desenvolver um ambiente digital seguro e que permita a troca de dúvidas, respostas, materiaisde estudos e conhecimentos entre membros da PUC Minas.
+* Implementar mecanismos de validação de conteúdo de modo a garantir a confiabilidade das informações compartilhadas.
+* Integrar a plataforma a elementos e informações institucionais, como disciplinas, calendário acadêmico, bibliografias recomendadas e referências para pesquisas.
+* Incentivar a participação ativa da comunidade acadêmica por meio de um sistema interativo, de fácil uso e acesso.
 
 ## Justificativa
 
-Descreva a importância ou a motivação para trabalhar com esta aplicação que você escolheu. Indique as razões pelas quais você escolheu seus objetivos específicos ou as razões para aprofundar em certos aspectos do software.
-
-O grupo de trabalho pode fazer uso de questionários, entrevistas e dados estatísticos, que podem ser apresentados, com o objetivo de esclarecer detalhes do problema que será abordado pelo grupo.
-
-> **Links Úteis**:
-> - [Como montar a justificativa](https://guiadamonografia.com.br/como-montar-justificativa-do-tcc/)
+A intenção de desenvolver um sistema colaborativo exclusivo para a Pontifícia Universidade Católica de Minas Gerais representa uma tentativa e uma oportunidade de fortalecer a cultura acadêmica participativa, inovadora e tecnológica, promovendo o engajamento dos membros da comunidade e a troca de experiência e conhecimentos entre eles. Ademais, deseja-se que a plataforma possa contribuir para integrar diferentes cursos e campi, estimulando práticas de aprendizagem ativa (práticas que impulsionam o engajamento dos estudantes), além de servir como suporte ao aprendizado e como um repositório vivo de conhecimentos produzidos dentro e pela própria universidade. Por fim, é imprescindível citar a intenção de posicionar a instituição como um meio propício a inovações e que utiliza da tecnologia no meio educacional, gerando impacto positivo tanto para os usuários, quanto para
+a reputação acadêmica. 
 
 ## Público-Alvo
-
-Descreva quem serão as pessoas que usarão a sua aplicação indicando os diferentes perfis. O objetivo aqui não é definir quem serão os clientes ou quais serão os papéis dos usuários na aplicação. A ideia é, dentro do possível, conhecer um pouco mais sobre o perfil dos usuários: conhecimentos prévios, relação com a tecnologia, relações
-hierárquicas, etc.
-
-Adicione informações sobre o público-alvo por meio de uma descrição textual, diagramas de personas e mapa de stakeholders.
-
-> **Links Úteis**:
-> - [Público-alvo](https://blog.hotmart.com/pt-br/publico-alvo/)
-> - [Como definir o público alvo](https://exame.com/pme/5-dicas-essenciais-para-definir-o-publico-alvo-do-seu-negocio/)
-> - [Público-alvo: o que é, tipos, como definir seu público e exemplos](https://klickpages.com.br/blog/publico-alvo-o-que-e/)
-> - [Qual a diferença entre público-alvo e persona?](https://rockcontent.com/blog/diferenca-publico-alvo-e-persona/)
+A aplicação contará com três perfis de usuários, de modo que cada um desempenhe e contribua com funções específicas dentro plataforma:
+* Alunos da PUC Minas:
+- Perfil: Indivíduos com nível de escolaridade universitário em andamento, que possuem familiaridade com ferramentas digitais e fazem o uso delas para estudo, faixa etária predominante entre 18 e 30 anos (segundo pesquisa realizada pelo portal de notícias da
+Comunica.ufu).
+- Papel: Postar dúvidas, responder perguntas, compartilhar materiais de apoio e estudo, interagir com outros usuários, participar de debates e discussões, avaliar respostas e contribuir para o crescimento do acervo colaborativo.
+* Professores:
+- Perfil: Profissionais de educação superior com experiência em suas áreas de atuação.
+- Papel: Validar respostas, fornecer feedback técnico e explicativo, orientar discussões, sugerir materiais de estudo, atuar como moderadores especializados em garantir a qualidade dos conteúdos, atribuir função de monitor aos alunos e responder perguntas.
+* Equipe Administrativa/Moderadores Institucionais:
+- Perfil: Colaboradores designados pela instituição, com conhecimento em políticas acadêmicas.
+- Papel: Gerenciar usuários, aplicar políticas de uso, moderar e remover conteúdos impróprios, gerar relatórios de desempenho da plataforma.

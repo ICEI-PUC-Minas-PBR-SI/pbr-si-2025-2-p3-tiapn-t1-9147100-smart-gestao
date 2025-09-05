@@ -1,22 +1,28 @@
 # 5. Planejamento do Projeto
+ > O projeto em desenvolvimento pelos alunos do 3° período do curso de Sistemas de Informação da PUC
+Minas Barreiro, consiste na elaboração de uma plataforma digital colaborativa, voltada para a comunidade da Pontifícia Universidade Católica de Minas Gerais (PUC Minas), se diferenciando de sites genéricos de pesquisa, como o “Brainly”, visto que utilizará de fontes institucionais, integrando o calendário acadêmico, as disciplinas e a bibliografia oficial da universidade,
+além de possibilitar a interação entre alunos, professores, monitores e colaboradores, incentivando a troca de conhecimento, sempre respeitando as normas e diretrizes internas, garantindo assim, a segurança e a veracidade das perguntas e respostas. 
 
-> Aqui será feito o gerenciamento das tarefas de implementação do projeto.
 
 ## 5.1. Divisão de Papéis
 
 > Apresente a divisão de papéis entre os membros do grupo em cada sprint. O desejável é que, em cada sprint, o aluno assuma papéis diferentes na disciplina. Siga o modelo do exemplo abaixo:
 
 ### Sprint 1
-- _Scrum master_: AlunaX
-- Protótipos: AlunoY
-- Testes: AlunoK
-- Documentação: AlunaZ
+- Project Owner: Giovanna Fabíola Vaz
+- _Scrum master_: Luiza Rodrigues Vertelo
+- Protótipos: Gabriel Rodrigo dos Santos Miguel
+- Testes: Ronaldo Pereira de Camargos Júnior
+- Documentação: Mateus de Carvalho Freitas
 
 ### Sprint 2
-- _Scrum master_: AlunaY
-- Desenvolvedor _front-end_: AlunoX
-- Desenvolvedor _back-end_: AlunoK
-- Testes: AlunaZ
+- Project Owner: Giovanna Fabíola Vaz
+- _Scrum master_: Luiza Rodrigues Vertelo
+- Modelagem de Processos: Todos
+- Modelo Entidade-Relacionamento: Todos
+- Desenvolvedor _front-end_: Gabriel Rodrigo dos Santos Miguel, Luiza Rodrigues dos Santos Miguel
+- Desenvolvedor _back-end_: Ronaldo Pereira de Camargos Júnior, Giovanna Fabíola Vaz
+- Testes: Mateus de Carvalho Freitas, Giovanna Fabíola Vaz, Luiza Rodrigues Vertelo
 
 ## 5.1. Quadro de tarefas
 
