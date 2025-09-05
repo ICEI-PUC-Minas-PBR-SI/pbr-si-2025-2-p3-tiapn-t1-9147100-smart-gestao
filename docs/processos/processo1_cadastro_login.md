@@ -17,6 +17,7 @@
 | entrar               | Fim da Atividade 1 (se login válido)              | default           |
 | cadastrar            | Clicar em "Cadastre-se"  |                   |
 
+---
 
 **Atividade 2: Preencher formulário de dados**
 
@@ -31,11 +32,12 @@
 | curso                | Seleção única  | lista de cursos cadastrados             |                   |
 | tipo de usuário      | Seleção única  | aluno, professor, monitor, visitante    |                   |
 
-
 | **Comandos** | **Destino**                      | **Tipo**   |
 |--------------|----------------------------------|------------|
 | salvar       | Validar dados preenchidos        | default    |
 | cancelar     | Início do processo               | cancel     |
+
+---
 
 **Atividade 3 – Aceitar termos e privacidade**
 
@@ -49,6 +51,8 @@
 | continuar    | Consultar tipo de usuário        | default    |
 | voltar       | Preencher formulário de dados    | cancel     |
 
+---
+
 **Atividade 4 – Validar dados preenchidos (Sistema)**
 
 | **Campo**         | **Tipo**   | **Restrições**                                | **Valor default** |
@@ -60,6 +64,7 @@
 | dados corretos  | Consultar tipo de usuário      | default    |
 | dados incorretos| Preencher formulário de dados  | cancel     |
 
+---
 
 **Atividade 5 – Consultar tipo de usuário**
 
@@ -71,6 +76,8 @@
 |----------------|--------------------------------------|------------|
 | atribuir perfil| Conceder acesso com permissões atribuídas | default |
 
+---
+
 **Atividade 6 – Conceder acesso com permissões atribuídas**
 
 | **Campo**            | **Tipo**         | **Restrições**                                                                 | **Valor default** |
@@ -81,7 +88,7 @@
 |-----------------|--------------------|------------|
 | acesso liberado | Fim do processo    | default    |
 
-
+---
 
 _Tipos de dados utilizados:_
 

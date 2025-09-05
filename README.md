@@ -6,12 +6,7 @@
 
 `Quarto Semestre`
 
-Inspirado no aplicativo Web e Mobile “Brainly”, uma comunidade de compartilhamento de
-conhecimentos entre especialistas e estudantes dos mais diversos assuntos, idealizamos um projeto que
-visa promover a interação e a cooperação entre membros da comunidade acadêmica da PUC Minas,
-aliando tecnologia, inovação e metodologias de aprendizagem colaborativa. Assim, espera-se que o
-acesso ao conhecimento, bem como a construção coletiva do aprendizado no ambiente universitário
-sejam fortalecidos e garantidos. 
+> Inspirado no aplicativo Web e Mobile “Brainly”, uma comunidade de compartilhamento de conhecimentos entre especialistas e estudantes dos mais diversos assuntos, idealizamos um projeto que visa promover a interação e a cooperação entre membros da comunidade acadêmica da PUC Minas, aliando tecnologia, inovação e metodologias de aprendizagem colaborativa. Assim, espera-se que o acesso ao conhecimento, bem como a construção coletiva do aprendizado no ambiente universitário sejam fortalecidos e garantidos. 
 
 ## Integrantes
 
@@ -49,7 +44,7 @@ Assim que a primeira versão do sistema estiver disponível, deverá complementa
 
 # Apresentação
 
-<li><a href="presentation/README.md"> Apresentação da solução</a></li>
+<li><a href="docs/apresentacao/README.md"> Apresentação da solução</a></li>
 
 
 ## Histórico de versões

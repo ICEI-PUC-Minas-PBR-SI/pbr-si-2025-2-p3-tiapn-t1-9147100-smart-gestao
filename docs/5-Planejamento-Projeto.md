@@ -1,12 +1,9 @@
 # 5. Planejamento do Projeto
- > O projeto em desenvolvimento pelos alunos do 3° período do curso de Sistemas de Informação da PUC
+O projeto em desenvolvimento pelos alunos do 3° período do curso de Sistemas de Informação da PUC
 Minas Barreiro, consiste na elaboração de uma plataforma digital colaborativa, voltada para a comunidade da Pontifícia Universidade Católica de Minas Gerais (PUC Minas), se diferenciando de sites genéricos de pesquisa, como o “Brainly”, visto que utilizará de fontes institucionais, integrando o calendário acadêmico, as disciplinas e a bibliografia oficial da universidade,
 além de possibilitar a interação entre alunos, professores, monitores e colaboradores, incentivando a troca de conhecimento, sempre respeitando as normas e diretrizes internas, garantindo assim, a segurança e a veracidade das perguntas e respostas. 
 
-
 ## 5.1. Divisão de Papéis
-
-> Apresente a divisão de papéis entre os membros do grupo em cada sprint. O desejável é que, em cada sprint, o aluno assuma papéis diferentes na disciplina. Siga o modelo do exemplo abaixo:
 
 ### Sprint 1
 - Project Owner: Giovanna Fabíola Vaz
@@ -24,43 +21,36 @@ além de possibilitar a interação entre alunos, professores, monitores e colab
 - Desenvolvedor _back-end_: Ronaldo Pereira de Camargos Júnior, Giovanna Fabíola Vaz
 - Testes: Mateus de Carvalho Freitas, Giovanna Fabíola Vaz, Luiza Rodrigues Vertelo
 
-## 5.1. Quadro de tarefas
-
-> Apresente a divisão de tarefas entre os membros do grupo e o acompanhamento da execução, conforme exemplo abaixo.
+## 5.2. Quadro de tarefas
 
 ## Sprint 1
 
-Atualizado em: 21/04/2024
+Atualizado em: 22/08/2025
 
 | Responsável   | Tarefa/Requisito | Iniciado em    | Prazo      | Status | Terminado em    |
 | :----         |    :----         |      :----:    | :----:     | :----: | :----:          |
-| AlunaX        | Introdução | 01/02/2024     | 07/02/2024 | ✔️    | 05/01/2005      |
-| AlunaZ        | Objetivos    | 03/02/2024     | 10/02/2024 | 📝    |                 |
-| AlunoY        | Histórias de usuário  | 01/01/2024     | 07/01/2005 | ⌛     |                 |
-| AlunoK        | Personas 1  |    01/01/2024        | 12/02/2005 | ❌    |       |
+| Giovanna Fabíola Vaz    | Introdução | 01/08/2025     | 22/08/2025 | ✔️    | 22/08/2025 |
+| Luiza Rodrigues Vertelo | Objetivos    | 01/08/2025      | 22/08/2025 | ✔️     | 22/08/2025 
+| Gabriel Rodrigo dos Santos Miguel | Público Alvo  | 01/08/2025 | 22/08/2025     | ✔️      | 22/08/2025 |       
+|  Mateus de Carvalho Freitas | Objetivos  | 01/08/2025  | 22/08/2025 | ✔️     | 22/08/2025 |
+| Ronaldo Pereira de Camargos Júnior | Objetivos  | 01/08/2025 | 22/08/2025 | ✔️     | 22/08/2025 |
 
 ## Sprint 2
 
-Atualizado em: 21/04/2024
+Atualizado em: 05/09/2025
 
 | Responsável   | Tarefa/Requisito | Iniciado em    | Prazo      | Status | Terminado em    |
 | :----         |    :----         |      :----:    | :----:     | :----: | :----:          |
-| AlunaX        | Home-Page        | 01/02/2024     | 07/03/2024 | ✔️    | 05/01/2005      |
-| AlunaZ        | CSS Unificado    | 03/02/2024     | 10/03/2024 | 📝    |                 |
-| AlunoY        | Página de login  | 01/02/2024     | 07/03/2024 | ⌛     |                 |
-| AlunoK        | Script de login  |  01/01/2024    | 12/03/2024 | ❌    |       |
-
+| Giovanna Fabíola Vaz    | Relatório "Análise da situação atual" | 01/02/2024     | 05/09/2025 | ✔️    | 05/09/2025 |
+| Luiza Rodrigues Vertelo | Relatório "Descrição geral da proposta de solução"    | 03/02/2024     | 05/09/2025 | ✔️     | 05/09/2025 
+| Gabriel Rodrigo dos Santos Miguel | Modelagem do processo 1 - BPMN | 05/09/2025     | ✔️      | 05/09/2025 |       
+|  Mateus de Carvalho Freitas | Relatório "Modelagem dos processos - Processo 1" |    05/09/2025  | 05/09/2025 | ✔️     | 05/09/2025 |
+| Ronaldo Pereira de Camargos Júnior | Relatório "Modelagem dos processos - Processo 1"  |    05/09/2025  | 05/09/2025 | ✔️     | 05/09/2025 |
 
 Legenda:
 - ✔️: terminado
 - 📝: em execução
 - ⌛: atrasado
 - ❌: não iniciado
-
-
-
-## Links Úteis
-> - [11 Passos Essenciais para Implantar Scrum no seu Projeto](https://mindmaster.com.br/scrum-11-passos/)
-> - [Scrum em 9 minutos](https://www.youtube.com/watch?v=XfvQWnRgxG0)
 
 
