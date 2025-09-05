@@ -19,7 +19,6 @@ Inspirado no aplicativo Web e Mobile “Brainly”, uma comunidade de compartilh
 ## Orientador
 
 * Cleia Marcia Gomes Amaral
-* Gleisson Albergaria Amaral
 
 ## Instruções de utilização
 
