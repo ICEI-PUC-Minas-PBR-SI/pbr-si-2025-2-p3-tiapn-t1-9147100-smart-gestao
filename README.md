@@ -1,24 +1,30 @@
-# TÍTULO DO PROJETO
+# PUC Integra
 
-`CURSO`
+`Sistemas de Informação`
 
-`DISCIPLINA`
+`Trabalho interdisciplinar: Aplicações para processos de negócios`
 
-`SEMESTRE`
+`Quarto Semestre`
 
-Descrever resumidamente, em um ou dois parágrafos, o projeto que está sendo desenvolvido.
+Inspirado no aplicativo Web e Mobile “Brainly”, uma comunidade de compartilhamento de
+conhecimentos entre especialistas e estudantes dos mais diversos assuntos, idealizamos um projeto que
+visa promover a interação e a cooperação entre membros da comunidade acadêmica da PUC Minas,
+aliando tecnologia, inovação e metodologias de aprendizagem colaborativa. Assim, espera-se que o
+acesso ao conhecimento, bem como a construção coletiva do aprendizado no ambiente universitário
+sejam fortalecidos e garantidos. 
 
 ## Integrantes
 
-* Gabriel Rodrigo dos Santos Miguel,
-* Giovanna Fabíola Vaz,
-* Luiza Rodrigues Vertelo,
-* Mateus de Carvalho Freitas,
+* Gabriel Rodrigo dos Santos Miguel
+* Giovanna Fabíola Vaz
+* Luiza Rodrigues Vertelo
+* Mateus de Carvalho Freitas
 * Ronaldo Pereira de Camargos Júnior
 
 ## Orientador
 
-* Nome completo do professor 1
+* Cleia Marcia Gomes Amaral
+* Gleisson Albergaria Amaral
 
 ## Instruções de utilização
 

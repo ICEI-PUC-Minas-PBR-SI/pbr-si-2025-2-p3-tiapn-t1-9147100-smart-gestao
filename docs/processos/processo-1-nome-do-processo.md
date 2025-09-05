@@ -3,12 +3,9 @@
 _Apresente aqui o nome e as oportunidades de melhoria para o processo 1. 
 Em seguida, apresente o modelo do processo 1, descrito no padrão BPMN._
 
-![Exemplo de um Modelo BPMN do PROCESSO 1](../images/process.png "Modelo BPMN do Processo 1.")
+![Exemplo de um Modelo BPMN do PROCESSO 1](../images/modelagem_p1.png "Modelo BPMN do Processo 1.")
 
 #### Detalhamento das atividades
-
-_Descreva aqui cada uma das propriedades das atividades do processo 1. 
-Devem estar relacionadas com o modelo de processo apresentado anteriormente._
 
 _Os tipos de dados a serem utilizados são:_
 
@@ -37,31 +34,79 @@ _* **Link** - campo que armazena uma URL_
 _* **Tabela** - campo formado por uma matriz de valores_
 
 
-**Nome da atividade 1**
+**Atividade 1: Acessar Plataforma**
 
 | **Campo**       | **Tipo**         | **Restrições** | **Valor default** |
 | ---             | ---              | ---            | ---               |
-| [Nome do campo] | [tipo de dados]  |                |                   |
-| ***Exemplo:***  |                  |                |                   |
-| login           | Caixa de Texto   | formato de e-mail |                |
-| senha           | Caixa de Texto   | mínimo de 8 caracteres |           |
+| login | Caixa de texto  | formato de e-mail institucional (xxxx@sga.pucminas.br)  |                   |
+| senha | Caixa de texto | mínimo de 8 caracteres, com letra maiúscula, número e caractere especial |                   |
+
 
 | **Comandos**         |  **Destino**                   | **Tipo** |
 | ---                  | ---                            | ---               |
-| [Nome do botão/link] | Atividade/processo de destino  | (default/cancel/  ) |
-| ***Exemplo:***       |                                |                   |
-| entrar               | Fim do Processo 1              | default           |
-| cadastrar            | Início do proceso de cadastro  |                   |
+| entrar               | Fim da Atividade 1 (se login válido)              | default           |
+| cadastrar            | Clicar em "Cadastre-se"  |                   |
 
 
-**Nome da atividade 2**
+**Atividade 2: Preencher formulário de dados**
 
-| **Campo**       | **Tipo**         | **Restrições** | **Valor default** |
-| ---             | ---              | ---            | ---               |
-| [Nome do campo] | [tipo de dados]  |                |                   |
-|                 |                  |                |                   |
+| **Campo**           | **Tipo**       | **Restrições**                          | **Valor default** |
+|----------------------|----------------|-----------------------------------------|-------------------|
+| nome completo        | Caixa de texto | obrigatório, máximo 100 caracteres      |                   |
+| e-mail institucional | Caixa de texto | formato válido (xxxxxx@sga.pucminas.br) |                   |
+| CEP                  | Caixa de texto | formato numérico de 8 dígitos           |                   |
+| data de nascimento   | Data           | formato dd-mm-aaaa, idade ≥ 16 anos     |                   |
+| CPF                  | Caixa de texto | formato numérico de 11 dígitos          |                   |
+| número de matrícula  | Número         | somente números, máximo 10 dígitos      |                   |
+| curso                | Seleção única  | lista de cursos cadastrados             |                   |
+| tipo de usuário      | Seleção única  | aluno, professor, monitor, visitante    |                   |
 
-| **Comandos**         |  **Destino**                   | **Tipo**          |
-| ---                  | ---                            | ---               |
-| [Nome do botão/link] | Atividade/processo de destino  | (default/cancel/  ) |
-|                      |                                |                   |
+
+| **Comandos** | **Destino**                      | **Tipo**   |
+|--------------|----------------------------------|------------|
+| salvar       | Validar dados preenchidos        | default    |
+| cancelar     | Início do processo               | cancel     |
+
+**Atividade 3 – Aceitar termos e privacidade**
+
+| **Campo**          | **Tipo**       | **Restrições**     | **Valor default** |
+|---------------------|----------------|--------------------|-------------------|
+| aceite termos       | Seleção única  | obrigatório (sim/não) |                |
+| aceite privacidade  | Seleção única  | obrigatório (sim/não) |                |
+
+| **Comandos** | **Destino**                      | **Tipo**   |
+|--------------|----------------------------------|------------|
+| continuar    | Consultar tipo de usuário        | default    |
+| voltar       | Preencher formulário de dados    | cancel     |
+
+**Atividade 4 – Validar dados preenchidos (Sistema)**
+
+| **Campo**         | **Tipo**   | **Restrições**                                | **Valor default** |
+|--------------------|-----------|-----------------------------------------------|-------------------|
+| validação cadastro | Tabela    | cruzar CPF, matrícula e e-mail com o banco de dados |                   |
+
+| **Comandos**    | **Destino**                   | **Tipo**   |
+|-----------------|--------------------------------|------------|
+| dados corretos  | Consultar tipo de usuário      | default    |
+| dados incorretos| Preencher formulário de dados  | cancel     |
+
+
+**Atividade 5 – Consultar tipo de usuário**
+
+| **Campo**      | **Tipo**       | **Restrições**                     | **Valor default** |
+|-----------------|----------------|------------------------------------|-------------------|
+| tipo usuário    | Seleção única  | atribuído automaticamente via matrícula/cadastro |                   |
+
+| **Comandos**   | **Destino**                          | **Tipo**   |
+|----------------|--------------------------------------|------------|
+| atribuir perfil| Conceder acesso com permissões atribuídas | default |
+
+**Atividade 6 – Conceder acesso com permissões atribuídas**
+
+| **Campo**            | **Tipo**         | **Restrições**                                                                 | **Valor default** |
+|-----------------------|------------------|--------------------------------------------------------------------------------|-------------------|
+| permissões de usuário | Seleção múltipla | conforme tipo: aluno = postar/perguntar; professor = responder; monitor = moderar; visitante = leitura | |
+
+| **Comandos**    | **Destino**        | **Tipo**   |
+|-----------------|--------------------|------------|
+| acesso liberado | Fim do processo    | default    |
