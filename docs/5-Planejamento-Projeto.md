@@ -6,8 +6,6 @@ além de possibilitar a interação entre alunos, professores, monitores e colab
 
 ## 5.1. Divisão de Papéis
 
-> Apresente a divisão de papéis entre os membros do grupo em cada sprint. O desejável é que, em cada sprint, o aluno assuma papéis diferentes na disciplina. Siga o modelo do exemplo abaixo:
-
 ### Sprint 1
 - Project Owner: Giovanna Fabíola Vaz
 - _Scrum master_: Luiza Rodrigues Vertelo
