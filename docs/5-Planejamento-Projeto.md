@@ -41,11 +41,11 @@ Atualizado em: 05/09/2025
 
 | Responsável   | Tarefa/Requisito | Iniciado em    | Prazo      | Status | Terminado em    |
 | :----         |    :----         |      :----:    | :----:     | :----: | :----:          |
-| Giovanna Fabíola Vaz    | Relatório "Análise da situação atual" | 01/02/2024     | 05/09/2025 | ✔️    | 05/09/2025 |
-| Luiza Rodrigues Vertelo | Relatório "Descrição geral da proposta de solução"    | 03/02/2024     | 05/09/2025 | ✔️     | 05/09/2025 
-| Gabriel Rodrigo dos Santos Miguel | Modelagem do processo 1 - BPMN | 05/09/2025     | ✔️      | 05/09/2025 |       
-|  Mateus de Carvalho Freitas | Relatório "Modelagem dos processos - Processo 1" |    05/09/2025  | 05/09/2025 | ✔️     | 05/09/2025 |
-| Ronaldo Pereira de Camargos Júnior | Relatório "Modelagem dos processos - Processo 1"  |    05/09/2025  | 05/09/2025 | ✔️     | 05/09/2025 |
+| Giovanna Fabíola Vaz    | Relatório "Análise da situação atual" | 01/09/2025     | 05/09/2025 | ✔️    | 05/09/2025 |
+| Luiza Rodrigues Vertelo | Relatório "Descrição geral da proposta de solução"    | 01/09/2025      | 05/09/2025 | ✔️     | 05/09/2025 
+| Gabriel Rodrigo dos Santos Miguel | Modelagem do processo 1 - BPMN | 01/09/2025 | 05/09/2025 | ✔️    | 05/09/2025 |      
+|  Mateus de Carvalho Freitas | Relatório "Modelagem dos processos - Processo 1" |    01/09/2025   | 05/09/2025 | ✔️     | 05/09/2025 |
+| Ronaldo Pereira de Camargos Júnior | Relatório "Modelagem dos processos - Processo 1"  |   01/09/2025  | 05/09/2025 | ✔️     | 05/09/2025 |
 
 Legenda:
 - ✔️: terminado
