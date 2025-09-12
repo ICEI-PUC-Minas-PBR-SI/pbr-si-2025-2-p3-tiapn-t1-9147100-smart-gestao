@@ -4,9 +4,9 @@
 
 `Trabalho interdisciplinar: Aplicações para processos de negócios`
 
-`Quarto Semestre`
+`2.2025`
 
-> Inspirado no aplicativo Web e Mobile “Brainly”, uma comunidade de compartilhamento de conhecimentos entre especialistas e estudantes dos mais diversos assuntos, idealizamos um projeto que visa promover a interação e a cooperação entre membros da comunidade acadêmica da PUC Minas, aliando tecnologia, inovação e metodologias de aprendizagem colaborativa. Assim, espera-se que o acesso ao conhecimento, bem como a construção coletiva do aprendizado no ambiente universitário sejam fortalecidos e garantidos. 
+Inspirado no aplicativo Web e Mobile “Brainly”, uma comunidade de compartilhamento de conhecimentos entre especialistas e estudantes dos mais diversos assuntos, idealizamos um projeto que visa promover a interação e a cooperação entre membros da comunidade acadêmica da PUC Minas, aliando tecnologia, inovação e metodologias de aprendizagem colaborativa. Assim, espera-se que o acesso ao conhecimento, bem como a construção coletiva do aprendizado no ambiente universitário sejam fortalecidos e garantidos. 
 
 ## Integrantes
 
@@ -19,7 +19,6 @@
 ## Orientador
 
 * Cleia Marcia Gomes Amaral
-* Gleisson Albergaria Amaral
 
 ## Instruções de utilização
 

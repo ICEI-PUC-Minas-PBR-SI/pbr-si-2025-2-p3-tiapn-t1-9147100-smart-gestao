@@ -1,5 +1,11 @@
 ### 3.3.1 Processo 1 – Login e Cadastro de usuários
 
+O modelo apresentado descreve o processo de login e cadastro de usuários no sistema PUC Integra.
+O fluxo inicia quando o usuário acessa a plataforma, podendo entrar com login e senha ou optar por se cadastrar. No cadastro, o usuário preenche um formulário com dados pessoais (nome, e-mail institucional, CEP, data de nascimento, CPF, matrícula, curso e tipo de usuário). Em seguida, deve aceitar os termos e a política de privacidade.
+O sistema valida as informações preenchidas, cruzando CPF, matrícula e e-mail com o banco de dados. Caso haja inconsistências, o usuário retorna ao formulário para correção; se estiverem corretas, o sistema consulta o tipo de usuário e armazena seus dados.
+Por fim, são atribuídas permissões específicas conforme o perfil (aluno, professor, monitor ou visitante), e o acesso é liberado, concluindo o processo, garantindo que somente usuários válidos e devidamente cadastrados tenham acesso à plataforma, com permissões ajustadas ao seu papel.
+
+
 ![Exemplo de um Modelo BPMN do PROCESSO 1](../images/modelagem_p1.jpg "Modelo BPMN do Processo 1.")
 
 #### Detalhamento das atividades
