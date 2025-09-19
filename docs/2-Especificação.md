@@ -20,7 +20,7 @@ Para elaborar esta etapa, utilizamos as seguintes **técnicas e ferramentas**:
 
 4. **Lucas Oliveira (Aluno):** 23 anos, faz estágio em desenvolvimento e cursa Engenharia de Software. Mora em Betim. Gosta de colaborar em fóruns, responder dúvidas e compartilhar materiais. Vê na plataforma uma oportunidade de reforçar o portfólio acadêmico.  
 
-5. **Fernanda Dias (Tutora de Laboratórios):**  32 anos, tutora da área de TI no campus Barreiro. Mora em Belo Horizonte. Precisa acompanhar os alunos, sugerir materiais de apoio e validar respostas técnicas.  
+5. **Fernanda Dias (Monitora):**  32 anos, tutora da área de TI no campus Barreiro. Mora em Belo Horizonte. Precisa acompanhar os alunos, sugerir materiais de apoio e validar respostas técnicas.  
 
 
 ## Histórias de Usuários
@@ -31,14 +31,14 @@ Com base na análise das personas forma identificadas as seguintes histórias de
 
 | EU COMO...   | QUERO/PRECISO ...                  | PARA ...                                                      |
 |--------------|------------------------------------|----------------------------------------------------------------|
-| Aluno        | Tirar minhas dúvidas em um canal confiável | Otimizar meu aprendizado e me preparar para avaliações |
-| Aluno        | Acessar materiais de diferentes disciplinas | Integrar meus estudos em um único ambiente |
-| Aluno        | Avaliar respostas de colegas        | Contribuir para a qualidade das interações |
-| Professor    | Responder alunos via web            | Apoiar o aprendizado e economizar tempo de atendimento individual |
-| Professor    | Indicar materiais complementares    | Direcionar melhor os estudos dos alunos |
-| Administrador| Aplicar as políticas de uso         | Garantir que a plataforma seja usada de forma correta |
-| Administrador| Gerar relatórios de uso e interações| Monitorar engajamento e desempenho da plataforma |
-| Tutor        | Validar respostas técnicas dos alunos| Garantir que o conteúdo publicado esteja correto e confiável |
+| Clara Monteverde (Aluna)       | Tirar minhas dúvidas em um canal confiável | Otimizar meu aprendizado e me preparar para avaliações |
+| Lucas Oliveira (Aluno)      | Acessar materiais de diferentes disciplinas | Integrar meus estudos em um único ambiente |
+| Clara Monteverde (Aluna)       | Avaliar respostas de colegas        | Contribuir para a qualidade das interações |
+| Rafael Antunes (Professor)    | Responder alunos via web            | Apoiar o aprendizado e economizar tempo de atendimento individual |
+| Rafael Antunes (Professor)    | Indicar materiais complementares    | Direcionar melhor os estudos dos alunos |
+| Mariana Costa (Administradora)| Aplicar as políticas de uso         | Garantir que a plataforma seja usada de forma correta |
+| Mariana Costa (Administradora)| Gerar relatórios de uso e interações| Monitorar engajamento e desempenho da plataforma |
+| Fernanda Dias (Monitora)        | Validar respostas técnicas dos alunos| Garantir que o conteúdo publicado esteja correto e confiável |
 
 ## Requisitos
 
@@ -81,21 +81,6 @@ As tabelas que se seguem apresentam os requisitos funcionais e não funcionais q
 |RNF-016| Nenhum dado deve ser perdido em situações de queda do sistema. | ALTA | 
 |RNF-017| A plataforma deve possibilitar integrações futuras com outros serviços acadêmicos, como calendário e portal do aluno | BAIXA | 
 |RNF-018| O sistema deve possibilitar o acompanhamento de desempenho e uso. |  MÉDIA | 
-
-Com base nas Histórias de Usuário, enumere os requisitos da sua solução. Classifique esses requisitos em dois grupos:
-
-- [Requisitos Funcionais
- (RF)](https://pt.wikipedia.org/wiki/Requisito_funcional):
- correspondem a uma funcionalidade que deve estar presente na
-  plataforma (ex: cadastro de usuário).
-- [Requisitos Não Funcionais
-  (RNF)](https://pt.wikipedia.org/wiki/Requisito_n%C3%A3o_funcional):
-  correspondem a uma característica técnica, seja de usabilidade,
-  desempenho, confiabilidade, segurança ou outro (ex: suporte a
-  dispositivos iOS e Android).
-Lembre-se que cada requisito deve corresponder à uma e somente uma
-característica alvo da sua solução. Além disso, certifique-se de que
-todos os aspectos capturados nas Histórias de Usuário foram cobertos.
 
 ## Restrições
 
