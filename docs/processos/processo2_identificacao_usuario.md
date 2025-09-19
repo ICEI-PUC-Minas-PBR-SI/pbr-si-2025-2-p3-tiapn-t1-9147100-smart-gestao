@@ -9,17 +9,6 @@ O processo 2 consiste na identificação automática do usuário após o login/c
 
 ![PROCESSO 2 - Identificação do Usuário e Definição do Perfil](../images/modelagem_processo2.png "Modelo BPMN do Processo 2.")
 
-### 3.3.2 Processo 2 – Identificação do Usuário e Definição do Perfil  
-
-O processo 2 tem como objetivo identificar o perfil do usuário após o fornecimento dos dados de acesso, validar suas credenciais e, em seguida, atribuir as permissões correspondentes (Aluno, Professor ou Administrador). Dessa forma, a plataforma garante que cada usuário tenha acesso às funcionalidades adequadas ao seu papel institucional.  
-
-**Oportunidades de melhoria:**  
-- Garantir que a validação de credenciais seja automatizada e integrada com os sistemas institucionais;  
-- Minimizar erros de atribuição de perfil através da verificação automática dos dados;  
-- Otimizar a experiência do usuário, permitindo que apenas funcionalidades relevantes sejam exibidas.  
-
-![Modelo BPMN do Processo 2](../images/process.png "Modelo BPMN do Processo 2.")  
-
 ---
 
 #### Detalhamento das atividades  

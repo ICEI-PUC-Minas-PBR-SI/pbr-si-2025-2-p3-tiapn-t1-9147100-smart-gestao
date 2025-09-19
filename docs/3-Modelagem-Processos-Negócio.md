@@ -25,4 +25,4 @@ a reputação acadêmica.
 
 [PROCESSO 1 - Login e Cadastro de Usuário](./processos/processo1_cadastro_login.md "Detalhamento do Processo 1.")
 
-[PROCESSO 2 - Identificação do Usuário e definição do perfil](./processos/processo-2-nome-do-processo.md "Detalhamento do Processo 2.")
+[PROCESSO 2 - Identificação do Usuário e definição do perfil](./processos/processo2_identificacao_usuario.md "Detalhamento do Processo 2.")

@@ -104,13 +104,13 @@ A tabela abaixo mostra a relação entre as **Histórias de Usuários** e os **R
 
 | História de Usuário                                                                 | Requisitos Relacionados |
 |-------------------------------------------------------------------------------------|--------------------------|
-| **EU COMO aluno quero tirar minhas dúvidas em um canal confiável para otimizar meu aprendizado** | RF-002, RF-003, RNF-001, RNF-002 |
-| **EU COMO aluno quero acessar materiais de diferentes disciplinas para integrar meus estudos em um único ambiente** | RF-005, RF-009, RNF-013 |
-| **EU COMO aluno quero avaliar respostas de colegas para contribuir para a qualidade das interações** | RF-004, RF-009 |
-| **EU COMO professor quero responder alunos via web para apoiar o aprendizado** | RF-003, RF-005, RNF-011 |
-| **EU COMO professor quero indicar materiais complementares para direcionar melhor os estudos dos alunos** | RF-005, RNF-010 |
-| **EU COMO administrador quero aplicar as políticas de uso para garantir que a plataforma seja usada de forma correta** | RF-008, RNF-003, RNF-005 |
-| **EU COMO administrador quero gerar relatórios de uso e interações para monitorar engajamento** | RF-007, RF-009, RNF-018 |
-| **EU COMO tutor quero validar respostas técnicas dos alunos para garantir confiabilidade do conteúdo** | RF-003, RF-008, RNF-004 |
-| **EU COMO aluno quero personalizar meu perfil para ter uma identidade no ambiente virtual** | RF-006, RNF-011, RNF-013 |
-| **EU COMO administrador quero que apenas usuários com vínculo ativo possam acessar** | RF-001, RNF-001, R-03 |
+| **EU, Clara Monteverde, COMO aluna quero tirar minhas dúvidas em um canal confiável para otimizar meu aprendizado** | RF-002, RF-003, RNF-001, RNF-002 |
+| **EU, Clara Monteverde, COMO aluna quero acessar materiais de diferentes disciplinas para integrar meus estudos em um único ambiente** | RF-005, RF-009, RNF-013 |
+| **EU, Lucas Oliveira, COMO aluna quero avaliar respostas de colegas para contribuir para a qualidade das interações** | RF-004, RF-009 |
+| **EU, Rafael Antunes, COMO professor quero responder alunos via web para apoiar o aprendizado** | RF-003, RF-005, RNF-011 |
+| **EU, Rafael Antunes, COMO professor quero indicar materiais complementares para direcionar melhor os estudos dos alunos** | RF-005, RNF-010 |
+| **EU, Mariana Costa, COMO administradora quero aplicar as políticas de uso para garantir que a plataforma seja usada de forma correta** | RF-008, RNF-003, RNF-005 |
+| **EU, Mariana Costa, COMO administradora quero gerar relatórios de uso e interações para monitorar engajamento** | RF-007, RF-009, RNF-018 |
+| **EU, Rafael Antunes, COMO professor quero validar respostas técnicas dos alunos para garantir confiabilidade do conteúdo** | RF-003, RF-008, RNF-004 |
+| **EU, Lucas Oliveira, COMO aluno quero personalizar meu perfil para ter uma identidade no ambiente virtual** | RF-006, RNF-011, RNF-013 |
+| **EU, Mariana Costa, COMO administradora quero que apenas usuários com vínculo ativo possam acessar** | RF-001, RNF-001, R-03 |
