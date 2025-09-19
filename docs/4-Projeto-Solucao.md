@@ -17,9 +17,29 @@
 
 ### 4.2. Protótipos de telas
 
-Visão geral da interação do usuário pelas telas do sistema e protótipo interativo das telas com as funcionalidades que fazem parte do sistema (wireframes).
-Apresente as principais interfaces da plataforma. Discuta como ela foi elaborada de forma a atender os requisitos funcionais, não funcionais e histórias de usuário abordados nas <a href="02-Especificação do Projeto.md"> Especificação do Projeto</a>.
-A partir das atividades de usuário identificadas na seção anterior, elabore o protótipo de tela de cada uma delas.
+O wireframe apresenta as duas telas principais que compõem o Processo 1 – Login e Cadastro de Usuários, representando a interação entre usuário e sistema.
+**Tela de Cadastro ("Criar Conta:")**
+Na tela de cadastro, o usuário que ainda não possui registro pode criar sua conta na plataforma. Os campos obrigatórios permitem que o sistema colete informações essenciais para a identificação e autenticação futura.
+Campos disponíveis:
+* Nome Completo (Caixa de texto – obrigatório)
+* CPF (Caixa de texto – numérico, obrigatório)
+* Telefone (Caixa de texto – numérico, opcional)
+* Matrícula (Caixa de texto – obrigatório)
+* E-mail Institucional (Caixa de texto – obrigatório, formato válido)
+* Senha (Caixa de texto – obrigatório, mínimo 8 caracteres)
+* Confirmar Senha (Caixa de texto – deve coincidir com a senha)
+* Tipo de Entidade (Seleção única – opções: Aluno ou Professor)
+Ação principal:
+* Botão "Confirmar" → envia os dados para validação e registro no banco de dados, conforme o fluxo do processo BPMN.
+---
+**Tela de Login ("Entrar")**
+Na tela de login, o usuário já cadastrado pode acessar a plataforma utilizando suas credenciais.
+Campos disponíveis:
+* E-mail Institucional / Matrícula (Caixa de texto – obrigatório)
+* Senha (Caixa de texto – obrigatório)
+Ações principais:
+* Botão "Confirmar" → valida as credenciais e direciona o usuário para o sistema, caso estejam corretas.
+* Link "Não possui cadastro? Clique aqui" → direciona o usuário para a tela de cadastro, caso ainda não tenha registro.
 ![Exemplo de Wireframe](../docs/images/wf_processo1.jpg)
 
 São protótipos usados em design de interface para sugerir a estrutura de um site web e seu relacionamentos entre suas páginas. Um wireframe web é uma ilustração semelhante do layout de elementos fundamentais na interface.
