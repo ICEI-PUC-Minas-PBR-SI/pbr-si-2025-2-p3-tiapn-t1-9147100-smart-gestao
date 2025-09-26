@@ -1,165 +1,110 @@
-### 3.3.1 Processo 1 – Login e Cadastro de usuários
+### 3.3.1 Processo 1 – Cadastro de Usuários
 
-O modelo apresentado descreve o processo de login e cadastro de usuários no sistema PUC Integra.
-O fluxo inicia quando o usuário acessa a plataforma, podendo entrar com login e senha ou optar por se cadastrar. No cadastro, o usuário preenche um formulário com dados pessoais (nome, e-mail institucional, CEP, data de nascimento, CPF, matrícula, curso e tipo de usuário). Em seguida, deve aceitar os termos e a política de privacidade.
-O sistema valida as informações preenchidas, cruzando CPF, matrícula e e-mail com o banco de dados. Caso haja inconsistências, o usuário retorna ao formulário para correção; se estiverem corretas, o sistema consulta o tipo de usuário e armazena seus dados.
-Por fim, são atribuídas permissões específicas conforme o perfil (aluno, professor, monitor ou visitante), e o acesso é liberado, concluindo o processo, garantindo que somente usuários válidos e devidamente cadastrados tenham acesso à plataforma, com permissões ajustadas ao seu papel.
+O processo de cadastro tem como objetivo permitir que novos usuários sejam registrados na plataforma PUC Integra.  
+Durante o cadastro, o usuário informa seus dados pessoais (nome, e-mail institucional, senha, matrícula e curso).  
+Após o preenchimento, o sistema valida as informações e identifica automaticamente o tipo de usuário: **aluno** ou **professor**.  
 
-
-![Exemplo de um Modelo BPMN do PROCESSO 1](../images/modelagem_processo1.png "Modelo BPMN do Processo 1.")
-
-### 3.3.1 Processo 1 – Login e Cadastro de Usuários  
-
-O processo 1 tem como objetivo permitir que os usuários acessem a plataforma, verificando se já possuem cadastro e, caso contrário, possibilitando a criação de um novo registro. Além disso, o processo valida as credenciais fornecidas e libera o acesso apenas para usuários autenticados corretamente.  
+Essa identificação é essencial para garantir que o perfil inicial seja atribuído corretamente, permitindo que cada usuário utilize a plataforma de acordo com suas responsabilidades acadêmicas.  
 
 **Oportunidades de melhoria:**  
-- Automatizar a verificação de cadastro para reduzir o tempo de resposta;  
+- Automatizar a identificação do perfil com base na matrícula e e-mail;  
 - Implementar mensagens claras de erro para facilitar a experiência do usuário;  
-- Garantir segurança no armazenamento de dados (criptografia de senhas e validação de entrada).  
+- Garantir segurança no armazenamento dos dados (criptografia de senha e validação de entrada). 
 
-![Modelo BPMN do Processo 1](../images/process1.png "Modelo BPMN do Processo 1.")  
+![PROCESSO 1 - Cadastro de Usuários](../images/p1_CadastroUsuario.png "Modelo BPMN do Processo 1.")
 
 ---
 
 #### Detalhamento das atividades  
 
-**Atividade 1 – Acessar plataforma (Usuário)**  
+#### Atividade 1 – Acessar tela de cadastro (Usuário)
 
-| **Campo**       | **Tipo**        | **Restrições**                     | **Valor default** |
-|------------------|-----------------|------------------------------------|-------------------|
-| URL da plataforma| Link            | acesso via navegador               |                   |
+| **Campo**         | **Tipo**       | **Restrições**              | **Valor default** |
+|--------------------|----------------|-----------------------------|-------------------|
+| botão cadastro     | Botão          | único, visível              |                   |
 
-| **Comandos**     | **Destino**            | **Tipo**   |
-|------------------|------------------------|------------|
-| acessar          | Clicar em "Entrar"     | default    |
-
----
-
-**Atividade 2 – Clicar em "Entrar" (Usuário)**  
-
-| **Campo**        | **Tipo**       | **Restrições**     | **Valor default** |
-|-------------------|----------------|--------------------|-------------------|
-| botão entrar      | Botão          | único, visível     |                   |
-
-| **Comandos**     | **Destino**               | **Tipo**   |
-|------------------|---------------------------|------------|
-| confirmar clique | Pergunta se tem cadastro  | default    |
+| **Comandos**       | **Destino**            | **Tipo**   |
+|--------------------|------------------------|------------|
+| clicar             | Exibe formulário       | default    |
 
 ---
 
-**Atividade 3 – Pergunta se tem cadastro (Sistema)**  
+#### Atividade 2 – Exibir formulário de cadastro (Sistema)
 
-| **Campo**         | **Tipo**       | **Restrições**                       | **Valor default** |
-|--------------------|----------------|--------------------------------------|-------------------|
-| pergunta exibida   | Texto          | resposta obrigatória (sim/não)       |                   |
+| **Campo**            | **Tipo**        | **Restrições**                                        | **Valor default** |
+|-----------------------|-----------------|-------------------------------------------------------|-------------------|
+| formulário cadastro   | Caixa de texto  | campos obrigatórios: nome, e-mail, senha, matrícula   |                   |
 
-| **Comandos**       | **Destino**              | **Tipo**   |
-|--------------------|--------------------------|------------|
-| sim                | Exibe tela de login      | default    |
-| não                | Exibe tela de cadastro   | default    |
-
----
-
-**Atividade 4 – Exibe tela de cadastro (Sistema)**  
-
-| **Campo**         | **Tipo**        | **Restrições**                                      | **Valor default** |
-|--------------------|-----------------|-----------------------------------------------------|-------------------|
-| formulário cadastro| Tabela/caixas   | campos obrigatórios: nome, e-mail, senha, matrícula |                   |
-
-| **Comandos**       | **Destino**                   | **Tipo**   |
-|--------------------|--------------------------------|------------|
-| enviar cadastro    | Preencher dados de cadastro    | default    |
-| cancelar           | Fim do processo                | cancel     |
+| **Comandos**          | **Destino**                   | **Tipo**   |
+|-----------------------|--------------------------------|------------|
+| preencher formulário  | Preencher dados do cadastro    | default    |
+| cancelar              | Fim do processo                | cancel     |
 
 ---
 
-**Atividade 5 – Preencher dados de cadastro (Usuário)**  
+#### Atividade 3 – Preencher dados de cadastro (Usuário)
 
-| **Campo**         | **Tipo**        | **Restrições**                                    | **Valor default** |
-|--------------------|-----------------|---------------------------------------------------|-------------------|
-| nome               | Caixa de texto  | mínimo 3 caracteres                               |                   |
-| e-mail             | Caixa de texto  | formato institucional (xxxx@sga.pucminas.br)      |                   |
-| senha              | Caixa de texto  | mínimo 8 caracteres, incluindo número e símbolo   |                   |
-| matrícula          | Caixa de texto  | valor numérico válido                             |                   |
+| **Campo**     | **Tipo**        | **Restrições**                                                 | **Valor default** |
+|---------------|-----------------|----------------------------------------------------------------|-------------------|
+| nome          | Caixa de texto  | mínimo 3 caracteres                                            |                   |
+| e-mail        | Caixa de texto  | deve ser institucional (xxxx@sga.pucminas.br)                  |                   |
+| senha         | Caixa de texto  | mínimo 8 caracteres, com número e símbolo                      |                   |
+| matrícula     | Caixa de texto  | valor numérico válido, conforme registros institucionais       |                   |
+| curso         | Caixa de texto  | obrigatório apenas para alunos                                 |                   |
 
-| **Comandos**       | **Destino**                  | **Tipo**   |
-|--------------------|-------------------------------|------------|
-| confirmar dados    | Dados estão de acordo?        | default    |
-
----
-
-**Atividade 6 – Dados estão de acordo? (Sistema)**  
-
-| **Campo**        | **Tipo**     | **Restrições**                    | **Valor default** |
-|-------------------|--------------|-----------------------------------|-------------------|
-| validação dados   | Booleano     | verificar preenchimento correto   |                   |
-
-| **Comandos**       | **Destino**                    | **Tipo**   |
-|--------------------|--------------------------------|------------|
-| sim                | Armazena dados cadastrados     | default    |
-| não                | Exibe "Tente novamente"        | cancel     |
+| **Comandos**       | **Destino**                | **Tipo**   |
+|--------------------|-----------------------------|------------|
+| confirmar dados    | Validar informações         | default    |
 
 ---
 
-**Atividade 7 – Armazena dados cadastrados (Banco de Dados)**  
+#### Atividade 4 – Validar informações (Sistema)
 
-| **Campo**          | **Tipo**    | **Restrições**                           | **Valor default** |
-|---------------------|-------------|------------------------------------------|-------------------|
-| cadastro gravado    | Registro    | salvar dados no banco de forma segura    |                   |
+| **Campo**         | **Tipo**    | **Restrições**                                 | **Valor default** |
+|--------------------|-------------|-----------------------------------------------|-------------------|
+| validação dados    | Booleano    | verificar e-mail, matrícula e força da senha  |                   |
 
-| **Comandos**       | **Destino**       | **Tipo**   |
-|--------------------|-------------------|------------|
-| finalizar cadastro | Exibe tela de login | default  |
-
----
-
-**Atividade 8 – Exibe tela de login (Sistema)**  
-
-| **Campo**          | **Tipo**        | **Restrições**                             | **Valor default** |
-|---------------------|-----------------|--------------------------------------------|-------------------|
-| formulário login    | Caixa de texto  | e-mail e senha obrigatórios                |                   |
-
-| **Comandos**       | **Destino**       | **Tipo**   |
-|--------------------|-------------------|------------|
-| enviar login       | Efetuar login     | default    |
+| **Comandos**       | **Destino**                     | **Tipo**   |
+|--------------------|----------------------------------|------------|
+| dados válidos      | Identificar perfil               | default    |
+| dados inválidos    | Exibir mensagem de erro          | cancel     |
 
 ---
 
-**Atividade 9 – Efetuar login (Usuário)**  
+#### Atividade 5 – Identificar perfil (Sistema)
 
-| **Campo**          | **Tipo**        | **Restrições**                   | **Valor default** |
-|---------------------|-----------------|----------------------------------|-------------------|
-| e-mail              | Caixa de texto  | deve existir no cadastro         |                   |
-| senha               | Caixa de texto  | deve coincidir com a cadastrada  |                   |
+| **Campo**        | **Tipo**        | **Restrições**                             | **Valor default** |
+|-------------------|-----------------|--------------------------------------------|-------------------|
+| perfil usuário    | Seleção única   | aluno (com matrícula em curso) / professor |                   |
 
-| **Comandos**       | **Destino**             | **Tipo**   |
-|--------------------|-------------------------|------------|
-| confirmar acesso   | Dados corretos?         | default    |
-
----
-
-**Atividade 10 – Dados corretos? (Sistema)**  
-
-| **Campo**         | **Tipo**     | **Restrições**                       | **Valor default** |
-|--------------------|--------------|--------------------------------------|-------------------|
-| validação login    | Booleano     | e-mail e senha devem coincidir       |                   |
-
-| **Comandos**        | **Destino**          | **Tipo**   |
-|---------------------|----------------------|------------|
-| sim                 | Login efetuado       | default    |
-| não                 | Exibe "Tente novamente" | cancel   |
+| **Comandos**       | **Destino**                | **Tipo**   |
+|--------------------|-----------------------------|------------|
+| aluno              | Armazenar cadastro          | default    |
+| professor          | Armazenar cadastro          | default    |
 
 ---
 
-**Atividade 11 – Exibe "Tente novamente" (Sistema)**  
+#### Atividade 6 – Armazenar cadastro (Banco de Dados)
 
-| **Campo**         | **Tipo**       | **Restrições**                | **Valor default** |
-|--------------------|----------------|-------------------------------|-------------------|
-| mensagem erro      | Texto          | exibida sempre que login falha |                   |
+| **Campo**            | **Tipo**    | **Restrições**                       | **Valor default** |
+|-----------------------|-------------|--------------------------------------|-------------------|
+| cadastro registrado   | Registro    | salvar dados de forma segura         |                   |
+
+| **Comandos**       | **Destino**               | **Tipo**   |
+|--------------------|----------------------------|------------|
+| salvar cadastro    | Confirmar cadastro         | default    |
+
+---
+
+#### Atividade 7 – Confirmar cadastro (Sistema)
+
+| **Campo**        | **Tipo**       | **Restrições**                      | **Valor default** |
+|-------------------|----------------|-------------------------------------|-------------------|
+| mensagem sucesso  | Texto          | exibida apenas quando cadastro ok   |                   |
 
 | **Comandos**       | **Destino**         | **Tipo**   |
 |--------------------|---------------------|------------|
-| retornar login     | Exibe tela de login | default    |
+| prosseguir login   | Exibir tela de login | default    |
 
 ---
 

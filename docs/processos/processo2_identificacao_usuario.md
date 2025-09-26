@@ -1,105 +1,91 @@
-### 3.3.2 Processo 2 – Identificação do Usuário e Definição do Perfil
+### 3.3.2 Processo 2 – Login de Usuários
 
-O processo 2 consiste na identificação automática do usuário após o login/cadastro e na atribuição do perfil correto (aluno, professor, monitor ou administrador). Esse fluxo é essencial para garantir que os acessos sejam personalizados de acordo com as responsabilidades e permissões de cada tipo de usuário dentro da plataforma.
+O processo de login garante que apenas usuários cadastrados possam acessar a plataforma PUC Integra.  
+Para isso, o usuário deve inserir seu **e-mail institucional** e **senha** previamente cadastrada.  
+O sistema valida as credenciais e, em caso de sucesso, libera o acesso ao ambiente da plataforma.  
 
-**Oportunidades de melhoria:**
-* Automatizar a definição de perfis por meio da matrícula e cargo cadastrados, evitando erros manuais;
-* Garantir que permissões sejam atribuídas dinamicamente, facilitando o gerenciamento de acessos;
-* Possibilitar ajustes administrativos em casos especiais, como mudança de função do usuário (ex.: aluno que se torna monitor).
+**Oportunidades de melhoria:**  
+- Permitir autenticação multifator (MFA) para maior segurança;  
+- Implementar mensagens claras em caso de erro de login;  
+- Otimizar o tempo de resposta da autenticação.  
 
-![PROCESSO 2 - Identificação do Usuário e Definição do Perfil](../images/modelagem_processo2.png "Modelo BPMN do Processo 2.")
+![PROCESSO 2 - Login de Usuários](../images/p2_login.JPG "Modelo BPMN do Processo 2.")
 
 ---
 
 #### Detalhamento das atividades  
 
-**Atividade 1 – Fornecer dados de acesso (Usuário)**  
+#### Atividade 1 – Acessar tela de login (Usuário)
 
-| **Campo**        | **Tipo**        | **Restrições**                                  | **Valor default** |
-|-------------------|-----------------|-------------------------------------------------|-------------------|
-| login             | Caixa de texto  | formato de e-mail institucional (xxxx@sga.pucminas.br) |                   |
-| senha             | Caixa de texto  | mínimo 8 caracteres, incluindo letra maiúscula, número e caractere especial |                   |
+| **Campo**        | **Tipo**        | **Restrições**            | **Valor default** |
+|-------------------|-----------------|---------------------------|-------------------|
+| botão login       | Botão           | único, visível            |                   |
 
-| **Comandos**       | **Destino**           | **Tipo**   |
-|--------------------|-----------------------|------------|
-| enviar             | Receber dados do usuário | default |
-| cancelar           | Encerrar processo     | cancel     |
+| **Comandos**       | **Destino**            | **Tipo**   |
+|--------------------|-------------------------|------------|
+| clicar             | Exibe formulário login | default    |
 
 ---
 
-**Atividade 2 – Receber dados do usuário (Sistema)**  
+#### Atividade 2 – Exibir formulário de login (Sistema)
 
-| **Campo**           | **Tipo**  | **Restrições**                       | **Valor default** |
-|----------------------|-----------|--------------------------------------|-------------------|
-| dados recebidos      | Tabela    | armazenar login e senha informados   |                   |
+| **Campo**          | **Tipo**        | **Restrições**                               | **Valor default** |
+|---------------------|-----------------|----------------------------------------------|-------------------|
+| formulário login    | Caixa de texto  | campos obrigatórios: e-mail e senha          |                   |
 
-| **Comandos**        | **Destino**        | **Tipo**   |
-|---------------------|--------------------|------------|
-| validar credenciais | Validar credenciais | default    |
+| **Comandos**       | **Destino**             | **Tipo**   |
+|--------------------|--------------------------|------------|
+| preencher login    | Inserir credenciais      | default    |
 
 ---
 
-**Atividade 3 – Validar credenciais (Sistema)**  
+#### Atividade 3 – Inserir credenciais (Usuário)
 
-| **Campo**           | **Tipo**  | **Restrições**                                      | **Valor default** |
-|----------------------|-----------|-----------------------------------------------------|-------------------|
-| credenciais válidas  | Booleano  | autenticação obrigatória no banco de dados institucional |                   |
+| **Campo**     | **Tipo**        | **Restrições**                                                | **Valor default** |
+|---------------|-----------------|---------------------------------------------------------------|-------------------|
+| e-mail        | Caixa de texto  | deve existir no cadastro, formato institucional obrigatório   |                   |
+| senha         | Caixa de texto  | deve coincidir com senha cadastrada                           |                   |
 
-| **Comandos**         | **Destino**                    | **Tipo**   |
+| **Comandos**       | **Destino**                  | **Tipo**   |
+|--------------------|-------------------------------|------------|
+| confirmar login    | Validar credenciais           | default    |
+
+---
+
+#### Atividade 4 – Validar credenciais (Sistema)
+
+| **Campo**            | **Tipo**     | **Restrições**                        | **Valor default** |
+|-----------------------|--------------|---------------------------------------|-------------------|
+| validação login       | Booleano     | autenticação obrigatória              |                   |
+
+| **Comandos**         | **Destino**                   | **Tipo**   |
 |----------------------|--------------------------------|------------|
-| credenciais válidas  | Decisão: Qual é o perfil?      | default    |
-| credenciais inválidas| Fornecer dados de acesso       | cancel     |
+| credenciais válidas  | Liberar acesso                 | default    |
+| credenciais inválidas| Exibir mensagem de erro        | cancel     |
 
 ---
 
-**Atividade 4 – Identificar perfil do usuário (Sistema)**  
+#### Atividade 5 – Exibir mensagem de erro (Sistema)
 
-| **Campo**         | **Tipo**       | **Restrições**                                          | **Valor default** |
-|--------------------|----------------|---------------------------------------------------------|-------------------|
-| perfil usuário     | Seleção única  | Aluno / Professor / Administrador, definido automaticamente |                   |
+| **Campo**        | **Tipo**      | **Restrições**                       | **Valor default** |
+|-------------------|---------------|--------------------------------------|-------------------|
+| mensagem erro     | Texto         | exibida sempre que login falhar      |                   |
 
-| **Comandos**       | **Destino**                       | **Tipo**   |
-|--------------------|-----------------------------------|------------|
-| aluno              | Atribuir permissões de Aluno      | default    |
-| professor          | Atribuir permissões de Professor  | default    |
-| administrador      | Atribuir permissões de Administrador | default |
+| **Comandos**       | **Destino**            | **Tipo**   |
+|--------------------|-------------------------|------------|
+| tentar novamente   | Exibir tela de login    | default    |
 
 ---
 
-**Atividade 5 – Atribuir permissões**  
+#### Atividade 6 – Liberar acesso (Sistema)
 
-| **Campo**                 | **Tipo**         | **Restrições**                                                                 | **Valor default** |
-|----------------------------|------------------|--------------------------------------------------------------------------------|-------------------|
-| permissões atribuídas      | Seleção múltipla | aluno = postar/perguntar; professor = responder/validar; administrador = gerenciar sistema |                   |
+| **Campo**        | **Tipo**       | **Restrições**                          | **Valor default** |
+|-------------------|----------------|-----------------------------------------|-------------------|
+| acesso autorizado | Booleano       | válido somente para usuários cadastrados|                   |
 
-| **Comandos**        | **Destino**                | **Tipo**   |
-|---------------------|-----------------------------|------------|
-| registrar perfil    | Registrar perfil definido   | default    |
-
----
-
-**Atividade 6 – Registrar perfil definido**  
-
-| **Campo**          | **Tipo**       | **Restrições**               | **Valor default** |
-|---------------------|----------------|------------------------------|-------------------|
-| perfil confirmado   | Caixa de texto | armazenar perfil atribuído   |                   |
-
-| **Comandos**        | **Destino**                            | **Tipo**   |
-|---------------------|----------------------------------------|------------|
-| salvar              | Disponibilizar funcionalidades específicas | default |
-
----
-
-**Atividade 7 – Disponibilizar funcionalidades específicas**  
-
-| **Campo**          | **Tipo**       | **Restrições**                                       | **Valor default** |
-|---------------------|----------------|------------------------------------------------------|-------------------|
-| funcionalidades     | Seleção múltipla | liberadas conforme perfil (aluno/professor/admin)    |                   |
-
-| **Comandos**        | **Destino**        | **Tipo**   |
-|---------------------|--------------------|------------|
-| concluir processo   | Fim do processo    | default    |
-
+| **Comandos**       | **Destino**             | **Tipo**   |
+|--------------------|--------------------------|------------|
+| prosseguir sistema | Área principal da plataforma | default |
 ---
 
 _Tipos de dados utilizados:_  
