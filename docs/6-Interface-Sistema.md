@@ -16,13 +16,13 @@ _Descrição da tela principal do sistema._
 
 _Descrição da tela relativa à atividade 1._
 
-![Tela de Cadastro](../images/cadastro_screen.png)
+![Tela de Cadastro](../docs/images/cadastro_screen.png)
 
 
 ## 6.3. Processo 2 - Tela de Login
 
 _Descrição da tela relativa à atividade 2._
 
-![Tela de Login](../images/login_screen.png)
+![Tela de Login](../docs/images/login_screen.png)
 
 
