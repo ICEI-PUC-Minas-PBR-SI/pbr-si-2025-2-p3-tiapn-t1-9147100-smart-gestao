@@ -6,7 +6,7 @@ Atualmente, muitos microempreendedores têm dificuldade em analisar suas finanç
 
 #### Detalhamento das atividades
 
- Detalhamento das Atividades
+ 
 No processo de Geração de Relatórios Financeiros, o fluxo se inicia com o usuário Inserindo ou Sincronizando Dados. Nesta etapa, o usuário fornece os registros financeiros, podendo optar por inseri-los manualmente, sincronizar uma planilha através de um campo de Arquivo, ou conectar-se a outro sistema utilizando uma Chave de API. Após a seleção da Fonte dos Dados, o sistema prossegue para a validação e consolidação das informações.
 Em seguida, o usuário avança para Selecionar o Período do Relatório, onde define o intervalo de tempo desejado através dos campos Data Inicial e Data Final, e escolhe o Tipo de Relatório (Despesas, Receitas ou Consolidado).
 Posteriormente, na etapa de Filtrar Dados, o usuário tem a opção de refinar o relatório, aplicando filtros específicos por Categorias (como alimentação, transporte, fornecedores) e Formas de Pagamento (cartão, dinheiro, pix).
