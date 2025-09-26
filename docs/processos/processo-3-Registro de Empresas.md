@@ -1,12 +1,14 @@
-### 3.3.1 Processo 1 – Registro de Despesas
+### 3.3.3 Processo 3 – Cadastro e gerenciamento de clientes
 
-Hoje muitos microempreendedores registram suas despesas em cadernos ou planilhas, sem padronização e com risco de perda de informações. O Smart Gestão permitirá que o registro seja automatizado, categorizado e armazenado em nuvem, trazendo mais organização e segurança.
+O processo de Cadastro e Gerenciamento de Clientes é essencial para organizar informações de clientes e fornecedores, servindo de base para outros módulos do sistema, como despesas, receitas e relatórios. Ele garante dados centralizados, evita duplicidades e facilita a tomada de decisões.
 
-![Exemplo de um Modelo BPMN do PROCESSO 1](../images/process.png "Modelo BPMN do Processo 1.")
+
+![Exemplo de um Modelo BPMN do PROCESSO 1] [Processo3.drawio.pdf](https://github.com/user-attachments/files/22567254/Processo3.drawio.pdf)
+
 
 #### Detalhamento das atividades
 
-No processo de registro de despesas do sistema Smart Gestão, o usuário inicia inserindo informações básicas como descrição, valor, data e forma de pagamento, com a opção de anexar comprovantes. Em seguida, os dados passam por uma validação automática para garantir o preenchimento correto dos campos obrigatórios. Após essa verificação, a despesa é classificada em categorias pré-definidas, como alimentação, transporte ou fornecedores, possibilitando uma organização mais estruturada. Por fim, o registro é salvo no sistema com identificação única e data/hora automáticas, ficando disponível para consultas futuras e para a geração de relatórios financeiros.
+No Sistema, o usuário poderá cadastrar, editar, buscar e desativar registros, contando com validações automáticas e alertas de erro. Assim, o sistema oferece uma interface simples e eficiente para manter os cadastros atualizados e confiáveis.
 
 _Os tipos de dados a serem utilizados são:_
 
