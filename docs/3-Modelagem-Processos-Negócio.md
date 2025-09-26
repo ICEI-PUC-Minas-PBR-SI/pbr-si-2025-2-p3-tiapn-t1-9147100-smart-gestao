@@ -13,9 +13,10 @@ lecionados. Para isso, o sistema contará com:
 * **Validação de conteúdo:** recursos que permitem a verificação e avaliação de conteúdos e conhecimentos utilizados em forma de like/dislike.
 * **Integração institucional:** conexão com elementos e informações da universidade, como disciplinas, calendário acadêmico e bibliografias recomendadas. 
 
-**Processo 1** – Login e Cadastro de Usuário: responsável por permitir que novos usuários se registrem no sistema ou acessem com suas credenciais institucionais. Esse processo assegura que apenas membros devidamente identificados tenham acesso à plataforma, mediante o fornecimento de dados pessoais, validação de informações e aceite de termos e políticas. Ao final, o sistema atribui permissões de acordo com o perfil cadastrado.
+**Processo 1 – Cadastro de Usuários:** Esse processo é responsável por registrar novos membros da comunidade acadêmica na plataforma.  
+O fluxo inicia quando o usuário acessa a tela de cadastro e insere seus dados pessoais e institucionais (nome, e-mail, senha, matrícula e curso, quando aplicável). O sistema realiza a validação automática desses dados, verificando se a matrícula é válida e se o e-mail corresponde ao domínio institucional. Em seguida, identifica se o usuário é aluno ou professor, atribuindo o perfil inicial de forma automática. O cadastro é armazenado com segurança e uma mensagem de confirmação é exibida. Esse processo garante que apenas pessoas ligadas à instituição sejam registradas e que seu perfil inicial já esteja adequado à função acadêmica desempenhada.  
 
-**Processo 2** – Identificação do Usuário e Definição do Perfil: após o login, o sistema consulta o cadastro e identifica automaticamente se o usuário é aluno, professor, monitor ou administrador. A partir dessa classificação, são aplicadas permissões específicas (por exemplo: alunos podem postar dúvidas e interagir, professores podem responder e validar conteúdos, monitores podem moderar discussões, e administradores gerenciam o ambiente). Esse processo garante que cada usuário tenha uma experiência ajustada ao seu papel na comunidade acadêmica.
+**Processo 3 – Personalização de Perfil**: Após realizar login com sucesso, o usuário pode acessar a área de personalização de perfil. Nesse processo, ele tem a possibilidade de atualizar suas informações pessoais e acadêmicas, como nome, senha, curso, além de adicionar uma foto de perfil e uma breve biografia. O sistema valida os dados inseridos, verificando duplicidade de e-mail, consistência de matrícula e formatos aceitos para imagens. Quando aprovadas, as alterações são salvas no banco de dados e imediatamente refletidas na conta do usuário. Esse processo é essencial para proporcionar uma experiência mais personalizada e alinhada às preferências individuais, fortalecendo o senso de pertencimento à comunidade acadêmica.
 
 Assim, espera-se que o fortalecimento da cultura acadêmica participativa, inovadora e tecnológica seja garantido, promovendo o engajamento dos membros da comunidade e a troca de experiência e conhecimentos entre eles. Ademais, deseja-se que a plataforma possa contribuir para integrar diferentes cursos na área de Tecnologia da Informaçãp, estimulando práticas de aprendizagem ativa, além de servir como suporte ao aprendizado e como um repositório vivo de conhecimentos produzidos dentro e pela própria universidade. Por fim, é imprescindível citar a intenção de posicionar a instituição como um meio propício a inovações e que
 utiliza da tecnologia no meio educacional, gerando impacto positivo tanto para os usuários, quanto para
@@ -23,6 +24,6 @@ a reputação acadêmica.
 
 ### 3.3. Modelagem dos processos
 
-[PROCESSO 1 - Login e Cadastro de Usuário](./processos/processo1_cadastro_login.md "Detalhamento do Processo 1.")
-
-[PROCESSO 2 - Identificação do Usuário e definição do perfil](./processos/processo2_identificacao_usuario.md "Detalhamento do Processo 2.")
+[PROCESSO 1 - Cadastro de Usuários](./processos/processo1_cadastro_usuario.md "Detalhamento do Processo 1.")
+[PROCESSO 2 - Login de Usuários](./processos/processo2_login_usuario.md "Detalhamento do Processo 2.")
+[PROCESSO 2 - Personalização de Perfil](./processos/processo3_personalizacao_usuario.md "Detalhamento do Processo 3.")

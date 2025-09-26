@@ -12,25 +12,17 @@ _Descrição da tela principal do sistema._
 [`Tela principal do sistema`](images/)
 
 
-## 6.2. Telas do processo 1
+## 6.2. Processo 1 - Tela de Cadastro
 
 _Descrição da tela relativa à atividade 1._
 
-[`Tela da atividade 1`](images/)
+[`Tela da atividade 1`](images/cadastro_screen.png)
+
+
+## 6.3. Processo 2 - Tela de Login
 
 _Descrição da tela relativa à atividade 2._
 
-[`Tela da atividade 2`](images/)
-
-
-## 6.3. Telas do processo 2
-
-_Descrição da tela relativa à atividade 1._
-
-[`Tela da atividade 1`](images/)
-
-_Descrição da tela relativa à atividade 2._
-
-[`Tela da atividade 2`](images/)
+[`Tela da atividade 2`](images/login_screen.png)
 
 
