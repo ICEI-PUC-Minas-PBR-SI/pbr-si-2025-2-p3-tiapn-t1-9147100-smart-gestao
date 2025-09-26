@@ -1,12 +1,14 @@
 ### 3.3.1 Processo 1 – Registro de Despesas
 
-Hoje muitos microempreendedores registram suas despesas em cadernos ou planilhas, sem padronização e com risco de perda de informações. O Smart Gestão permitirá que o registro seja automatizado, categorizado e armazenado em nuvem, trazendo mais organização e segurança.
+O processo de registro de despesas e receitas foi criado para permitir que o microempreendedor organize de forma prática suas movimentações financeiras dentro do sistema. O objetivo é oferecer um fluxo simples, em que o usuário consiga lançar valores, categorias e descrições de cada operação, garantindo que todas as informações fiquem registradas corretamente.
 
-![Exemplo de um Modelo BPMN do PROCESSO 1](../images/process.png "Modelo BPMN do Processo 1.")
+
+![Exemplo de um Modelo BPMN do PROCESSO 1] <img width="1891" height="431" alt="Processo1 drawio" src="https://github.com/user-attachments/assets/bb4ace34-b24a-469e-a982-3a886a74b5d5" />
+
 
 #### Detalhamento das atividades
 
-No processo de registro de despesas do sistema Smart Gestão, o usuário inicia inserindo informações básicas como descrição, valor, data e forma de pagamento, com a opção de anexar comprovantes. Em seguida, os dados passam por uma validação automática para garantir o preenchimento correto dos campos obrigatórios. Após essa verificação, a despesa é classificada em categorias pré-definidas, como alimentação, transporte ou fornecedores, possibilitando uma organização mais estruturada. Por fim, o registro é salvo no sistema com identificação única e data/hora automáticas, ficando disponível para consultas futuras e para a geração de relatórios financeiros.
+As atividades envolvem desde a abertura do formulário de lançamento, o preenchimento e validação dos dados, até o salvamento no banco e a atualização automática dos relatórios e saldos. Dessa forma, o usuário tem maior controle sobre suas finanças e consegue visualizar em tempo real a saúde financeira do seu negócio.
 
 _Os tipos de dados a serem utilizados são:_
 
