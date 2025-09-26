@@ -31,5 +31,7 @@ a reputação acadêmica.
 ### 3.3. Modelagem dos processos
 
 [PROCESSO 1 - Cadastro de Usuários](./processos/processo1_cadastro_usuario.md "Detalhamento do Processo 1.")
+
 [PROCESSO 2 - Login de Usuários](./processos/processo2_login_usuario.md "Detalhamento do Processo 2.")
+
 [PROCESSO 2 - Personalização de Perfil](./processos/processo3_personalizacao_usuario.md "Detalhamento do Processo 3.")
