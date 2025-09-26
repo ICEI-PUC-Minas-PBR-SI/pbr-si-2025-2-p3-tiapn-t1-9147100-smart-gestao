@@ -44,13 +44,18 @@ Essa identificação é essencial para garantir que o perfil inicial seja atribu
 
 #### Atividade 3 – Preencher dados de cadastro (Usuário)
 
-| **Campo**     | **Tipo**        | **Restrições**                                                 | **Valor default** |
-|---------------|-----------------|----------------------------------------------------------------|-------------------|
-| nome          | Caixa de texto  | mínimo 3 caracteres                                            |                   |
-| e-mail        | Caixa de texto  | deve ser institucional (xxxx@sga.pucminas.br)                  |                   |
-| senha         | Caixa de texto  | mínimo 8 caracteres, com número e símbolo                      |                   |
-| matrícula     | Caixa de texto  | valor numérico válido, conforme registros institucionais       |                   |
-| curso         | Caixa de texto  | obrigatório apenas para alunos                                 |                   |
+## Atividade 3 – Exibir formulário de dados (Sistema)
+| Campo | Tipo | Restrições |
+|-------|------|------------|
+| Nome completo | Texto | resposta obrigatória |
+| CPF | Numérico | 11 dígitos, formato XXX.XXX.XXX-XX, obrigatório |
+| E-mail institucional | Texto | formato XXX@sga.pucminas.br, obrigatório |
+| Matrícula | Texto/Numérico | obrigatório |
+| Telefone | Numérico | formato (XX)XXXXX-XXXX, obrigatório |
+| Senha | Texto | 8 caracteres, contendo maiúscula, minúscula, número e caractere especial, obrigatório |
+| Confirmar senha | Texto | 8 caracteres, contendo maiúscula, minúscula, número e caractere especial, obrigatório |
+| Tipo de usuário | Combo box | Aluno, professor ou monitor, obrigatório |
+
 
 | **Comandos**       | **Destino**                | **Tipo**   |
 |--------------------|-----------------------------|------------|

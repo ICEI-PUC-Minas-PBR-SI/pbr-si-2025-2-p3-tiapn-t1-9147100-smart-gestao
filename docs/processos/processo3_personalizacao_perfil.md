@@ -17,6 +17,79 @@ Essa etapa é importante para adaptar a experiência de uso às necessidades de 
 
 #### Detalhamento das atividades  
 
+## Atividade 1 – Acessar área de personalização (Usuário)
+| Campo | Tipo | Restrições |
+|-------|------|------------|
+| Botão/Menu: Personalização | Botão | Apenas usuários logados podem acessar |
+
+**Comandos**
+- Clicar em personalização → **Tela de personalização**
+
+---
+
+## Atividade 2 – Selecionar preferências (Usuário)
+| Campo | Tipo | Restrições |
+|-------|------|------------|
+| Tema | Botão | Campo obrigatório |
+| Idioma | Toggle | Campo obrigatório |
+| Notificações | Checkbox | Campo obrigatório |
+
+**Comandos**
+- Selecionar a opção desejada
+
+---
+
+## Atividade 3 – Personalização da plataforma (Sistema)
+| Campo | Tipo | Restrições |
+|-------|------|------------|
+| Botão confirmar | Botão | Só habilitado se houver alguma alteração |
+| Botão cancelar | Botão | Retorna sem salvar |
+
+**Comandos**
+- Confirmar → aplica no sistema  
+- Cancelar → retorna à tela inicial  
+
+---
+
+## Atividade 4 – Receber preferências (Sistema)
+| Campo | Tipo | Restrições |
+|-------|------|------------|
+| Dados enviados pelo usuário | - | Devem chegar no formato esperado |
+
+**Comandos**
+- Coleta as escolhas → sistema backend
+
+---
+
+## Atividade 5 – Validar dados recebidos (Sistema)
+| Campo | Tipo | Restrições |
+|-------|------|------------|
+| Preferências enviadas | - | Automático |
+
+**Comandos**
+- Verificação no sistema
+
+---
+
+## Atividade 6 – Dados corretos? (Sistema)
+| Campo | Tipo | Restrições |
+|-------|------|------------|
+| Booleano | - | Verificar preenchimento correto |
+
+**Comandos**
+- Sim → salva no banco e envia feedback  
+- Não → exibe "Tente novamente" + motivo do erro  
+
+---
+
+## Atividade 7 – Confirmação ao usuário (Sistema)
+| Campo | Tipo | Restrições |
+|-------|------|------------|
+| Registro | - | Salvar dados no banco de forma segura |
+
+**Comandos**
+- Envia feedback → usuário recebe mensagem  
+- Retorno → tela inicial
 ---
 
 _Tipos de dados utilizados:_  
