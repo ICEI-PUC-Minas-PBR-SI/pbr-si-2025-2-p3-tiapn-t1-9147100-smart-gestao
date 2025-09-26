@@ -3,6 +3,9 @@
 Atualmente, muitos microempreendedores têm dificuldade em analisar suas finanças, já que os registros ficam dispersos em cadernos ou planilhas sem padrão. O Smart Gestão oferece a possibilidade de consolidar automaticamente as informações, permitindo gerar relatórios organizados, categorizados e atualizados em tempo real, dando maior clareza sobre lucros, gastos e saldo disponível.
 
 ![Exemplo de um Modelo BPMN do PROCESSO 2](../images/process.png "Modelo BPMN do Processo 2.")
+![Exemplo de um Modelo BPMN do PROCESSO 2](images/processo2_planejamento_financeiro.png "Modelo BPMN do Processo 2.")
+
+
 
 
 #### Detalhamento das atividades
