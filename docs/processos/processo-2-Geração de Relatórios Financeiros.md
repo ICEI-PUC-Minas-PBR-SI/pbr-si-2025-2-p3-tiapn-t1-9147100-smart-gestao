@@ -34,35 +34,82 @@ _* **Link** - campo que armazena uma URL_
 
 _* **Tabela** - campo formado por uma matriz de valores_
 
-**1-Selecionar Período do Relatório**
-
-| **Campo**       | **Tipo**         | **Restrições** | **Valor default** |
-| ---             | ---              | ---            | ---               |
-| [Nome do campo] | [tipo de dados]  |                |                   |
-| ***Exemplo:***  |                  |                |                   |
-| Data Inicial    | Data             | Obrigatório    |Primeiro dia do mês atual| formato de e-mail |     
-| Data Final      | Data             | Obrigatório    |Último dia do mês atual|
-|Tipo de Relatório| Seleção única    |Opções: Despesas, Receitas, Consolidado |Consolidado|
-
-| **Comandos**         |  **Destino**                   | **Tipo**           |
-| ---                  | ---                            | ---                |
-| [Nome do botão/link] | Atividade/processo de destino  | (default/cancel/  )|
-| ***Exemplo:***       |                                |                    |
-| Continuar            | Filtrar Dados                  | padrão             |
-| Cancelar             | Fim do processo                |                    |cancelar
 
 
-**2-Filtrar Dados**
+A seguir, apresentamos o detalhamento das atividades do processo de Geração de Relatórios Financeiros, com a especificação dos campos e comandos para cada etapa do fluxo.
 
-| **Campo**          | **Tipo**         | **Restrições**                                     | **Valor default** |
-| ---                | ---              | ---                                                | ---               |
-| [Nome do campo]    | [tipo de dados]  |                                                    |                   |
-| Categorias         |Seleção múltipla  |Opcional (alimentação, transporte, fornecedores etc.)|Todas
-| Formas de Pagamento|Seleção múltipla  |Opcional (cartão, dinheiro, pix etc.)                |Todas
+## Detalhamento das Atividades
 
-| **Comandos**         |  **Destino**                   | **Tipo**           |
-| ---                  | ---                            | ---                |
-| [Nome do botão/link] | Atividade/processo de destino  | (default/cancel/  )|
-|  Aplicar Filtros     |    Gerar Relatório             |  padrão            |
-|Voltar                |Selecionar Período              |cancelar            |
+### 1. Inserir ou Sincronizar Dados
+
+Nesta etapa, o usuário fornece os dados financeiros que serão a base para a geração do relatório.
+
+| Campo | Tipo | Restrições | Valor Default |
+| :--- | :--- | :--- | :--- |
+| Fonte dos Dados | Seleção única | Obrigatório. Opções: Inserir Manualmente, Sincronizar Planilha, Conectar Outro Sistema | Inserir Manualmente |
+| Arquivo (para planilha) | Arquivo | Opcional. Visível se "Fonte dos Dados" for "Sincronizar Planilha" | N/A |
+| Chave de API (para sistema) | Caixa de texto | Opcional. Visível se "Fonte dos Dados" for "Conectar Outro Sistema" | N/A |
+
+| Comandos | Destino | Tipo |
+| :--- | :--- | :--- |
+| **Validar Dados** | Validar e Consolidar Dados | padrão |
+| **Cancelar** | Fim do processo | cancelar |
+
+### 2. Selecionar Período do Relatório
+
+O usuário define o intervalo de tempo e o escopo geral do relatório a ser gerado.
+
+| Campo | Tipo | Restrições | Valor Default |
+| :--- | :--- | :--- | :--- |
+| Data Inicial | Data | Obrigatório | Primeiro dia do mês atual |
+| Data Final | Data | Obrigatório | Último dia do mês atual |
+| Tipo de Relatório | Seleção única | Obrigatório. Opções: Despesas, Receitas, Consolidado | Consolidado |
+
+| Comandos | Destino | Tipo |
+| :--- | :--- | :--- |
+| **Continuar** | Filtrar Dados | padrão |
+| **Cancelar** | Fim do processo | cancelar |
+
+### 3. Filtrar Dados
+
+O usuário pode refinar os dados que aparecerão no relatório, aplicando filtros específicos.
+
+| Campo | Tipo | Restrições | Valor Default |
+| :--- | :--- | :--- | :--- |
+| Categorias | Seleção múltipla | Opcional (alimentação, transporte, fornecedores etc.) | Todas |
+| Formas de Pagamento | Seleção múltipla | Opcional (cartão, dinheiro, pix etc.) | Todas |
+
+| Comandos | Destino | Tipo |
+| :--- | :--- | :--- |
+| **Aplicar Filtros** | Gerar Relatório | padrão |
+| **Voltar** | Selecionar Período | cancelar |
+
+### 4. Visualizar Relatório
+
+O sistema apresenta o relatório consolidado para análise do usuário.
+
+| Campo | Tipo | Restrições | Valor Default |
+| :--- | :--- | :--- | :--- |
+| Relatório Gerado | Área de texto/Imagem | Apenas leitura. Exibe os dados, tabelas e gráficos. | N/A |
+
+| Comandos | Destino | Tipo |
+| :--- | :--- | :--- |
+| **Exportar** | Exportar Relatório | padrão |
+| **Refazer** | Selecionar Período | cancelar |
+| **Finalizar** | Fim do processo | cancelar |
+
+### 5. Exportar Relatório
+
+O usuário escolhe o formato desejado para salvar o relatório gerado.
+
+| Campo | Tipo | Restrições | Valor Default |
+| :--- | :--- | :--- | :--- |
+| Formato de Exportação | Seleção única | Obrigatório. Opções: PDF, Excel, CSV | PDF |
+| Nome do Arquivo | Caixa de texto | Obrigatório | Relatorio_Financeiro_[DataFinal] |
+
+| Comandos | Destino | Tipo |
+| :--- | :--- | :--- |
+| **Salvar** | Fim do processo | padrão |
+| **Voltar** | Visualizar Relatório | cancelar |
+
 
