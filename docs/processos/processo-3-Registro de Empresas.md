@@ -3,7 +3,8 @@
 O processo de Cadastro e Gerenciamento de Clientes é essencial para organizar informações de clientes e fornecedores, servindo de base para outros módulos do sistema, como despesas, receitas e relatórios. Ele garante dados centralizados, evita duplicidades e facilita a tomada de decisões.
 
 
-![Exemplo de um Modelo BPMN do PROCESSO 1] [Processo3.drawio.pdf](https://github.com/user-attachments/files/22567254/Processo3.drawio.pdf)
+![Exemplo de um Modelo BPMN do PROCESSO 1] [Processo3.drawio.pdf] <img width="1602" height="381" alt="Processo3 drawio" src="https://github.com/user-attachments/assets/4d5c3271-2fb8-43aa-89ab-18888454d4d5" />
+
 
 
 #### Detalhamento das atividades
