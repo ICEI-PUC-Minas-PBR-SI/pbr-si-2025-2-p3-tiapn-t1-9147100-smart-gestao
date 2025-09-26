@@ -2,17 +2,11 @@
 
 Atualmente, muitos microempreendedores têm dificuldade em analisar suas finanças, já que os registros ficam dispersos em cadernos ou planilhas sem padrão. O Smart Gestão oferece a possibilidade de consolidar automaticamente as informações, permitindo gerar relatórios organizados, categorizados e atualizados em tempo real, dando maior clareza sobre lucros, gastos e saldo disponível.
 
-![Exemplo de um Modelo BPMN do PROCESSO 2](../images/process.png "Modelo BPMN do Processo 2.")
-
 ![Exemplo de Modelo BPMN do PROCESSO 2](../images/processo2_planejamento_financeiro.png)
-
-
-
-
 
 #### Detalhamento das atividades
 
-No processo de Geração de Relatórios Financeiros, o usuário escolhe o período e o tipo de relatório desejado, podendo aplicar filtros como categorias de gastos e formas de pagamento. O sistema gera automaticamente uma tabela com os registros e gráficos em imagem, além de um resumo em área de texto com os principais indicadores. Ao final, o relatório pode ser visualizado, exportado em PDF ou compartilhado.
+ No processo de Geração de Relatórios Financeiros, o usuário inicia informando ou sincronizando os dados financeiros provenientes de cadernos, planilhas ou outros sistemas. O sistema valida e consolida essas informações, garantindo consistência, removendo duplicidades e organizando os registros por categorias. Em seguida, é gerado automaticamente um relatório que pode incluir resumo de lucros e gastos, saldo disponível e gráficos de desempenho. O usuário visualiza o relatório, analisa os dados e identifica insights financeiros. Ao final, ele decide se deseja exportar ou salvar o relatório; caso positivo, o sistema permite a exportação em PDF, Excel ou outros formatos, encerrando o processo.
 
 _Os tipos de dados a serem utilizados são:_
 
