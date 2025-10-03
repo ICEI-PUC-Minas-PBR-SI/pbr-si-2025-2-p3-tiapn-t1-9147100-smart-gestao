@@ -1,104 +1,90 @@
-### 3.3.2 Processo 2 – Login de Usuários
+### Processo 2 – Gerar Relatórios
 
-O processo de login garante que apenas usuários cadastrados possam acessar a plataforma PUC Integra.  
-Para isso, o usuário deve inserir seu **e-mail institucional** e **senha** previamente cadastrada.  
-O sistema valida as credenciais e, em caso de sucesso, libera o acesso ao ambiente da plataforma.  
+O processo de geração de relatórios permite que o usuário visualize e analise suas informações financeiras de forma organizada. Esta funcionalidade é crucial para o acompanhamento da saúde financeira do MEI, oferecendo diferentes perspectivas através de filtros, gráficos e tabelas detalhadas.
 
-**Oportunidades de melhoria:**  
-- Permitir autenticação multifator (MFA) para maior segurança;  
-- Implementar mensagens claras em caso de erro de login;  
-- Otimizar o tempo de resposta da autenticação.  
-
-![PROCESSO 2 - Login de Usuários](/assets/images/p2_login.JPG "Modelo BPMN do Processo 2.")
-
----
-
-#### Detalhamento das atividades  
-
-#### Atividade 1 – Acessar tela de login (Usuário)
-
-| **Campo**        | **Tipo**        | **Restrições**            | **Valor default** |
-|-------------------|-----------------|---------------------------|-------------------|
-| botão login       | Botão           | único, visível            |                   |
-
-| **Comandos**       | **Destino**            | **Tipo**   |
-|--------------------|-------------------------|------------|
-| clicar             | Exibe formulário login | default    |
+**Fluxo principal:**
+1. Usuário acessa a página de Relatórios.
+2. Usuário seleciona filtros de período e tipo de relatório.
+3. Usuário clica em "Gerar Relatório".
+4. Sistema exibe gráficos e estatísticas financeiras.
+5. Sistema exibe tabela de análise detalhada.
+6. Sistema exibe insights financeiros relevantes.
 
 ---
 
-#### Atividade 2 – Exibir formulário de login (Sistema)
+#### Detalhamento das atividades
 
-| **Campo**          | **Tipo**        | **Restrições**                               | **Valor default** |
-|---------------------|-----------------|----------------------------------------------|-------------------|
-| formulário login    | Caixa de texto  | campos obrigatórios: e-mail e senha          |                   |
+## Atividade 1 – Selecionar Filtros de Relatório (Usuário)
 
-| **Comandos**       | **Destino**             | **Tipo**   |
-|--------------------|--------------------------|------------|
-| preencher login    | Inserir credenciais      | default    |
+Esta atividade permite ao usuário definir os parâmetros para a geração do relatório financeiro.
 
----
+| Campo/Elemento     | Tipo          | Restrições                                  |
+|:-------------------|:--------------|:--------------------------------------------|
+| Período            | Seleção Única | Obrigatório. Opções: Últimos 30 dias, Este mês, Mês passado, Trimestre atual, Semestre atual, Ano atual. |
+| Tipo de Relatório  | Seleção Única | Obrigatório. Opções: Resumo Financeiro, Despesas por Categoria, Fluxo de Caixa, Comparativo Mensal. |
+| Botão: Gerar Relatório | Botão         | Habilitado após a seleção dos filtros.      |
 
-#### Atividade 3 – Inserir credenciais (Usuário)
-
-| **Campo**     | **Tipo**        | **Restrições**                                                | **Valor default** |
-|---------------|-----------------|---------------------------------------------------------------|-------------------|
-| e-mail        | Caixa de texto  | deve existir no cadastro, formato institucional obrigatório   |                   |
-| senha         | Caixa de texto  | deve coincidir com senha cadastrada                           |                   |
-
-| **Comandos**       | **Destino**                  | **Tipo**   |
-|--------------------|-------------------------------|------------|
-| confirmar login    | Validar credenciais           | default    |
+**Comandos**
+- Selecionar uma opção no dropdown "Período".
+- Selecionar uma opção no dropdown "Tipo de Relatório".
+- Clicar no botão "Gerar Relatório" para processar as seleções.
 
 ---
 
-#### Atividade 4 – Validar credenciais (Sistema)
+## Atividade 2 – Visualizar Gráficos e Estatísticas (Sistema)
 
-| **Campo**            | **Tipo**     | **Restrições**                        | **Valor default** |
-|-----------------------|--------------|---------------------------------------|-------------------|
-| validação login       | Booleano     | autenticação obrigatória              |                   |
+Após a geração, o sistema apresenta os dados de forma visual para facilitar a compreensão.
 
-| **Comandos**         | **Destino**                   | **Tipo**   |
-|----------------------|--------------------------------|------------|
-| credenciais válidas  | Liberar acesso                 | default    |
-| credenciais inválidas| Exibir mensagem de erro        | cancel     |
+| Campo/Elemento           | Tipo   | Restrições                                  |
+|:-------------------------|:-------|:--------------------------------------------|
+| Gráfico: Receitas vs Despesas | Gráfico de Barras | Exibe comparativo de receitas e despesas. Pode ser filtrado por Mensal, Trimestral, Anual. |
+| Gráfico: Despesas por Categoria | Gráfico de Pizza | Exibe a proporção das despesas por categoria. |
 
----
-
-#### Atividade 5 – Exibir mensagem de erro (Sistema)
-
-| **Campo**        | **Tipo**      | **Restrições**                       | **Valor default** |
-|-------------------|---------------|--------------------------------------|-------------------|
-| mensagem erro     | Texto         | exibida sempre que login falhar      |                   |
-
-| **Comandos**       | **Destino**            | **Tipo**   |
-|--------------------|-------------------------|------------|
-| tentar novamente   | Exibir tela de login    | default    |
+**Comandos**
+- O sistema exibe automaticamente os gráficos com base nos filtros selecionados.
+- O usuário pode selecionar o período de visualização para o gráfico de Receitas vs Despesas (Mensal, Trimestral, Anual).
 
 ---
 
-#### Atividade 6 – Liberar acesso (Sistema)
+## Atividade 3 – Analisar Tabela Detalhada (Sistema)
 
-| **Campo**        | **Tipo**       | **Restrições**                          | **Valor default** |
-|-------------------|----------------|-----------------------------------------|-------------------|
-| acesso autorizado | Booleano       | válido somente para usuários cadastrados|                   |
+Uma tabela fornece uma visão pormenorizada dos dados financeiros.
 
-| **Comandos**       | **Destino**             | **Tipo**   |
-|--------------------|--------------------------|------------|
-| prosseguir sistema | Área principal da plataforma | default |
+| Campo/Elemento         | Tipo    | Restrições                                  |
+|:-----------------------|:--------|:--------------------------------------------|
+| Tabela: Análise Detalhada | Tabela  | Exibe Categoria, Orçamento, Realizado, Variação e % do Total. |
+
+**Comandos**
+- O sistema preenche a tabela com os dados detalhados do período e tipo de relatório selecionados.
+
 ---
 
-_Tipos de dados utilizados:_  
+## Atividade 4 – Consultar Insights Financeiros (Sistema)
 
-* **Área de texto** - campo texto de múltiplas linhas  
-* **Caixa de texto** - campo texto de uma linha  
-* **Número** - campo numérico  
-* **Data** - campo do tipo data (dd-mm-aaaa)  
-* **Hora** - campo do tipo hora (hh:mm:ss)  
-* **Data e Hora** - campo do tipo data e hora (dd-mm-aaaa, hh:mm:ss)  
-* **Imagem** - campo contendo uma imagem  
-* **Seleção única** - campo com várias opções de valores que são mutuamente exclusivas (radio button ou combobox)  
-* **Seleção múltipla** - campo com várias opções que podem ser selecionadas mutuamente (checkbox ou listbox)  
-* **Arquivo** - campo de upload de documento  
-* **Link** - campo que armazena uma URL  
-* **Tabela** - campo formado por uma matriz de valores  
+O sistema oferece insights automáticos para destacar pontos importantes da análise financeira.
+
+| Campo/Elemento           | Tipo   | Restrições                                  |
+|:-------------------------|:-------|:--------------------------------------------|
+| Insight: Bom trabalho nas vendas! | Texto  | Mensagem positiva sobre aumento de receitas. |
+| Insight: Atenção com materiais | Texto  | Alerta sobre orçamento excedido em materiais. |
+| Insight: Meta próxima    | Texto  | Informação sobre proximidade de meta.       |
+
+**Comandos**
+- O sistema gera e exibe insights contextuais baseados nos dados financeiros.
+
+---
+
+_Tipos de dados utilizados:_
+
+*   **Área de texto** - campo texto de múltiplas linhas
+*   **Caixa de texto** - campo texto de uma linha
+*   **Número** - campo numérico
+*   **Data** - campo do tipo data (dd-mm-aaaa)
+*   **Hora** - campo do tipo hora (hh:mm:ss)
+*   **Data e Hora** - campo do tipo data e hora (dd-mm-aaaa, hh:mm:ss)
+*   **Imagem** - campo contendo uma imagem
+*   **Seleção única** - campo com várias opções de valores que são mutuamente exclusivas (radio button ou combobox)
+*   **Seleção múltipla** - campo com várias opções que podem ser selecionadas mutuamente (checkbox ou listbox)
+*   **Arquivo** - campo de upload de documento
+*   **Link** - campo que armazena uma URL
+*   **Tabela** - campo formado por uma matriz de valores
