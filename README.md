@@ -18,7 +18,6 @@ Além de atender a uma necessidade concreta dos pequenos negócios, o projeto pr
 * Júlia Fernanda Alves
 * Maria Clara Silva Botelho
 
-
 ## Orientador
 
 * Cleia Marcia Gomes Amaral
@@ -48,9 +47,9 @@ Assim que a primeira versão do sistema estiver disponível, deverá complementa
 
 <li><a href="presentation/README.md"> Apresentação da solução</a></li>
 
-
 ## Histórico de versões
-
+* 0.1.2
+    * CHANGE: Atualização das documentações. Código permaneceu inalterado. Reajuste na estrutura das pastas e localiação de arquivos, paa melhor controle das informações.
 * 0.1.1
     * CHANGE: Atualização das documentações. Código permaneceu inalterado.
 * 0.1.0
