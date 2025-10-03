@@ -1,14 +1,17 @@
 ### 3.3.3 Processo 3: Cadastro de Empresa
 
-O processo de cadastro de empresa permite que novos usuários criem uma conta no sistema, fornecendo suas informações básicas e detalhes sobre o tipo de negócio. Esta etapa é fundamental para que o usuário possa começar a utilizar as funcionalidades de controle de despesas.
+O processo de criação de metas permite que os usuários definam objetivos financeiros ou de gestão dentro do sistema, fornecendo informações básicas como nome da meta, valor desejado e prazo. Esta etapa é fundamental para que o usuário possa acompanhar seu progresso e utilizar as funcionalidades de controle de despesas e receitas.
 
 **Fluxo principal:**
-1. Usuário acessa a página de criação de conta.
-2. Usuário preenche os dados cadastrais.
-3. Usuário clica em "Criar Conta".
-4. Sistema valida os dados fornecidos.
-5. Sistema cria a nova conta.
-6. Usuário é redirecionado para a página de login ou dashboard.
+1. O usuário acessa a página de criação de metas.
+2. O usuário preenche os dados da meta.
+3. O usuário clica em “Salvar Meta”.
+4. O sistema valida os dados fornecidos.
+5. O sistema registra a nova meta.
+6. O sistema registra a nova meta.
+7. O usuário é redirecionado para a tela de listagem de metas.
+   
+Modelagem BPMN: <img width="1081" height="661" alt="Processo3Metas drawio" src="https://github.com/user-attachments/assets/ca7f9118-0137-499a-8207-db631d83af94" />
 
 ---
 
