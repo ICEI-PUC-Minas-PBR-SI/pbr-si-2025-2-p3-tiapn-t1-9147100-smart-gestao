@@ -3,12 +3,16 @@
 O processo de cadastro de despesas permite ao usuário registrar e gerenciar suas transações financeiras, sejam elas receitas ou despesas. Esta funcionalidade é essencial para manter um controle financeiro detalhado e preciso, possibilitando a categorização e o acompanhamento de todas as movimentações.
 
 **Fluxo principal:**
-1. Usuário acessa a página de Transações.
-2. Usuário clica em "Nova Transação".
-3. Usuário preenche os detalhes da transação (data, descrição, categoria, tipo, valor).
-4. Usuário salva a transação.
-5. Sistema valida e registra a transação.
-6. Sistema exibe a transação na lista.
+1. O usuário acessa a página de transações.
+2. O usuário abre o formulário de lançamento financeiro.
+3. O usuário seleciona o tipo de registro (receita ou despesa).
+4. O usuário preenche os dados obrigatórios (descrição, valor, categoria, data etc.).
+5. O sistema valida os dados do formulário.
+6. Se inválidos, o sistema exibe mensagem de erro e o usuário corrige os dados.
+7. Se os dados forem válidos, o sistema atualiza saldo e relatórios financeiros.
+8. O sistema exibe mensagem de confirmação.
+9. Caso o usuário não confirme, pode corrigir os dados.
+10. Caso confirme, o sistema salva o registro no banco de dados.
 
 Modelagem BPMN: <img width="1461" height="661" alt="Processo1CadastroDespesas drawio" src="https://github.com/user-attachments/assets/1344fdf2-a41a-4c98-aed2-6086a2cde29d" />
 
