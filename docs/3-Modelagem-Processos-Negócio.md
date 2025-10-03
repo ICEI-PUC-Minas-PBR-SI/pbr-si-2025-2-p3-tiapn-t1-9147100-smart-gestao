@@ -58,6 +58,8 @@ Essa proposta está diretamente alinhada às estratégias de organização, efic
 
 ### 3.3. Modelagem dos processos
 
+<a href="https://www.figma.com/proto/bDCgHckIi4FXwnIgAgItPm/Smart-Gestao?node-id=107-231&t=zSmkdUWemt54Sckg-0&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=107%3A231&share=1" target="_blank">Prototipo - Smart Gestão</a>
+
 [PROCESSO 1 - Controle de Despesas de MEIs](./processos/processo-1-controle-despesas.md "Detalhamento do Processo 1.")
 
 [PROCESSO 2 - Planejamento Financeiro com Metas](./processos/processo-2-planejamento-financeiro.md "Detalhamento do Processo 2.")
