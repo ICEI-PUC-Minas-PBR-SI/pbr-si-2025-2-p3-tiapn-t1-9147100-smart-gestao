@@ -1,108 +1,63 @@
-### 3.3.3 Processo 3 – Personalização de Perfil
+### 3.3.3 Processo 3: Cadastro de Empresa
 
-O processo de personalização de perfil permite que o usuário configure e edite suas informações pessoais e acadêmicas após o login. Essa etapa é importante para adaptar a experiência de uso às necessidades de cada membro da comunidade acadêmica, permitindo atualizações de dados, inserção de foto, definição de preferências e atualização de informações institucionais.
+O processo de cadastro de empresa permite que novos usuários criem uma conta no sistema, fornecendo suas informações básicas e detalhes sobre o tipo de negócio. Esta etapa é fundamental para que o usuário possa começar a utilizar as funcionalidades de controle de despesas.
 
 **Fluxo principal:**
-1. Usuário acessa a área de perfil.
-2. Sistema exibe formulário de personalização.
-3. Usuário atualiza informações desejadas.
+1. Usuário acessa a página de criação de conta.
+2. Usuário preenche os dados cadastrais.
+3. Usuário clica em "Criar Conta".
 4. Sistema valida os dados fornecidos.
-5. Sistema salva as alterações no banco de dados.
-6. Perfil atualizado é exibido ao usuário.
+5. Sistema cria a nova conta.
+6. Usuário é redirecionado para a página de login ou dashboard.
 
 ---
 
 #### Detalhamento das atividades
 
-## Atividade 1 – Acessar e Visualizar Perfil (Usuário)
+## Atividade 1 – Preencher Dados Cadastrais (Usuário)
 
-Esta atividade envolve a navegação do usuário até a página de perfil e a visualização das informações.
+Esta atividade envolve o preenchimento das informações necessárias para a criação da conta.
 
-| Campo/Elemento           | Tipo   | Restrições                                  |
-|:-------------------------|:-------|:--------------------------------------------|
-| Botão/Link: Perfil       | Botão/Link | Apenas usuários logados podem acessar       |
-| Avatar do Usuário        | Imagem | Exibe a imagem de perfil do usuário         |
-| Nome Completo            | Texto  | Exibe o nome completo do usuário            |
-| E-mail                   | Texto  | Exibe o e-mail do usuário                   |
-| Telefone                 | Texto  | Exibe o telefone do usuário                 |
-| CNPJ                     | Texto  | Exibe o CNPJ do usuário                     |
-| Tipo de Negócio          | Texto  | Exibe o tipo de negócio do usuário          |
+| Campo/Elemento     | Tipo          | Restrições                                  |
+|:-------------------|:--------------|:--------------------------------------------|
+| Nome Completo      | Texto         | Obrigatório. Campo de texto.                |
+| E-mail             | E-mail        | Obrigatório. Formato de e-mail válido.      |
+| Senha              | Senha         | Obrigatório. Mínimo de 6 caracteres.        |
+| Confirmar Senha    | Senha         | Obrigatório. Deve ser idêntica à senha.     |
+| Tipo de Negócio    | Seleção Única | Obrigatório. Opções: MEI, Autônomo, Outro.  |
 
 **Comandos**
-- Navegar para a página de perfil.
-- Visualizar informações pessoais e estatísticas.
+- Inserir o nome completo no campo "Nome Completo".
+- Inserir o endereço de e-mail no campo "E-mail".
+- Inserir a senha no campo "Senha".
+- Inserir a senha novamente no campo "Confirmar Senha".
+- Selecionar o tipo de negócio no dropdown "Tipo de Negócio".
 
 ---
 
-## Atividade 2 – Editar Informações Pessoais (Usuário)
+## Atividade 2 – Criar Conta (Usuário)
 
-Permite ao usuário modificar seus dados pessoais exibidos no perfil.
+Após preencher os dados, o usuário finaliza o processo de criação da conta.
 
-| Campo/Elemento           | Tipo   | Restrições                                  |
-|:-------------------------|:-------|:--------------------------------------------|
-| Botão: Editar (Informações Pessoais) | Botão  | Habilita a edição dos campos                |
-| Campo: Nome Completo     | Texto  | Campo de texto editável                     |
-| Campo: E-mail            | Texto  | Campo de texto editável (formato e-mail)    |
-| Campo: Telefone          | Texto  | Campo de texto editável (formato telefone)  |
-| Campo: CNPJ              | Texto  | Campo de texto editável (formato CNPJ)      |
-| Campo: Tipo de Negócio   | Texto  | Campo de texto editável                     |
-| Botão: Salvar Alterações | Botão  | Salva as modificações no sistema            |
-| Botão: Cancelar Edição   | Botão  | Descarta as modificações e retorna ao estado anterior |
+| Campo/Elemento     | Tipo   | Restrições                                  |
+|:-------------------|:-------|:--------------------------------------------|
+| Botão: Criar Conta | Botão  | Habilitado após o preenchimento de todos os campos obrigatórios e validação. |
 
 **Comandos**
-- Clicar em "Editar" para habilitar os campos.
-- Preencher/modificar os campos desejados.
-- Clicar em "Salvar Alterações" para persistir os dados.
-- Clicar em "Cancelar Edição" para desfazer as alterações.
+- Clicar no botão "Criar Conta".
 
 ---
 
-## Atividade 3 – Gerenciar Configurações da Conta (Usuário)
+## Atividade 3 – Navegar para Login (Opcional) (Usuário)
 
-Permite ao usuário ajustar preferências como notificações e tema da interface.
+Caso o usuário já possua uma conta, ele pode optar por fazer login.
 
-| Campo/Elemento           | Tipo     | Restrições                                  |
-|:-------------------------|:---------|:--------------------------------------------|
-| Toggle: Notificações     | Toggle   | Ativa/desativa alertas sobre metas e despesas |
-| Toggle: E-mails de Relatório | Toggle   | Ativa/desativa o recebimento de relatórios semanais |
-| Toggle: Tema Escuro      | Toggle   | Ativa/desativa o modo escuro da interface   |
+| Campo/Elemento     | Tipo   | Restrições                                  |
+|:-------------------|:-------|:--------------------------------------------|
+| Link: Fazer login  | Link   | Redireciona para a página de login.         |
 
 **Comandos**
-- Clicar no toggle para ativar ou desativar a opção desejada.
-
----
-
-## Atividade 4 – Definir Preferências Financeiras (Usuário)
-
-Permite ao usuário configurar aspectos financeiros como moeda padrão e orçamento.
-
-| Campo/Elemento           | Tipo         | Restrições                                  |
-|:-------------------------|:-------------|:--------------------------------------------|
-| Seleção: Moeda Padrão    | Seleção única | Escolha entre Real, Dólar, Euro             |
-| Seleção: Dia de Vencimento de Impostos | Seleção única | Escolha entre opções pré-definidas ou personalizado |
-| Campo: Orçamento Mensal Padrão | Número       | Campo numérico para definir orçamento mensal |
-
-**Comandos**
-- Selecionar a moeda padrão desejada.
-- Selecionar o dia de vencimento de impostos.
-- Inserir um valor para o orçamento mensal padrão.
-
----
-
-## Atividade 5 – Realizar Ações da Conta (Usuário)
-
-Oferece opções para exportar dados, alterar senha ou sair da conta.
-
-| Campo/Elemento           | Tipo   | Restrições                                  |
-|:-------------------------|:-------|:--------------------------------------------|
-| Botão: Exportar Todos os Dados | Botão  | Exporta todos os dados do usuário em formato PDF |
-| Botão: Alterar Senha     | Botão  | Redireciona para a tela de alteração de senha |
-| Botão: Sair da Conta     | Botão  | Encerra a sessão do usuário                 |
-
-**Comandos**
-- Clicar em "Exportar Todos os Dados" para gerar um PDF.
-- Clicar em "Alterar Senha" para iniciar o processo de mudança de senha.
-- Clicar em "Sair da Conta" para fazer logout.
+- Clicar no link "Fazer login".
 
 ---
 
@@ -120,4 +75,3 @@ _Tipos de dados utilizados:_
 *   **Arquivo** - campo de upload de documento
 *   **Link** - campo que armazena uma URL
 *   **Tabela** - campo formado por uma matriz de valores
- 
