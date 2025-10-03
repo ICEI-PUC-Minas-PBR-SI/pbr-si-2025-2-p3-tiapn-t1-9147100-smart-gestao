@@ -1,129 +1,76 @@
-### 3.3.1 Processo 1 – Cadastro de Usuários
+### 3.3.1 Processo: Cadastro de Despesas
 
-O processo de cadastro tem como objetivo permitir que novos usuários sejam registrados na plataforma PUC Integra.  
-Durante o cadastro, o usuário informa seus dados pessoais (nome, e-mail institucional, senha, matrícula e curso).  
-Após o preenchimento, o sistema valida as informações e identifica automaticamente o tipo de usuário: **aluno** ou **professor**.  
+O processo de cadastro de despesas permite ao usuário registrar e gerenciar suas transações financeiras, sejam elas receitas ou despesas. Esta funcionalidade é essencial para manter um controle financeiro detalhado e preciso, possibilitando a categorização e o acompanhamento de todas as movimentações.
 
-Essa identificação é essencial para garantir que o perfil inicial seja atribuído corretamente, permitindo que cada usuário utilize a plataforma de acordo com suas responsabilidades acadêmicas.  
-
-**Oportunidades de melhoria:**  
-- Automatizar a identificação do perfil com base na matrícula e e-mail;  
-- Implementar mensagens claras de erro para facilitar a experiência do usuário;  
-- Garantir segurança no armazenamento dos dados (criptografia de senha e validação de entrada). 
-
-![PROCESSO 1 - Cadastro de Usuários](/assets/images/p1_CadastroUsuario.png "Modelo BPMN do Processo 1.")
+**Fluxo principal:**
+1. Usuário acessa a página de Transações.
+2. Usuário clica em "Nova Transação".
+3. Usuário preenche os detalhes da transação (data, descrição, categoria, tipo, valor).
+4. Usuário salva a transação.
+5. Sistema valida e registra a transação.
+6. Sistema exibe a transação na lista.
 
 ---
 
-#### Detalhamento das atividades  
+#### Detalhamento das atividades
 
-#### Atividade 1 – Acessar tela de cadastro (Usuário)
+## Atividade 1 – Visualizar e Filtrar Transações (Usuário)
 
-| **Campo**         | **Tipo**       | **Restrições**              | **Valor default** |
-|--------------------|----------------|-----------------------------|-------------------|
-| botão cadastro     | Botão          | único, visível              |                   |
+Esta atividade permite ao usuário visualizar todas as transações existentes e aplicar filtros para refinar a busca.
 
-| **Comandos**       | **Destino**            | **Tipo**   |
-|--------------------|------------------------|------------|
-| clicar             | Exibe formulário       | default    |
+| Campo/Elemento           | Tipo          | Restrições                                  |
+|:-------------------------|:--------------|:--------------------------------------------|
+| Botão: Filtrar           | Botão         | Abre opções de filtro.                      |
+| Seleção: Período         | Seleção Única | Opções: Últimos 30 dias, Este mês, Mês passado, Personalizado. |
+| Seleção: Tipo            | Seleção Única | Opções: Todos, Receitas, Despesas.          |
+| Seleção: Categoria       | Seleção Única | Opções: Todas, Materiais, Serviços, Transporte, Impostos, etc. |
+| Tabela de Transações     | Tabela        | Exibe Data, Descrição, Categoria, Tipo, Valor e Ações. |
+| Botão: Editar (Transação)| Botão         | Permite editar uma transação específica.    |
+| Botão: Excluir (Transação)| Botão         | Permite excluir uma transação específica.   |
+| Paginação                | Navegação     | Permite navegar entre as páginas de transações. |
 
----
-
-#### Atividade 2 – Exibir formulário de cadastro (Sistema)
-
-| **Campo**            | **Tipo**        | **Restrições**                                        | **Valor default** |
-|-----------------------|-----------------|-------------------------------------------------------|-------------------|
-| formulário cadastro   | Caixa de texto  | campos obrigatórios: nome, e-mail, senha, matrícula   |                   |
-
-| **Comandos**          | **Destino**                   | **Tipo**   |
-|-----------------------|--------------------------------|------------|
-| preencher formulário  | Preencher dados do cadastro    | default    |
-| cancelar              | Fim do processo                | cancel     |
+**Comandos**
+- Clicar em "Filtrar" para exibir as opções de filtro.
+- Selecionar opções nos dropdowns "Período", "Tipo" e "Categoria".
+- Clicar nos botões de ação (Editar/Excluir) para gerenciar transações individuais.
+- Clicar nos botões "Anterior" ou "Próxima" para navegar na paginação.
 
 ---
 
-#### Atividade 3 – Preencher dados de cadastro (Usuário)
+## Atividade 2 – Adicionar Nova Transação (Usuário)
 
-## Atividade 3 – Exibir formulário de dados (Sistema)
-| Campo | Tipo | Restrições |
-|-------|------|------------|
-| Nome completo | Texto | resposta obrigatória |
-| CPF | Numérico | 11 dígitos, formato XXX.XXX.XXX-XX, obrigatório |
-| E-mail institucional | Texto | formato XXX@sga.pucminas.br, obrigatório |
-| Matrícula | Texto/Numérico | obrigatório |
-| Telefone | Numérico | formato (XX)XXXXX-XXXX, obrigatório |
-| Senha | Texto | 8 caracteres, contendo maiúscula, minúscula, número e caractere especial, obrigatório |
-| Confirmar senha | Texto | 8 caracteres, contendo maiúscula, minúscula, número e caractere especial, obrigatório |
-| Tipo de usuário | Combo box | Aluno, professor ou monitor, obrigatório |
+Esta atividade permite ao usuário registrar uma nova receita ou despesa no sistema.
 
+| Campo/Elemento           | Tipo          | Restrições                                  |
+|:-------------------------|:--------------|:--------------------------------------------|
+| Botão: Nova Transação    | Botão         | Abre um formulário para adicionar transação. |
+| Campo: Data              | Data          | Obrigatório. Data da transação.             |
+| Campo: Descrição         | Texto         | Obrigatório. Breve descrição da transação.  |
+| Campo: Categoria         | Seleção Única | Obrigatório. Categoria da transação (ex: Vendas, Materiais, Serviços). |
+| Campo: Tipo              | Seleção Única | Obrigatório. Tipo da transação (Receita ou Despesa). |
+| Campo: Valor             | Número        | Obrigatório. Valor monetário da transação.  |
+| Botão: Salvar            | Botão         | Salva a nova transação.                     |
+| Botão: Cancelar          | Botão         | Cancela a adição da transação.              |
 
-| **Comandos**       | **Destino**                | **Tipo**   |
-|--------------------|-----------------------------|------------|
-| confirmar dados    | Validar informações         | default    |
-
----
-
-#### Atividade 4 – Validar informações (Sistema)
-
-| **Campo**         | **Tipo**    | **Restrições**                                 | **Valor default** |
-|--------------------|-------------|-----------------------------------------------|-------------------|
-| validação dados    | Booleano    | verificar e-mail, matrícula e força da senha  |                   |
-
-| **Comandos**       | **Destino**                     | **Tipo**   |
-|--------------------|----------------------------------|------------|
-| dados válidos      | Identificar perfil               | default    |
-| dados inválidos    | Exibir mensagem de erro          | cancel     |
+**Comandos**
+- Clicar em "Nova Transação".
+- Preencher os campos "Data", "Descrição", "Categoria", "Tipo" e "Valor".
+- Clicar em "Salvar" para registrar a transação.
+- Clicar em "Cancelar" para fechar o formulário sem salvar.
 
 ---
 
-#### Atividade 5 – Identificar perfil (Sistema)
+_Tipos de dados utilizados:_
 
-| **Campo**        | **Tipo**        | **Restrições**                             | **Valor default** |
-|-------------------|-----------------|--------------------------------------------|-------------------|
-| perfil usuário    | Seleção única   | aluno (com matrícula em curso) / professor |                   |
-
-| **Comandos**       | **Destino**                | **Tipo**   |
-|--------------------|-----------------------------|------------|
-| aluno              | Armazenar cadastro          | default    |
-| professor          | Armazenar cadastro          | default    |
-
----
-
-#### Atividade 6 – Armazenar cadastro (Banco de Dados)
-
-| **Campo**            | **Tipo**    | **Restrições**                       | **Valor default** |
-|-----------------------|-------------|--------------------------------------|-------------------|
-| cadastro registrado   | Registro    | salvar dados de forma segura         |                   |
-
-| **Comandos**       | **Destino**               | **Tipo**   |
-|--------------------|----------------------------|------------|
-| salvar cadastro    | Confirmar cadastro         | default    |
-
----
-
-#### Atividade 7 – Confirmar cadastro (Sistema)
-
-| **Campo**        | **Tipo**       | **Restrições**                      | **Valor default** |
-|-------------------|----------------|-------------------------------------|-------------------|
-| mensagem sucesso  | Texto          | exibida apenas quando cadastro ok   |                   |
-
-| **Comandos**       | **Destino**         | **Tipo**   |
-|--------------------|---------------------|------------|
-| prosseguir login   | Exibir tela de login | default    |
-
----
-
-_Tipos de dados utilizados:_  
-
-* **Área de texto** - campo texto de múltiplas linhas  
-* **Caixa de texto** - campo texto de uma linha  
-* **Número** - campo numérico  
-* **Data** - campo do tipo data (dd-mm-aaaa)  
-* **Hora** - campo do tipo hora (hh:mm:ss)  
-* **Data e Hora** - campo do tipo data e hora (dd-mm-aaaa, hh:mm:ss)  
-* **Imagem** - campo contendo uma imagem  
-* **Seleção única** - campo com várias opções de valores que são mutuamente exclusivas (radio button ou combobox)  
-* **Seleção múltipla** - campo com várias opções que podem ser selecionadas mutuamente (checkbox ou listbox)  
-* **Arquivo** - campo de upload de documento  
-* **Link** - campo que armazena uma URL  
-* **Tabela** - campo formado por uma matriz de valores  
+*   **Área de texto** - campo texto de múltiplas linhas
+*   **Caixa de texto** - campo texto de uma linha
+*   **Número** - campo numérico
+*   **Data** - campo do tipo data (dd-mm-aaaa)
+*   **Hora** - campo do tipo hora (hh:mm:ss)
+*   **Data e Hora** - campo do tipo data e hora (dd-mm-aaaa, hh:mm:ss)
+*   **Imagem** - campo contendo uma imagem
+*   **Seleção única** - campo com várias opções de valores que são mutuamente exclusivas (radio button ou combobox)
+*   **Seleção múltipla** - campo com várias opções que podem ser selecionadas mutuamente (checkbox ou listbox)
+*   **Arquivo** - campo de upload de documento
+*   **Link** - campo que armazena uma URL
+*   **Tabela** - campo formado por uma matriz de valores
