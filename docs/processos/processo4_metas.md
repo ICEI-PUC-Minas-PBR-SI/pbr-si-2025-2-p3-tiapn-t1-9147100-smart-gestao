@@ -1,4 +1,4 @@
-### 4.4.4 Processo 4: Criação de metas
+### 3.3.4 Processo 4: Criação de metas
 
 O processo de criação de metas permite que os usuários definam objetivos financeiros ou de gestão dentro do sistema, fornecendo informações básicas como nome da meta, valor desejado e prazo. Esta etapa é fundamental para que o usuário possa acompanhar seu progresso e utilizar as funcionalidades de controle de despesas e receitas.
 
