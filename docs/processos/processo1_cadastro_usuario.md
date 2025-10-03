@@ -1,4 +1,4 @@
-### 3.3.1 Processo: Cadastro de Despesas
+### 3.3.1 Processo 1: Cadastro de Despesas
 
 O processo de cadastro de despesas permite ao usuário registrar e gerenciar suas transações financeiras, sejam elas receitas ou despesas. Esta funcionalidade é essencial para manter um controle financeiro detalhado e preciso, possibilitando a categorização e o acompanhamento de todas as movimentações.
 
