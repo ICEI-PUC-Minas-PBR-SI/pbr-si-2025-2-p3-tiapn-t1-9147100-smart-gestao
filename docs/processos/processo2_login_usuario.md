@@ -1,4 +1,4 @@
-### Processo 2 – Gerar Relatórios
+###3.3.2 Processo 2 – Gerar Relatórios
 
 O processo de geração de relatórios permite que o usuário visualize e analise suas informações financeiras de forma organizada. Esta funcionalidade é crucial para o acompanhamento da saúde financeira do MEI, oferecendo diferentes perspectivas através de filtros, gráficos e tabelas detalhadas.
 
