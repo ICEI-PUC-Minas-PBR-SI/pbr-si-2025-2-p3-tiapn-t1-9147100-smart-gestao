@@ -1,4 +1,4 @@
-### Processo 3 – Personalização de Perfil
+### 3.3.3 Processo 3 – Personalização de Perfil
 
 O processo de personalização de perfil permite que o usuário configure e edite suas informações pessoais e acadêmicas após o login. Essa etapa é importante para adaptar a experiência de uso às necessidades de cada membro da comunidade acadêmica, permitindo atualizações de dados, inserção de foto, definição de preferências e atualização de informações institucionais.
 
