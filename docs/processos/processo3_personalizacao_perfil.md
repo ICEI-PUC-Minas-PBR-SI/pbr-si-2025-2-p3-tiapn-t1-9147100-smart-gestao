@@ -10,6 +10,9 @@ O processo de cadastro de empresa permite que novos usuários criem uma conta no
 5. Sistema cria a nova conta.
 6. Usuário é redirecionado para a página de login ou dashboard.
 
+Modelagem BPMN: <img width="1602" height="381" alt="Processo3 drawio" src="https://github.com/user-attachments/assets/2674a917-7672-481f-97ac-62ae25047faa" />
+
+
 ---
 
 #### Detalhamento das atividades
