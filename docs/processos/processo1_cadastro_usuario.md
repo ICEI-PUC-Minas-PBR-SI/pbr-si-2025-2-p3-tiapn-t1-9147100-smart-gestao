@@ -11,7 +11,7 @@ Essa identificação é essencial para garantir que o perfil inicial seja atribu
 - Implementar mensagens claras de erro para facilitar a experiência do usuário;  
 - Garantir segurança no armazenamento dos dados (criptografia de senha e validação de entrada). 
 
-![PROCESSO 1 - Cadastro de Usuários](../images/p1_CadastroUsuario.png "Modelo BPMN do Processo 1.")
+![PROCESSO 1 - Cadastro de Usuários](/assets/images/p1_CadastroUsuario.png "Modelo BPMN do Processo 1.")
 
 ---
 

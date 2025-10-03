@@ -9,7 +9,7 @@ O sistema valida as credenciais e, em caso de sucesso, libera o acesso ao ambien
 - Implementar mensagens claras em caso de erro de login;  
 - Otimizar o tempo de resposta da autenticação.  
 
-![PROCESSO 2 - Login de Usuários](../images/p2_login.JPG "Modelo BPMN do Processo 2.")
+![PROCESSO 2 - Login de Usuários](/assets/images/p2_login.JPG "Modelo BPMN do Processo 2.")
 
 ---
 
