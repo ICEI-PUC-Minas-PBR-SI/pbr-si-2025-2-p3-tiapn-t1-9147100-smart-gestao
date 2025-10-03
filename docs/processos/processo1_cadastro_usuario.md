@@ -10,6 +10,8 @@ O processo de cadastro de despesas permite ao usuário registrar e gerenciar sua
 5. Sistema valida e registra a transação.
 6. Sistema exibe a transação na lista.
 
+Modelagem BPMN: <img width="1891" height="431" alt="Processo1 drawio" src="https://github.com/user-attachments/assets/a8be079b-d7d5-495f-b077-fa1994f013b6" />
+
 ---
 
 #### Detalhamento das atividades
