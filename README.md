@@ -1,25 +1,28 @@
-# PUC Integra
+# Smart Gestão
 
-`Sistemas de Informação`
+`SISTEMAS DE INFORMAÇÃO`
 
-`Trabalho interdisciplinar: Aplicações para processos de negócios`
+`TRABALHO INTERDISCIPLINAR : APLICAÇÕES PARA PROCESSO DE NEGÓCIOS`
 
-`2.2025`
+`02.2025`
 
-Inspirado no aplicativo Web e Mobile “Brainly”, uma comunidade de compartilhamento de conhecimentos entre especialistas e estudantes dos mais diversos assuntos, idealizamos um projeto que visa promover a interação e a cooperação entre membros da comunidade acadêmica da PUC Minas, aliando tecnologia, inovação e metodologias de aprendizagem colaborativa. Assim, espera-se que o acesso ao conhecimento, bem como a construção coletiva do aprendizado no ambiente universitário sejam fortalecidos e garantidos. 
+Nosso projeto tem como objetivo desenvolver um sistema de controle de despesas para microempreendedores individuais (MEIs) e profissionais autônomos, visando solucionar a falta de organização financeira, uma dificuldade comum desse público. Muitos ainda utilizam métodos informais, como cadernos ou planilhas simples, dificultando o acompanhamento do fluxo de caixa e a tomada de decisões estratégicas. O sistema propõe oferecer uma ferramenta prática, acessível e intuitiva, capaz de registrar e categorizar transações, gerar relatórios, definir metas e emitir alertas, contribuindo para uma gestão financeira mais eficiente.
+
+Além de atender a uma necessidade concreta dos pequenos negócios, o projeto promove a educação financeira ao incentivar o uso contínuo de recursos tecnológicos. A solução prioriza simplicidade e usabilidade, sem abrir mão de funcionalidades essenciais como segurança das informações e compatibilidade com múltiplas plataformas, ajudando os usuários a reduzir gastos desnecessários, melhorar o planejamento estratégico e alcançar maior sustentabilidade em seus empreendimentos.
 
 ## Integrantes
 
-* Gabriel Rodrigo dos Santos Miguel
-* Giovanna Fabíola Vaz
-* Luiza Rodrigues Vertelo
-* Mateus de Carvalho Freitas
-* Ronaldo Pereira de Camargos Júnior
+* Heron Victor Vieira da Silva
+* Hugo Ferreira Silva
+* Izadora Helena Pedrosa Soares Pereira
+* Júlia Fernanda Alves
+* Maria Clara Silva Botelho
+
 
 ## Orientador
 
 * Cleia Marcia Gomes Amaral
-
+  
 ## Instruções de utilização
 
 Assim que a primeira versão do sistema estiver disponível, deverá complementar com as instruções de utilização. Descreva como instalar eventuais dependências e como executar a aplicação.
@@ -43,7 +46,7 @@ Assim que a primeira versão do sistema estiver disponível, deverá complementa
 
 # Apresentação
 
-<li><a href="docs/apresentacao/README.md"> Apresentação da solução</a></li>
+<li><a href="presentation/README.md"> Apresentação da solução</a></li>
 
 
 ## Histórico de versões
