@@ -41,10 +41,16 @@ O **Modelo Conceitual** descreve de forma abstrata **as principais entidades** d
 > **DER (Diagrama Entidade-Relacionamento)** é um modelo gráfico que representa **as entidades de um sistema**, seus **atributos** e **os relacionamentos** entre elas.
 
 ```text
+
+Empresa (1) ───< (N) Usuário  
 Usuário (1) ───< (N) ClienteFornecedor  
 Usuário (1) ───< (N) Transação  
 Usuário (1) ───< (N) MetaFinanceira  
-MetaFinanceira (1) ───< (N) Alerta
+MetaFinanceira (1) ───< (N) Alerta  
+Usuário (1) ───< (N) LogAuditoria  
+
+> Cada entidade possui o campo **empresaId**, que garante isolamento total de dados entre diferentes empresas.
+> O campo **uuid** é um identificador único global gerado automaticamente para cada usuário, evitando duplicidade.
 
 ```
 
@@ -54,12 +60,32 @@ MetaFinanceira (1) ───< (N) Alerta
 
 ```text
 +--------------------+
+|      EMPRESA       |
++--------------------+
+| id_empresa (PK)    |
+| nome               |
+| cnpj               |
+| email_contato      |
+| telefone           |
+| endereco           |
+| plano              |
+| ativo              |
+| data_cadastro      |
++--------------------+
+
+          │ 1
+          │
+          │ N
++--------------------+
 |      USUARIO       |
 +--------------------+
 | id_usuario (PK)    |
+| id_empresa (FK)    |
 | nome               |
 | email              |
 | senha_hash         |
+| role (ADMIN/USER)  |
+| ativo              |
 | data_cadastro      |
 +--------------------+
 
@@ -70,6 +96,7 @@ MetaFinanceira (1) ───< (N) Alerta
 |  CLIENTE_FORNECEDOR    |
 +------------------------+
 | id_cf (PK)             |
+| id_empresa (FK)        |
 | id_usuario (FK)        |
 | tipo                   |
 | nome_razao             |
@@ -78,6 +105,7 @@ MetaFinanceira (1) ───< (N) Alerta
 | email                  |
 | categoria              |
 | endereco               |
+| ativo                  |
 +------------------------+
 
           │ 1
@@ -87,16 +115,17 @@ MetaFinanceira (1) ───< (N) Alerta
 |   TRANSACAO      |
 +------------------+
 | id_transacao (PK)|
+| id_empresa (FK)  |
 | id_usuario (FK)  |
 | id_cf (FK)       |
 | tipo             |
 | descricao        |
 | categoria        |
 | valor            |
-| data             |
+| data_transacao   |
 | forma_pagamento  |
 | status           |
-| anexo            |
+| anexo_url        |
 +------------------+
 
           │ 1
@@ -106,6 +135,7 @@ MetaFinanceira (1) ───< (N) Alerta
 | META_FINANCEIRA  |
 +------------------+
 | id_meta (PK)     |
+| id_empresa (FK)  |
 | id_usuario (FK)  |
 | tipo_meta        |
 | valor_meta       |
@@ -122,11 +152,9 @@ MetaFinanceira (1) ───< (N) Alerta
 +----------------+
 | id_alerta (PK) |
 | id_meta (FK)   |
-| tipo_alerta    |
-| mensagem       |
-| data_geracao   |
-| status         |
-+----------------+
+| id_empresa (FK)|
+| id_usuari_
+
 ```
 
 ### Script Base SQL

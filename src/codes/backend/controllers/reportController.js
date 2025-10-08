@@ -1,34 +1,27 @@
-// Controlador de relatórios financeiros
+// controllers/reportController.js
+// Gera relatórios financeiros restritos à empresa logada
 
 import Transaction from "../models/Transaction.js";
 
-export const generateReport = async (req, res) => {
+export const getCompanyReport = async (req, res) => {
   try {
-    const { clientId } = req.params;
-    const { startDate, endDate } = req.query;
+    const empresaId = req.user.empresaId;
 
-    // Filtro por cliente e período
-    const query = { clientId };
-    if (startDate && endDate) {
-      query.date = { $gte: new Date(startDate), $lte: new Date(endDate) };
-    }
+    // Filtro automático — somente dados da empresa
+    const transactions = await Transaction.find({ empresaId });
 
-    // Busca todas transações
-    const transactions = await Transaction.find(query);
+    const resumo = {
+      totalReceitas: transactions
+        .filter(t => t.tipo === "receita")
+        .reduce((acc, t) => acc + t.valor, 0),
+      totalDespesas: transactions
+        .filter(t => t.tipo === "despesa")
+        .reduce((acc, t) => acc + t.valor, 0),
+    };
 
-    // Calcula totais
-    const totalReceitas = transactions.filter(t => t.type === "receita").reduce((s, t) => s + t.value, 0);
-    const totalDespesas = transactions.filter(t => t.type === "despesa").reduce((s, t) => s + t.value, 0);
-
-    // Retorna relatório simples
-    res.json({
-      periodo: { startDate, endDate },
-      totalReceitas,
-      totalDespesas,
-      saldoFinal: totalReceitas - totalDespesas,
-      qtdTransacoes: transactions.length
-    });
+    res.status(200).json({ empresaId, resumo, quantidade: transactions.length });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Erro ao gerar relatório:", err);
+    res.status(500).json({ message: "Erro ao gerar relatório financeiro" });
   }
 };

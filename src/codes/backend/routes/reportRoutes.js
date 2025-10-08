@@ -1,11 +1,11 @@
 import express from "express";
+import { getCompanyReport } from "../controllers/reportController.js";
 import { companyScopeMiddleware } from "../middlewares/companyScopeMiddleware.js";
-import * as transactionController from "../controllers/transactionController.js";
 import Transaction from "../models/Transaction.js";
 
 const router = express.Router();
 
-// Rota protegida pelo escopo da empresa
-router.get("/", companyScopeMiddleware(Transaction), transactionController.getAllTransactions);
+// Rota para gerar relatório financeiro da empresa logada
+router.get("/", companyScopeMiddleware(Transaction), getCompanyReport);
 
 export default router;

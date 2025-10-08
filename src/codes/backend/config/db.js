@@ -1,16 +1,23 @@
-// Arquivo responsável por conectar ao banco MongoDB Atlas
+// config/db.js
+// Conexão com o MongoDB (Mongoose)
+// Carrega variáveis de ambiente com dotenv
 
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 
 dotenv.config();
 
-export const connectDB = async () => {
+export async function connectDB() {
   try {
-    await mongoose.connect(process.env.MONGO_URI); // pega string de conexão do .env
-    console.log("✅ Conectado ao MongoDB Atlas");
-  } catch (error) {
-    console.error("❌ Erro ao conectar:", error.message);
-    process.exit(1); // encerra aplicação se não conectar
+    // process.env.MONGO_URI vem do arquivo .env
+    await mongoose.connect(process.env.MONGO_URI, {
+      // opções recomendadas
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    });
+    console.log("✅ Conectado ao MongoDB");
+  } catch (err) {
+    console.error("❌ Erro ao conectar ao MongoDB:", err);
+    process.exit(1);
   }
-};
+}
