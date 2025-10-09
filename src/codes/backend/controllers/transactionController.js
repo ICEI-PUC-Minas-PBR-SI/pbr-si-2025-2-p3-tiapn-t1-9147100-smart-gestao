@@ -1,25 +1,44 @@
-// Controlador de transações: receitas e despesas
+// ===========================================
+// Arquivo: controllers/transactionController.js
+// Função: Controle de transações financeiras (receitas e despesas)
+// ===========================================
 
 import Transaction from "../models/Transaction.js";
+import { createLog } from "../utils/logger.js";
 
-// Criar uma transação (receita ou despesa)
-export const createTransaction = async (req, res) => {
+/**
+ * Listar todas as transações da empresa
+ */
+export const getAllTransactions = async (req, res) => {
   try {
-    const tx = new Transaction(req.body);
-    await tx.save();
-    res.status(201).json(tx);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+    const transactions = await Transaction.find({ companyId: req.user.companyId });
+    res.status(200).json(transactions);
+  } catch (error) {
+    res.status(500).json({ message: "Erro ao listar transações", error });
   }
 };
 
-// Listar todas as transações de um cliente
-export const getTransactions = async (req, res) => {
+/**
+ * Criar uma nova transação (receita ou despesa)
+ */
+export const createTransaction = async (req, res) => {
   try {
-    const { clientId } = req.params;
-    const txs = await Transaction.find({ clientId });
-    res.json(txs);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+    const transaction = new Transaction({
+      ...req.body,
+      companyId: req.user.companyId,
+    });
+    await transaction.save();
+
+    await createLog({
+      userId: req.user.userId,
+      companyId: req.user.companyId,
+      action: "CREATE_TRANSACTION",
+      description: `Transação criada (${transaction.type}): ${transaction.value}`,
+      route: req.originalUrl,
+    });
+
+    res.status(201).json(transaction);
+  } catch (error) {
+    res.status(500).json({ message: "Erro ao criar transação", error });
   }
 };

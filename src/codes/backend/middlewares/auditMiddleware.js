@@ -1,39 +1,51 @@
-// middlewares/auditMiddleware.js
-// Middleware de auditoria para registrar operações de forma automática.
+// ===========================================
+// Arquivo: middlewares/auditMiddleware.js
+// Função: Registrar logs de auditoria após resposta (res.on('finish'))
+// Uso: aplicar em rotas que realizam escrita (POST/PUT/DELETE)
+// Exemplo: router.post('/', authMiddleware, auditMiddleware('CREATE_TRANSACTION'), controller.createTransaction)
+// ===========================================
 
-import Log from "../models/Log.js";
+import { createLog } from "../utils/logger.js";
 
 /**
  * auditMiddleware(actionName)
- * 
- * Exemplo de uso:
- * router.post("/",
- *   authMiddleware,                 // garante que o usuário está autenticado
- *   auditMiddleware("CRIAR_TRANSACAO"), // registra ação
- *   transactionController.createTransaction);
+ * - actionName: string curta representando a ação (ex: 'CREATE_TRANSACTION').
+ *
+ * O middleware retorna uma função que:
+ *  - adiciona um listener em res 'finish'
+ *  - quando a resposta for finalizada, grava um log com informações do request/response
  */
-export function auditMiddleware(actionName) {
-  return async (req, res, next) => {
-    // Aguarda a resposta ser enviada para registrar log completo
+export function auditMiddleware(actionName = "") {
+  return (req, res, next) => {
+    // listener será executado quando a resposta terminar
     res.on("finish", async () => {
       try {
-        await Log.create({
-          empresaId: req.user?.empresaId || null,
-          usuarioId: req.user?._id || null,
-          acao: actionName || `${req.method} ${req.originalUrl}`,
-          descricao: `Requisição ${req.method} em ${req.originalUrl}`,
-          ip_origem: req.ip,
-          user_agent: req.headers["user-agent"],
-          detalhes: {
+        const logData = {
+          userId: req.user?.userId || null,
+          companyId: req.user?.companyId || null,
+          action: actionName || `${req.method}_${req.originalUrl}`,
+          description: `Status ${res.statusCode}`,
+          route: req.originalUrl,
+          ip: req.ip || req.headers["x-forwarded-for"] || null,
+          userAgent: req.headers["user-agent"] || null,
+          details: {
+            method: req.method,
             statusCode: res.statusCode,
-            body: req.body,
-            params: req.params
-          }
-        });
+            body: req.body ? JSON.stringify(req.body) : undefined,
+            params: req.params,
+            query: req.query,
+          },
+        };
+
+        // grava o log usando o helper centralizado
+        await createLog(logData);
       } catch (err) {
-        console.error("Erro ao gravar log:", err);
+        // Não interrompe o fluxo principal se falhar ao gravar o log
+        console.error("Falha ao gravar log de auditoria:", err);
       }
     });
+
+    // segue para próxima função/middleware/handler
     next();
   };
 }

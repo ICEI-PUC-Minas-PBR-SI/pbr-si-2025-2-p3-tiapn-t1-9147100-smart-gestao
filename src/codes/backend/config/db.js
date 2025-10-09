@@ -1,23 +1,28 @@
-// config/db.js
-// Conexão com o MongoDB (Mongoose)
-// Carrega variáveis de ambiente com dotenv
+// ===========================================
+// Arquivo: config/db.js
+// Função: Conexão principal com o banco MongoDB
+// ===========================================
 
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 
-dotenv.config();
+dotenv.config(); // Carrega as variáveis do arquivo .env
 
-export async function connectDB() {
+/**
+ * Função responsável por conectar o servidor Node.js ao banco MongoDB.
+ * Ela utiliza a string de conexão definida em MONGO_URI no arquivo .env.
+ */
+export const connectDB = async () => {
   try {
-    // process.env.MONGO_URI vem do arquivo .env
+    // Conexão com o banco de dados MongoDB
     await mongoose.connect(process.env.MONGO_URI, {
-      // opções recomendadas
       useNewUrlParser: true,
-      useUnifiedTopology: true
+      useUnifiedTopology: true,
     });
-    console.log("✅ Conectado ao MongoDB");
-  } catch (err) {
-    console.error("❌ Erro ao conectar ao MongoDB:", err);
-    process.exit(1);
+
+    console.log("✅ Conexão com MongoDB estabelecida com sucesso!");
+  } catch (error) {
+    console.error("❌ Erro ao conectar com o MongoDB:", error.message);
+    process.exit(1); // Encerra o processo caso o banco não esteja acessível
   }
-}
+};

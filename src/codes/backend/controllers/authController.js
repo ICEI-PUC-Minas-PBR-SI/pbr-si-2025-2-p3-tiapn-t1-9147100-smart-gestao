@@ -1,47 +1,58 @@
-// Controlador de autenticação: cadastro e login de usuários
+// ===========================================
+// Arquivo: controllers/authController.js
+// Função: Autenticação e controle de login/logout
+// ===========================================
 
 import User from "../models/User.js";
-import bcrypt from "bcryptjs"; // para criptografar senhas
-import jwt from "jsonwebtoken"; // para gerar token de sessão
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { createLog } from "../config/logger.js";
 
-// Cadastro de usuário
-export const register = async (req, res) => {
+/**
+ * Login do usuário — valida credenciais e gera token JWT
+ */
+export const login = async (req, res) => {
+  const { email, password } = req.body;
   try {
-    const { name, email, password, clientId } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) return res.status(401).json({ message: "Usuário não encontrado." });
 
-    // Criptografa a senha antes de salvar
-    const hashed = await bcrypt.hash(password, 10);
-    const newUser = new User({ name, email, password: hashed, clientId });
+    // Verificação da senha criptografada
+    const validPassword = await bcrypt.compare(password, user.password);
+    if (!validPassword) return res.status(401).json({ message: "Senha incorreta." });
 
-    await newUser.save();
-    res.status(201).json({ message: "Usuário registrado com sucesso" });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+    // Geração do token JWT
+    const token = jwt.sign(
+      { userId: user._id, companyId: user.companyId, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: process.env.TOKEN_EXPIRATION || "1d" }
+    );
+
+    await createLog({
+      userId: user._id,
+      companyId: user.companyId,
+      action: "USER_LOGIN",
+      description: `Login realizado com sucesso.`,
+      route: req.originalUrl,
+    });
+
+    res.status(200).json({ token });
+  } catch (error) {
+    res.status(500).json({ message: "Erro no processo de login", error });
   }
 };
 
-// Login de usuário
-export const login = async (req, res) => {
-  try {
-    const { email, password } = req.body;
+/**
+ * Logout — apenas gera log, sem invalidar o token (JWT é stateless)
+ */
+export const logout = async (req, res) => {
+  await createLog({
+    userId: req.user.userId,
+    companyId: req.user.companyId,
+    action: "USER_LOGOUT",
+    description: "Usuário encerrou a sessão",
+    route: req.originalUrl,
+  });
 
-    // Verifica se usuário existe
-    const user = await User.findOne({ email });
-    if (!user) return res.status(404).json({ message: "Usuário não encontrado" });
-
-    // Compara senha informada com a salva no banco
-    const valid = await bcrypt.compare(password, user.password);
-    if (!valid) return res.status(401).json({ message: "Senha inválida" });
-
-    // Gera token JWT
-    const token = jwt.sign(
-      { id: user._id, clientId: user.clientId },
-      process.env.JWT_SECRET,
-      { expiresIn: "1h" }
-    );
-
-    res.json({ token, clientId: user.clientId });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+  res.status(200).json({ message: "Logout registrado com sucesso." });
 };
