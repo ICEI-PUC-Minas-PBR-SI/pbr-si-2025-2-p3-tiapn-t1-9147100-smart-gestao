@@ -1,87 +1,83 @@
 // ===========================================
-// Arquivo: controllers/permissionController.js
-// Função: CRUD simples para Permissões (roles/permissions)
-// Obs: usado para popular e gerenciar papéis do sistema.
+// controllers/permissionController.js
+// Função: CRUD para Permission (papéis/roles)
+// Observação: normalmente executado por ROOT (owner do sistema).
 // ===========================================
 
 import Permission from "../models/Permission.js";
 import { createLog } from "../utils/logger.js";
 
 /**
- * Listar todas as permissões do sistema.
- * Normalmente utilizado pelo administrativo para visualizar roles existentes.
+ * GET /api/permissions
+ * Retorna lista de permissões (roles) do sistema.
  */
 export const getAllPermissions = async (req, res) => {
   try {
-    const permissions = await Permission.find().sort({ name: 1 }); // ordena alfabeticamente
-    return res.status(200).json(permissions);
+    const items = await Permission.find().sort({ name: 1 });
+    return res.status(200).json(items);
   } catch (error) {
     console.error("Erro em getAllPermissions:", error);
-    return res.status(500).json({ message: "Erro ao listar permissões", error });
+    return res.status(500).json({ message: "Erro ao listar permissões", error: error.message });
   }
 };
 
 /**
- * Criar uma nova permissão (role).
- * Ex.: { name: "ADMIN_COMPANY", description: "Administrador da empresa" }
- * Somente usuários com role apropriada (ex.: ROOT) devem executar isso — verificar nas rotas.
+ * POST /api/permissions
+ * Cria uma permissão/role.
+ * Body: { name: "ADMIN_COMPANY", description: "..." }
  */
 export const createPermission = async (req, res) => {
   try {
-    const payload = req.body;
+    const { name, description } = req.body;
 
-    const exists = await Permission.findOne({ name: payload.name });
-    if (exists) {
-      return res.status(400).json({ message: "Permissão já existe" });
-    }
+    // Evita duplicidade
+    const exists = await Permission.findOne({ name: name.toUpperCase() });
+    if (exists) return res.status(400).json({ message: "Permissão já existe" });
 
-    const permission = new Permission(payload);
-    await permission.save();
+    const perm = await Permission.create({ name: name.toUpperCase(), description });
 
-    // Log da operação
     await createLog({
-      userId: req.user?.userId || null,
-      companyId: req.user?.companyId || null,
+      userId: req.user.userId,
+      companyId: req.user.companyId,
       action: "CREATE_PERMISSION",
-      description: `Permissão criada: ${permission.name}`,
+      description: `Permissão criada: ${perm.name}`,
       route: req.originalUrl,
     });
 
-    return res.status(201).json(permission);
+    return res.status(201).json(perm);
   } catch (error) {
     console.error("Erro em createPermission:", error);
-    return res.status(500).json({ message: "Erro ao criar permissão", error });
+    return res.status(500).json({ message: "Erro ao criar permissão", error: error.message });
   }
 };
 
 /**
- * Atualizar uma permissão existente.
- * Parâmetro: req.params.id -> id da permissão
+ * PUT /api/permissions/:id
+ * Atualiza permissão existente.
  */
 export const updatePermission = async (req, res) => {
   try {
-    const updated = await Permission.findByIdAndUpdate(req.params.id, req.body, { new: true });
-
-    if (!updated) return res.status(404).json({ message: "Permissão não encontrada" });
+    const perm = await Permission.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!perm) return res.status(404).json({ message: "Permissão não encontrada" });
 
     await createLog({
-      userId: req.user?.userId || null,
-      companyId: req.user?.companyId || null,
+      userId: req.user.userId,
+      companyId: req.user.companyId,
       action: "UPDATE_PERMISSION",
-      description: `Permissão atualizada: ${updated.name}`,
+      description: `Permissão atualizada: ${perm.name}`,
       route: req.originalUrl,
     });
 
-    return res.status(200).json(updated);
+    return res.status(200).json(perm);
   } catch (error) {
     console.error("Erro em updatePermission:", error);
-    return res.status(500).json({ message: "Erro ao atualizar permissão", error });
+    return res.status(500).json({ message: "Erro ao atualizar permissão", error: error.message });
   }
 };
 
 /**
- * Remover (deletar) uma permissão.
- * Atenção: em ambiente real, prefira flag de "ativo" em vez de remover fisicamente.
+ * DELETE /api/permissions/:id
+ * Remove permissão (em produção, prefira desativação lógica).
  */
 export const deletePermission = async (req, res) => {
   try {
@@ -89,16 +85,16 @@ export const deletePermission = async (req, res) => {
     if (!removed) return res.status(404).json({ message: "Permissão não encontrada" });
 
     await createLog({
-      userId: req.user?.userId || null,
-      companyId: req.user?.companyId || null,
+      userId: req.user.userId,
+      companyId: req.user.companyId,
       action: "DELETE_PERMISSION",
       description: `Permissão removida: ${removed.name}`,
       route: req.originalUrl,
     });
 
-    return res.status(200).json({ message: "Permissão removida com sucesso" });
+    return res.status(200).json({ message: "Permissão removida" });
   } catch (error) {
     console.error("Erro em deletePermission:", error);
-    return res.status(500).json({ message: "Erro ao remover permissão", error });
+    return res.status(500).json({ message: "Erro ao remover permissão", error: error.message });
   }
 };

@@ -1,44 +1,35 @@
 // ===========================================
-// Arquivo: controllers/clientController.js
-// Função: CRUD para clientes e fornecedores
+// Arquivo: controllers/ClientController.js
+// Descrição: CRUD para clientes e fornecedores
 // ===========================================
 
 import Client from "../models/Client.js";
-import { createLog } from "../config/logger.js";
+import { createLog } from "../utils/logger.js";
 
 /**
- * Listar clientes e fornecedores
+ * Cria um novo cliente ou fornecedor vinculado à empresa do usuário logado.
  */
-export const getAllClients = async (req, res) => {
+export const createClient = async (req, res) => {
   try {
-    const clients = await Client.find({ companyId: req.user.companyId });
-    res.status(200).json(clients);
+    const empresaId = req.user.companyId;
+    const client = await Client.create({ ...req.body, companyId: empresaId });
+
+    await createLog(req, "CREATE_CLIENT", `Cliente/Fornecedor criado: ${client.nome_razao}`);
+    res.status(201).json(client);
   } catch (error) {
-    res.status(500).json({ message: "Erro ao listar clientes/fornecedores", error });
+    res.status(500).json({ message: "Erro ao criar cliente", error: error.message });
   }
 };
 
 /**
- * Criar novo cliente/fornecedor
+ * Lista todos os clientes/fornecedores da empresa logada.
  */
-export const createClient = async (req, res) => {
+export const getClients = async (req, res) => {
   try {
-    const client = new Client({
-      ...req.body,
-      companyId: req.user.companyId,
-    });
-    await client.save();
-
-    await createLog({
-      userId: req.user.userId,
-      companyId: req.user.companyId,
-      action: "CREATE_CLIENT",
-      description: `Cliente/Fornecedor criado: ${client.name}`,
-      route: req.originalUrl,
-    });
-
-    res.status(201).json(client);
+    const empresaId = req.user.companyId;
+    const clients = await Client.find({ companyId: empresaId });
+    res.status(200).json(clients);
   } catch (error) {
-    res.status(500).json({ message: "Erro ao criar cliente/fornecedor", error });
+    res.status(500).json({ message: "Erro ao listar clientes", error: error.message });
   }
 };

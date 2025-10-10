@@ -1,58 +1,58 @@
 // ===========================================
-// Arquivo: controllers/authController.js
-// Função: Autenticação e controle de login/logout
+// Arquivo: controllers/AuthController.js
+// Descrição: Controla autenticação e login de usuários
 // ===========================================
 
-import User from "../models/User.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { createLog } from "../config/logger.js";
+import User from "../models/User.js";
+import SessionToken from "../models/SessionToken.js";
+import { createLog } from "../utils/logger.js";
 
 /**
- * Login do usuário — valida credenciais e gera token JWT
+ * Realiza o login e gera o token JWT para o usuário.
  */
 export const login = async (req, res) => {
-  const { email, password } = req.body;
   try {
-    const user = await User.findOne({ email });
-    if (!user) return res.status(401).json({ message: "Usuário não encontrado." });
+    const { email, password } = req.body;
 
-    // Verificação da senha criptografada
-    const validPassword = await bcrypt.compare(password, user.password);
-    if (!validPassword) return res.status(401).json({ message: "Senha incorreta." });
+    // Verifica se o usuário existe
+    const user = await User.findOne({ email }).populate("companyId");
+    if (!user) return res.status(404).json({ message: "Usuário não encontrado" });
 
-    // Geração do token JWT
+    // Compara a senha fornecida com o hash armazenado
+    const validPassword = await bcrypt.compare(password, user.passwordHash);
+    if (!validPassword) return res.status(401).json({ message: "Senha incorreta" });
+
+    // Cria token JWT
     const token = jwt.sign(
-      { userId: user._id, companyId: user.companyId, role: user.role },
+      { id: user._id, companyId: user.companyId },
       process.env.JWT_SECRET,
       { expiresIn: process.env.TOKEN_EXPIRATION || "1d" }
     );
 
-    await createLog({
-      userId: user._id,
-      companyId: user.companyId,
-      action: "USER_LOGIN",
-      description: `Login realizado com sucesso.`,
-      route: req.originalUrl,
-    });
+    // Armazena o token na coleção de sessões
+    await SessionToken.create({ userId: user._id, token });
 
-    res.status(200).json({ token });
+    await createLog(req, "USER_LOGIN", `Usuário ${user.email} autenticado com sucesso.`);
+    res.status(200).json({ token, user });
   } catch (error) {
-    res.status(500).json({ message: "Erro no processo de login", error });
+    res.status(500).json({ message: "Erro ao autenticar usuário", error: error.message });
   }
 };
 
 /**
- * Logout — apenas gera log, sem invalidar o token (JWT é stateless)
+ * Realiza logout e remove o token de sessão.
  */
 export const logout = async (req, res) => {
-  await createLog({
-    userId: req.user.userId,
-    companyId: req.user.companyId,
-    action: "USER_LOGOUT",
-    description: "Usuário encerrou a sessão",
-    route: req.originalUrl,
-  });
+  try {
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) return res.status(400).json({ message: "Token ausente" });
 
-  res.status(200).json({ message: "Logout registrado com sucesso." });
+    await SessionToken.deleteOne({ token });
+    await createLog(req, "USER_LOGOUT", "Usuário realizou logout com sucesso.");
+    res.status(200).json({ message: "Logout realizado com sucesso" });
+  } catch (error) {
+    res.status(500).json({ message: "Erro ao realizar logout", error: error.message });
+  }
 };

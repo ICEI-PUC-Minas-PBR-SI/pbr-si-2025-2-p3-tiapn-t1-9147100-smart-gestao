@@ -1,65 +1,45 @@
 // ===========================================
-// Arquivo: controllers/alertController.js
-// Função: Gerenciamento dos alertas financeiros do sistema
+// Arquivo: controllers/AlertController.js
+// Descrição: Gerencia alertas financeiros do sistema
 // ===========================================
 
 import Alert from "../models/Alert.js";
-import { createLog } from "../config/logger.js";
+import { createLog } from "../utils/logger.js";
 
 /**
- * Listar todos os alertas de uma empresa
+ * Lista todos os alertas da empresa vinculada ao usuário.
  */
-export const getAllAlerts = async (req, res) => {
+export const getAlerts = async (req, res) => {
   try {
-    const { companyId } = req.user;
-
-    const alerts = await Alert.find({ companyId });
+    const empresaId = req.user.companyId;
+    const alerts = await Alert.find({ companyId: empresaId });
+    await createLog(req, "LIST_ALERTS", "Listagem de alertas financeiros realizada.");
     res.status(200).json(alerts);
   } catch (error) {
-    res.status(500).json({ message: "Erro ao listar alertas", error });
+    res.status(500).json({ message: "Erro ao listar alertas", error: error.message });
   }
 };
 
 /**
- * Criar um novo alerta (gerado automaticamente ou manualmente)
+ * Cria um novo alerta financeiro (gerado manualmente ou por meta).
  */
 export const createAlert = async (req, res) => {
   try {
-    const { companyId, userId } = req.user;
-    const alert = new Alert({ ...req.body, companyId });
-    await alert.save();
+    const { message, type, metaId } = req.body;
+    const empresaId = req.user.companyId;
 
-    await createLog({
-      userId,
-      companyId,
-      action: "CREATE_ALERT",
-      description: `Alerta criado: ${alert.message}`,
-      route: req.originalUrl,
+    const newAlert = await Alert.create({
+      companyId: empresaId,
+      metaId,
+      message,
+      type,
+      createdAt: new Date(),
+      status: "ativo",
     });
 
-    res.status(201).json(alert);
+    await createLog(req, "CREATE_ALERT", `Alerta criado: ${message}`);
+    res.status(201).json(newAlert);
   } catch (error) {
-    res.status(500).json({ message: "Erro ao criar alerta", error });
-  }
-};
-
-/**
- * Marcar um alerta como lido
- */
-export const markAsRead = async (req, res) => {
-  try {
-    const alert = await Alert.findByIdAndUpdate(req.params.id, { status: "lido" }, { new: true });
-
-    await createLog({
-      userId: req.user.userId,
-      companyId: req.user.companyId,
-      action: "READ_ALERT",
-      description: `Alerta marcado como lido (${alert._id})`,
-      route: req.originalUrl,
-    });
-
-    res.status(200).json(alert);
-  } catch (error) {
-    res.status(500).json({ message: "Erro ao atualizar alerta", error });
+    res.status(500).json({ message: "Erro ao criar alerta", error: error.message });
   }
 };

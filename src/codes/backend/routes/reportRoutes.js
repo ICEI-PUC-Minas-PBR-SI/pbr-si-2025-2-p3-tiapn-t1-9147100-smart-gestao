@@ -1,11 +1,22 @@
+// ===========================================
+// Arquivo: routes/reportRoutes.js
+// Descrição: Geração de relatórios e dashboards financeiros
+// ===========================================
+
 import express from "express";
-import { getCompanyReport } from "../controllers/reportController.js";
+import { getFinancialSummary, getMonthlyReport, getAlertsReport } from "../controllers/reportController.js";
+import { authMiddleware } from "../middlewares/authMiddleware.js";
 import { companyScopeMiddleware } from "../middlewares/companyScopeMiddleware.js";
-import Transaction from "../models/Transaction.js";
 
 const router = express.Router();
 
-// Rota para gerar relatório financeiro da empresa logada
-router.get("/", companyScopeMiddleware(Transaction), getCompanyReport);
+// 🔹 Resumo financeiro geral (receitas/despesas)
+router.get("/summary", authMiddleware, companyScopeMiddleware, getFinancialSummary);
+
+// 🔹 Relatório financeiro mensal
+router.get("/monthly", authMiddleware, companyScopeMiddleware, getMonthlyReport);
+
+// 🔹 Relatório de alertas (metas atingidas)
+router.get("/alerts", authMiddleware, companyScopeMiddleware, getAlertsReport);
 
 export default router;
