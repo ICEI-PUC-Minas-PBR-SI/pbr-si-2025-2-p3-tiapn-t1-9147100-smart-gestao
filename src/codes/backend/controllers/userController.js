@@ -1,153 +1,164 @@
-// ===========================================
-// controllers/transactionController.js
-// Função: CRUD de Transactions (income/expense)
-// Observação: toda operação respeita companyId (multi-tenant).
-// ===========================================
+// controllers/userController.js
+// CRUD e perfil de users
 
-import Transaction from "../models/Transaction.js";
+import User from "../models/User.js";
+import bcrypt from "bcrypt";
 import { createLog } from "../utils/logger.js";
 
 /**
- * GET /api/transactions
- * Lista transações da company do usuário. Suporta filtros por date range e categoria.
- * Query params: ?start=YYYY-MM-DD&end=YYYY-MM-DD&category=...
+ * POST /api/users
+ * Cria usuário dentro da mesma company (admin cria para sua company)
+ * Body: { name, email, password, role }
  */
-export const getAllTransactions = async (req, res) => {
-  try {
-    const companyId = req.user.companyId;
-    const filter = { companyId };
-
-    // Filtros opcionais de data
-    if (req.query.start || req.query.end) {
-      filter.date = {};
-      if (req.query.start) filter.date.$gte = new Date(req.query.start);
-      if (req.query.end) filter.date.$lte = new Date(req.query.end);
-    }
-
-    if (req.query.category) filter.category = req.query.category;
-    if (req.query.type) filter.type = req.query.type; // income|expense
-
-    const transactions = await Transaction.find(filter).sort({ date: -1 });
-    return res.status(200).json(transactions);
-  } catch (error) {
-    console.error("Erro em getAllTransactions:", error);
-    return res.status(500).json({ message: "Erro ao listar transações", error: error.message });
-  }
-};
-
-/**
- * GET /api/transactions/:id
- * Busca uma transação específica, somente se pertencer à mesma company.
- */
-export const getTransactionById = async (req, res) => {
-  try {
-    const companyId = req.user.companyId;
-    const tx = await Transaction.findOne({ _id: req.params.id, companyId });
-    if (!tx) return res.status(404).json({ message: "Transação não encontrada" });
-    return res.status(200).json(tx);
-  } catch (error) {
-    console.error("Erro em getTransactionById:", error);
-    return res.status(500).json({ message: "Erro ao buscar transação", error: error.message });
-  }
-};
-
-/**
- * POST /api/transactions
- * Cria nova transação. Body esperado:
- * { type: "income"|"expense", description, category, value, date, paymentMethod, clientId(optional) }
- */
-export const createTransaction = async (req, res) => {
+export const createUser = async (req, res) => {
   try {
     const companyId = req.user.companyId;
     const creatorId = req.user.userId;
+    const { name, email, password, role } = req.body;
 
-    const payload = {
-      ...req.body,
+    if (!name || !email || !password) return res.status(400).json({ message: "name, email e password obrigatórios" });
+
+    // evita duplicidade email por company
+    const exists = await User.findOne({ companyId, email: email.toLowerCase() });
+    if (exists) return res.status(400).json({ message: "Email já cadastrado nesta company" });
+
+    const passwordHash = await bcrypt.hash(password, 10);
+
+    const user = await User.create({
+      name,
+      email: email.toLowerCase(),
+      passwordHash,
       companyId,
-    };
-
-    // validações básicas
-    if (!payload.type || !["income", "expense"].includes(payload.type)) {
-      return res.status(400).json({ message: "Tipo inválido de transação" });
-    }
-    if (typeof payload.value !== "number" || payload.value < 0) {
-      return res.status(400).json({ message: "Valor inválido" });
-    }
-
-    const tx = await Transaction.create(payload);
+      role: role || "USER",
+    });
 
     await createLog({
       userId: creatorId,
       companyId,
-      action: "CREATE_TRANSACTION",
-      description: `Transação criada (${tx.type}) valor=${tx.value}`,
+      action: "CREATE_USER",
+      description: `User criado: ${user.email}`,
       route: req.originalUrl,
     });
 
-    return res.status(201).json(tx);
+    const result = user.toObject();
+    delete result.passwordHash;
+    return res.status(201).json(result);
   } catch (error) {
-    console.error("Erro em createTransaction:", error);
-    return res.status(500).json({ message: "Erro ao criar transação", error: error.message });
+    console.error("createUser:", error);
+    return res.status(500).json({ message: "Erro ao criar user", error: error.message });
   }
 };
 
 /**
- * PUT /api/transactions/:id
- * Atualiza uma transação existente (within company).
+ * GET /api/users
+ * Lista usuários da company (sem passwordHash)
  */
-export const updateTransaction = async (req, res) => {
+export const getAllUsers = async (req, res) => {
   try {
     const companyId = req.user.companyId;
-    const updaterId = req.user.userId;
-    const txId = req.params.id;
+    const users = await User.find({ companyId }).select("-passwordHash").sort({ name: 1 });
+    return res.status(200).json(users);
+  } catch (error) {
+    console.error("getAllUsers:", error);
+    return res.status(500).json({ message: "Erro ao listar users", error: error.message });
+  }
+};
 
-    const updated = await Transaction.findOneAndUpdate(
-      { _id: txId, companyId },
-      { $set: req.body },
-      { new: true }
-    );
+/**
+ * GET /api/users/profile/me
+ * Retorna dados do perfil do usuário logado
+ */
+export const getProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId).select("-passwordHash");
+    if (!user) return res.status(404).json({ message: "User não encontrado" });
+    return res.status(200).json(user);
+  } catch (error) {
+    console.error("getProfile:", error);
+    return res.status(500).json({ message: "Erro ao buscar perfil", error: error.message });
+  }
+};
 
-    if (!updated) return res.status(404).json({ message: "Transação não encontrada" });
+/**
+ * PUT /api/users/:id
+ * Atualiza user (não altera password aqui)
+ */
+export const updateUser = async (req, res) => {
+  try {
+    const companyId = req.user.companyId;
+    const updated = await User.findOneAndUpdate({ _id: req.params.id, companyId }, { $set: req.body }, { new: true }).select("-passwordHash");
+    if (!updated) return res.status(404).json({ message: "User não encontrado" });
 
     await createLog({
-      userId: updaterId,
+      userId: req.user.userId,
       companyId,
-      action: "UPDATE_TRANSACTION",
-      description: `Transação atualizada (${updated._id})`,
+      action: "UPDATE_USER",
+      description: `User atualizado: ${updated.email}`,
       route: req.originalUrl,
     });
 
     return res.status(200).json(updated);
   } catch (error) {
-    console.error("Erro em updateTransaction:", error);
-    return res.status(500).json({ message: "Erro ao atualizar transação", error: error.message });
+    console.error("updateUser:", error);
+    return res.status(500).json({ message: "Erro ao atualizar user", error: error.message });
   }
 };
 
 /**
- * DELETE /api/transactions/:id
- * Remove (ou marca como cancelada) uma transação.
+ * DELETE /api/users/:id
+ * Remove user (por simplicidade: deleção física; em produção, use flag active=false)
  */
-export const deleteTransaction = async (req, res) => {
+export const deleteUser = async (req, res) => {
   try {
     const companyId = req.user.companyId;
-    const deleterId = req.user.userId;
-    const txId = req.params.id;
-
-    const removed = await Transaction.findOneAndDelete({ _id: txId, companyId });
-    if (!removed) return res.status(404).json({ message: "Transação não encontrada" });
+    const removed = await User.findOneAndDelete({ _id: req.params.id, companyId });
+    if (!removed) return res.status(404).json({ message: "User não encontrado" });
 
     await createLog({
-      userId: deleterId,
+      userId: req.user.userId,
       companyId,
-      action: "DELETE_TRANSACTION",
-      description: `Transação removida (${removed._id})`,
+      action: "DELETE_USER",
+      description: `User removido: ${removed.email}`,
       route: req.originalUrl,
     });
 
-    return res.status(200).json({ message: "Transação removida com sucesso" });
+    return res.status(200).json({ message: "User removido com sucesso" });
   } catch (error) {
-    console.error("Erro em deleteTransaction:", error);
-    return res.status(500).json({ message: "Erro ao remover transação", error: error.message });
+    console.error("deleteUser:", error);
+    return res.status(500).json({ message: "Erro ao remover user", error: error.message });
+  }
+};
+
+/**
+ * POST /api/users/change-password
+ * Permite usuário alterar sua senha atual (oldPassword, newPassword)
+ */
+export const changePassword = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const { oldPassword, newPassword } = req.body;
+    if (!oldPassword || !newPassword) return res.status(400).json({ message: "oldPassword e newPassword obrigatórios" });
+
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ message: "User não encontrado" });
+
+    const match = await bcrypt.compare(oldPassword, user.passwordHash);
+    if (!match) return res.status(401).json({ message: "Old password incorreta" });
+
+    user.passwordHash = await bcrypt.hash(newPassword, 10);
+    await user.save();
+
+    await createLog({
+      userId,
+      companyId: req.user.companyId,
+      action: "CHANGE_PASSWORD",
+      description: "Senha alterada",
+      route: req.originalUrl,
+    });
+
+    return res.status(200).json({ message: "Senha alterada com sucesso" });
+  } catch (error) {
+    console.error("changePassword:", error);
+    return res.status(500).json({ message: "Erro ao alterar senha", error: error.message });
   }
 };

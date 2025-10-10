@@ -1,7 +1,5 @@
-// ===========================================
-// Arquivo: controllers/AuthController.js
-// Descrição: Controla autenticação e login de usuários
-// ===========================================
+// controllers/authController.js
+// Login / logout e geração de token JWT
 
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -10,39 +8,61 @@ import SessionToken from "../models/SessionToken.js";
 import { createLog } from "../utils/logger.js";
 
 /**
- * Realiza o login e gera o token JWT para o usuário.
+ * POST /api/auth/login
+ * Body: { email, password }
+ * Retorna: { token, user } (user sem passwordHash)
  */
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
+    if (!email || !password) return res.status(400).json({ message: "Email e password são obrigatórios" });
 
-    // Verifica se o usuário existe
-    const user = await User.findOne({ email }).populate("companyId");
-    if (!user) return res.status(404).json({ message: "Usuário não encontrado" });
+    const user = await User.findOne({ email: email.toLowerCase() });
+    if (!user) return res.status(401).json({ message: "Credenciais inválidas" });
 
-    // Compara a senha fornecida com o hash armazenado
-    const validPassword = await bcrypt.compare(password, user.passwordHash);
-    if (!validPassword) return res.status(401).json({ message: "Senha incorreta" });
+    const match = await bcrypt.compare(password, user.passwordHash);
+    if (!match) return res.status(401).json({ message: "Credenciais inválidas" });
 
-    // Cria token JWT
+    // Gera token JWT
     const token = jwt.sign(
-      { id: user._id, companyId: user.companyId },
+      { userId: String(user._id), companyId: String(user.companyId), role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: process.env.TOKEN_EXPIRATION || "1d" }
     );
 
-    // Armazena o token na coleção de sessões
-    await SessionToken.create({ userId: user._id, token });
+    // Armazena session token (opcional; facilita logout)
+    await SessionToken.create({
+      userId: user._id,
+      token,
+      ip: req.ip || req.headers["x-forwarded-for"],
+      userAgent: req.headers["user-agent"],
+      expiresAt: new Date(Date.now() + (24 * 3600 * 1000)), // 1 dia (ajustar conforme TOKEN_EXPIRATION)
+    });
 
-    await createLog(req, "USER_LOGIN", `Usuário ${user.email} autenticado com sucesso.`);
-    res.status(200).json({ token, user });
+    // Remove passwordHash do objeto retornado
+    const userObj = user.toObject();
+    delete userObj.passwordHash;
+
+    await createLog({
+      userId: user._id,
+      companyId: user.companyId,
+      action: "USER_LOGIN",
+      description: `Login realizado por ${user.email}`,
+      route: req.originalUrl,
+      ip: req.ip,
+    });
+
+    return res.status(200).json({ token, user: userObj });
   } catch (error) {
-    res.status(500).json({ message: "Erro ao autenticar usuário", error: error.message });
+    console.error("login:", error);
+    return res.status(500).json({ message: "Erro no login", error: error.message });
   }
 };
 
 /**
- * Realiza logout e remove o token de sessão.
+ * POST /api/auth/logout
+ * Remove sessão (token) do banco
+ * Requer authMiddleware para popular req.user
  */
 export const logout = async (req, res) => {
   try {
@@ -50,9 +70,18 @@ export const logout = async (req, res) => {
     if (!token) return res.status(400).json({ message: "Token ausente" });
 
     await SessionToken.deleteOne({ token });
-    await createLog(req, "USER_LOGOUT", "Usuário realizou logout com sucesso.");
-    res.status(200).json({ message: "Logout realizado com sucesso" });
+
+    await createLog({
+      userId: req.user.userId,
+      companyId: req.user.companyId,
+      action: "USER_LOGOUT",
+      description: "Logout realizado",
+      route: req.originalUrl,
+    });
+
+    return res.status(200).json({ message: "Logout efetuado com sucesso" });
   } catch (error) {
-    res.status(500).json({ message: "Erro ao realizar logout", error: error.message });
+    console.error("logout:", error);
+    return res.status(500).json({ message: "Erro no logout", error: error.message });
   }
 };

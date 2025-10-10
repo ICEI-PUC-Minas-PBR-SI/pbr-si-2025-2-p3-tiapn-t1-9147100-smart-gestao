@@ -16,53 +16,57 @@ A aplicação segue uma **arquitetura modular** com **Node.js**, **Express** e *
 ## 🗂️ Estrutura do Projeto (em ordem alfabética)
 
 ```text
-backend/
-├── config/
-│   └── db.js
-├── controllers/
-│   ├── alertController.js
-│   ├── authController.js
-│   ├── clientController.js
-│   ├── companyController.js
-│   ├── metaController.js
-│   ├── permissionController.js
-│   ├── reportController.js
-│   ├── transactionController.js
-│   └── userController.js
-├── middlewares/
-│   ├── auditMiddleware.js
-│   ├── authMiddleware.js
-│   ├── companyScopeMiddleware.js
-│   ├── errorMiddleware.js
-│   └── roleMiddleware.js
-├── models/
-│   ├── Alert.js
-│   ├── Client.js
-│   ├── Company.js
-│   ├── Logs.js
-│   ├── Meta.js
-│   ├── Permission.js
-│   ├── SessionToken.js
-│   ├── Transaction.js
-│   └── User.js
-├── routes/
-│   ├── alertRoutes.js
-│   ├── authRoutes.js
-│   ├── clientRoutes.js
-│   ├── companyRoutes.js
-│   ├── metaRoutes.js
-│   ├── permissionRoutes.js
-│   ├── reportRoutes.js
-│   ├── transactionRoutes.js
-│   └── userRoutes.js
-├── utils/
-│   ├── bcryptHelper.js
-│   ├── jwtHelper.js
-│   ├── logger.js
-│   └── validationSchemas.js
-├── server.js
-├── package.json
-└── .env.example
+src/
+├── backend/
+│   ├── config/
+│   │   └── db.js
+│   ├── controllers/
+│   │   ├── alertController.js
+│   │   ├── authController.js
+│   │   ├── clientController.js
+│   │   ├── companyController.js
+│   │   ├── logController.js
+│   │   ├── metaController.js
+│   │   ├── permissionController.js
+│   │   ├── reportController.js
+│   │   ├── transactionController.js
+│   │   └── userController.js
+│   ├── middlewares/
+│   │   ├── auditMiddleware.js
+│   │   ├── authMiddleware.js
+│   │   └── errorHandler.js
+│   ├── models/
+│   │   ├── Alert.js
+│   │   ├── Client.js
+│   │   ├── Company.js
+│   │   ├── Logs.js
+│   │   ├── Meta.js
+│   │   ├── Permission.js
+│   │   ├── SessionToken.js
+│   │   ├── Transaction.js
+│   │   └── User.js
+│   ├── routes/
+│   │   ├── alertRoutes.js
+│   │   ├── authRoutes.js
+│   │   ├── clientRoutes.js
+│   │   ├── companyRoutes.js
+│   │   ├── logRoutes.js
+│   │   ├── metaRoutes.js
+│   │   ├── permissionRoutes.js
+│   │   ├── reportRoutes.js
+│   │   ├── transactionRoutes.js
+│   │   └── userRoutes.js
+│   ├── Scripts/
+│   │   └── initPermissions.js
+│   ├── utils/
+│   │   ├── encrypt.js
+│   │   ├── jwt.js
+│   │   └── logger.js
+│   ├── server.js
+│   └── package.json
+│
+└── .env
+
 ```
 
 ## ⚙️ Configuração do Servidor (server.js)
@@ -311,3 +315,242 @@ Ajuste as variáveis de ambiente no .env.example:
 > Alertas financeiros.
 
 - Todos os relatórios são filtrados por empresaId e usuário autenticado.
+
+## Banco de dados
+
+
+``` text
+
+🧭 Backend Documentation — Smart Gestão
+
+📘 Documentação técnica completa do backend do sistema Smart Gestão
+Versão acadêmica — arquitetura modular, conexão em nuvem e boas práticas de desenvolvimento.
+Banco de dados principal: MongoDB Atlas
+
+📁 Estrutura de Diretórios
+src/
+├── backend/
+│   ├── config/
+│   │   └── db.js
+│   ├── controllers/
+│   │   ├── alertController.js
+│   │   ├── authController.js
+│   │   ├── clientController.js
+│   │   ├── companyController.js
+│   │   ├── logController.js
+│   │   ├── metaController.js
+│   │   ├── permissionController.js
+│   │   ├── reportController.js
+│   │   ├── transactionController.js
+│   │   └── userController.js
+│   ├── middlewares/
+│   │   ├── auditMiddleware.js
+│   │   ├── authMiddleware.js
+│   │   └── errorHandler.js
+│   ├── models/
+│   │   ├── Alert.js
+│   │   ├── Client.js
+│   │   ├── Company.js
+│   │   ├── Logs.js
+│   │   ├── Meta.js
+│   │   ├── Permission.js
+│   │   ├── SessionToken.js
+│   │   ├── Transaction.js
+│   │   └── User.js
+│   ├── routes/
+│   │   ├── alertRoutes.js
+│   │   ├── authRoutes.js
+│   │   ├── clientRoutes.js
+│   │   ├── companyRoutes.js
+│   │   ├── logRoutes.js
+│   │   ├── metaRoutes.js
+│   │   ├── permissionRoutes.js
+│   │   ├── reportRoutes.js
+│   │   ├── transactionRoutes.js
+│   │   └── userRoutes.js
+│   ├── Scripts/
+│   │   └── initPermissions.js
+│   ├── utils/
+│   │   ├── encrypt.js
+│   │   ├── jwt.js
+│   │   └── logger.js
+│   ├── server.js
+│   └── package.json
+│
+└── .env
+
+⚙️ 1. Configuração de Ambiente
+📄 Arquivo .env
+# 🌐 Configurações de servidor
+PORT=5000
+
+# 🔐 Configurações de segurança
+JWT_SECRET=chaveSeguraAqui
+TOKEN_EXPIRATION=1d
+
+# 🧩 Configuração de banco de dados (MongoDB Atlas)
+MONGO_URI=mongodb+srv://adminSmart:PUC@SmartG&stao@smartgestaodb.qgvbre5.mongodb.net/
+
+
+⚠️ Importante: nunca publique este arquivo no GitHub.
+O .env contém credenciais sensíveis e deve ser protegido via .gitignore.
+
+📄 Arquivo .gitignore
+# Ignorar dependências e arquivos sensíveis
+node_modules/
+.env
+.DS_Store
+package-lock.json
+.vscode/
+
+🧱 2. Configuração do Banco de Dados
+🔗 Conexão (config/db.js)
+
+Responsável por estabelecer conexão entre o backend e o MongoDB Atlas.
+
+Utiliza dotenv para ler a variável MONGO_URI.
+
+Em caso de falha, encerra o processo (process.exit(1)).
+
+Exibe no console o status da conexão.
+
+await mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+
+📊 Status no console:
+
+✅ Conexão com MongoDB estabelecida com sucesso!
+🌍 Servidor do banco: cluster0-shard.mongodb.net
+
+🧠 3. Modelagem de Dados
+
+MongoDB é um banco de dados NoSQL orientado a documentos,
+e utiliza coleções e documentos JSON em vez de tabelas e registros.
+
+🧩 Entidades Principais
+Entidade	Descrição	Relacionamentos
+User	Usuário autenticado do sistema	pertence a uma Company
+Company	Empresa cadastrada no sistema	possui muitos Users e Transactions
+Client	Cliente ou fornecedor vinculado a uma empresa	pertence a uma Company
+Transaction	Registro de receita ou despesa	pertence a um Client e a uma Company
+Meta	Metas financeiras	pertence a uma Company
+Alert	Alertas de desempenho financeiro	pertence a uma Meta
+Permission	Perfis e papéis de acesso (admin, read-only, etc.)	referência em User
+Logs	Auditoria de ações do usuário	pertence a um User e Company
+SessionToken	Armazena tokens ativos e sessões de login	pertence a um User
+💡 Representação Textual do DER
+Company (1) ───< (N) User  
+Company (1) ───< (N) Client  
+Company (1) ───< (N) Transaction  
+Company (1) ───< (N) MetaFinanceira  
+MetaFinanceira (1) ───< (N) Alert  
+User (1) ───< (N) Logs
+
+🧩 4. Fluxo de Autenticação e Acesso
+
+Login (/api/auth/login)
+
+Usuário informa email e senha.
+
+O sistema gera JWT (JSON Web Token).
+
+O token é armazenado em SessionToken.
+
+Validação de Sessão
+
+Cada rota privada usa authMiddleware.
+
+O middleware valida o token antes de permitir acesso.
+
+Controle de Permissões
+
+As permissões são inicializadas por initPermissions.js.
+
+Cada usuário possui um nível de acesso (Root, Admin, User, ReadOnly).
+
+Auditoria e Logs
+
+Toda ação de escrita (POST, PUT, DELETE) passa por auditMiddleware.
+
+As informações são registradas em Logs.js:
+
+usuário
+
+empresa
+
+ação
+
+IP
+
+data e hora
+
+🧮 5. Relatórios e Dashboards
+
+O reportController.js centraliza os relatórios financeiros por empresa:
+
+Resumo de receitas e despesas
+
+Lucro líquido mensal
+
+Metas atingidas
+
+Alertas gerados
+
+Logs de auditoria (opcional)
+
+Todos os relatórios são filtrados automaticamente por empresaId e usuário autenticado.
+
+🧾 6. Logs e Auditoria
+
+Cada modificação importante (como criar, alterar ou excluir dados) gera um log automático no MongoDB.
+
+Exemplo de documento na coleção Logs:
+
+{
+  "empresaId": "ObjectId('6720e2c2...')",
+  "usuarioId": "ObjectId('6720e2c2...')",
+  "rota": "/api/transactions/create",
+  "acao": "CREATE_TRANSACTION",
+  "statusCode": 201,
+  "ip": "192.168.1.10",
+  "data": "2025-10-10T13:35:00Z"
+}
+
+🔐 7. Segurança
+
+Mesmo sendo um projeto acadêmico, já há boas práticas aplicadas:
+
+Senhas armazenadas com bcrypt (hash seguro)
+
+Tokens JWT assinados com JWT_SECRET
+
+Filtros por companyId para evitar acesso indevido
+
+Estrutura modular pronta para receber helmet, rate-limit e mongo-sanitize futuramente
+
+💬 Observação: a segurança ainda pode ser aprimorada com essas bibliotecas se o projeto evoluir para uso real.
+
+📊 8. Testes de Conexão
+
+Após iniciar o servidor:
+
+npm run dev
+
+
+Verifique no navegador:
+
+http://localhost:5000/api/health
+
+
+Resposta esperada:
+
+{
+  "status": "ok",
+  "message": "Servidor Smart Gestão ativo!",
+  "timestamp": "2025-10-10T17:30:00.000Z"
+}
+
+```

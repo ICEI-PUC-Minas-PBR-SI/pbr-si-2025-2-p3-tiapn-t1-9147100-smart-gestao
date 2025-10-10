@@ -37,3 +37,26 @@ UserSchema.methods.comparePassword = async function(password) {
 UserSchema.index({ empresaId: 1, email: 1 }, { unique: true });
 
 export default model("User", UserSchema);
+
+
+// models/User.js (trecho)
+const UserSchema = new Schema({
+  companyId: { type: Schema.Types.ObjectId, ref: "Company", required: true, index: true },
+  uuid: { type: String, default: uuidv4, unique: true },
+  name: { type: String, required: true, trim: true },
+  email: { type: String, required: true, lowercase: true, trim: true },
+  passwordHash: { type: String, required: true }, // renomeado
+  role: { type: String, enum: ["ROOT","ADMIN_COMPANY","USER","VIEW_ONLY"], default: "USER" },
+  active: { type: Boolean, default: true }
+}, { timestamps: true });
+
+// index composto para unicidade por empresa
+UserSchema.index({ companyId: 1, email: 1 }, { unique: true });
+
+// hook para hash senha (se campo for passwordHash)
+userSchema.pre("save", async function(next){
+  if (!this.isModified("passwordHash")) return next();
+  const salt = await bcrypt.genSalt(10);
+  this.passwordHash = await bcrypt.hash(this.passwordHash, salt);
+  next();
+});

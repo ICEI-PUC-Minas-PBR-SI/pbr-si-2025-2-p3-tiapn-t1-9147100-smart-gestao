@@ -1,45 +1,77 @@
-// ===========================================
-// Arquivo: controllers/AlertController.js
-// Descrição: Gerencia alertas financeiros do sistema
-// ===========================================
+// controllers/alertController.js
+// Gerencia alertas financeiros (CRUD mínimo)
 
 import Alert from "../models/Alert.js";
 import { createLog } from "../utils/logger.js";
 
 /**
- * Lista todos os alertas da empresa vinculada ao usuário.
+ * GET /api/alerts
+ * Lista alertas da company do usuário autenticado.
  */
-export const getAlerts = async (req, res) => {
+export const getAllAlerts = async (req, res) => {
   try {
-    const empresaId = req.user.companyId;
-    const alerts = await Alert.find({ companyId: empresaId });
-    await createLog(req, "LIST_ALERTS", "Listagem de alertas financeiros realizada.");
-    res.status(200).json(alerts);
+    const companyId = req.user.companyId;
+    const alerts = await Alert.find({ companyId }).sort({ createdAt: -1 });
+    return res.status(200).json(alerts);
   } catch (error) {
-    res.status(500).json({ message: "Erro ao listar alertas", error: error.message });
+    console.error("getAllAlerts:", error);
+    return res.status(500).json({ message: "Erro ao listar alertas", error: error.message });
   }
 };
 
 /**
- * Cria um novo alerta financeiro (gerado manualmente ou por meta).
+ * POST /api/alerts
+ * Cria um alerta manual (em geral alertas automáticos são gerados por regras)
  */
 export const createAlert = async (req, res) => {
   try {
-    const { message, type, metaId } = req.body;
-    const empresaId = req.user.companyId;
+    const companyId = req.user.companyId;
+    const userId = req.user.userId;
+    const payload = { ...req.body, companyId };
 
-    const newAlert = await Alert.create({
-      companyId: empresaId,
-      metaId,
-      message,
-      type,
-      createdAt: new Date(),
-      status: "ativo",
+    const alert = await Alert.create(payload);
+
+    await createLog({
+      userId,
+      companyId,
+      action: "CREATE_ALERT",
+      description: `Alerta criado: ${alert.message}`,
+      route: req.originalUrl,
     });
 
-    await createLog(req, "CREATE_ALERT", `Alerta criado: ${message}`);
-    res.status(201).json(newAlert);
+    return res.status(201).json(alert);
   } catch (error) {
-    res.status(500).json({ message: "Erro ao criar alerta", error: error.message });
+    console.error("createAlert:", error);
+    return res.status(500).json({ message: "Erro ao criar alerta", error: error.message });
+  }
+};
+
+/**
+ * PUT /api/alerts/:id/read
+ * Marca um alerta como lido
+ */
+export const markAlertAsRead = async (req, res) => {
+  try {
+    const companyId = req.user.companyId;
+    const userId = req.user.userId;
+    const alert = await Alert.findOneAndUpdate(
+      { _id: req.params.id, companyId },
+      { status: "read" },
+      { new: true }
+    );
+    if (!alert) return res.status(404).json({ message: "Alerta não encontrado" });
+
+    await createLog({
+      userId,
+      companyId,
+      action: "MARK_ALERT_READ",
+      description: `Alerta marcado como lido: ${alert._id}`,
+      route: req.originalUrl,
+    });
+
+    return res.status(200).json(alert);
+  } catch (error) {
+    console.error("markAlertAsRead:", error);
+    return res.status(500).json({ message: "Erro ao marcar alerta como lido", error: error.message });
   }
 };

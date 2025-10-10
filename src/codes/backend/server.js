@@ -1,100 +1,127 @@
-// =============================================
-// 📌 ARQUIVO PRINCIPAL DO BACKEND - SMART GESTÃO
-// =============================================
-//
-// Este arquivo inicializa o servidor Express, configura
-// o banco de dados MongoDB, aplica middlewares globais
-// (como CORS e JSON), e registra todas as rotas do sistema.
-//
-// Estrutura baseada em Node.js + Express + Mongoose
-// =============================================
+// ============================================================
+// 🚀 Arquivo: server.js
+// 🧩 Função: Inicializa o servidor Express do backend Smart Gestão
+// ============================================================
 
+// ----------------------
+// 📦 Importações gerais
+// ----------------------
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import mongoose from "mongoose";
+import morgan from "morgan";
 
-// 🧩 Importa rotas principais do sistema
-import authRoutes from "./routes/authRoutes.js";            // Rotas de autenticação
-import userRoutes from "./routes/userRoutes.js";            // Rotas de usuários
-import clientRoutes from "./routes/clientRoutes.js";        // Rotas de clientes/fornecedores
-import transactionRoutes from "./routes/transactionRoutes.js"; // Rotas de transações financeiras
-import reportRoutes from "./routes/reportRoutes.js";        // ✅ Rotas de relatórios por empresa
+// ----------------------
+// 🔗 Importação da conexão com o banco
+// ----------------------
+import { connectDB } from "./config/db.js";
 
-// ⚙️ Configuração de variáveis de ambiente (.env)
+// ----------------------
+// 🛡️ Importação do script de inicialização de permissões
+// (cria roles padrão automaticamente se não existirem)
+// ----------------------
+import { initPermissions } from "./Scripts/initPermissions.js";
+
+// ----------------------
+// 🧭 Importação das rotas da API (organizadas por domínio)
+// ----------------------
+import alertRoutes from "./routes/alertRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
+import clientRoutes from "./routes/clientRoutes.js";
+import companyRoutes from "./routes/companyRoutes.js";
+import logRoutes from "./routes/logRoutes.js";
+import metaRoutes from "./routes/metaRoutes.js";
+import permissionRoutes from "./routes/permissionRoutes.js";
+import reportRoutes from "./routes/reportRoutes.js";
+import transactionRoutes from "./routes/transactionRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
+
+// ----------------------
+// ⚙️ Configuração de ambiente
+// ----------------------
+// Carrega variáveis do arquivo .env (como PORT, MONGO_URI e JWT_SECRET)
 dotenv.config();
 
 // Cria a aplicação Express
 const app = express();
 
-// ======================
-// 🧱 MIDDLEWARES GLOBAIS
-// ======================
+// ============================================================
+// 🧩 MIDDLEWARES GLOBAIS
+// ============================================================
 
-// Permite que o frontend (React, por exemplo) acesse a API
+// 🔓 CORS — permite requisições externas (como do front-end React)
 app.use(cors());
 
-// Permite envio e recebimento de dados em JSON
-app.use(express.json());
+// 🧾 Body Parser — permite que o servidor interprete JSONs grandes (até 10MB)
+app.use(express.json({ limit: "10mb" }));
 
-// =======================
-// 🌐 CONEXÃO COM O BANCO
-// =======================
-//
-// O banco utilizado é o MongoDB (Atlas ou local).
-// Você pode definir a variável MONGODB_URI no arquivo .env
-// Exemplo: MONGODB_URI=mongodb+srv://usuario:senha@cluster.mongodb.net/smartgestao
-//
-mongoose
-  .connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log("✅ Conexão com MongoDB estabelecida com sucesso"))
-  .catch((err) => console.error("❌ Erro ao conectar ao MongoDB:", err));
+// 🔤 Interpreta dados enviados via formulários (x-www-form-urlencoded)
+app.use(express.urlencoded({ extended: true }));
 
-// =======================
-// 🚏 ROTAS DO SISTEMA
-// =======================
-//
-// Cada grupo de funcionalidades do sistema tem seu próprio
-// arquivo de rotas, garantindo organização e manutenibilidade.
-//
+// 🧠 Morgan — exibe logs das requisições HTTP no console (para debug)
+app.use(morgan("dev"));
 
-app.use("/api/auth", authRoutes);           // Autenticação e login
-app.use("/api/users", userRoutes);          // Usuários e permissões
-app.use("/api/clients", clientRoutes);      // Clientes e fornecedores
-app.use("/api/transactions", transactionRoutes); // Transações financeiras
-app.use("/api/reports", reportRoutes);      // ✅ Relatórios por empresa (novidade)
-
-// =======================
-// ⚡ ROTA BASE DE TESTE
-// =======================
-//
-// Apenas para verificar se o servidor está no ar.
-// Pode ser acessada via: http://localhost:5000/api
-//
-app.get("/api", (req, res) => {
-  res.json({
-    status: "Online",
-    message: "🚀 API Smart Gestão em execução com sucesso!",
-    version: "1.0.0",
+// ============================================================
+// ❤️ ROTA DE TESTE (Health Check)
+// ============================================================
+// Serve para confirmar se o servidor está ativo e funcional
+app.get("/api/health", (req, res) => {
+  return res.json({
+    status: "ok",
+    message: "Servidor Smart Gestão ativo!",
+    timestamp: new Date().toISOString(),
   });
 });
 
-// =======================
-// ⚙️ EXECUÇÃO DO SERVIDOR
-// =======================
-//
-// Define a porta de execução. Se não houver variável de ambiente PORT,
-// utiliza a porta 5000 por padrão.
-//
+// ============================================================
+// 📚 REGISTRO DAS ROTAS PRINCIPAIS DA API
+// ============================================================
+// Cada domínio do sistema possui um módulo de rotas separado.
+
+app.use("/api/alerts", alertRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/clients", clientRoutes);
+app.use("/api/companies", companyRoutes);
+app.use("/api/logs", logRoutes);
+app.use("/api/meta", metaRoutes);
+app.use("/api/permissions", permissionRoutes);
+app.use("/api/reports", reportRoutes);
+app.use("/api/transactions", transactionRoutes);
+app.use("/api/users", userRoutes);
+
+// ============================================================
+// 🔄 INICIALIZAÇÃO DO SERVIDOR
+// ============================================================
+
+// Define a porta padrão (vem do .env ou 5000 por padrão)
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log(`🚀 Servidor rodando na porta ${PORT}`);
-  console.log(`🌐 Acesse: http://localhost:${PORT}/api`);
-});
-// =======================
-// 📌 FIM DO ARQUIVO PRINCIPAL
-// =======================
+/**
+ * Função autoexecutável responsável por:
+ * 1️⃣ Conectar ao MongoDB Atlas
+ * 2️⃣ Criar permissões padrão se necessário
+ * 3️⃣ Iniciar o servidor Express
+ */
+(async () => {
+  try {
+    console.log("⏳ Iniciando servidor...");
+
+    // 1️⃣ Conecta ao banco de dados
+    await connectDB();
+
+    // 2️⃣ Inicializa permissões padrão (ROOT, ADMIN_COMPANY, USER_COMPANY, READ_ONLY)
+    await initPermissions();
+
+    // 3️⃣ Sobe o servidor Express
+    app.listen(PORT, () => {
+      console.log(`🚀 Servidor Smart Gestão rodando na porta ${PORT}`);
+      console.log(`📡 Acesse: http://localhost:${PORT}/api/health`);
+    });
+  } catch (err) {
+    // Caso qualquer etapa falhe, o sistema encerra de forma segura
+    console.error("❌ Erro ao iniciar o servidor:");
+    console.error(err.message);
+    process.exit(1);
+  }
+})();
+// ============================================================

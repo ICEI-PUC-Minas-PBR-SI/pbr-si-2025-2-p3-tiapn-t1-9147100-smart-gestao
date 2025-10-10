@@ -1,35 +1,101 @@
-// ===========================================
-// Arquivo: controllers/ClientController.js
-// Descrição: CRUD para clientes e fornecedores
-// ===========================================
+// controllers/clientController.js
+// CRUD para clients (clientes e suppliers)
 
 import Client from "../models/Client.js";
 import { createLog } from "../utils/logger.js";
 
 /**
- * Cria um novo cliente ou fornecedor vinculado à empresa do usuário logado.
+ * GET /api/clients
+ * Lista todos clients da company do usuário
  */
-export const createClient = async (req, res) => {
+export const getAllClients = async (req, res) => {
   try {
-    const empresaId = req.user.companyId;
-    const client = await Client.create({ ...req.body, companyId: empresaId });
-
-    await createLog(req, "CREATE_CLIENT", `Cliente/Fornecedor criado: ${client.nome_razao}`);
-    res.status(201).json(client);
+    const companyId = req.user.companyId;
+    const clients = await Client.find({ companyId }).sort({ name: 1 });
+    return res.status(200).json(clients);
   } catch (error) {
-    res.status(500).json({ message: "Erro ao criar cliente", error: error.message });
+    console.error("getAllClients:", error);
+    return res.status(500).json({ message: "Erro ao listar clientes", error: error.message });
   }
 };
 
 /**
- * Lista todos os clientes/fornecedores da empresa logada.
+ * POST /api/clients
+ * Cria client (tipo: 'client' | 'supplier')
  */
-export const getClients = async (req, res) => {
+export const createClient = async (req, res) => {
   try {
-    const empresaId = req.user.companyId;
-    const clients = await Client.find({ companyId: empresaId });
-    res.status(200).json(clients);
+    const companyId = req.user.companyId;
+    const userId = req.user.userId;
+    const payload = { ...req.body, companyId };
+
+    const client = await Client.create(payload);
+
+    await createLog({
+      userId,
+      companyId,
+      action: "CREATE_CLIENT",
+      description: `Client criado: ${client.name}`,
+      route: req.originalUrl,
+    });
+
+    return res.status(201).json(client);
   } catch (error) {
-    res.status(500).json({ message: "Erro ao listar clientes", error: error.message });
+    console.error("createClient:", error);
+    return res.status(500).json({ message: "Erro ao criar client", error: error.message });
+  }
+};
+
+/**
+ * PUT /api/clients/:id
+ * Atualiza client (somente na mesma company)
+ */
+export const updateClient = async (req, res) => {
+  try {
+    const companyId = req.user.companyId;
+    const client = await Client.findOneAndUpdate(
+      { _id: req.params.id, companyId },
+      { $set: req.body },
+      { new: true }
+    );
+    if (!client) return res.status(404).json({ message: "Client não encontrado" });
+
+    await createLog({
+      userId: req.user.userId,
+      companyId,
+      action: "UPDATE_CLIENT",
+      description: `Client atualizado: ${client.name}`,
+      route: req.originalUrl,
+    });
+
+    return res.status(200).json(client);
+  } catch (error) {
+    console.error("updateClient:", error);
+    return res.status(500).json({ message: "Erro ao atualizar client", error: error.message });
+  }
+};
+
+/**
+ * DELETE /api/clients/:id
+ * Remove client (dentro da company)
+ */
+export const deleteClient = async (req, res) => {
+  try {
+    const companyId = req.user.companyId;
+    const removed = await Client.findOneAndDelete({ _id: req.params.id, companyId });
+    if (!removed) return res.status(404).json({ message: "Client não encontrado" });
+
+    await createLog({
+      userId: req.user.userId,
+      companyId,
+      action: "DELETE_CLIENT",
+      description: `Client removido: ${removed.name}`,
+      route: req.originalUrl,
+    });
+
+    return res.status(200).json({ message: "Client removido com sucesso" });
+  } catch (error) {
+    console.error("deleteClient:", error);
+    return res.status(500).json({ message: "Erro ao remover client", error: error.message });
   }
 };

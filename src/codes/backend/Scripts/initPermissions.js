@@ -1,28 +1,30 @@
-// scripts/initPermissions.js
-// Executar uma vez para popular permissões iniciais
+// Scripts/initPermissions.js
+// Inicializa no banco as permissões padrões do sistema.
+// Uso: chamar no startup (após connectDB).
 
-import dotenv from "dotenv";
-dotenv.config();
-import { connectDB } from "../config/db.js";
 import Permission from "../models/Permission.js";
 
-async function run() {
-  await connectDB();
-  const perms = [
-    { nome: "ADMIN", descricao: "Administrador total" },
-    { nome: "USER", descricao: "Usuário comum" },
-    { nome: "MANAGER", descricao: "Gerenciar clientes e transacoes" }
-  ];
-  for (const p of perms) {
-    const exists = await Permission.findOne({ nome: p.nome });
-    if (!exists) {
-      await Permission.create(p);
-      console.log("Criada permissão:", p.nome);
-    } else {
-      console.log("Permissão já existe:", p.nome);
+/**
+ * initPermissions - cria roles padrão caso não existam
+ */
+export const initPermissions = async () => {
+  try {
+    const count = await Permission.countDocuments();
+    if (count > 0) {
+      console.log("🔒 Permissões já existentes no banco. Nenhuma alteração necessária.");
+      return;
     }
-  }
-  process.exit(0);
-}
 
-run().catch(err => { console.error(err); process.exit(1); });
+    const permissions = [
+      { name: "ROOT", description: "Acesso total ao sistema (donos do sistema)." },
+      { name: "ADMIN_COMPANY", description: "Administrador da empresa, gerencia usuários e dados da própria company." },
+      { name: "USER_COMPANY", description: "Usuário comum da company; pode manipular dados da própria company." },
+      { name: "READ_ONLY", description: "Apenas leitura de informações." },
+    ];
+
+    await Permission.insertMany(permissions);
+    console.log("✅ Permissões padrão (ROOT, ADMIN_COMPANY, USER_COMPANY, READ_ONLY) criadas com sucesso.");
+  } catch (error) {
+    console.error("Erro ao inicializar permissões:", error);
+  }
+};
