@@ -6,7 +6,7 @@
 import express from "express";
 import {
   createCompany,
-  getAllCompanies,
+  getCompanies,
   getCompanyById,
   updateCompany,
   deactivateCompany,
@@ -21,7 +21,7 @@ const router = express.Router();
 router.post("/", authMiddleware, roleMiddleware(["ROOT"]), auditMiddleware("CREATE_COMPANY"), createCompany);
 
 // 🔹 Listar empresas cadastradas
-router.get("/", authMiddleware, roleMiddleware(["ROOT"]), getAllCompanies);
+router.get("/", authMiddleware, roleMiddleware(["ROOT"]), getCompanies);
 
 // 🔹 Buscar empresa pelo ID
 router.get("/:id", authMiddleware, getCompanyById);

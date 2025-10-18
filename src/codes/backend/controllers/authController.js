@@ -1,87 +1,97 @@
-// controllers/authController.js
-// Login / logout e geração de token JWT
+// =============================================
+// 📄 controllers/authController.js
+// 🔐 Controle de autenticação (login, logout, refresh token)
+// =============================================
 
-import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 import User from "../models/User.js";
-import SessionToken from "../models/SessionToken.js";
-import { createLog } from "../utils/logger.js";
 
-/**
- * POST /api/auth/login
- * Body: { email, password }
- * Retorna: { token, user } (user sem passwordHash)
- */
-export const login = async (req, res) => {
+// =============================================================
+// 🧩 Função: loginUser
+// =============================================================
+export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
-    if (!email || !password) return res.status(400).json({ message: "Email e password são obrigatórios" });
 
-    const user = await User.findOne({ email: email.toLowerCase() });
-    if (!user) return res.status(401).json({ message: "Credenciais inválidas" });
+    // 🔍 Verifica se o usuário existe
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "Usuário não encontrado." });
+    }
 
-    const match = await bcrypt.compare(password, user.passwordHash);
-    if (!match) return res.status(401).json({ message: "Credenciais inválidas" });
+    // 🔑 Compara senha digitada com o hash do banco
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Senha incorreta." });
+    }
 
-    // Gera token JWT
+    // 🎫 Gera token JWT
     const token = jwt.sign(
-      { userId: String(user._id), companyId: String(user.companyId), role: user.role },
+      { id: user._id, role: user.role },
       process.env.JWT_SECRET,
-      { expiresIn: process.env.TOKEN_EXPIRATION || "1d" }
+      { expiresIn: "1h" }
     );
 
-    // Armazena session token (opcional; facilita logout)
-    await SessionToken.create({
-      userId: user._id,
+    // 🔁 Gera refresh token (opcional)
+    const refreshToken = jwt.sign(
+      { id: user._id },
+      process.env.JWT_REFRESH_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    // ✅ Retorna sucesso
+    return res.status(200).json({
+      message: "Login realizado com sucesso!",
       token,
-      ip: req.ip || req.headers["x-forwarded-for"],
-      userAgent: req.headers["user-agent"],
-      expiresAt: new Date(Date.now() + (24 * 3600 * 1000)), // 1 dia (ajustar conforme TOKEN_EXPIRATION)
+      refreshToken,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
     });
-
-    // Remove passwordHash do objeto retornado
-    const userObj = user.toObject();
-    delete userObj.passwordHash;
-
-    await createLog({
-      userId: user._id,
-      companyId: user.companyId,
-      action: "USER_LOGIN",
-      description: `Login realizado por ${user.email}`,
-      route: req.originalUrl,
-      ip: req.ip,
-    });
-
-    return res.status(200).json({ token, user: userObj });
   } catch (error) {
-    console.error("login:", error);
-    return res.status(500).json({ message: "Erro no login", error: error.message });
+    console.error("Erro no loginUser:", error);
+    return res.status(500).json({ message: "Erro interno ao realizar login." });
   }
 };
 
-/**
- * POST /api/auth/logout
- * Remove sessão (token) do banco
- * Requer authMiddleware para popular req.user
- */
-export const logout = async (req, res) => {
+// =============================================================
+// 🚪 Função: logoutUser
+// =============================================================
+export const logoutUser = async (req, res) => {
   try {
-    const token = req.headers.authorization?.split(" ")[1];
-    if (!token) return res.status(400).json({ message: "Token ausente" });
-
-    await SessionToken.deleteOne({ token });
-
-    await createLog({
-      userId: req.user.userId,
-      companyId: req.user.companyId,
-      action: "USER_LOGOUT",
-      description: "Logout realizado",
-      route: req.originalUrl,
-    });
-
-    return res.status(200).json({ message: "Logout efetuado com sucesso" });
+    // Aqui você pode invalidar o token (em um cache, blacklist etc.)
+    return res.status(200).json({ message: "Logout realizado com sucesso." });
   } catch (error) {
-    console.error("logout:", error);
-    return res.status(500).json({ message: "Erro no logout", error: error.message });
+    console.error("Erro no logoutUser:", error);
+    return res.status(500).json({ message: "Erro ao realizar logout." });
+  }
+};
+
+// =============================================================
+// ♻️ Função: refreshToken
+// =============================================================
+export const refreshToken = async (req, res) => {
+  try {
+    const { token } = req.body;
+
+    if (!token) {
+      return res.status(400).json({ message: "Token de atualização não fornecido." });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
+    const newToken = jwt.sign(
+      { id: decoded.id },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
+    return res.status(200).json({ token: newToken });
+  } catch (error) {
+    console.error("Erro no refreshToken:", error);
+    return res.status(401).json({ message: "Token inválido ou expirado." });
   }
 };

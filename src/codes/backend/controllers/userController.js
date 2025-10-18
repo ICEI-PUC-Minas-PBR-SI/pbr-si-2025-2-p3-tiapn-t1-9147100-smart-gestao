@@ -2,7 +2,7 @@
 // CRUD e perfil de users
 
 import User from "../models/User.js";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { createLog } from "../utils/logger.js";
 
 /**

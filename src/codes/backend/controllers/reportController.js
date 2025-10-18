@@ -1,104 +1,106 @@
-// controllers/reportController.js
-// Geração de relatórios e dashboards básicos
+// ============================================================
+// 📄 Arquivo: controllers/reportController.js
+// 🧩 Função: Controla os relatórios financeiros e de alertas do sistema
+// ============================================================
 
 import Transaction from "../models/Transaction.js";
 import Meta from "../models/Meta.js";
 import Alert from "../models/Alert.js";
-import { createLog } from "../utils/logger.js";
 
 /**
- * GET /api/reports/summary
- * Retorna soma de income, expense e balance num período
- * Query optional: ?start=YYYY-MM-DD&end=YYYY-MM-DD
+ * 📊 getFinancialSummary
+ * Gera um resumo financeiro da empresa:
+ * - Total de receitas
+ * - Total de despesas
+ * - Lucro líquido
  */
 export const getFinancialSummary = async (req, res) => {
   try {
-    const companyId = req.user.companyId;
-    const start = req.query.start ? new Date(req.query.start) : new Date(new Date().getFullYear(), new Date().getMonth(), 1);
-    const end = req.query.end ? new Date(req.query.end) : new Date();
+    const { companyId } = req.user; // obtém a empresa do usuário logado
 
-    const transactions = await Transaction.find({
+    // Busca todas as transações da empresa
+    const transactions = await Transaction.find({ companyId });
+
+    // Calcula totais
+    const totalIncome = transactions
+      .filter(t => t.type === "income")
+      .reduce((sum, t) => sum + t.amount, 0);
+
+    const totalExpense = transactions
+      .filter(t => t.type === "expense")
+      .reduce((sum, t) => sum + t.amount, 0);
+
+    const netProfit = totalIncome - totalExpense;
+
+    res.status(200).json({
       companyId,
-      date: { $gte: start, $lte: end }
+      totalIncome,
+      totalExpense,
+      netProfit,
     });
-
-    const income = transactions.filter(t => t.type === "income").reduce((s, t) => s + Number(t.value || 0), 0);
-    const expense = transactions.filter(t => t.type === "expense").reduce((s, t) => s + Number(t.value || 0), 0);
-    const balance = income - expense;
-
-    await createLog({
-      userId: req.user.userId,
-      companyId,
-      action: "GENERATE_FINANCIAL_SUMMARY",
-      description: `Relatório gerado (${start.toISOString()} - ${end.toISOString()})`,
-      route: req.originalUrl,
-    });
-
-    return res.status(200).json({ start, end, totals: { income, expense, balance }, transactionsCount: transactions.length });
   } catch (error) {
-    console.error("getFinancialSummary:", error);
-    return res.status(500).json({ message: "Erro ao gerar resumo financeiro", error: error.message });
+    console.error("❌ Erro ao gerar resumo financeiro:", error);
+    res.status(500).json({ message: "Erro ao gerar resumo financeiro." });
   }
 };
 
 /**
- * GET /api/reports/categories
- * Agrupa transações por category
+ * 📅 getMonthlyReport
+ * Retorna o balanço financeiro mensal agrupado por mês.
  */
-export const getCategoryReport = async (req, res) => {
+export const getMonthlyReport = async (req, res) => {
   try {
-    const companyId = req.user.companyId;
+    const { companyId } = req.user;
 
-    const result = await Transaction.aggregate([
+    const report = await Transaction.aggregate([
       { $match: { companyId } },
-      { $group: { _id: "$category", totalValue: { $sum: "$value" }, count: { $sum: 1 } } },
-      { $sort: { totalValue: -1 } }
+      {
+        $group: {
+          _id: { $month: "$date" },
+          totalIncome: {
+            $sum: { $cond: [{ $eq: ["$type", "income"] }, "$amount", 0] },
+          },
+          totalExpense: {
+            $sum: { $cond: [{ $eq: ["$type", "expense"] }, "$amount", 0] },
+          },
+        },
+      },
+      { $sort: { "_id": 1 } },
     ]);
 
-    return res.status(200).json(result);
+    res.status(200).json({ companyId, report });
   } catch (error) {
-    console.error("getCategoryReport:", error);
-    return res.status(500).json({ message: "Erro ao gerar relatório por categoria", error: error.message });
+    console.error("❌ Erro ao gerar relatório mensal:", error);
+    res.status(500).json({ message: "Erro ao gerar relatório mensal." });
   }
 };
 
 /**
- * GET /api/reports/meta-progress
- * Calcula progresso das metas
+ * 🚨 getAlertsReport
+ * Lista alertas financeiros e operacionais da empresa,
+ * permitindo análise dos principais riscos ou falhas detectadas.
  */
-export const getMetaProgress = async (req, res) => {
+export const getAlertsReport = async (req, res) => {
   try {
-    const companyId = req.user.companyId;
-    const metas = await Meta.find({ companyId });
+    const { companyId } = req.user;
 
-    const progress = await Promise.all(metas.map(async (meta) => {
-      const agg = await Transaction.aggregate([
-        { $match: { companyId, type: meta.type, category: meta.focusCategory, date: { $gte: meta.startDate, $lte: meta.endDate } } },
-        { $group: { _id: null, total: { $sum: "$value" } } }
-      ]);
-      const achieved = agg.length ? agg[0].total : 0;
-      const pct = meta.value ? ((achieved / meta.value) * 100).toFixed(2) : "0.00";
-      return { metaId: meta._id, type: meta.type, valueGoal: meta.value, achieved, progress: `${pct}%` };
-    }));
+    // Busca alertas vinculados à empresa
+    const alerts = await Alert.find({ companyId }).sort({ createdAt: -1 });
 
-    return res.status(200).json(progress);
+    if (!alerts.length) {
+      return res.status(200).json({
+        message: "Nenhum alerta registrado para esta empresa.",
+        alerts: [],
+      });
+    }
+
+    res.status(200).json({
+      message: "Relatório de alertas gerado com sucesso.",
+      totalAlerts: alerts.length,
+      alerts,
+    });
   } catch (error) {
-    console.error("getMetaProgress:", error);
-    return res.status(500).json({ message: "Erro ao gerar progresso de metas", error: error.message });
-  }
-};
-
-/**
- * GET /api/reports/alerts
- * Lista alertas ativos
- */
-export const getActiveAlerts = async (req, res) => {
-  try {
-    const companyId = req.user.companyId;
-    const alerts = await Alert.find({ companyId, status: "active" }).sort({ createdAt: -1 });
-    return res.status(200).json(alerts);
-  } catch (error) {
-    console.error("getActiveAlerts:", error);
-    return res.status(500).json({ message: "Erro ao listar alertas", error: error.message });
+    console.error("❌ Erro ao gerar relatório de alertas:", error);
+    res.status(500).json({ message: "Erro ao gerar relatório de alertas." });
   }
 };
