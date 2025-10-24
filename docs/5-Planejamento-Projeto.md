@@ -1,38 +1,93 @@
 # 5. Planejamento do Projeto
 
-O planejamento do projeto de desenvolvimento do sistema de controle de despesas para MEIs e profissionais autônomos é crucial para garantir a entrega de uma solução eficaz e alinhada às necessidades do público-alvo. Esta fase inicial estabelece as bases para todas as atividades subsequentes, desde a análise de requisitos até a implementação e testes. 
-3.1. Objetivos do Projeto 
-Principal: Desenvolver uma ferramenta intuitiva e acessível para o controle financeiro de MEIs e autônomos, promovendo a organização do fluxo de caixa e a tomada de decisões estratégicas. 
-Específicos: 
-Permitir o registro e categorização eficiente de receitas e despesas. Gerar relatórios financeiros claros e personalizáveis. 
-Possibilitar a definição e acompanhamento de metas financeiras. 
-Oferecer alertas e notificações sobre a saúde financeira. 
-Garantir a segurança e privacidade dos dados dos usuários. 
-Proporcionar uma experiência de usuário simples e agradável 
-(usabilidade). 
-3.2. Escopo do Projeto 
-O escopo inicial do projeto abrange as funcionalidades essenciais para o controle de despesas, conforme detalhado na proposta de solução. Isso inclui o registro de transações, categorização, geração de relatórios básicos e definição de metas.
-Funcionalidades mais avançadas, como integração bancária automática ou módulos de faturamento, serão consideradas em fases futuras. 
-3.3. Cronograma (Estimativa Inicial) 
-Considerando a complexidade e as fases de desenvolvimento, o cronograma inicial estimado é: 
-Fase 1: Análise e Modelagem (Atual): 4 semanas (incluindo levantamento de requisitos, modelagem de processos AS IS/TO BE, diagramas UML e prototipagem). 
-Fase 2: Desenvolvimento do Frontend: 6 semanas (implementação da interface do usuário e integração com o Backend). 
-Fase 3: Desenvolvimento do Backend e Banco de Dados: 8 semanas (implementação da lógica de negócio, APIs e estrutura do banco de dados). 
-Fase 4: Testes e Ajustes: 3 semanas (testes de funcionalidade, usabilidade, segurança e correção de bugs). 
-Fase 5: Implantação e Lançamento: 1 semana. 
-3.4. Recursos Necessários 
-Equipe: Desenvolvedores Frontend, Desenvolvedores Backend, Designer UX/UI, Analista de Negócios/Processos. 
-Ferramentas: IDEs de desenvolvimento (VS Code, IntelliJ IDEA), Ferramentas de prototipagem (Figma), Ferramentas de modelagem (draw.io, Lucidchart), Git/GitHub para controle de versão, Plataformas de comunicação (Slack, Google Meet). 
-Infraestrutura: Servidor para hospedagem do Backend, Banco de Dados MySQL, Serviço de deploy (GitHub Pages). 
-3.5. Riscos Identificados 
-Adesão do Usuário: Dificuldade em mudar hábitos financeiros informais. 
-Segurança dos Dados: Necessidade de garantir a proteção rigorosa das informações financeiras.
-Complexidade da Integração: Desafios na integração com APIs externas (futuras). 
-Manutenção e Suporte: Garantir a sustentabilidade do sistema após o lançamento. 
-Este planejamento serve como um guia, sendo flexível para adaptações conforme o projeto avança e novas informações surgem. 
+O planejamento do projeto de desenvolvimento do sistema de controle de despesas para MEIs e profissionais autônomos é crucial para garantir a entrega de uma solução eficaz e alinhada às necessidades do público-alvo. Esta fase inicial estabelece as bases para todas as atividades subsequentes, desde a análise de requisitos até a implementação e testes.
+
+## 5.1 Objetivos do Projeto
+
+**Objetivo Principal:**  
+Desenvolver uma ferramenta intuitiva e acessível para o controle financeiro de MEIs e autônomos, promovendo a organização do fluxo de caixa e a tomada de decisões estratégicas.
+
+**Objetivos Específicos:**
+
+- Permitir o registro e categorização eficiente de receitas e despesas  
+- Gerar relatórios financeiros claros e personalizáveis  
+- Possibilitar a definição e acompanhamento de metas financeiras  
+- Oferecer alertas e notificações sobre a saúde financeira  
+- Garantir a segurança e privacidade dos dados dos usuários  
+- Proporcionar uma experiência de usuário simples e agradável (usabilidade)
+
+## 5.2 Escopo do Projeto
+
+O escopo inicial do projeto abrange as funcionalidades essenciais para o controle de despesas, conforme detalhado na proposta de solução. Isso inclui:
+
+- Registro de transações  
+- Categorização de receitas e despesas  
+- Geração de relatórios básicos  
+- Definição de metas financeiras
+
+Funcionalidades mais avançadas, como integração bancária automática ou módulos de faturamento, serão consideradas em fases futuras.
+
+## 5.3 Cronograma (Estimativa Inicial)
+
+Considerando a complexidade e as fases de desenvolvimento, o cronograma inicial estimado é:
+
+- **Fase 1: Análise e Modelagem (Atual)** – 4 semanas  
+  - Levantamento de requisitos  
+  - Modelagem de processos AS IS / TO BE  
+  - Diagramas UML  
+  - Prototipagem
+
+- **Fase 2: Desenvolvimento do Frontend** – 6 semanas  
+  - Implementação da interface do usuário  
+  - Integração com o Backend
+
+- **Fase 3: Desenvolvimento do Backend e Banco de Dados** – 8 semanas  
+  - Implementação da lógica de negócio  
+  - Criação de APIs  
+  - Estruturação do banco de dados
+
+- **Fase 4: Testes e Ajustes** – 3 semanas  
+  - Testes de funcionalidade, usabilidade e segurança  
+  - Correção de bugs
+
+- **Fase 5: Implantação e Lançamento** – 1 semana
+
+## 5.4 Recursos Necessários
+
+**Equipe:**
+
+- Desenvolvedores Frontend  
+- Desenvolvedores Backend  
+- Designer UX/UI  
+- Analista de Negócios/Processos
+
+**Ferramentas:**
+
+- IDEs de desenvolvimento: VS Code, IntelliJ IDEA  
+- Ferramentas de prototipagem: Figma  
+- Ferramentas de modelagem: draw.io, Lucidchart  
+- Controle de versão: Git/GitHub  
+- Comunicação: Slack, Google Meet
+
+**Infraestrutura:**
+
+- Servidor para hospedagem do Backend  
+- Banco de Dados MySQL  
+- Serviço de deploy: GitHub Pages
+
+## 5.5 Riscos Identificados
+
+- **Adesão do Usuário:** Dificuldade em mudar hábitos financeiros informais  
+- **Segurança dos Dados:** Necessidade de garantir a proteção rigorosa das informações financeiras  
+- **Complexidade da Integração:** Desafios na integração com APIs externas (futuras)  
+- **Manutenção e Suporte:** Garantir a sustentabilidade do sistema após o lançamento
+
+---
+
+Este planejamento serve como um guia, sendo flexível para adaptações conforme o projeto avança e novas informações surgem.
 
 
-## 5.1. Divisão de Papéis
+## 5.6. Divisão de Papéis
 
 ### Sprint 1
 * Scrum Master: Hugo Ferrira
