@@ -14,7 +14,8 @@ O processo de cadastro de despesas permite ao usuário registrar e gerenciar sua
 9. Caso o usuário não confirme, pode corrigir os dados.
 10. Caso confirme, o sistema salva o registro no banco de dados.
 
-Modelagem BPMN: <img width="1461" height="661" alt="Processo1CadastroDespesas drawio" src="https://github.com/user-attachments/assets/1344fdf2-a41a-4c98-aed2-6086a2cde29d" />
+Modelagem BPMN: <img width="1461" height="701" alt="Despesas" src="https://github.com/user-attachments/assets/9d635264-33c2-43d2-b278-1380c7ef8060" />
+
 
 
 
