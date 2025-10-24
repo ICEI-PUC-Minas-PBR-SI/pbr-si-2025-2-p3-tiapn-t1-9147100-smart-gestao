@@ -1,7 +1,7 @@
 
 ## 7. Conclusão
 
-<span style="color:red">Pré-requisitos: <a href="6-Interface-Sistema.md"> Projeto da Solução</a></span>
+<span style="color:red">Pré-requisitos: <a href="6-Interface-Sistema-SG.md"> Projeto da Solução</a></span>
 
 O desenvolvimento do sistema de controle de despesas para MEIs e profissionais autônomos representou uma solução prática e necessária para um problema real: a dificuldade que muitos empreendedores enfrentam para gerenciar suas finanças de forma eficiente. Ao propor uma ferramenta intuitiva, acessível e segura, buscamos transformar processos manuais e desorganizados em fluxos digitais, centralizados e automatizados, proporcionando mais clareza, controle e agilidade na gestão financeira.
 
