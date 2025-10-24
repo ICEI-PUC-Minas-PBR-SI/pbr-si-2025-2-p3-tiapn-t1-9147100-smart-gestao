@@ -1,0 +1,16 @@
+[
+  {
+    "metaId": "ObjectId('66f9a7f7d15e4d1b4b8e3123')",
+    "type": "limit_reached",
+    "message": "🚨 Você atingiu 90% da meta de despesas operacionais.",
+    "generatedAt": "2025-10-15T14:22:00Z",
+    "status": "active"
+  },
+  {
+    "metaId": "ObjectId('66f9a7f7d15e4d1b4b8e3124')",
+    "type": "goal_achieved",
+    "message": "🎉 Parabéns! A meta de receita mensal foi alcançada.",
+    "generatedAt": "2025-10-16T09:00:00Z",
+    "status": "active"
+  }
+]
