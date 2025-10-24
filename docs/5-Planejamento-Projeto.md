@@ -31,7 +31,7 @@ Funcionalidades mais avançadas, como integração bancária automática ou mód
 
 Considerando a complexidade e as fases de desenvolvimento, o cronograma inicial estimado é:
 
-- **Fase 1: Análise e Modelagem (Atual)** – 4 semanas  
+- **Fase 1: Análise e Modelagem** – 4 semanas  
   - Levantamento de requisitos  
   - Modelagem de processos AS IS / TO BE  
   - Diagramas UML  
