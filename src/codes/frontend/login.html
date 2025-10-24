@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Controle de Despesas MEI</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="auth-page">
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <i class="fas fa-money-bill-wave logo-icon"></i>
+                <h1>Smart Gestão</h1>
+                <p>Controle de Despesas para MEIs</p>
+            </div>
+
+            <form class="auth-form">
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" class="form-control" placeholder="seu@email.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" class="form-control" placeholder="Sua senha" required>
+                </div>
+
+                <div class="form-options">
+                    <label class="checkbox">
+                        <input type="checkbox"> Lembrar de mim
+                    </label>
+                    <a href="#" class="forgot-password">Esqueci minha senha</a>
+                </div>
+
+                <button type="submit" class="btn btn-auth">Entrar</button>
+            </form>
+
+            <div class="auth-footer">
+                <p>Não tem uma conta? <a href="cadastro.html">Cadastre-se</a></p>
+                <!-- ou -->
+                <p>Já tem uma conta? <a href="login.html">Fazer login</a></p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>PUC Minas - ICEI - Sistema de Controle de Despesas para MEIs - 2025</p>
+            <p>Desenvolvido por: Júlia Fernanda, Izadora Helena, Hugo Ferreira, Heron Silva e Maria Clara</p>
+        </div>
+    </footer>
+</body>
+</html>
