@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
+    "start": "concurrently \"node server.js\" \"cd ../frontend/pages && npx http-server . -p 3000\"",
+    "dev": "concurrently \"nodemon server.js\" \"cd ../frontend/pages && npx http-server . -p 3000\""
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

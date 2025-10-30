@@ -12,7 +12,7 @@ import User from "../models/User.js";
 // =============================================================
 export const loginUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
+  const { email, password } = req.body;
 
     // 🔍 Verifica se o usuário existe
     const user = await User.findOne({ email });
@@ -20,22 +20,23 @@ export const loginUser = async (req, res) => {
       return res.status(404).json({ message: "Usuário não encontrado." });
     }
 
-    // 🔑 Compara senha digitada com o hash do banco
-    const isMatch = await bcrypt.compare(password, user.password);
+    // 🔑 Compara senha digitada com o hash armazenado em passwordHash
+    const isMatch = await bcrypt.compare(password, user.passwordHash);
     if (!isMatch) {
       return res.status(401).json({ message: "Senha incorreta." });
     }
 
     // 🎫 Gera token JWT
+    // Padroniza payload com userId para compatibilidade com authMiddleware
     const token = jwt.sign(
-      { id: user._id, role: user.role },
+      { userId: user._id, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
 
     // 🔁 Gera refresh token (opcional)
     const refreshToken = jwt.sign(
-      { id: user._id },
+      { userId: user._id },
       process.env.JWT_REFRESH_SECRET,
       { expiresIn: "7d" }
     );
@@ -82,9 +83,12 @@ export const refreshToken = async (req, res) => {
       return res.status(400).json({ message: "Token de atualização não fornecido." });
     }
 
+    // Verifica e decodifica o refresh token
     const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
+
+    // Gera novo token com payload padronizado (userId)
     const newToken = jwt.sign(
-      { id: decoded.id },
+      { userId: decoded.userId },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );

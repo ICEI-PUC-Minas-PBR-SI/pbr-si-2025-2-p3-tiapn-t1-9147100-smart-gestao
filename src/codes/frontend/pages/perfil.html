@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil - Controle de Despesas MEI</title>
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-money-bill-wave logo-icon"></i>
+                    <h1>Controle de Despesas MEI</h1>
+                </div>
+                <div class="user-actions">
+                    <button class="btn"><i class="fas fa-download"></i> Exportar</button>
+                    <a href="index.html" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Voltar</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="dashboard">
+            
+            <div class="sidebar">
+                <ul class="sidebar-menu">
+                    <li><a href=".\startPage.html"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href=".\transacoes.html"><i class="fas fa-exchange-alt"></i> Transações</a></li>
+                    <li><a href="#"><i class="fas fa-chart-pie"></i> Categorias</a></li>
+                    <li><a href=".\metas.html"><i class="fas fa-bullseye"></i> Metas</a></li>
+                    <li><a href=".\relatorios.html"><i class="fas fa-chart-line"></i> Relatórios</a></li>
+                </ul>
+            </div>
+
+            
+            <div class="main-content">
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        <div class="avatar-placeholder">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <button class="btn-edit-avatar"><i class="fas fa-camera"></i></button>
+                    </div>
+                    <div class="profile-info">
+                        <h1>João Ferreira</h1>
+                        <p>Microempreendedor Individual</p>
+                        <div class="profile-stats">
+                            <div class="stat">
+                                <span class="stat-value">28</span>
+                                <span class="stat-label">Transações</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">5</span>
+                                <span class="stat-label">Metas</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">85%</span>
+                                <span class="stat-label">Organização</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-content">
+                    <!-- Informações Pessoais -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Informações Pessoais</h2>
+                            <button class="btn btn-outline"><i class="fas fa-edit"></i> Editar</button>
+                        </div>
+                        <div class="profile-details">
+                            <div class="detail-group">
+                                <label>Nome Completo</label>
+                                <p>João Ferreira</p>
+                            </div>
+                            <div class="detail-group">
+                                <label>E-mail</label>
+                                <p>joao.silva@email.com</p>
+                            </div>
+                            <div class="detail-group">
+                                <label>Telefone</label>
+                                <p>(31) 99999-9999</p>
+                            </div>
+                            <div class="detail-group">
+                                <label>CNPJ</label>
+                                <p>12.345.678/0001-90</p>
+                            </div>
+                            <div class="detail-group">
+                                <label>Tipo de Negócio</label>
+                                <p>Prestação de Serviços - MEI</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Configurações da Conta</h2>
+                        </div>
+                        <div class="settings-list">
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <i class="fas fa-bell setting-icon"></i>
+                                    <div>
+                                        <h4>Notificações</h4>
+                                        <p>Receba alertas sobre suas metas e despesas</p>
+                                    </div>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <i class="fas fa-envelope setting-icon"></i>
+                                    <div>
+                                        <h4>E-mails de Relatório</h4>
+                                        <p>Relatórios semanais no seu e-mail</p>
+                                    </div>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Preferências Financeiras</h2>
+                        </div>
+                        <div class="preferences">
+                            <div class="preference-group">
+                                <label>Moeda Padrão</label>
+                                <select class="form-control">
+                                    <option>Real (R$)</option>
+                                    <option>Dólar Americano (US$)</option>
+                                    <option>Euro (€)</option>
+                                </select>
+                            </div>
+                            <div class="preference-group">
+                                <label>Dia de Vencimento de Impostos</label>
+                                <select class="form-control">
+                                    <option>Todo dia 05</option>
+                                    <option>Todo dia 25</option>
+                                    
+                                </select>
+                            </div>
+                            <div class="preference-group">
+                                <label>Orçamento Mensal Padrão</label>
+                                <input type="number" class="form-control" placeholder="R$ 0,00" step="0.01">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ações da Conta -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Ações da Conta</h2>
+                        </div>
+                        <div class="account-actions">
+                            <button class="btn btn-outline btn-danger">
+                                <i class="fas fa-file-pdf"></i> Exportar Todos os Dados
+                            </button>
+                            <button class="btn btn-outline btn-danger">
+                                <i class="fas fa-key"></i> Alterar Senha
+                            </button>
+                            <button class="btn btn-danger">
+                                <i class="fas fa-sign-out-alt"></i> Sair da Conta
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>PUC Minas - ICEI - Sistema de Controle de Despesas para MEIs - 2025</p>
+            <p>Desenvolvido por: Júlia Fernanda, Izadora Helena, Hugo Ferreira, Heron Silva e Maria Clara</p>
+        </div>
+    </footer>
+</body>
+</html>
