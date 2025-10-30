@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Controle de Despesas MEI</title>
-    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="auth-page">
@@ -31,7 +31,8 @@
                     <label class="checkbox">
                         <input type="checkbox"> Lembrar de mim
                     </label>
-                    <a href="#" class="forgot-password">Esqueci minha senha</a>
+                    <!-- PENDENTE: Hugo, favor criar a página de "Recuperação de Senha" e linkar aqui. -->
+                    <a href="#" class="forgot-password">Esqueci minha senha</a> 
                 </div>
 
                 <button type="submit" class="btn btn-auth">Entrar</button>
@@ -50,27 +51,7 @@
         </div>
     </footer>
 
-    <!--implementar os adados de login fazendo a requisição para o backend depois-->>
-    <script>
-        document.querySelector('.auth-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            
-            if (!email || !password) {
-                alert('Por favor, preencha todos os campos');
-                return;
-            }
-            
-            if (!email.includes('@')) {
-                alert('Por favor, insira um e-mail válido');
-                return;
-            }
-            
-            // Aqui você adicionará a lógica de envio para o backend
-            console.log('Dados de login:', { email, password });
-        });
-    </script>
+    <!-- Conecta o script modularizado da página de login -->
+    <script type="module" src="../js/pages/login.js"></script>
 </body>
 </html>

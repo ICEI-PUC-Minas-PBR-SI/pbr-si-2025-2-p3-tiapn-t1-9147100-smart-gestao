@@ -141,7 +141,7 @@ curl http://localhost:5000/api/clients ^
   -H "Authorization: Bearer SEU_TOKEN_AQUI"
 ```
 
-## Boas práticas para o time
+## Boas práticas
 
 - Versione no repositório uma Collection do Postman e um Environment em docs/postman/:
   - docs/postman/collection.json
@@ -152,14 +152,14 @@ curl http://localhost:5000/api/clients ^
   - Erro: { success: false, message, errors }
 - Use .env.example como base; garanta as variáveis: MONGO_URI, JWT_SECRET, JWT_REFRESH_SECRET, PORT.
 
-## Observações para Windows (cmd e PowerShell)
+## Observações sobre Windows PowerShell e Linux/macOS
 
-- Windows cmd: use ^ para quebrar linhas ou mantenha tudo em uma linha.
-- Windows PowerShell: prefira uma linha ou use splatting/parâmetros nomeados; exemplo abaixo em uma linha:
+- Se usar PowerShell ou shells Unix, remova o acento circunflexo (^) e use uma única linha ou a barra invertida (\) apropriada do shell.
+- Exemplo em PowerShell (uma linha):
 ```
 curl -Method POST http://localhost:5000/api/auth/login -H "Content-Type: application/json" -Body '{"email":"usuario@empresa.com","password":"Senha123"}'
 ```
 
 ---
 
-Com este guia, qualquer membro do time pode optar por Postman ou curl (no Windows) mantendo a mesma experiência de teste e validação.
+Com este guia, qualquer membro do time pode optar por Postman ou curl mantendo a mesma experiência de teste e validação.

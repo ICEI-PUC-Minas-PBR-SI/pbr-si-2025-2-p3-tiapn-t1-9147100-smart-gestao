@@ -124,7 +124,7 @@ Atualizado em: 21/04/2024
 
 | Responsável   | Tarefa/Requisito | Iniciado em    | Prazo      | Status | Terminado em    |
 | :----         |    :----         |      :----:    | :----:     | :----: | :----:          |
-| Hugo Ferreira        | Desenvolvimento do front-end (HTML/CSS)        | 20/08/2025     | 20/08/2025  | ✔️    | 05/01/2005      |
+| Hugo Ferreira        | Desenvolvimento do front-end (HTML/CSS)        | 20/08/2025     | 20/08/2025  | ✔️    | 20/08/2025      |
 | Maria Clara        | Documentação (Relatório Sprint 2)    | 20/08/2025      | 20/09/2025 | 📝    |                 |
 | Júlia Fernanda        | documentação (Relatório Sprint 2) | 20/08/2025      | 20/09/2025 | ⌛     |                 |
 | Izadora Helena        | Documentação (Relatório Sprint 2)  |  20/08/2025     | 20/09/2025 | ⌛    |       |

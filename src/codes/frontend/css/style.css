@@ -1,3 +1,5 @@
+/* === ESTILOS GLOBAIS E RESET === */
+
 * {
     margin: 0;
     padding: 0;
@@ -11,14 +13,14 @@ body {
     line-height: 1.6;
 }
 
-/* Container */
+/* --- Layout Principal (Container) --- */
 .container {
     width: 90%;
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
 }
-
+/* === COMPONENTES COMUNS === */
 /* Header */
 header {
     background: linear-gradient(135deg, #2c3e50 0%, #4a6491 100%);
@@ -48,7 +50,7 @@ header {
     color: #3498db;
 }
 
-/* Botões */
+/* --- Botões --- */
 .user-actions {
     display: flex;
     align-items: center;
@@ -87,14 +89,14 @@ header {
     color: white;
 }
 
-/* Dashboard */
+/* === LAYOUT DO DASHBOARD === */
 .dashboard {
     display: grid;
     grid-template-columns: 1fr 3fr;
     gap: 20px;
     margin-top: 20px;
 }
-
+/* --- Sidebar (Menu Lateral) --- */
 /* Sidebar */
 .sidebar {
     background-color: white;
@@ -133,7 +135,7 @@ header {
     font-size: 1.2rem;
 }
 
-/* Cards */
+/* --- Conteúdo Principal e Cards --- */
 .main-content {
     display: flex;
     flex-direction: column;
@@ -161,7 +163,7 @@ header {
     color: #2c3e50;
 }
 
-/* Summary Cards */
+/* --- Cards de Resumo (Receitas, Despesas, Saldo) --- */
 .summary-cards {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -207,7 +209,9 @@ header {
     margin-top: 10px;
 }
 
-/* Formulário */
+/* === COMPONENTES DE FORMULÁRIO === */
+
+/* --- Formulário de Transação --- */
 .transaction-form {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -246,7 +250,7 @@ header {
     margin-top: 10px;
 }
 
-/* Tabela */
+/* === COMPONENTES DE DADOS === */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -299,7 +303,7 @@ tr:hover {
     color: #3498db;
 }
 
-/* Categorias */
+/* --- Seção de Categorias --- */
 .categories {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -335,7 +339,8 @@ tr:hover {
     font-weight: 600;
     color: #2c3e50;
 }
-        
+
+/* --- Lista de Metas (Goals) --- */
 .goals-list {
     display: flex;
     flex-direction: column;
@@ -380,7 +385,8 @@ tr:hover {
     font-size: 0.9rem;
     color: #7f8c8d;
 }
-        
+
+/* --- Modal (Janela Pop-up) --- */
 .modal {
     display: none;
     position: fixed;
@@ -424,7 +430,8 @@ tr:hover {
     cursor: pointer;
     color: #7f8c8d;
 }
-        
+
+/* --- Rodapé (Footer) --- */
 footer {
     text-align: center;
     margin-top: 40px;
@@ -432,7 +439,9 @@ footer {
     color: #7f8c8d;
     font-size: 0.9rem;
 }
-        
+
+/* === MEDIA QUERIES (RESPONSIVIDADE) === */
+
 @media (max-width: 768px) {
 .dashboard {
     grid-template-columns: 1fr;
@@ -450,7 +459,9 @@ footer {
     grid-template-columns: 1fr;
     } 
 }
-/* Páginas de Autenticação */
+
+/* === PÁGINAS ESPECÍFICAS === */
+/* --- Páginas de Autenticação (Login, Cadastro) --- */
 .auth-page {
     background: linear-gradient(135deg, #2c3e50 0%, #4a6491 100%);
     min-height: 100vh;
@@ -548,7 +559,7 @@ footer {
     text-decoration: underline;
 }
 
-/* Página de Transações */
+/* --- Página de Transações --- */
 .header-actions {
     display: flex;
     gap: 10px;
@@ -602,7 +613,7 @@ footer {
     border-top: 1px solid #eee;
 }
 
-/* Página de Relatórios */
+/* --- Página de Relatórios --- */
 .report-filters {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -674,7 +685,7 @@ footer {
     color: #2c3e50;
 }
 
-/* Gráfico de Pizza */
+/* --- Gráfico de Pizza (Pie Chart) --- */
 .pie-chart {
     width: 150px;
     height: 150px;
@@ -713,7 +724,7 @@ footer {
 .legend-color.taxes { background-color: #9b59b6; }
 .legend-color.other { background-color: #1abc9c; }
 
-/* Tabela de Análise */
+/* --- Tabela de Análise Detalhada --- */
 .analysis-table {
     display: flex;
     flex-direction: column;
@@ -743,7 +754,7 @@ footer {
     font-weight: 600;
 }
 
-/* Insights */
+/* --- Cards de Insights --- */
 .insights {
     display: flex;
     flex-direction: column;
@@ -787,7 +798,7 @@ footer {
     font-size: 1.5rem;
 }
 
-/* Página de Metas */
+/* --- Página de Metas (Goals) --- */
 .summary-card.completed {
     background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
 }
@@ -929,7 +940,7 @@ footer {
     font-size: 0.9rem;
 }
 
-/* Página de Perfil */
+/* --- Página de Perfil (Profile) --- */
 .profile-header {
     display: flex;
     gap: 30px;
@@ -1028,7 +1039,7 @@ footer {
     margin: 0;
 }
 
-/* Configurações */
+/* --- Seção de Configurações (Settings) --- */
 .settings-list {
     display: flex;
     flex-direction: column;
@@ -1066,7 +1077,7 @@ footer {
     font-size: 0.9rem;
 }
 
-/* Switch */
+/* --- Componente Switch (Toggle) --- */
 .switch {
     position: relative;
     display: inline-block;
@@ -1112,7 +1123,7 @@ input:checked + .slider:before {
     transform: translateX(26px);
 }
 
-/* Preferências */
+/* --- Seção de Preferências --- */
 .preferences {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -1130,7 +1141,7 @@ input:checked + .slider:before {
     color: #2c3e50;
 }
 
-/* Ações da Conta */
+/* --- Seção de Ações da Conta --- */
 .account-actions {
     display: flex;
     gap: 15px;
@@ -1147,7 +1158,7 @@ input:checked + .slider:before {
     border-color: #c0392b;
 }
 
-/* Responsividade */
+/* --- Responsividade Adicional --- */
 @media (max-width: 768px) {
     .profile-header {
         flex-direction: column;

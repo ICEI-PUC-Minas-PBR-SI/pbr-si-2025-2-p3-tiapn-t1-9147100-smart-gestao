@@ -1,0 +1,11 @@
+# Ignorar dependências do Node.js
+node_modules/
+
+# Ignorar arquivos de ambiente (contêm segredos)
+.env
+
+# Arquivos de log
+*.log
+
+# Arquivos gerados pelo sistema operacional
+.DS_Store

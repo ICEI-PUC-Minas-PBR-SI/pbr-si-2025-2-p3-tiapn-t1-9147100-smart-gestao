@@ -1,33 +1,52 @@
-<!-- está criada nas demais páginas mas não existe no projeto, o Hugo tem que fazer a implementação do código nela) -->
-<!-- com cuidado para não alterar as demais páginas-->
-<!-- Criado com auxilio de IA somente para fingir existir algum contúdo nela-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categorias - Controle de Despesas MEI</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-money-bill-wave logo-icon"></i>
+                    <h1>Controle de Despesas MEI</h1>
+                </div>
+                <div class="user-actions">
+                    <a href="perfil.html" class="btn btn-outline"><i class="fas fa-user"></i> Perfil</a>
+                </div>
+            </div>
+        </div>
+    </header>
 
-<link rel="stylesheet" href="../assets/css/style.css">
+    <div class="container">
+        <div class="dashboard">
+            <div class="sidebar">
+                <ul class="sidebar-menu">
+                    <li><a href="startPage.html"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="transacoes.html"><i class="fas fa-exchange-alt"></i> Transações</a></li>
+                    <li><a href="categorias.html" class="active"><i class="fas fa-chart-pie"></i> Categorias</a></li>
+                    <li><a href="metas.html"><i class="fas fa-bullseye"></i> Metas</a></li>
+                    <li><a href="relatorios.html"><i class="fas fa-chart-line"></i> Relatórios</a></li>
+                </ul>
+            </div>
+            <div class="main-content">
+                <div class="card">
+                    <h2 class="card-title">Gerenciar Categorias</h2>
+                    <p>Esta página está em construção. Aqui você poderá criar, editar e excluir categorias para suas transações.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-
-
-<script>
-    document.querySelector('.transaction-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const description = document.getElementById('description').value;
-        const amount = document.getElementById('amount').value;
-        const type = document.getElementById('type').value;
-        const category = document.getElementById('category').value;
-        const date = document.getElementById('date').value;
-        
-        if (!description || !amount || !date) {
-            alert('Por favor, preencha todos os campos obrigatórios');
-            return;
-        }
-        
-        // Aqui você adicionará a lógica de envio para o backend
-        console.log('Dados da transação:', {
-            description,
-            amount,
-            type,
-            category,
-            date
-        });
-    });
-</script>
+    <footer>
+        <div class="container">
+            <p>PUC Minas - ICEI - Sistema de Controle de Despesas para MEIs - 2025</p>
+            <p>Desenvolvido por: Júlia Fernanda, Izadora Helena, Hugo Ferreira, Heron Silva e Maria Clara</p>
+        </div>
+    </footer>
+</body>
+</html>

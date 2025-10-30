@@ -28,11 +28,7 @@ Esta seção orienta como executar o sistema localmente para fins acadêmicos/de
 
 ### Pré-requisitos
 - Node.js instalado
-- Conta MongoDB Atlas já criada e banco configurado no portal, com:
-  - Cluster/projeto ativo
-  - Database e usuário ADMIN já provisionados
-  - IP do desenvolvedor liberado em Network Access
-  - String de conexão (MONGODB_URI) disponível
+- Conta MongoDB Atlas (ou outra instância MongoDB acessível) e string de conexão
 
 ### Configuração (uma única vez)
 1) Backend: instalar dependências
@@ -48,12 +44,10 @@ Esta seção orienta como executar o sistema localmente para fins acadêmicos/de
    PORT=5000
    LOG_LEVEL=info
    ```
-   Observações importantes:
-   - MONGODB_URI: copie do portal do MongoDB Atlas (Connection string). Ex.: mongodb+srv://usuarioAdmin:senha@cluster.../nomeBanco?retryWrites=true&w=majority
-   - Liberação de IP: em Network Access, adicione seu IP (ou 0.0.0.0/0 somente para desenvolvimento).
-   - Usuário ADMIN: use credenciais administrativas para permitir criação inicial de coleções/registros.
-   - JWT_SECRET: defina um segredo aleatório para assinar tokens.
-   - PORT: mantenha 5000 para compatibilidade com o frontend (que sobe em 3000).
+   Observações:
+   - MONGODB_URI: pegue no MongoDB Atlas (libere seu IP em Network Access).
+   - JWT_SECRET: qualquer string segura para assinar tokens.
+   - PORT: 5000 é o padrão esperado pelo frontend.
 
 ### Execução (sobe backend e frontend juntos)
 No diretório do backend execute:
@@ -63,23 +57,13 @@ npm start
 ```
 Isso inicia:
 - Backend em http://localhost:5000 (health: http://localhost:5000/api/health)
-- Frontend (servidor estático) em http://localhost:3000 (servindo páginas em src/codes/frontend/pages)
-
-Ordem recomendada de verificação:
-1) Verifique health: abra http://localhost:5000/api/health (deve responder OK com status e data)
-2) Abra o frontend: http://localhost:3000/login.html
-3) Realize cadastro/login conforme perfil (admin primeiro, depois usuários comuns)
-4) Navegue pelas páginas internas (transações, metas, relatórios)
+- Frontend (servidor estático) em http://localhost:3000
 
 ### Acesso rápido (fluxo mínimo)
-1) Admin: realizar primeiro acesso
-   - Se o ambiente estiver zerado, efetue o cadastro do usuário admin (ou use seed/política definida) e acesse o sistema.
-   - Admin cria os primeiros usuários finais (sem privilégios administrativos).
-2) Usuário final: login
-   - Acessa http://localhost:3000/login.html
-   - Informa as credenciais fornecidas pelo admin
-3) Uso do sistema
-   - Navega pelas páginas e executa processos: cadastrar transações, definir metas, consultar relatórios, etc.
+1) Abra http://localhost:3000/login.html
+2) Caso não tenha usuário, vá para cadastro e crie conta
+3) Faça login; ao sucesso, será redirecionado para a página inicial
+4) Utilize as páginas de Transações, Metas e Relatórios
 
 ### Troubleshooting (problemas comuns)
 - Porta 3000 em uso (EADDRINUSE):
@@ -90,12 +74,9 @@ Ordem recomendada de verificação:
 - Erro de CORS ao acessar API:
   - Em desenvolvimento, o backend já expõe cors(); se precisar, verifique se está ativo e/ou ajuste origens permitidas.
 - Conexão com MongoDB falhando:
-  - Confirme MONGODB_URI no .env, usuário/senha corretos; teste conexão no portal (Connect > Drivers) e verifique whitelist de IPs no Atlas.
-  - Verifique se o usuário ADMIN possui permissão no database alvo.
+  - Confirme MONGODB_URI no .env, usuário/senha corretos, e whitelist de IPs no Atlas.
 - Falha ao iniciar o frontend:
   - O script npm start do backend usa um servidor estático simples (http-server). Caso 3000 esteja ocupada, ajuste a porta no script.
-- Permissões/Perfis:
-  - Caso um usuário sem privilégios tente acessar rotas administrativas, o backend retornará 403; revise as permissões do perfil.
 
 ### Testes de integração (para a equipe)
 Objetivo: validar o fluxo ponta a ponta sem ferramentas complexas.
