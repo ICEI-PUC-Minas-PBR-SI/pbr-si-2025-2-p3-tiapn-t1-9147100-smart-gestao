@@ -10,8 +10,6 @@ O processo de geração de relatórios permite que o usuário visualize e analis
 5. Sistema exibe tabela de análise detalhada.
 6. Sistema exibe insights financeiros relevantes.
 
-Modelo BPMN:<img width="1081" height="661" alt="metas" src="https://github.com/user-attachments/assets/02e97d18-d857-4142-ae08-6fc4c11815f3" />
-
 
 
 ---
