@@ -10,10 +10,21 @@ O processo de criação de metas permite que os usuários definam objetivos fina
 5. O sistema registra a nova meta.
 6. O sistema registra a nova meta.
 7. O usuário é redirecionado para a tela de listagem de metas.
+6. O usuário é redirecionado para a tela de listagem de metas.
+
+
+> **Ponto de Melhoria (Revisado por Heron):** Pessoal, a etapa "O sistema registra a nova meta" está duplicada neste fluxo (passos 5 e 6 originais). O responsável pela documentação poderia remover a etapa repetida para deixar o fluxo correto?
    
 Modelagem BPMN: <img width="1081" height="661" alt="Processo3Metas drawio" src="https://github.com/user-attachments/assets/ca7f9118-0137-499a-8207-db631d83af94" />
 
 ---
+
+> **Ponto de Melhoria Importante (Revisado por Heron):** Olá, equipe! Um ponto de atenção aqui: a seção "Detalhamento das atividades" precisa ser refeita, pois o conteúdo é do cadastro de usuário.
+>
+> **Guia para a reescrita:**
+> O responsável pela documentação pode substituir todo o conteúdo abaixo por uma única atividade chamada **"Definir Nova Meta Financeira"**. A estrutura deve ter:
+> - **Uma tabela de campos com:** `Nome da Meta`, `Valor Alvo`, `Prazo` e `Botão: Salvar Meta`.
+> - **Uma lista de comandos** descrevendo como preencher cada campo e clicar no botão para salvar.
 
 #### Detalhamento das atividades
 

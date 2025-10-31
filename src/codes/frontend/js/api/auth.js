@@ -29,10 +29,12 @@ export async function login(email, password) {
   }
 
   // Se o login for bem-sucedido, armazena os tokens e os dados do usuário no localStorage.
-  // O localStorage permite que os dados persistam mesmo após fechar a aba do navegador.
+  // O localStorage é usado para que a sessão do usuário persista mesmo após fechar
+  // e reabrir o navegador.
   localStorage.setItem('token', data.token);
   localStorage.setItem('refreshToken', data.refreshToken);
-  // Armazenamos o objeto do usuário como string JSON.
+  // O objeto do usuário é convertido para uma string JSON antes de ser armazenado,
+  // pois o localStorage só armazena strings.
   localStorage.setItem('user', JSON.stringify(data.user));
 
   // Retorna os dados para que a página que chamou a função possa usá-los se necessário.
@@ -79,6 +81,7 @@ export async function register(userData) {
  * Remove os dados de autenticação do localStorage.
  */
 export function logout() {
+  // Limpa todos os dados da sessão do usuário do armazenamento local.
   localStorage.removeItem('token');
   localStorage.removeItem('refreshToken');
   localStorage.removeItem('user');

@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Pega os valores digitados pelo usuário nos campos de input.
     // .trim() remove espaços em branco do início e do fim.
     const name = nameInput.value.trim();
-    const email = emailInput.value.trim();
+    const email = emailInput.value.trim().toLowerCase(); // Normaliza o email para minúsculas
     const password = passwordInput.value.trim();
     const confirmPassword = confirmPasswordInput.value.trim();
     const companyName = companyNameInput.value.trim();
@@ -85,6 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Desabilita o botão de submit para evitar múltiplos cliques.
       const submitButton = registerForm.querySelector('button[type="submit"]');
       submitButton.disabled = true;
+      // Altera o texto do botão para dar um feedback visual ao usuário.
       submitButton.textContent = 'Cadastrando...';
 
       // Prepara os dados do usuário para envio, conforme o backend espera.
@@ -99,9 +100,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     } catch (error) {
       console.error('Falha no cadastro:', error);
-      showError(error.message); // Exibe a mensagem de erro para o usuário.
+      // Exibe a mensagem de erro retornada pela API (ex: "E-mail já cadastrado").
+      // Se não houver mensagem específica, mostra uma genérica.
+      showError(error.message || 'Ocorreu um erro inesperado. Tente novamente.');
     } finally {
       const submitButton = registerForm.querySelector('button[type="submit"]');
+      // Reabilita o botão e restaura o texto original, independentemente do resultado.
       submitButton.disabled = false;
       submitButton.textContent = 'Criar Conta';
     }

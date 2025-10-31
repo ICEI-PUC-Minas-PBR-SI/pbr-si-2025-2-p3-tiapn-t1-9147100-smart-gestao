@@ -7,8 +7,9 @@ import { apiRequest } from '/js/api/apiHelper.js';
 import { validateRequired } from '/js/utils/validators.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Protege a página, garantindo que apenas usuários logados possam acessá-la.
-  // O authGuard já redireciona para o login se não houver token.
+  // Importa e executa o `authGuard`. Este script verifica se o usuário está autenticado
+  // (ou seja, se existe um token no localStorage). Caso não esteja, ele redireciona
+  // automaticamente para a página de login, protegendo o acesso a esta página.
   import('/js/utils/authGuard.js');
 
   const newTransactionForm = document.querySelector('#new-transaction-form');
@@ -25,8 +26,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /**
    * Carrega e exibe a lista de transações do usuário.
+   * Faz uma requisição GET para o endpoint '/transactions', que retorna
+   * as transações associadas ao token do usuário logado.
    */
   async function loadTransactions() {
+    // Exibe uma mensagem de carregamento enquanto a requisição está em andamento.
+    transactionsTableBody.innerHTML = '<tr><td colspan="5" class="text-center">Carregando...</td></tr>';
+
     try {
       const response = await apiRequest('/transactions');
       if (!response.ok) {
@@ -35,6 +41,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const transactions = await response.json();
       renderTransactions(transactions);
     } catch (error) {
+      // Em caso de erro, exibe a mensagem na tabela também.
+      transactionsTableBody.innerHTML = `<tr><td colspan="5" class="text-center text-danger">Falha ao carregar transações.</td></tr>`;
       showError(error.message);
     }
   }
@@ -44,10 +52,12 @@ document.addEventListener('DOMContentLoaded', () => {
    * @param {Array} transactions - A lista de transações a ser exibida.
    */
   function renderTransactions(transactions) {
-    transactionsTableBody.innerHTML = ''; // Limpa a tabela antes de preencher
+    // Limpa o conteúdo atual da tabela para evitar duplicatas ao recarregar.
+    transactionsTableBody.innerHTML = '';
 
     if (transactions.length === 0) {
-      transactionsTableBody.innerHTML = '<tr><td colspan="5">Nenhuma transação encontrada.</td></tr>';
+      // Exibe uma mensagem amigável se não houver transações.
+      transactionsTableBody.innerHTML = '<tr><td colspan="5" class="text-center">Nenhuma transação encontrada.</td></tr>';
       return;
     }
 
@@ -55,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const row = document.createElement('tr');
       row.innerHTML = `
         <td>${new Date(tx.date).toLocaleDateString()}</td>
+        // A descrição é opcional, então mostramos um hífen se não existir.
         <td>${tx.description || '-'}</td>
         <td>${tx.category}</td>
         <td class="${tx.type === 'income' ? 'text-success' : 'text-danger'}">
@@ -77,7 +88,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const formData = new FormData(newTransactionForm);
     const transactionData = Object.fromEntries(formData.entries());
 
-    // Validação simples
+    // Validação de cliente para garantir que os campos essenciais foram preenchidos
+    // antes de enviar a requisição para a API.
     if (!validateRequired(transactionData.value) || !validateRequired(transactionData.date)) {
       showError('Valor e Data são obrigatórios.');
       return;
@@ -94,13 +106,18 @@ document.addEventListener('DOMContentLoaded', () => {
         throw new Error(errorData.message || 'Falha ao criar transação.');
       }
 
-      newTransactionForm.reset(); // Limpa o formulário
-      loadTransactions(); // Recarrega a lista de transações
+      // Se a criação for bem-sucedida:
+      newTransactionForm.reset(); // 1. Limpa os campos do formulário.
+      loadTransactions(); // 2. Recarrega a lista para exibir a nova transação.
     } catch (error) {
       showError(error.message);
     }
   }
 
+  /**
+   * Exibe uma mensagem de erro na área designada da página.
+   * @param {string} message - A mensagem a ser exibida.
+   */
   function showError(message) {
     errorMessageDiv.textContent = message;
     errorMessageDiv.style.display = 'block';

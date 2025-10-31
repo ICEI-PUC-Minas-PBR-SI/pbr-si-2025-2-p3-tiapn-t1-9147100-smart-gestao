@@ -15,6 +15,8 @@ const API_BASE_URL = 'http://localhost:5000/api';
  */
 async function refreshToken() {
   const currentRefreshToken = localStorage.getItem('refreshToken');
+  // Se não houver um refresh token, não há como renovar a sessão.
+  // Isso pode acontecer se o usuário nunca logou ou se o refresh token foi removido.
   if (!currentRefreshToken) {
     return null;
   }
@@ -27,6 +29,7 @@ async function refreshToken() {
     });
 
     if (!response.ok) {
+      // Se a resposta não for 'ok', o refresh token pode ser inválido, expirado ou revogado pelo backend.
       throw new Error('Falha ao renovar o token.');
     }
 
@@ -34,6 +37,8 @@ async function refreshToken() {
     localStorage.setItem('token', data.token); // Salva o novo access token
     return data.token;
   } catch (error) {
+    // Qualquer erro na tentativa de renovação (seja de rede ou pela resposta da API)
+    // resultará na falha da renovação.
     console.error('Erro no refresh token:', error);
     return null;
   }
@@ -63,19 +68,24 @@ export async function apiRequest(endpoint, options = {}) {
   // Realiza a primeira tentativa de requisição
   let response = await fetch(`${API_BASE_URL}${endpoint}`, { ...options, headers });
 
-  // Se a resposta for 401 (Não Autorizado) e não for a rota de refresh, tenta renovar o token
+  // Verifica se a requisição falhou com status 401 (Não Autorizado),
+  // o que geralmente indica que o Access Token expirou.
+  // A verificação `endpoint !== '/auth/refresh'` previne um loop infinito caso a própria
+  // requisição de refresh falhe com 401.
   if (response.status === 401 && endpoint !== '/auth/refresh') {
     console.log('Access token expirado. Tentando renovar...');
     const newAccessToken = await refreshToken();
 
     if (newAccessToken) {
       // Se a renovação foi bem-sucedida, atualiza o header e tenta a requisição original novamente
+      console.log('Token renovado com sucesso. Repetindo a requisição original...');
       headers['Authorization'] = `Bearer ${newAccessToken}`;
       response = await fetch(`${API_BASE_URL}${endpoint}`, { ...options, headers });
     } else {
       // Se a renovação falhou (ex: refresh token também expirou), desloga o usuário.
       console.log('Refresh token inválido ou expirado. Deslogando...');
       logout(); // A função logout já redireciona para a página de login.
+      // Lança um erro para interromper o fluxo da chamada original.
       throw new Error('Sessão expirada. Por favor, faça login novamente.');
     }
   }

@@ -15,11 +15,19 @@ O processo de cadastro de despesas permite ao usuário registrar e gerenciar sua
 10. Caso confirme, o sistema salva o registro no banco de dados.
 
 Modelagem BPMN: <img width="1461" height="701" alt="Despesas" src="https://github.com/user-attachments/assets/9d635264-33c2-43d2-b278-1380c7ef8060" />
-
-
-
+> **Ponto de Melhoria (Revisado por Heron):** Olá, equipe! Para alinharmos o diagrama BPMN com o feedback da professora, o responsável pela documentação poderia, por favor, fazer um pequeno ajuste?
+>
+> **Guia para o ajuste:**
+> 1.  No diagrama, mova a tarefa "Salva o registro no banco de dados" para dentro da raia "Sistema".
+> 2.  Depois, remova completamente a raia "Banco de Dados", pois o banco é um componente do sistema, não um participante do processo.
 
 ---
+
+> **Ponto de Melhoria (Revisado por Heron):** Pessoal, para deixarmos a documentação mais consistente, o responsável poderia reorganizar a seção "Detalhamento das atividades" abaixo?
+>
+> **Guia para o ajuste:**
+> 1.  **Reorganize as atividades:** O foco principal do diagrama é adicionar uma transação. Então, a atividade de "Adicionar Nova Transação" (que hoje é a Atividade 2) deve vir primeiro.
+> 2.  **Ajuste os títulos:** A atividade de "Visualizar e Filtrar" (que hoje é a Atividade 1) pode se tornar a "Atividade 2", já que é uma ação complementar na mesma tela.
 
 #### Detalhamento das atividades
 
@@ -66,8 +74,15 @@ Esta atividade permite ao usuário registrar uma nova receita ou despesa no sist
 - Preencher os campos "Data", "Descrição", "Categoria", "Tipo" e "Valor".
 - Clicar em "Salvar" para registrar a transação.
 - Clicar em "Cancelar" para fechar o formulário sem salvar.
+> **Ponto de Melhoria (Revisado por Heron):** Para deixar a documentação ainda mais clara, o responsável poderia descrever o que acontece após cada comando?
+>
+> **Guia para o ajuste:**
+> - No comando "Clicar em 'Salvar'", adicione o resultado: `-> A transação é salva, o formulário é limpo e a lista de transações é atualizada na tela.`
+> - No comando "Clicar em 'Cancelar'", adicione o resultado: `-> O formulário é fechado e os dados preenchidos são descartados.`
 
 ---
+
+> **Ponto de Melhoria (Revisado por Heron):** Pessoal, para completar a documentação deste processo, o responsável poderia criar e adicionar os wireframes (esboços de tela) aqui? Um esboço simples da tela de transações, mostrando a lista e o formulário, já seria excelente.
 
 _Tipos de dados utilizados:_
 

@@ -34,6 +34,16 @@ const UserSchema = new Schema(
       type: String,
       required: true,
     },
+    // --- CAMPOS PARA RECUPERAÇÃO DE SENHA ---
+    passwordResetToken: {
+      type: String,
+      select: false, // Não retorna este campo em queries por padrão
+    },
+    passwordResetExpires: {
+      type: Date,
+      select: false, // Não retorna este campo em queries por padrão
+    },
+    // -----------------------------------------
     role: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Permission", // Permissão associada (ADMIN_COMPANY, USER_COMPANY, etc.)
