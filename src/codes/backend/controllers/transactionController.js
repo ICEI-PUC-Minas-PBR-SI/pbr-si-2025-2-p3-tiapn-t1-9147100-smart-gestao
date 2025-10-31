@@ -10,12 +10,12 @@ import { createLog } from "../utils/logger.js";
  */
 export const getAllTransactions = async (req, res) => {
   try {
-    const companyId = req.user.companyId;
-    const filter = { companyId };
+    const companyId = req.user.companyId; // Vem do authMiddleware
+    const filter = { companyId: companyId };
 
     if (req.query.start || req.query.end) {
       filter.date = {};
-      if (req.query.start) filter.date.$gte = new Date(req.query.start);
+      if (req.query.start) filter.date.$gte = new Date(req.query.start); // Usa o campo 'date'
       if (req.query.end) filter.date.$lte = new Date(req.query.end);
     }
     if (req.query.category) filter.category = req.query.category;
@@ -36,19 +36,18 @@ export const getAllTransactions = async (req, res) => {
 export const createTransaction = async (req, res) => {
   try {
     const companyId = req.user.companyId;
-    const userId = req.user.userId;
-    const payload = { ...req.body, companyId };
+    const payload = { ...req.body, companyId: companyId };
 
-    if (!payload.type || !["income", "expense"].includes(payload.type)) return res.status(400).json({ message: "Tipo inválido" });
-    if (typeof payload.value !== "number") return res.status(400).json({ message: "Valor obrigatorio e numérico" });
-
+    // A validação agora é primariamente feita pelo Mongoose Schema.
+    // O controller pode focar na lógica de negócio.
     const tx = await Transaction.create(payload);
 
+    // Exemplo de log de auditoria
     await createLog({
-      userId,
+      userId: req.user.userId,
       companyId,
       action: "CREATE_TRANSACTION",
-      description: `Transaction criada: ${tx._id} (${tx.type}) valor=${tx.value}`,
+      description: `Transação criada: ${tx._id} (${tx.type}) valor=${tx.value}`,
       route: req.originalUrl,
     });
 
@@ -66,7 +65,11 @@ export const createTransaction = async (req, res) => {
 export const updateTransaction = async (req, res) => {
   try {
     const companyId = req.user.companyId;
-    const updated = await Transaction.findOneAndUpdate({ _id: req.params.id, companyId }, { $set: req.body }, { new: true });
+    const updated = await Transaction.findOneAndUpdate(
+      { _id: req.params.id, companyId: companyId }, // Garante que só pode editar da própria empresa
+      { $set: req.body },
+      { new: true, runValidators: true } // 'runValidators' força a validação do schema na atualização
+    );
     if (!updated) return res.status(404).json({ message: "Transaction não encontrada" });
 
     await createLog({
@@ -91,7 +94,7 @@ export const updateTransaction = async (req, res) => {
 export const deleteTransaction = async (req, res) => {
   try {
     const companyId = req.user.companyId;
-    const removed = await Transaction.findOneAndDelete({ _id: req.params.id, companyId });
+    const removed = await Transaction.findOneAndDelete({ _id: req.params.id, companyId: companyId });
     if (!removed) return res.status(404).json({ message: "Transaction não encontrada" });
 
     await createLog({

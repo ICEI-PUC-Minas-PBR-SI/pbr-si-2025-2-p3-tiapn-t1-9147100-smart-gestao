@@ -1,82 +1,118 @@
 /**
- * Script responsável pelo gerenciamento da página de cadastro
- * - Manipula o formulário de registro
- * - Realiza validações dos campos
- * - Integra com a API de autenticação para criar novo usuário
+ * @file Script da página de cadastro.
+ * @description Este arquivo gerencia a interatividade da página de cadastro,
+ * incluindo a captura de dados do formulário, validação e a chamada à API de registro.
  */
 
-// Importa funções necessárias de outros módulos
-import { register } from '../api/auth.js';
-import { validateEmail, validateRequired, validatePassword } from '../utils/validators.js';
+// Importa funções necessárias de outros módulos.
+// A função `register` vem do nosso módulo de API, separando a lógica de comunicação.
+// As funções de validação vêm do módulo `utils/validators.js`.
+import { register } from '/js/api/auth.js';
+// Importa as funções de validação. Assumimos que `validators.js` existe e contém estas funções.
+// Se `validators.js` ainda não existe, ele precisará ser criado na pasta `js/utils`.
+import { validateEmail, validateRequired, validatePassword } from '/js/utils/validators.js';
 
-// Aguarda o carregamento completo do DOM
+// O evento 'DOMContentLoaded' garante que o script só será executado
+// após todo o HTML da página ter sido carregado e processado pelo navegador.
 document.addEventListener('DOMContentLoaded', () => {
-    // Busca o formulário de registro na página
-    const registerForm = document.querySelector('.auth-form');
-    
-    // Adiciona o listener de submit se o formulário existir
-    if (registerForm) {
-        registerForm.addEventListener('submit', handleRegister);
-    }
-});
+  // Seleciona os elementos do DOM com os quais vamos interagir.
+  // É uma boa prática usar IDs para formulários e elementos de mensagem de erro.
+  const registerForm = document.querySelector('#register-form');
+  const nameInput = document.querySelector('#name');
+  const emailInput = document.querySelector('#email');
+  const passwordInput = document.querySelector('#password');
+  const confirmPasswordInput = document.querySelector('#confirm-password');
+  const companyNameInput = document.querySelector('#companyName'); // Assumindo que este campo existe no HTML
+  const cnpjInput = document.querySelector('#cnpj'); // Assumindo que este campo existe no HTML
+  const errorMessageDiv = document.querySelector('#error-message');
 
-/**
- * Manipula o evento de submit do formulário de cadastro
- * @param {Event} event - Evento de submit do formulário
- */
-async function handleRegister(event) {
-    // Previne o comportamento padrão de submit do formulário
+  // Verifica se o formulário de registro realmente existe na página antes de adicionar o listener.
+  if (registerForm) {
+    // Adiciona um "ouvinte" para o evento de 'submit' do formulário.
+    // A função handleRegister será chamada quando o usuário clicar no botão de submit.
+    registerForm.addEventListener('submit', handleRegister);
+  }
+
+  /**
+   * Manipula o evento de submit do formulário de cadastro.
+   * É uma função assíncrona porque vai esperar a resposta da API.
+   * @param {Event} event - O objeto do evento de submit.
+   */
+  async function handleRegister(event) {
+    // Previne o comportamento padrão do formulário, que é recarregar a página.
     event.preventDefault();
-    
-    // Obtém os valores de todos os campos do formulário
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    const confirmPassword = document.getElementById('confirm-password').value;
-    const business = document.getElementById('business').value;
-    
-    // Validação de campos obrigatórios
-    if (!validateRequired(name) || !validateRequired(email) || 
-        !validateRequired(password) || !validateRequired(confirmPassword)) {
-        alert('Por favor, preencha todos os campos');
-        return;
+
+    // Esconde mensagens de erro anteriores.
+    errorMessageDiv.style.display = 'none';
+
+    // Pega os valores digitados pelo usuário nos campos de input.
+    // .trim() remove espaços em branco do início e do fim.
+    const name = nameInput.value.trim();
+    const email = emailInput.value.trim();
+    const password = passwordInput.value.trim();
+    const confirmPassword = confirmPasswordInput.value.trim();
+    const companyName = companyNameInput.value.trim();
+    const cnpj = cnpjInput.value.trim();
+
+    // --- Validação no Cliente ---
+    // Validação de campos obrigatórios.
+    if (!validateRequired(name) || !validateRequired(email) ||
+        !validateRequired(password) || !validateRequired(confirmPassword) ||
+        !validateRequired(companyName) || !validateRequired(cnpj)) {
+      showError('Por favor, preencha todos os campos.');
+      return;
     }
-    
-    // Validação do formato do email
+
+    // Validação do formato do email.
     if (!validateEmail(email)) {
-        alert('Por favor, insira um e-mail válido');
-        return;
+      showError('Por favor, insira um e-mail válido.');
+      return;
     }
-    
-    // Validação da força da senha
+
+    // Validação da força da senha (ex: mínimo de 6 caracteres).
     if (!validatePassword(password)) {
-        alert('A senha deve ter pelo menos 6 caracteres');
-        return;
+      showError('A senha deve ter pelo menos 6 caracteres.');
+      return;
     }
-    
-    // Validação de confirmação de senha
+
+    // Validação de confirmação de senha.
     if (password !== confirmPassword) {
-        alert('As senhas não coincidem');
-        return;
+      showError('As senhas não coincidem.');
+      return;
     }
-    
+
     try {
-        // Prepara os dados do usuário para envio
-        const userData = {
-            name,
-            email,
-            password,
-            businessType: business
-        };
-        
-        // Tenta realizar o registro através da API
-        await register(userData);
-        
-        // Se bem sucedido, exibe mensagem e redireciona para login
-        alert('Cadastro realizado com sucesso!');
-        window.location.href = 'login.html';
+      // Desabilita o botão de submit para evitar múltiplos cliques.
+      const submitButton = registerForm.querySelector('button[type="submit"]');
+      submitButton.disabled = true;
+      submitButton.textContent = 'Cadastrando...';
+
+      // Prepara os dados do usuário para envio, conforme o backend espera.
+      const userData = { name, email, password, companyName, cnpj };
+
+      // Chama a função `register` do módulo de API.
+      await register(userData);
+
+      // Se o registro for bem-sucedido, exibe uma mensagem e redireciona para a página de login.
+      alert('Cadastro realizado com sucesso! Faça login para continuar.');
+      window.location.href = 'login.html'; // Redireciona para a página de login.
+
     } catch (error) {
-        // Em caso de erro, exibe mensagem ao usuário
-        alert('Erro ao realizar cadastro. Por favor, tente novamente.');
+      console.error('Falha no cadastro:', error);
+      showError(error.message); // Exibe a mensagem de erro para o usuário.
+    } finally {
+      const submitButton = registerForm.querySelector('button[type="submit"]');
+      submitButton.disabled = false;
+      submitButton.textContent = 'Criar Conta';
     }
-}
+  }
+
+  /**
+   * Exibe uma mensagem de erro na div designada.
+   * @param {string} message - A mensagem de erro a ser exibida.
+   */
+  function showError(message) {
+    errorMessageDiv.textContent = message;
+    errorMessageDiv.style.display = 'block';
+  }
+});

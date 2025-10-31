@@ -4,7 +4,8 @@
 // ===========================================
 
 import express from "express";
-import { loginUser, logoutUser, refreshToken } from "../controllers/authController.js";
+import { loginUser, logoutUser, refreshToken } from '../controllers/authController.js';
+import { registerCompanyAndUser } from '../controllers/registerController.js';
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 import { auditMiddleware } from "../middlewares/auditMiddleware.js";
 
@@ -12,6 +13,9 @@ const router = express.Router();
 
 // 🔹 Login do usuário — retorna token JWT
 router.post("/login", auditMiddleware("LOGIN_USER"), loginUser);
+
+// 🔹 Registro de nova empresa e usuário administrador
+router.post('/register', auditMiddleware('REGISTER_COMPANY_USER'), registerCompanyAndUser);
 
 // 🔹 Logout — invalida o token atual
 router.post("/logout", authMiddleware, auditMiddleware("LOGOUT_USER"), logoutUser);

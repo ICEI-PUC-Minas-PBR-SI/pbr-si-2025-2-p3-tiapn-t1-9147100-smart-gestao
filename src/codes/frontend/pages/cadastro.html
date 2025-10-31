@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro - Controle de Despesas MEI</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <title>Cadastro - Smart Gestão</title>
+    <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="auth-page">
@@ -16,7 +16,7 @@
                 <p>Comece a organizar suas finanças</p>
             </div>
 
-            <form class="auth-form">
+            <form id="register-form" class="auth-form">
                 <div class="form-group">
                     <label for="name">Nome Completo</label>
                     <input type="text" id="name" class="form-control" placeholder="Seu nome" required>
@@ -48,6 +48,10 @@
                 </div>
 
                 <button type="submit" class="btn btn-auth">Criar Conta</button>
+
+                <div id="error-message" class="error-message" style="display: none;">
+                    <!-- Mensagens de erro aparecerão aqui -->
+                </div>
             </form>
 
             <div class="auth-footer">
@@ -64,6 +68,6 @@
     </footer>
 
     <!-- Conecta o script modularizado da página de cadastro -->
-    <script type="module" src="../js/pages/cadastro.js"></script>
+    <script type="module" src="/js/pages/cadastro.js"></script>
 </body>
 </html>

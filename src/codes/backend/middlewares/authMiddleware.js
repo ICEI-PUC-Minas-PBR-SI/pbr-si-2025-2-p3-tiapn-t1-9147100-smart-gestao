@@ -6,6 +6,7 @@
 
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
+import crypto from 'crypto';
 
 /**
  * authMiddleware
@@ -29,6 +30,18 @@ export async function authMiddleware(req, res, next) {
       payload = jwt.verify(token, process.env.JWT_SECRET);
     } catch (err) {
       return res.status(401).json({ message: "Token inválido ou expirado" });
+    }
+
+    // --- Validação do Token Fingerprint ---
+    // Recalcula a impressão digital da requisição atual.
+    const userAgent = req.headers['user-agent'] || '';
+    const clientIp = req.ip;
+    const currentFingerprint = crypto.createHash('sha256').update(userAgent + clientIp).digest('hex');
+
+    // Compara a impressão digital da requisição atual com a que foi gravada no token.
+    // Se não baterem, o token pode ter sido roubado.
+    if (payload.fingerprint !== currentFingerprint) {
+      return res.status(401).json({ message: "Token inválido para esta sessão." });
     }
 
     // Busca o usuário no banco para confirmar existência e status

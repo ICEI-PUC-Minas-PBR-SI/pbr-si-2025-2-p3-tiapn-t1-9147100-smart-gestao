@@ -1,0 +1,8 @@
+{
+  "nome_razao": "Cliente Exemplo SA",
+  "cpf_cnpj": "11.222.333/0001-44",
+  "email": "contato@clienteexemplo.com",
+  "telefone": "11987654321",
+  "tipo": "CLIENTE",
+  "categoria": "Serviços"
+}

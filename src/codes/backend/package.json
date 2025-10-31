@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "start": "concurrently \"node server.js\" \"cd ../frontend/pages && npx http-server . -p 3000\"",
-    "dev": "concurrently \"nodemon server.js\" \"cd ../frontend/pages && npx http-server . -p 3000\""
+    "start": "concurrently \"npm:start-backend\" \"npm:start-frontend\"",
+    "start-backend": "node server.js",
+    "start-frontend": "http-server ../frontend -p 3000",
+    "dev": "nodemon server.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -17,6 +19,8 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "concurrently": "^8.2.2",
+    "http-server": "^14.1.1",
     "nodemon": "^3.1.10"
   }
 }

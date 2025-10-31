@@ -1,0 +1,8 @@
+{
+  "nome": "Nome do Usuário",
+  "email": "novo.usuario@empresa.com",
+  "password": "SuaSenhaSegura123",
+  "empresa": {
+    "nome": "Nome da Empresa"
+  }
+}

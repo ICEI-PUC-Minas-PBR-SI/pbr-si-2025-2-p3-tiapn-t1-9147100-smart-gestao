@@ -40,9 +40,15 @@ Esta seção orienta como executar o sistema localmente para fins acadêmicos/de
    Crie src/codes/backend/.env com conteúdo semelhante:
    ```env
    MONGODB_URI=sua_string_conexao_mongodb
-   JWT_SECRET=um_segredo_aleatorio_seguro
    PORT=5000
-   LOG_LEVEL=info
+
+   # Segredos para os tokens JWT (use valores longos e aleatórios)
+   JWT_SECRET=um_segredo_aleatorio_seguro_para_access_token
+   JWT_REFRESH_SECRET=outro_segredo_aleatorio_seguro_para_refresh_token
+
+   # Tempo de expiração da sessão (inatividade) e do refresh token
+   ACCESS_TOKEN_EXPIRATION=30m
+   REFRESH_TOKEN_EXPIRATION=7d
    ```
    Observações:
    - MONGODB_URI: pegue no MongoDB Atlas (libere seu IP em Network Access).
@@ -60,8 +66,8 @@ Isso inicia:
 - Frontend (servidor estático) em http://localhost:3000
 
 ### Acesso rápido (fluxo mínimo)
-1) Abra http://localhost:3000/login.html
-2) Caso não tenha usuário, vá para cadastro e crie conta
+1) Abra http://localhost:3000 no seu navegador. Você será redirecionado para a tela de login.
+2) Caso não tenha usuário, clique em "Cadastre-se" para criar uma nova conta.
 3) Faça login; ao sucesso, será redirecionado para a página inicial
 4) Utilize as páginas de Transações, Metas e Relatórios
 
@@ -127,6 +133,10 @@ Notas:
 
 ## Histórico de versões
 
+* 0.3.0
+    * CHANGE: Implementação de segurança de sessão avançada com expiração de token por inatividade (30 min), renovação automática (refresh token) e proteção contra roubo de token (fingerprinting). Adição de `authGuard` para proteger rotas do frontend. Correção da inicialização do servidor de desenvolvimento.
+* 0.2.0
+    * CHANGE: Criação de modelos JSON para requisições da API e organização da documentação técnica para padronizar o desenvolvimento.
 * 0.2.0
     * CHANGE: Implementação completa da integração frontend-backend. Sistema de autenticação JWT implementado. Reorganização da estrutura de arquivos para melhor manutenção. Documentação técnica detalhada adicionada.
 * 0.1.9
@@ -151,4 +161,3 @@ Notas:
     * Implementação da funcionalidade X pertencente ao processo P.
 * 0.0.1
     * Trabalhando na modelagem do processo de negócio.
-

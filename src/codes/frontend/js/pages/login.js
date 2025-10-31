@@ -6,8 +6,8 @@
  */
 
 // Importa funções necessárias de outros módulos
-import { login } from '../api/auth.js';
-import { validateEmail, validateRequired } from '../utils/validators.js';
+import { login } from '/js/api/auth.js';
+import { validateEmail, validateRequired } from '/js/utils/validators.js';
 
 // Aguarda o carregamento completo do DOM
 document.addEventListener('DOMContentLoaded', () => {

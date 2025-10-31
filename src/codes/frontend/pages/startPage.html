@@ -3,9 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Controle de Despesas para MEIs</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <title>Dashboard - Smart Gestão</title>
+    <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Script de proteção de rota: verifica se o usuário está logado. -->
+    <!-- Deve ser o primeiro script a ser carregado. -->
+    <script src="/js/utils/authGuard.js"></script>
 </head>
 <body>
     <header>
@@ -29,7 +32,7 @@
             <div class="sidebar">
                 <ul class="sidebar-menu">
                     <li><a href="startPage.html" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
-                    <li><a href="transacoes.html"><i class="fas fa-exchange-alt"></i> Transações</a></li>
+                    <li><a href="transacoes.html"><i class="fas fa-exchange-alt"></i> Transações</a></li> 
                     <li><a href="categorias.html"><i class="fas fa-chart-pie"></i> Categorias</a></li>
                     <li><a href="metas.html"><i class="fas fa-bullseye"></i> Metas</a></li>
                     <li><a href="relatorios.html"><i class="fas fa-chart-line"></i> Relatórios</a></li>

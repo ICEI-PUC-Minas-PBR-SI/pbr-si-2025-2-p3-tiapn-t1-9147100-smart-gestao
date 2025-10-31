@@ -133,12 +133,12 @@ dotenv.config();
 
 export const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    // Conecta ao MongoDB. Em versões recentes do Mongoose, as opções de configuração
+    // como `useNewUrlParser` e `useUnifiedTopology` são padrão e não precisam ser declaradas.
+    const conn = await mongoose.connect(process.env.MONGO_URI);
     console.log(`✅ MongoDB conectado: ${conn.connection.host}`);
   } catch (error) {
+    // Em caso de falha na conexão, exibe o erro e encerra a aplicação.
     console.error(`❌ Erro de conexão: ${error.message}`);
     process.exit(1);
   }

@@ -5,6 +5,7 @@
 
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+import crypto from 'crypto';
 import User from "../models/User.js";
 
 // =============================================================
@@ -14,31 +15,37 @@ export const loginUser = async (req, res) => {
   try {
   const { email, password } = req.body;
 
-    // 🔍 Verifica se o usuário existe
-    const user = await User.findOne({ email });
+    // 🔍 Verifica se o usuário existe e seleciona a senha explicitamente
+    const user = await User.findOne({ email }).select('+password');
     if (!user) {
       return res.status(404).json({ message: "Usuário não encontrado." });
     }
 
-    // 🔑 Compara senha digitada com o hash armazenado em passwordHash
+    // 🔑 Compara senha digitada com o hash armazenado
     const isMatch = await bcrypt.compare(password, user.passwordHash);
     if (!isMatch) {
       return res.status(401).json({ message: "Senha incorreta." });
     }
 
-    // 🎫 Gera token JWT
-    // Padroniza payload com userId para compatibilidade com authMiddleware
+    // --- Token Fingerprinting ---
+    // Cria uma "impressão digital" da sessão do usuário usando o IP e o User-Agent.
+    // Isso amarra o token à sessão original, aumentando a segurança.
+    const userAgent = req.headers['user-agent'] || '';
+    const clientIp = req.ip;
+    const fingerprint = crypto.createHash('sha256').update(userAgent + clientIp).digest('hex');
+
+    // 🎫 Gera token JWT, incluindo o fingerprint no payload.
     const token = jwt.sign(
-      { userId: user._id, role: user.role },
+      { userId: user._id, role: user.role, fingerprint },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: process.env.ACCESS_TOKEN_EXPIRATION || "30m" }
     );
 
-    // 🔁 Gera refresh token (opcional)
+    // 🔁 Gera refresh token, também com o fingerprint.
     const refreshToken = jwt.sign(
-      { userId: user._id },
+      { userId: user._id, fingerprint },
       process.env.JWT_REFRESH_SECRET,
-      { expiresIn: "7d" }
+      { expiresIn: process.env.REFRESH_TOKEN_EXPIRATION || "7d" }
     );
 
     // ✅ Retorna sucesso
@@ -86,11 +93,22 @@ export const refreshToken = async (req, res) => {
     // Verifica e decodifica o refresh token
     const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
 
-    // Gera novo token com payload padronizado (userId)
+    // --- Validação do Token Fingerprint ---
+    // Garante que o refresh token também está sendo usado pelo mesmo cliente.
+    const userAgent = req.headers['user-agent'] || '';
+    const clientIp = req.ip;
+    const currentFingerprint = crypto.createHash('sha256').update(userAgent + clientIp).digest('hex');
+
+    if (decoded.fingerprint !== currentFingerprint) {
+      // Se a impressão digital não bate, a requisição é suspeita e é rejeitada.
+      return res.status(401).json({ message: "Violação de segurança: tentativa de refresh de token de outra sessão." });
+    }
+
+    // Gera um novo token de acesso com a mesma impressão digital.
     const newToken = jwt.sign(
-      { userId: decoded.userId },
+      { userId: decoded.userId, role: decoded.role, fingerprint: currentFingerprint },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: process.env.ACCESS_TOKEN_EXPIRATION || "30m" }
     );
 
     return res.status(200).json({ token: newToken });

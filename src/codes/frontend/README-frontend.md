@@ -7,73 +7,41 @@ Este diretório contém todos os arquivos-fonte necessários para o funcionament
 ### 1. Sistema de Autenticação
 
 #### 1.1 Login
-```javascript
-// Processo de Login
-async function login(email, password) {
-    try {
-        // 1. Faz requisição para API
-        const response = await fetch(`${API_URL}/auth/login`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password })
-        });
-
-        // 2. Processa resposta
-        if (!response.ok) throw new Error('Credenciais inválidas');
-        const data = await response.json();
-
-        // 3. Armazena token
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
-
-        // 4. Redireciona
-        window.location.href = '/index.html';
-    } catch (error) {
-        handleError(error);
-    }
-}
-```
+O fluxo de login é gerenciado pelo `js/pages/login.js`, que captura os dados do formulário e chama a função `login` do módulo `js/api/auth.js`. Esta função, por sua vez, utiliza o `apiRequest` para se comunicar com o backend. Em caso de sucesso, os tokens (`token` e `refreshToken`) e os dados do usuário (`user`) são salvos no `localStorage`, e o usuário é redirecionado para a página principal.
 
 #### 1.2 Gerenciamento de Sessão
-```javascript
-// Verifica autenticação em cada página protegida
-function checkAuth() {
-    const token = localStorage.getItem('token');
-    if (!token) {
-        window.location.href = '/login.html';
-        return false;
-    }
-    return true;
-}
+A proteção das páginas internas é feita pelo script **`js/utils/authGuard.js`**. Este script é incluído no `<head>` de todas as páginas que exigem autenticação. Ele verifica a existência do `token` no `localStorage` antes de a página ser renderizada. Se o token não existir, o usuário é imediatamente redirecionado para a página de login.
+
+**Exemplo de uso em uma página HTML:**
+```html
+<head>
+    ...
+    <!-- Script de proteção de rota -->
+    <script src="/js/utils/authGuard.js"></script>
+    ...
+</head>
 ```
 
 ### 2. Integração com API
 
 #### 2.1 Configuração Base
+Toda a comunicação com o backend é centralizada no helper **`js/api/apiHelper.js`**. Ele exporta a função `apiRequest`, que encapsula a lógica do `fetch` e adiciona funcionalidades essenciais:
+
+1.  **Inclusão Automática do Token**: Adiciona o `Authorization: Bearer <token>` em todas as requisições para endpoints protegidos.
+2.  **Renovação Automática de Sessão**: Se uma requisição falha com status `401` (token expirado), o `apiRequest` utiliza o `refreshToken` para obter um novo `accessToken` do backend de forma silenciosa. Em seguida, ele refaz a requisição original sem que o usuário perceba.
+3.  **Logout Automático**: Se a renovação do token falhar (porque o `refreshToken` também expirou), o helper chama a função `logout()`, que limpa o `localStorage` e redireciona o usuário para a página de login.
+
+**Exemplo de uso para buscar transações:**
 ```javascript
-const API_URL = 'http://localhost:5000/api';
+// Em js/api/transactions.js
+import { apiRequest } from './apiHelper.js';
 
-// Helper para requisições autenticadas
-async function apiRequest(endpoint, options = {}) {
-    const token = localStorage.getItem('token');
-    const headers = {
-        'Content-Type': 'application/json',
-        ...(token && { 'Authorization': `Bearer ${token}` }),
-        ...options.headers
-    };
-
-    const response = await fetch(`${API_URL}${endpoint}`, {
-        ...options,
-        headers
-    });
-
-    if (response.status === 401) {
-        localStorage.clear();
-        window.location.href = '/login.html';
-        throw new Error('Sessão expirada');
-    }
-
-    return response;
+export async function getTransactions() {
+  const response = await apiRequest('/transactions'); // A mágica acontece aqui!
+  if (!response.ok) {
+    throw new Error('Não foi possível buscar as transações.');
+  }
+  return response.json();
 }
 ```
 
@@ -199,7 +167,7 @@ frontend/
 │   ├── api/          # Módulos de integração com o backend
 │   │   ├── apiHelper.js     # Configuração base da API
 │   │   ├── auth.js          # Autenticação
-│   │   ├── transactions.js  # Gerenciamento de transações
+│   │   ├── transactions.js  # Gerenciamento de transações (Exemplo)
 │   │   └── metas.js         # Gerenciamento de metas
 │   ├── pages/        # Scripts específicos de cada página
 │   └── utils/        # Utilitários e funções comuns
