@@ -99,9 +99,6 @@ Para maior flexibilidade, o sistema suporta dois modelos distintos de persistên
 1. **Modelo Relacional (MySQL)** — utilizado em instalações locais, ideal para empresas com infraestrutura própria.  
 2. **Modelo Não Relacional (MongoDB Atlas)** — utilizado no ambiente em nuvem, oferecendo alta disponibilidade e fácil escalabilidade.
 
-   <img width="857" height="491" alt="Captura de tela 2025-10-31 175358" src="https://github.com/user-attachments/assets/6545f434-e2e9-4a53-a3cc-96ae3eb2698a" />
-
-
 ---
 
 #### 4.3.1 Modelo DER
@@ -113,20 +110,15 @@ O **Diagrama Entidade-Relacionamento (DER)** representa as principais entidades 
 - **Transação:** contém as movimentações financeiras registradas pela empresa.  
 - **Categoria:** define os tipos de receitas e despesas existentes.  
 - **MetaFinanceira:** registra objetivos financeiros e períodos de execução.  
-- **Alerta:** armazena notificações automáticas geradas pelo sistema.  
+- **Alerta:** armazena notificações automáticas geradas pelo sistema.
+  
 
 ---
 
-#### Exemplo de DER (texto representativo)
+#### Exemplo de DER 
 
-```
-Usuário (1) ───< (N) Empresa  
-Empresa (1) ───< (N) Transação  
-Transação (N) ───> (1) Categoria  
-Empresa (1) ───< (N) MetaFinanceira  
-MetaFinanceira (1) ───< (N) Alerta
-```
-
+<img width="857" height="491" alt="Captura de tela 2025-10-31 175358" src="https://github.com/user-attachments/assets/9709087b-bd99-4ebe-a3b9-67d1275b21bf" />
+ 
 ---
 
 #### 4.3.2 Esquema Relacional (MySQL)
