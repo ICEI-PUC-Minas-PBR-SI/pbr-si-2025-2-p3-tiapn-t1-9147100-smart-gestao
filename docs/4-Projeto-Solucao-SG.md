@@ -131,8 +131,11 @@ CREATE TABLE users (
   name VARCHAR(100) NOT NULL,
   email VARCHAR(100) UNIQUE NOT NULL,
   password VARCHAR(255) NOT NULL,
+  phone VARCHAR(20),
   role ENUM('ROOT','ADMIN','USER','READ_ONLY'),
   company_id INT,
+  password_reset_token VARCHAR(255),
+  password_reset_expires DATETIME,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (company_id) REFERENCES companies(id)
 );
@@ -150,10 +153,23 @@ CREATE TABLE transactions (
   id INT AUTO_INCREMENT PRIMARY KEY,
   company_id INT NOT NULL,
   type ENUM('income','expense') NOT NULL,
+  description TEXT,
   category VARCHAR(50),
   value DECIMAL(10,2),
   date DATE,
-  description TEXT,
+  status ENUM('paid','pending') DEFAULT 'pending',
+  client_id INT,
+  FOREIGN KEY (company_id) REFERENCES companies(id),
+  FOREIGN KEY (client_id) REFERENCES clients(id)
+);
+
+CREATE TABLE clients (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  company_id INT NOT NULL,
+  name VARCHAR(120) NOT NULL,
+  type ENUM('client','supplier') NOT NULL,
+  document VARCHAR(20), -- Para CPF ou CNPJ
+  email VARCHAR(100),
   FOREIGN KEY (company_id) REFERENCES companies(id)
 );
 
@@ -191,44 +207,57 @@ O **MongoDB** utiliza um formato orientado a documentos JSON, permitindo maior f
     "_id": "ObjectId",
     "name": "Heron Silva",
     "email": "heron@email.com",
-    "password": "hashed_password",
-    "role": "ADMIN_COMPANY",
+    "password": "hashed_password",      // Senha criptografada
+    "phone": "(31) 99999-9999",        // Telefone do usuário
+    "role": "ADMIN",                    // Papel: ROOT, ADMIN, USER, READ_ONLY
     "companyId": "ObjectId",
-    "createdAt": "2025-10-18T10:00:00Z"
+    "passwordResetToken": "reset_token_hash", // Token para reset de senha
+    "passwordResetExpires": "2025-10-18T11:00:00Z", // Expiração do token
+    "createdAt": "2025-10-18T10:00:00Z" // Data de criação
   },
   "companies": {
     "_id": "ObjectId",
     "name": "Smart Solutions LTDA",
     "cnpj": "12.345.678/0001-99",
     "address": "Rua das Palmeiras, 120 - Betim/MG",
-    "status": "active",
+    "status": "active", // Status: active, inactive
     "createdAt": "2025-10-18T10:00:00Z"
   },
   "transactions": {
     "_id": "ObjectId",
     "companyId": "ObjectId",
-    "type": "expense",
+    "type": "expense", // Tipo: income, expense
+    "description": "Pagamento de energia elétrica",
     "category": "Operacional",
     "value": 950.00,
     "date": "2025-10-18T00:00:00Z",
-    "description": "Pagamento de energia elétrica"
+    "status": "paid", // Status: paid, pending
+    "clientId": "ObjectId" // Referência ao cliente/fornecedor
+  },
+  "clients": {
+    "_id": "ObjectId",
+    "companyId": "ObjectId",
+    "name": "Fornecedor de Peças XYZ",
+    "type": "supplier", // Tipo: client, supplier
+    "document": "98.765.432/0001-10", // CPF ou CNPJ
+    "email": "contato@fornecedorxyz.com"
   },
   "goals": {
     "_id": "ObjectId",
     "companyId": "ObjectId",
-    "type": "expense",
-    "targetValue": 5000.00,
+    "type": "expense", // Tipo: income, expense
+    "targetValue": 5000.00, // Valor alvo da meta
     "startDate": "2025-10-01T00:00:00Z",
     "endDate": "2025-10-31T00:00:00Z",
-    "category": "Custos Fixos"
+    "category": "Custos Fixos" // Categoria da meta
   },
   "alerts": {
     "_id": "ObjectId",
     "goalId": "ObjectId",
-    "type": "limit_reached",
+    "type": "limit_reached", // Tipo: warning, limit_reached, etc.
     "message": "Despesas fixas atingiram 90% da meta",
     "createdAt": "2025-10-18T09:30:00Z",
-    "status": "active"
+    "status": "active" // Status: active, read
   }
 }
 ```
@@ -261,4 +290,3 @@ Usuário → Frontend → API Backend → Banco de Dados → Logs/Auditoria
 O fluxo permite que o sistema funcione de forma modular e escalável, facilitando manutenções e futuras integrações com serviços de nuvem e relatórios de BI.
 
 ---
-
