@@ -99,9 +99,12 @@ Para maior flexibilidade, o sistema suporta dois modelos distintos de persistên
 1. **Modelo Relacional (MySQL)** — utilizado em instalações locais, ideal para empresas com infraestrutura própria.  
 2. **Modelo Não Relacional (MongoDB Atlas)** — utilizado no ambiente em nuvem, oferecendo alta disponibilidade e fácil escalabilidade.
 
+   <img width="857" height="491" alt="Captura de tela 2025-10-31 175358" src="https://github.com/user-attachments/assets/6545f434-e2e9-4a53-a3cc-96ae3eb2698a" />
+
+
 ---
 
-#### 4.3.1 Modelo ER
+#### 4.3.1 Modelo DER
 
 O **Diagrama Entidade-Relacionamento (DER)** representa as principais entidades do sistema e suas interconexões.
 
