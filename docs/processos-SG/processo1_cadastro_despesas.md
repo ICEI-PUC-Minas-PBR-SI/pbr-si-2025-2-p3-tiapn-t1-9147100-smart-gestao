@@ -14,7 +14,8 @@ O processo de cadastro de despesas permite ao usuário registrar e gerenciar sua
 9. Caso o usuário não confirme, pode corrigir os dados.
 10. Caso confirme, o sistema salva o registro no banco de dados.
 
-Modelagem BPMN: <img width="1461" height="701" alt="Despesas" src="https://github.com/user-attachments/assets/9d635264-33c2-43d2-b278-1380c7ef8060" />
+Modelagem BPMN: <img width="1461" height="632" alt="despesasatualizada drawio" src="https://github.com/user-attachments/assets/690d7150-c860-4ba1-9842-6657d8f6fa41" />
+
 > **Ponto de Melhoria (Revisado por Heron):** Olá, equipe! Para alinharmos o diagrama BPMN com o feedback da professora, o responsável pela documentação poderia, por favor, fazer um pequeno ajuste?
 >
 > **Guia para o ajuste:**
