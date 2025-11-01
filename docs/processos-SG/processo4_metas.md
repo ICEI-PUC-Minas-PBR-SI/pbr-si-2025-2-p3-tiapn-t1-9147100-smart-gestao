@@ -15,7 +15,9 @@ O processo de criação de metas permite que os usuários definam objetivos fina
 
 > **Ponto de Melhoria (Revisado por Heron):** Pessoal, a etapa "O sistema registra a nova meta" está duplicada neste fluxo (passos 5 e 6 originais). O responsável pela documentação poderia remover a etapa repetida para deixar o fluxo correto?
    
-Modelagem BPMN: <img width="1081" height="661" alt="Processo3Metas drawio" src="https://github.com/user-attachments/assets/ca7f9118-0137-499a-8207-db631d83af94" />
+Modelagem BPMN: <img width="1081" height="661" alt="metas (2)" src="https://github.com/user-attachments/assets/0b32a756-a7cf-428b-b1a3-83886ee2a48e" />
+
+
 
 ---
 

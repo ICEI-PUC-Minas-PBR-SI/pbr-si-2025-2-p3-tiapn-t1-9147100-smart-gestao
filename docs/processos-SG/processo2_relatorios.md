@@ -3,12 +3,16 @@
 O processo de geração de relatórios permite que o usuário visualize e analise suas informações financeiras de forma organizada. Esta funcionalidade é crucial para o acompanhamento da saúde financeira do MEI, oferecendo diferentes perspectivas através de filtros, gráficos e tabelas detalhadas.
 
 **Fluxo principal:**
-1. Usuário acessa a página de Relatórios.
+1. Usuário acessa a aba de Relatórios.
 2. Usuário seleciona filtros de período e tipo de relatório.
 3. Usuário clica em "Gerar Relatório".
 4. Sistema exibe gráficos e estatísticas financeiras.
 5. Sistema exibe tabela de análise detalhada.
 6. Sistema exibe insights financeiros relevantes.
+
+Modelo BPMN:
+<img width="1221" height="721" alt="processo2" src="https://github.com/user-attachments/assets/48187ecb-aff2-46a9-b4ab-c637984a265d" />
+
 
 ---
 
