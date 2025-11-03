@@ -145,18 +145,34 @@ Notas:
     * CHANGE: Criação de modelos JSON para requisições da API e organização da documentação técnica para padronizar o desenvolvimento.
 * 0.2.0
     * CHANGE: Implementação completa da integração frontend-backend. Sistema de autenticação JWT implementado. Reorganização da estrutura de arquivos para melhor manutenção. Documentação técnica detalhada adicionada.
+* 0.1.11
+    * CHANGE: Configuração do backend para utilizar variáveis de ambiente (`.env`), separando configurações sensíveis (como segredos de token e string de conexão do banco de dados) do código-fonte.
 * 0.1.9
     * CHANGE: Desenvolvimento do backend em Node.js/Express. Implementação das APIs RESTful para transações e metas financeiras. Configuração do MongoDB e modelos de dados.
 * 0.1.8
     * CHANGE: Desenvolvimento do frontend com HTML5/CSS3/JS. Implementação das telas de cadastro, login, transações e relatórios. Adição de validações e feedback visual.
-* 0.1.11
-    * CHANGE: Configuração do backend para utilizar variáveis de ambiente (`.env`), separando configurações sensíveis (como segredos de token e string de conexão do banco de dados) do código-fonte.
 * 0.1.7
     * CHANGE: Atualização da documentação técnica. Criação dos diagramas de arquitetura e fluxos de dados. Definição dos endpoints da API.
 * 0.1.6
     * CHANGE: Definição da arquitetura do sistema. Escolha das tecnologias e frameworks. Configuração inicial do ambiente de desenvolvimento.
 * 0.1.5
     * CHANGE: Finalização da modelagem de processos. Definição dos requisitos técnicos e regras de negócio.
+* 0.3.1
+    * CHANGE: Implementação do fluxo de recuperação de senha ("Esqueci minha senha"), incluindo novas rotas no backend e a criação das páginas de solicitação e redefinição no frontend.
+* 0.3.0
+    * CHANGE: Implementação de segurança de sessão avançada com expiração de token por inatividade (30 min), renovação automática (refresh token) e proteção contra roubo de token (fingerprinting). Adição de `authGuard` para proteger rotas do frontend. Correção da inicialização do servidor de desenvolvimento.
+* 0.2.3
+    * CHANGE: Padronização do feedback de erro e carregamento no frontend, removendo `alerts` e adicionando indicadores visuais para melhorar a experiência do usuário. 
+* 0.2.2
+    * CHANGE: Refatoração do backend para incluir um middleware de escopo (`companyScopeMiddleware`), garantindo que os dados de uma empresa não sejam acessados por outra.
+* 0.2.1
+    * CHANGE: Criação de modelos JSON para requisições da API e organização da documentação técnica para padronizar o desenvolvimento.
+* 0.2.0
+    * CHANGE: Implementação completa da integração frontend-backend. Sistema de autenticação JWT implementado. Reorganização da estrutura de arquivos para melhor manutenção. Documentação técnica detalhada adicionada.
+* 0.1.9
+    * CHANGE: Desenvolvimento do backend em Node.js/Express. Implementação das APIs RESTful para transações e metas financeiras. Configuração do MongoDB e modelos de dados.
+* 0.1.8
+    * CHANGE: Desenvolvimento do frontend com HTML5/CSS3/JS. Implementação das telas de cadastro, login, transações e relatórios. Adição de validações e feedback visual.
 * 0.1.4
     * CHANGE: Atualização das documentações. Códigos de estruturação do programa ajustados para simular as melhores práticas de programação. Reajuste na estrutura das pastas do projeto.
 * 0.1.3

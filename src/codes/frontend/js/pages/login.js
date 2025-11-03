@@ -62,9 +62,10 @@ async function handleLogin(event, errorMessageDiv) {
             window.location.href = 'startPage.html';
         }
     } catch (error) {
-        // Em caso de erro (ex: credenciais inválidas, falha de rede),
-        // exibe uma mensagem genérica e amigável ao usuário.
-        showError('Falha no login. Verifique seu e-mail e senha e tente novamente.', errorMessageDiv);
+        // exibe a mensagem da API ou uma mensagem genérica.
+        // Se a API retornar uma mensagem (ex: "Senha incorreta"), ela será exibida.
+        const message = error.message || 'Falha no login. Verifique seu e-mail e senha e tente novamente.';
+        showError(message, errorMessageDiv);
     }
 }
 
