@@ -17,22 +17,22 @@ import { auditMiddleware } from "../middlewares/auditMiddleware.js";
 
 const router = express.Router();
 
-// Listar alertas
+// - Listar alertas
 router.get("/", authMiddleware, companyScopeMiddleware, getAllAlerts);
 
-// Obter alerta por id
+// - Obter alerta por id
 router.get("/:id", authMiddleware, companyScopeMiddleware, getAlertById);
 
-// Criar alerta
+// - Criar alerta
 router.post("/", authMiddleware, auditMiddleware("CREATE_ALERT"), createAlert);
 
-// Atualizar alerta
+// - Atualizar alerta
 router.put("/:id", authMiddleware, auditMiddleware("UPDATE_ALERT"), updateAlert);
 
-// Marcar como lido
+// - Marcar como lido
 router.put("/:id/read", authMiddleware, auditMiddleware("READ_ALERT"), markAlertAsRead);
 
-// Remover alerta
+// - Remover alerta
 router.delete("/:id", authMiddleware, auditMiddleware("DELETE_ALERT"), deleteAlert);
 
 export default router;

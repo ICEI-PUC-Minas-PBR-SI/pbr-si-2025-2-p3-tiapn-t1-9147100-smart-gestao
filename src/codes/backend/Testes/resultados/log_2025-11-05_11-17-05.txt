@@ -1,0 +1,20 @@
+(node:13744) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+[0m[7m[1m[32m PASS [39m[22m[27m[0m [2mTestes/[22m[1mapi.test.js[22m
+  1. Módulo de Autenticação
+    [32m√[39m [2mRF-001: deve cadastrar um novo usuário e empresa (Empresa A) (287 ms)[22m
+    [32m√[39m [2mdeve barrar o cadastro de um usuário com e-mail já existente (27 ms)[22m
+    [32m√[39m [2mdeve falhar o login com senha incorreta (151 ms)[22m
+    [32m√[39m [2mdeve realizar o login com sucesso para a Empresa A (161 ms)[22m
+    [32m√[39m [2mdeve proteger rotas, barrando acesso sem token (7 ms)[22m
+
+----------|---------|----------|---------|---------|-------------------
+File      | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+----------|---------|----------|---------|---------|-------------------
+All files |       0 |        0 |       0 |       0 | [31;1m                 [0m 
+----------|---------|----------|---------|---------|-------------------
+[1mTest Suites: [22m[1m[32m1 passed[39m[22m, 1 total
+[1mTests:       [22m[1m[32m5 passed[39m[22m, 5 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        1.309 s, estimated 2 s
+[2mRan all test suites[22m[2m.[22m

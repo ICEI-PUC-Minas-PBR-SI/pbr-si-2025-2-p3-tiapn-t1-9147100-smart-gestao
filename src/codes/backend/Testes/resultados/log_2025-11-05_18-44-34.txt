@@ -1,0 +1,303 @@
+  console.log
+    
+    --- Configurando Empresa A ---
+
+      at Object.log (Testes/isolamento.test.js:43:17)
+
+(node:20708) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+  console.log
+    Empresa A configurada e logada.
+
+      at Object.log (Testes/isolamento.test.js:56:17)
+
+  console.log
+    
+    --- Configurando Empresa B ---
+
+      at Object.log (Testes/isolamento.test.js:59:17)
+
+  console.log
+    Empresa B - Cadastro (Status): 201
+
+      at Object.log (Testes/isolamento.test.js:68:17)
+
+  console.log
+    Empresa B - Cadastro (Corpo): {
+      "message": "Usuário cadastrado com sucesso!"
+    }
+
+      at Object.log (Testes/isolamento.test.js:69:17)
+
+  console.log
+    Empresa B configurada e logada.
+
+      at Object.log (Testes/isolamento.test.js:79:17)
+
+  console.log
+    
+    --- Criando transação para Empresa A ---
+
+      at Object.log (Testes/isolamento.test.js:85:17)
+
+  console.log
+    
+    --- Tentando modificar transação da Empresa A com token da Empresa B ---
+
+      at Object.log (Testes/isolamento.test.js:125:17)
+
+  console.log
+    Enviando: PUT para http://localhost:5000/api/transactions/undefined com token da Empresa B
+
+      at Object.log (Testes/isolamento.test.js:127:17)
+
+  console.log
+    Dados da atualização: {
+      "description": "Tentativa de Modificação pela Empresa B",
+      "amount": 999
+    }
+
+      at Object.log (Testes/isolamento.test.js:128:17)
+
+  console.log
+    Empresa B - Modificar Transação (Status): 401
+
+      at Object.log (Testes/isolamento.test.js:136:21)
+
+  console.log
+    Empresa B - Modificar Transação (Corpo): {
+      "message": "Token inválido para esta sessão."
+    }
+
+      at Object.log (Testes/isolamento.test.js:137:21)
+
+  console.log
+    
+    --- Tentando excluir transação da Empresa A com token da Empresa B ---
+
+      at Object.log (Testes/isolamento.test.js:145:17)
+
+  console.log
+    Enviando: DELETE para http://localhost:5000/api/transactions/undefined com token da Empresa B
+
+      at Object.log (Testes/isolamento.test.js:146:17)
+
+  console.log
+    Empresa B - Excluir Transação (Status): 401
+
+      at Object.log (Testes/isolamento.test.js:154:21)
+
+  console.log
+    Empresa B - Excluir Transação (Corpo): {
+      "message": "Token inválido para esta sessão."
+    }
+
+      at Object.log (Testes/isolamento.test.js:155:21)
+
+  console.log
+    
+    --- Tentando listar transações com token da Empresa B ---
+
+      at Object.log (Testes/isolamento.test.js:163:17)
+
+  console.log
+    Enviando: GET para http://localhost:5000/api/transactions com token da Empresa B
+
+      at Object.log (Testes/isolamento.test.js:164:17)
+
+FAIL Testes/isolamento.test.js
+  2. Teste de Isolamento de Dados (Transações)
+    × deve impedir que a Empresa B acesse transações da Empresa A (19 ms)
+    √ deve impedir que a Empresa B modifique transações da Empresa A (14 ms)
+    √ deve impedir que a Empresa B exclua transações da Empresa A (7 ms)
+    × deve impedir que a Empresa B liste todas as transações da Empresa A (7 ms)
+
+  ● 2. Teste de Isolamento de Dados (Transações) › deve impedir que a Empresa B acesse transações da Empresa A
+
+    AxiosError: Request failed with status code 401
+
+      84 |         // (Este passo depende de você ter um endpoint para criar transações)
+      85 |         console.log('\n--- Criando transação para Empresa A ---');
+    > 86 |         const createTransaction = await axios.post(`${API_URL}/transactions`, {
+         |                                   ^
+      87 |             description: 'Transação de Teste Empresa A',
+      88 |             amount: 100
+      89 |         }, {
+
+      at settle (node_modules/axios/lib/core/settle.js:19:12)
+      at IncomingMessage.handleStreamEnd (node_modules/axios/lib/adapters/http.js:793:11)
+      at Axios.request (node_modules/axios/lib/core/Axios.js:45:41)
+      at Object.<anonymous> (Testes/isolamento.test.js:86:35)
+
+  ● 2. Teste de Isolamento de Dados (Transações) › deve impedir que a Empresa B liste todas as transações da Empresa A
+
+    AxiosError: Request failed with status code 401
+
+      166 |         // A requisição para listar transações da Empresa B precisa do token da Empresa B
+      167 |         // para que o backend possa filtrar corretamente.
+    > 168 |         const responseB = await axios.get(`${API_URL}/transactions`, { 
+          |                           ^
+      169 |             headers: { Authorization: `Bearer ${tokenEmpresaB}` }
+      170 |         });
+      171 |
+
+      at settle (node_modules/axios/lib/core/settle.js:19:12)
+      at IncomingMessage.handleStreamEnd (node_modules/axios/lib/adapters/http.js:793:11)
+      at Axios.request (node_modules/axios/lib/core/Axios.js:45:41)
+      at Object.<anonymous> (Testes/isolamento.test.js:168:27)
+
+  console.log
+    
+    --- Teste: Cadastrar novo usuário ---
+
+      at Object.log (Testes/api.test.js:50:17)
+
+  console.log
+    Enviando: {
+      "name": "Usuário A",
+      "email": "empresaA_1762379077604@test.com",
+      "password": "password123",
+      "companyName": "Empresa A Teste 1762379077604",
+      "cnpj": "01762379077604"
+    }
+
+      at Object.log (Testes/api.test.js:51:17)
+
+  console.log
+    Recebido (Status): 201
+
+      at Object.log (Testes/api.test.js:56:21)
+
+  console.log
+    Recebido (Corpo): {
+      "message": "Usuário cadastrado com sucesso!"
+    }
+
+      at Object.log (Testes/api.test.js:57:21)
+
+  console.log
+    
+    --- Teste: Barrar e-mail duplicado ---
+
+      at Object.log (Testes/api.test.js:79:17)
+
+  console.log
+    Enviando: {
+      "name": "Usuário A",
+      "email": "empresaA_1762379077604@test.com",
+      "password": "password123",
+      "companyName": "Nome Duplicado",
+      "cnpj": "11223344556677"
+    }
+
+      at Object.log (Testes/api.test.js:80:17)
+
+  console.log
+    Recebido (Status): 409
+
+      at Object.log (Testes/api.test.js:86:21)
+
+  console.log
+    Recebido (Corpo): {
+      "message": "E-mail já cadastrado."
+    }
+
+      at Object.log (Testes/api.test.js:87:21)
+
+  console.log
+    
+    --- Teste: Login com senha incorreta ---
+
+      at Object.log (Testes/api.test.js:101:17)
+
+  console.log
+    Enviando: {
+      "email": "empresaA_1762379077604@test.com",
+      "password": "senha-errada"
+    }
+
+      at Object.log (Testes/api.test.js:102:17)
+
+  console.log
+    Recebido (Status): 401
+
+      at Object.log (Testes/api.test.js:107:21)
+
+  console.log
+    Recebido (Corpo): {
+      "message": "Credenciais inválidas."
+    }
+
+      at Object.log (Testes/api.test.js:108:21)
+
+  console.log
+    
+    --- Teste: Login com sucesso ---
+
+      at Object.log (Testes/api.test.js:122:17)
+
+  console.log
+    Enviando: {
+      "email": "empresaA_1762379077604@test.com",
+      "password": "password123"
+    }
+
+      at Object.log (Testes/api.test.js:123:17)
+
+  console.log
+    Recebido (Status): 200
+
+      at Object.log (Testes/api.test.js:127:17)
+
+  console.log
+    Recebido (Corpo): {
+      "user": {
+        "name": "Usuário A",
+        "email": "empresaa_1762379077604@test.com"
+      },
+      "message": "Tokens recebidos"
+    }
+
+      at Object.log (Testes/api.test.js:128:17)
+
+  console.log
+    
+    --- Teste: Acesso a rota protegida sem token ---
+
+      at Object.log (Testes/api.test.js:141:17)
+
+  console.log
+    Enviando: GET para http://localhost:5000/api/transactions
+
+      at Object.log (Testes/api.test.js:142:17)
+
+  console.log
+    Recebido (Status): 401
+
+      at Object.log (Testes/api.test.js:148:21)
+
+  console.log
+    Recebido (Corpo): {
+      "message": "Token ausente ou formato inválido"
+    }
+
+      at Object.log (Testes/api.test.js:149:21)
+
+PASS Testes/api.test.js
+  1. Módulo de Autenticação
+    √ RF-001: deve cadastrar um novo usuário e empresa (Empresa A) (282 ms)
+    √ deve barrar o cadastro de um usuário com e-mail já existente (31 ms)
+    √ deve falhar o login com senha incorreta (87 ms)
+    √ deve realizar o login com sucesso para a Empresa A (160 ms)
+    √ deve proteger rotas, barrando acesso sem token (13 ms)
+
+----------|---------|----------|---------|---------|-------------------
+File      | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+----------|---------|----------|---------|---------|-------------------
+All files |       0 |        0 |       0 |       0 |                   
+----------|---------|----------|---------|---------|-------------------
+Test Suites: 1 failed, 1 passed, 2 total
+Tests:       2 failed, 7 passed, 9 total
+Snapshots:   0 total
+Time:        2.742 s, estimated 3 s
+Ran all test suites.

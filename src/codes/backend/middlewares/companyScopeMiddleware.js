@@ -5,7 +5,7 @@
 // ===========================================
 
 /**
- * companyScopeMiddleware
+ * - companyScopeMiddleware
  * - Define filtros prontos para consultas baseadas em companyId
  * - Popula req.companyId e req.companyFilter para uso nos controllers
  *

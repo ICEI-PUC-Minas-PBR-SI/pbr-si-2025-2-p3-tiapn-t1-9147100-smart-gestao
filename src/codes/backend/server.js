@@ -1,10 +1,10 @@
 // ============================================================
-// 🚀 Arquivo: server.js
-// 🧩 Função: Inicializa o servidor Express do backend Smart Gestão
+// - Arquivo: server.js
+// - Função: Inicializa o servidor Express do backend Smart Gestão
 // ============================================================
 
 // ----------------------
-// 📦 Importações gerais
+// - Importações gerais
 // ----------------------
 import express from "express"; // Framework principal para criação de APIs
 import cors from "cors"; // Libera acesso do front-end (Cross-Origin)
@@ -12,19 +12,19 @@ import dotenv from "dotenv"; // Carrega variáveis de ambiente (.env)
 import morgan from "morgan"; // Exibe logs de requisições no console (modo dev)
 
 // ----------------------
-// 🔗 Conexão com o banco de dados
+// - Conexão com o banco de dados
 // ----------------------
 import { connectDB } from "./config/db.js"; // Arquivo de conexão com o MongoDB
 
 // ----------------------
-// 🛡️ Inicialização das permissões padrão do sistema
+// - Inicialização das permissões padrão do sistema
 // (Cria roles iniciais automaticamente, se não existirem)
 // ----------------------
 // ⚠️ Importante: a pasta deve ser 'scripts' (minúscula)
 import { initPermissions } from "./scripts/initPermissions.js";
 
 // ----------------------
-// 🧭 Importação das rotas da API (separadas por domínio funcional)
+// - Importação das rotas da API (separadas por domínio funcional)
 // ----------------------
 import alertRoutes from "./routes/alertRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
@@ -38,7 +38,7 @@ import transactionRoutes from "./routes/transactionRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 
 // ----------------------
-// ⚙️ Configuração de ambiente
+// - Configuração de ambiente
 // ----------------------
 dotenv.config(); // Carrega variáveis do arquivo .env (PORT, MONGO_URI, JWT_SECRET)
 
@@ -46,23 +46,23 @@ dotenv.config(); // Carrega variáveis do arquivo .env (PORT, MONGO_URI, JWT_SEC
 const app = express();
 
 // ============================================================
-// 🧩 MIDDLEWARES GLOBAIS
+// - MIDDLEWARES GLOBAIS
 // ============================================================
 
-// 🔓 CORS — permite que o front-end (React, por exemplo) acesse a API
+// - CORS — permite que o front-end (React, por exemplo) acesse a API
 app.use(cors());
 
-// 🧾 Express JSON — converte automaticamente o corpo das requisições em JSON
+// - Express JSON — converte automaticamente o corpo das requisições em JSON
 app.use(express.json({ limit: "10mb" }));
 
-// 🔤 Interpreta dados de formulários enviados via POST (x-www-form-urlencoded)
+// - Interpreta dados de formulários enviados via POST (x-www-form-urlencoded)
 app.use(express.urlencoded({ extended: true }));
 
-// 🧠 Morgan — exibe logs detalhados das requisições (método, rota, tempo de resposta)
+// - Morgan — exibe logs detalhados das requisições (método, rota, tempo de resposta)
 app.use(morgan("dev"));
 
 // ============================================================
-// ❤️ ROTA DE TESTE (Health Check)
+// - ROTA DE TESTE (Health Check)
 // ============================================================
 // Essa rota é útil para verificar se o backend está ativo e respondendo corretamente
 app.get("/api/health", (req, res) => {
@@ -75,7 +75,7 @@ app.get("/api/health", (req, res) => {
 });
 
 // ============================================================
-// 📚 REGISTRO DAS ROTAS PRINCIPAIS
+// - REGISTRO DAS ROTAS PRINCIPAIS
 // ============================================================
 // Cada módulo de negócio possui um grupo de rotas específico
 
@@ -91,15 +91,15 @@ app.use("/api/transactions", transactionRoutes);
 app.use("/api/users", userRoutes);
 
 // ============================================================
-// 🔄 INICIALIZAÇÃO DO SERVIDOR
+// - INICIALIZAÇÃO DO SERVIDOR
 // ============================================================
 
 // Define a porta de execução (por padrão 5000)
 const PORT = process.env.PORT || 5000;
 
 /**
- * 🔁 Função autoexecutável que:
- * 1️⃣ Conecta ao banco MongoDB (usando MONGO_URI)
+ * - Função autoexecutável que:
+ * 1. Conecta ao banco MongoDB (usando MONGO_URI)
  * 2️⃣ Inicializa permissões padrão (ROOT, ADMIN_COMPANY, USER_COMPANY, READ_ONLY)
  * 3️⃣ Inicia o servidor Express
  */
@@ -107,21 +107,21 @@ const PORT = process.env.PORT || 5000;
   try {
     console.log("⏳ Iniciando servidor Smart Gestão...");
 
-    // 1️⃣ Conecta ao banco MongoDB Atlas
+    // 1. Conecta ao banco MongoDB Atlas
     await connectDB();
 
-    // 2️⃣ Cria permissões padrão caso não existam
+    // 2. Cria permissões padrão caso não existam
     await initPermissions();
 
-    // 3️⃣ Inicializa o servidor Express
+    // 3. Inicializa o servidor Express
     app.listen(PORT, () => {
       console.log(`✅ Conexão com o banco estabelecida!`);
       console.log(`🚀 Servidor rodando na porta ${PORT}`);
       console.log(`📡 Verifique em: http://localhost:${PORT}/api/health`);
     });
   } catch (err) {
-    // Captura erros de inicialização e encerra o processo de forma segura
-    console.error("❌ Erro ao iniciar o servidor:");
+    // - Captura erros de inicialização e encerra o processo de forma segura
+    console.error("Erro ao iniciar o servidor:");
     console.error(err.message);
     process.exit(1);
   }

@@ -1,0 +1,110 @@
+
+> smart-gestao-backend@1.0.0 test:console
+> node --experimental-vm-modules node_modules/jest/bin/jest.js --config Testes/jest.config.js --detectOpenHandles --coverage --no-color
+
+(node:29648) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+[0m[7m[1m[31m FAIL [39m[22m[27m[0m [2mTestes/[22m[1mapi.test.js[22m
+  1. Módulo de Autenticação
+    [31m×[39m [2mRF-001: deve cadastrar um novo usuário e empresa (Empresa A) (48 ms)[22m
+    [31m×[39m [2mdeve barrar o cadastro de um usuário com e-mail já existente (13 ms)[22m
+    [31m×[39m [2mdeve falhar o login com senha incorreta (5 ms)[22m
+    [31m×[39m [2mdeve realizar o login com sucesso para a Empresa A (6 ms)[22m
+    [31m×[39m [2mdeve proteger rotas, barrando acesso sem token (5 ms)[22m
+
+[1m[31m  [1m● [22m[1m1. Módulo de Autenticação › RF-001: deve cadastrar um novo usuário e empresa (Empresa A)[39m[22m
+
+    AggregateError: Error
+[2m[22m
+[2m      40 |[22m
+[2m      41 |     it('RF-001: deve cadastrar um novo usuário e empresa (Empresa A)', async () => {[22m
+[2m    > 42 |         const response = await axios.post(`${API_URL}/auth/register`, {[22m
+[2m         |                          ^[22m
+[2m      43 |             name: empresaA.name,[22m
+[2m      44 |             email: empresaA.email,[22m
+[2m      45 |             password: empresaA.password,[22m
+[2m[22m
+[2m      [2mat Function.AxiosError.from ([22m[2mnode_modules/axios/lib/core/AxiosError.js[2m:96:14)[22m[2m[22m
+[2m      [2mat RedirectableRequest.handleRequestError ([22m[2mnode_modules/axios/lib/adapters/http.js[2m:817:25)[22m[2m[22m
+[2m      [2mat ClientRequest.eventHandlers.<computed> ([22m[2mnode_modules/follow-redirects/index.js[2m:49:24)[22m[2m[22m
+[2m      [2mat Axios.request ([22m[2mnode_modules/axios/lib/core/Axios.js[2m:45:41)[22m[2m[22m
+[2m      [2mat Object.<anonymous> ([22m[2m[0m[36mTestes/api.test.js[39m[0m[2m:42:26)[22m[2m[22m
+
+    Cause:
+    AggregateError:
+
+
+[1m[31m  [1m● [22m[1m1. Módulo de Autenticação › deve barrar o cadastro de um usuário com e-mail já existente[39m[22m
+
+    TypeError: Cannot read properties of undefined (reading 'status')
+[2m[22m
+[2m      65 |         } catch (error) {[22m
+[2m      66 |             // Espera-se um erro 409 (Conflict)[22m
+[2m    > 67 |             expect(error.response.status).toBe(409);[22m
+[2m         |                                   ^[22m
+[2m      68 |             expect(error.response.data.message).toContain('E-mail já cadastrado');[22m
+[2m      69 |         }[22m
+[2m      70 |     });[22m
+[2m[22m
+[2m      [2mat Object.status ([22m[2m[0m[36mTestes/api.test.js[39m[0m[2m:67:35)[22m[2m[22m
+
+[1m[31m  [1m● [22m[1m1. Módulo de Autenticação › deve falhar o login com senha incorreta[39m[22m
+
+    TypeError: Cannot read properties of undefined (reading 'status')
+[2m[22m
+[2m      78 |         } catch (error) {[22m
+[2m      79 |             // Espera-se um erro 401 (Unauthorized)[22m
+[2m    > 80 |             expect(error.response.status).toBe(401);[22m
+[2m         |                                   ^[22m
+[2m      81 |             expect(error.response.data.message).toBe('Credenciais inválidas.');[22m
+[2m      82 |         }[22m
+[2m      83 |     });[22m
+[2m[22m
+[2m      [2mat Object.status ([22m[2m[0m[36mTestes/api.test.js[39m[0m[2m:80:35)[22m[2m[22m
+
+[1m[31m  [1m● [22m[1m1. Módulo de Autenticação › deve realizar o login com sucesso para a Empresa A[39m[22m
+
+    AggregateError: Error
+[2m[22m
+[2m      84 |[22m
+[2m      85 |     it('deve realizar o login com sucesso para a Empresa A', async () => {[22m
+[2m    > 86 |         const response = await axios.post(`${API_URL}/auth/login`, {[22m
+[2m         |                          ^[22m
+[2m      87 |             email: empresaA.email,[22m
+[2m      88 |             password: empresaA.password[22m
+[2m      89 |         });[22m
+[2m[22m
+[2m      [2mat Function.AxiosError.from ([22m[2mnode_modules/axios/lib/core/AxiosError.js[2m:96:14)[22m[2m[22m
+[2m      [2mat RedirectableRequest.handleRequestError ([22m[2mnode_modules/axios/lib/adapters/http.js[2m:817:25)[22m[2m[22m
+[2m      [2mat ClientRequest.eventHandlers.<computed> ([22m[2mnode_modules/follow-redirects/index.js[2m:49:24)[22m[2m[22m
+[2m      [2mat Axios.request ([22m[2mnode_modules/axios/lib/core/Axios.js[2m:45:41)[22m[2m[22m
+[2m      [2mat Object.<anonymous> ([22m[2m[0m[36mTestes/api.test.js[39m[0m[2m:86:26)[22m[2m[22m
+
+    Cause:
+    AggregateError:
+
+
+[1m[31m  [1m● [22m[1m1. Módulo de Autenticação › deve proteger rotas, barrando acesso sem token[39m[22m
+
+    TypeError: Cannot read properties of undefined (reading 'status')
+[2m[22m
+[2m      105 |         } catch (error) {[22m
+[2m      106 |             // O middleware de autenticação deve retornar 401 (Unauthorized)[22m
+[2m    > 107 |             expect(error.response.status).toBe(401);[22m
+[2m          |                                   ^[22m
+[2m      108 |             expect(error.response.data.message).toBe('Token ausente ou formato inválido');[22m
+[2m      109 |         }[22m
+[2m      110 |     });[22m
+[2m[22m
+[2m      [2mat Object.status ([22m[2m[0m[36mTestes/api.test.js[39m[0m[2m:107:35)[22m[2m[22m
+
+----------|---------|----------|---------|---------|-------------------
+File      | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+----------|---------|----------|---------|---------|-------------------
+All files |       0 |        0 |       0 |       0 | [31;1m                 [0m 
+----------|---------|----------|---------|---------|-------------------
+[1mTest Suites: [22m[1m[31m1 failed[39m[22m, 1 total
+[1mTests:       [22m[1m[31m5 failed[39m[22m, 5 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        0.629 s, estimated 1 s
+[2mRan all test suites[22m[2m.[22m

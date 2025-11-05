@@ -17,19 +17,19 @@ import { auditMiddleware } from "../middlewares/auditMiddleware.js";
 
 const router = express.Router();
 
-// 🔹 Cadastrar nova empresa (acesso ROOT)
+// - Cadastrar nova empresa (acesso ROOT)
 router.post("/", authMiddleware, roleMiddleware(["ROOT"]), auditMiddleware("CREATE_COMPANY"), createCompany);
 
-// 🔹 Listar empresas cadastradas
+// - Listar empresas cadastradas
 router.get("/", authMiddleware, roleMiddleware(["ROOT"]), getCompanies);
 
-// 🔹 Buscar empresa pelo ID
+// - Buscar empresa pelo ID
 router.get("/:id", authMiddleware, getCompanyById);
 
-// 🔹 Atualizar dados da empresa
+// - Atualizar dados da empresa
 router.put("/:id", authMiddleware, roleMiddleware(["ROOT", "ADMIN_COMPANY"]), auditMiddleware("UPDATE_COMPANY"), updateCompany);
 
-// 🔹 Desativar empresa
+// - Desativar empresa
 router.patch("/:id/deactivate", authMiddleware, roleMiddleware(["ROOT"]), auditMiddleware("DEACTIVATE_COMPANY"), deactivateCompany);
 
 export default router;

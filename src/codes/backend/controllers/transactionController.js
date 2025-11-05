@@ -5,7 +5,7 @@ import Transaction from "../models/Transaction.js";
 import { createLog } from "../utils/logger.js";
 
 /**
- * GET /api/transactions
+ * - GET /api/transactions
  * Lista transações da company, com filtros opcionais: start,end,category,type
  */
 export const getAllTransactions = async (req, res) => {
@@ -30,13 +30,14 @@ export const getAllTransactions = async (req, res) => {
 };
 
 /**
- * POST /api/transactions
+ * - POST /api/transactions
  * Cria transaction; corpo: { type, description, category, value, date, paymentMethod, clientId }
  */
 export const createTransaction = async (req, res) => {
   try {
     const companyId = req.user.companyId;
-    const payload = { ...req.body, companyId: companyId };
+    // Garante que o companyId do token seja usado, ignorando qualquer um que venha no corpo
+    const payload = { ...req.body, companyId: companyId, userId: req.user.userId }; 
 
     // A validação agora é primariamente feita pelo Mongoose Schema.
     // O controller pode focar na lógica de negócio.
@@ -47,7 +48,7 @@ export const createTransaction = async (req, res) => {
       userId: req.user.userId,
       companyId,
       action: "CREATE_TRANSACTION",
-      description: `Transação criada: ${tx._id} (${tx.type}) valor=${tx.value}`,
+      description: `Transação criada: ${tx._id} (${tx.type}) valor=${tx.amount}`,
       route: req.originalUrl,
     });
 
@@ -59,7 +60,7 @@ export const createTransaction = async (req, res) => {
 };
 
 /**
- * PUT /api/transactions/:id
+ * - PUT /api/transactions/:id
  * Atualiza transaction (dentro da mesma company)
  */
 export const updateTransaction = async (req, res) => {
@@ -88,7 +89,7 @@ export const updateTransaction = async (req, res) => {
 };
 
 /**
- * DELETE /api/transactions/:id
+ * - DELETE /api/transactions/:id
  * Remove transaction (dentro da mesma company)
  */
 export const deleteTransaction = async (req, res) => {

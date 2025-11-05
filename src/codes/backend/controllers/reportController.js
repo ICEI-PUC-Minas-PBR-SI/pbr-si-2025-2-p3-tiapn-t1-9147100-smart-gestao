@@ -1,6 +1,6 @@
 // ============================================================
-// 📄 Arquivo: controllers/reportController.js
-// 🧩 Função: Controla os relatórios financeiros e de alertas do sistema
+// - Arquivo: controllers/reportController.js
+// - Função: Controla os relatórios financeiros e de alertas do sistema
 // ============================================================
 
 import Transaction from "../models/Transaction.js";
@@ -8,7 +8,7 @@ import Meta from "../models/Meta.js";
 import Alert from "../models/Alert.js";
 
 /**
- * 📊 getFinancialSummary
+ * - getFinancialSummary
  * Gera um resumo financeiro da empresa:
  * - Total de receitas
  * - Total de despesas
@@ -21,7 +21,7 @@ export const getFinancialSummary = async (req, res) => {
     // Busca todas as transações da empresa
     const transactions = await Transaction.find({ companyId });
 
-    // Calcula totais
+    // Calcula os totais de receita e despesa iterando sobre as transações.
     const totalIncome = transactions
       .filter(t => t.type === "income")
       .reduce((sum, t) => sum + t.amount, 0);
@@ -45,13 +45,14 @@ export const getFinancialSummary = async (req, res) => {
 };
 
 /**
- * 📅 getMonthlyReport
+ * - getMonthlyReport
  * Retorna o balanço financeiro mensal agrupado por mês.
  */
 export const getMonthlyReport = async (req, res) => {
   try {
     const { companyId } = req.user;
 
+    // Utiliza o Aggregation Framework do MongoDB para agrupar transações por mês e calcular os totais.
     const report = await Transaction.aggregate([
       { $match: { companyId } },
       {
@@ -76,7 +77,7 @@ export const getMonthlyReport = async (req, res) => {
 };
 
 /**
- * 🚨 getAlertsReport
+ * - getAlertsReport
  * Lista alertas financeiros e operacionais da empresa,
  * permitindo análise dos principais riscos ou falhas detectadas.
  */
@@ -84,7 +85,7 @@ export const getAlertsReport = async (req, res) => {
   try {
     const { companyId } = req.user;
 
-    // Busca alertas vinculados à empresa
+    // Busca todos os alertas vinculados à empresa do usuário logado e os ordena por data de criação.
     const alerts = await Alert.find({ companyId }).sort({ createdAt: -1 });
 
     if (!alerts.length) {

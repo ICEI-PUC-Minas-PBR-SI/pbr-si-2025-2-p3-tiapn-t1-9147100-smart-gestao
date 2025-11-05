@@ -16,16 +16,16 @@ import { auditMiddleware } from "../middlewares/auditMiddleware.js";
 
 const router = express.Router();
 
-// 🔹 Listar todos os clientes/fornecedores da empresa
+// - Listar todos os clientes/fornecedores da empresa
 router.get("/", authMiddleware, companyScopeMiddleware, getAllClients);
 
-// 🔹 Cadastrar um novo cliente/fornecedor
+// - Cadastrar um novo cliente/fornecedor
 router.post("/", authMiddleware, companyScopeMiddleware, auditMiddleware("CREATE_CLIENT"), createClient);
 
-// 🔹 Atualizar cliente/fornecedor
+// - Atualizar cliente/fornecedor
 router.put("/:id", authMiddleware, companyScopeMiddleware, auditMiddleware("UPDATE_CLIENT"), updateClient);
 
-// 🔹 Remover cliente/fornecedor
+// - Remover cliente/fornecedor
 router.delete("/:id", authMiddleware, companyScopeMiddleware, auditMiddleware("DELETE_CLIENT"), deleteClient);
 
 export default router;

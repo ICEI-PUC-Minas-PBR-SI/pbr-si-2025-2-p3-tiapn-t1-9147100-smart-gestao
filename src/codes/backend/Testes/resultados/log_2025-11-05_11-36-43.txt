@@ -1,0 +1,157 @@
+  console.log
+    
+    --- Teste: Cadastrar novo usuário ---
+
+      at Object.log (Testes/api.test.js:50:17)
+
+  console.log
+    Enviando: {
+      "name": "Usuário A",
+      "email": "empresaA_1762353405051@test.com",
+      "password": "password123",
+      "companyName": "Empresa A Teste 1762353405051",
+      "cnpj": "01762353405051"
+    }
+
+      at Object.log (Testes/api.test.js:51:17)
+
+(node:17136) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+  console.log
+    Recebido (Status): 201
+
+      at Object.log (Testes/api.test.js:56:21)
+
+  console.log
+    Recebido (Corpo): {
+      "message": "Usuário cadastrado com sucesso!"
+    }
+
+      at Object.log (Testes/api.test.js:57:21)
+
+  console.log
+    
+    --- Teste: Barrar e-mail duplicado ---
+
+      at Object.log (Testes/api.test.js:79:17)
+
+  console.log
+    Enviando: {
+      "name": "Usuário A",
+      "email": "empresaA_1762353405051@test.com",
+      "password": "password123",
+      "companyName": "Nome Duplicado",
+      "cnpj": "11223344556677"
+    }
+
+      at Object.log (Testes/api.test.js:80:17)
+
+  console.log
+    Recebido (Status): 409
+
+      at Object.log (Testes/api.test.js:86:21)
+
+  console.log
+    Recebido (Corpo): {
+      "message": "E-mail já cadastrado."
+    }
+
+      at Object.log (Testes/api.test.js:87:21)
+
+  console.log
+    
+    --- Teste: Login com senha incorreta ---
+
+      at Object.log (Testes/api.test.js:101:17)
+
+  console.log
+    Enviando: {
+      "email": "empresaA_1762353405051@test.com",
+      "password": "senha-errada"
+    }
+
+      at Object.log (Testes/api.test.js:102:17)
+
+  console.log
+    Recebido (Status): 401
+
+      at Object.log (Testes/api.test.js:107:21)
+
+  console.log
+    Recebido (Corpo): {
+      "message": "Credenciais inválidas."
+    }
+
+      at Object.log (Testes/api.test.js:108:21)
+
+  console.log
+    
+    --- Teste: Login com sucesso ---
+
+      at Object.log (Testes/api.test.js:122:17)
+
+  console.log
+    Enviando: {
+      "email": "empresaA_1762353405051@test.com",
+      "password": "password123"
+    }
+
+      at Object.log (Testes/api.test.js:123:17)
+
+  console.log
+    Recebido (Status): 200
+
+      at Object.log (Testes/api.test.js:127:17)
+
+  console.log
+    Recebido (Corpo): {
+      "user": {
+        "name": "Usuário A",
+        "email": "empresaa_1762353405051@test.com"
+      },
+      "message": "Tokens recebidos"
+    }
+
+      at Object.log (Testes/api.test.js:128:17)
+
+  console.log
+    
+    --- Teste: Acesso a rota protegida sem token ---
+
+      at Object.log (Testes/api.test.js:141:17)
+
+  console.log
+    Enviando: GET para http://localhost:5000/api/transactions
+
+      at Object.log (Testes/api.test.js:142:17)
+
+  console.log
+    Recebido (Status): 401
+
+      at Object.log (Testes/api.test.js:148:21)
+
+  console.log
+    Recebido (Corpo): {
+      "message": "Token ausente ou formato inválido"
+    }
+
+      at Object.log (Testes/api.test.js:149:21)
+
+PASS Testes/api.test.js
+  1. Módulo de Autenticação
+    √ RF-001: deve cadastrar um novo usuário e empresa (Empresa A) (379 ms)
+    √ deve barrar o cadastro de um usuário com e-mail já existente (39 ms)
+    √ deve falhar o login com senha incorreta (160 ms)
+    √ deve realizar o login com sucesso para a Empresa A (170 ms)
+    √ deve proteger rotas, barrando acesso sem token (8 ms)
+
+----------|---------|----------|---------|---------|-------------------
+File      | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+----------|---------|----------|---------|---------|-------------------
+All files |       0 |        0 |       0 |       0 |                   
+----------|---------|----------|---------|---------|-------------------
+Test Suites: 1 passed, 1 total
+Tests:       5 passed, 5 total
+Snapshots:   0 total
+Time:        1.605 s, estimated 2 s
+Ran all test suites.

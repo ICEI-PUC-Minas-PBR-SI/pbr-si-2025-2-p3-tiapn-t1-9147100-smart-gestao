@@ -1,13 +1,13 @@
 // ============================================================
-// 📁 models/Permission.js
-// 🧩 Estrutura da collection de permissões de acesso no sistema
+// - models/Permission.js
+// - Estrutura da collection de permissões de acesso no sistema
 // ============================================================
 
 import mongoose from "mongoose";
 
 const { Schema, model } = mongoose;
 
-// 🔐 Schema das permissões do sistema
+// - Schema das permissões do sistema
 // Cada permissão define o nível de acesso que um usuário pode ter.
 const PermissionSchema = new Schema(
   {

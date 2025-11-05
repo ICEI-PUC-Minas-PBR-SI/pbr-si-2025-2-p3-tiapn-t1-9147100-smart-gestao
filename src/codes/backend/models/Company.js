@@ -21,4 +21,4 @@ const EmpresaSchema = new Schema({
 EmpresaSchema.index({ nome: 1 });
 EmpresaSchema.index({ cnpj: 1 }, { unique: true });
 
-export default model("Empresa", EmpresaSchema);
+export default model("Company", EmpresaSchema);

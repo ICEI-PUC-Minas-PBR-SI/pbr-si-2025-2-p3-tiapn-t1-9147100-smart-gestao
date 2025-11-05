@@ -10,10 +10,10 @@ import { roleMiddleware } from "../middlewares/roleMiddleware.js";
 
 const router = express.Router();
 
-// 🔹 Listar todos os logs (ROOT ou ADMIN_COMPANY)
+// - Listar todos os logs (ROOT ou ADMIN_COMPANY)
 router.get("/", authMiddleware, roleMiddleware(["ROOT", "ADMIN_COMPANY"]), getAllLogs);
 
-// 🔹 Listar logs filtrados por usuário
+// - Listar logs filtrados por usuário
 router.get("/user/:userId", authMiddleware, getLogsByUser);
 
 export default router;

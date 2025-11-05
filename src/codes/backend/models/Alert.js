@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 const { Schema, model } = mongoose;
 
 const AlertSchema = new Schema({
-  empresaId: { type: Schema.Types.ObjectId, ref: "Empresa", required: true },
+  empresaId: { type: Schema.Types.ObjectId, ref: "Company", required: true },
   metaId: { type: Schema.Types.ObjectId, ref: "Meta", required: true },
   usuarioId: { type: Schema.Types.ObjectId, ref: "User" },
   tipo_alerta: { type: String, enum: ["aviso", "limite_atingido", "acima_da_meta"], required: true },

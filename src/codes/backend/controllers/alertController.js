@@ -5,7 +5,7 @@ import Alert from "../models/Alert.js";
 import { createLog } from "../utils/logger.js";
 
 /**
- * GET /api/alerts
+ * - GET /api/alerts
  * Lista alertas da company do usuário autenticado.
  */
 export const getAllAlerts = async (req, res) => {
@@ -20,7 +20,7 @@ export const getAllAlerts = async (req, res) => {
 };
 
 /**
- * GET /api/alerts/:id
+ * - GET /api/alerts/:id
  * Retorna um alerta por ID (se pertencer à mesma company do usuário).
  */
 export const getAlertById = async (req, res) => {
@@ -39,7 +39,7 @@ export const getAlertById = async (req, res) => {
 };
 
 /**
- * POST /api/alerts
+ * - POST /api/alerts
  * Cria um novo alerta (vinculado à company do usuário).
  */
 export const createAlert = async (req, res) => {
@@ -67,7 +67,7 @@ export const createAlert = async (req, res) => {
 };
 
 /**
- * PUT /api/alerts/:id
+ * - PUT /api/alerts/:id
  * Atualiza um alerta (apenas se pertencer à mesma company).
  */
 export const updateAlert = async (req, res) => {
@@ -93,7 +93,7 @@ export const updateAlert = async (req, res) => {
 };
 
 /**
- * PUT /api/alerts/:id/read
+ * - PUT /api/alerts/:id/read
  * Marca um alerta como lido.
  */
 export const markAlertAsRead = async (req, res) => {
@@ -118,7 +118,7 @@ export const markAlertAsRead = async (req, res) => {
 };
 
 /**
- * DELETE /api/alerts/:id
+ * - DELETE /api/alerts/:id
  * Remove um alerta (caso esteja autorizado e pertença à mesma company).
  */
 export const deleteAlert = async (req, res) => {

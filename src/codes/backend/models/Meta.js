@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 const { Schema, model } = mongoose;
 
 const MetaSchema = new Schema({
-  empresaId: { type: Schema.Types.ObjectId, ref: "Empresa", required: true },
+  empresaId: { type: Schema.Types.ObjectId, ref: "Company", required: true },
   usuarioId: { type: Schema.Types.ObjectId, ref: "User", required: true },
   tipo_meta: { type: String, enum: ["receita", "despesa"], required: true },
   valor_meta: { type: Number, required: true },

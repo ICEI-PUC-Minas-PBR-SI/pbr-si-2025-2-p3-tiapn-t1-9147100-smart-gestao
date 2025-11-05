@@ -12,12 +12,12 @@ import { createLog } from "../utils/logger.js";
  * - actionName: string curta representando a ação (ex: 'CREATE_TRANSACTION').
  *
  * O middleware retorna uma função que:
- *  - adiciona um listener em res 'finish'
- *  - quando a resposta for finalizada, grava um log com informações do request/response
+ *  - Adiciona um "ouvinte" ao evento 'finish' da resposta (`res`).
+ *  - Quando a resposta é finalizada e enviada ao cliente, a função de callback é executada para gravar o log.
  */
 export function auditMiddleware(actionName = "") {
   return (req, res, next) => {
-    // listener será executado quando a resposta terminar
+    // Ouve o evento 'finish', que é emitido quando a resposta foi completamente enviada.
     res.on("finish", async () => {
       try {
         const logData = {
@@ -37,7 +37,7 @@ export function auditMiddleware(actionName = "") {
           },
         };
 
-        // grava o log usando o helper centralizado
+        // Grava o log de forma assíncrona usando o helper centralizado.
         await createLog(logData);
       } catch (err) {
         // Não interrompe o fluxo principal se falhar ao gravar o log
@@ -45,7 +45,7 @@ export function auditMiddleware(actionName = "") {
       }
     });
 
-    // segue para próxima função/middleware/handler
+    // Passa o controle para o próximo middleware ou para o controller da rota.
     next();
   };
 }

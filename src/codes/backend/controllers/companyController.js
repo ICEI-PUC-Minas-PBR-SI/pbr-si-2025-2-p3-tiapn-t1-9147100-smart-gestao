@@ -6,7 +6,7 @@
 import Company from "../models/Company.js";
 
 /**
- * 🏗️ Cria uma nova empresa
+ * - Cria uma nova empresa
  */
 export const createCompany = async (req, res) => {
   try {
@@ -38,7 +38,7 @@ export const createCompany = async (req, res) => {
 };
 
 /**
- * 📋 Lista todas as empresas
+ * - Lista todas as empresas
  */
 export const getCompanies = async (req, res) => {
   try {
@@ -51,7 +51,7 @@ export const getCompanies = async (req, res) => {
 };
 
 /**
- * 🔍 Busca uma empresa pelo ID
+ * - Busca uma empresa pelo ID
  */
 export const getCompanyById = async (req, res) => {
   try {
@@ -67,7 +67,7 @@ export const getCompanyById = async (req, res) => {
 };
 
 /**
- * ✏️ Atualiza dados de uma empresa
+ * - Atualiza dados de uma empresa
  */
 export const updateCompany = async (req, res) => {
   try {
@@ -90,7 +90,7 @@ export const updateCompany = async (req, res) => {
 };
 
 /**
- * 🚫 Desativa uma empresa (soft delete)
+ * - Desativa uma empresa (soft delete)
  */
 export const deactivateCompany = async (req, res) => {
   try {

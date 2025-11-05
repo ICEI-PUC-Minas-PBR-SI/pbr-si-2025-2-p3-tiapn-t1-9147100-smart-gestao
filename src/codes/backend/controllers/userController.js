@@ -6,7 +6,7 @@ import bcrypt from "bcryptjs";
 import { createLog } from "../utils/logger.js";
 
 /**
- * POST /api/users
+ * - POST /api/users
  * Cria usuário dentro da mesma company (admin cria para sua company)
  * Body: { name, email, password, role }
  */
@@ -50,7 +50,7 @@ export const createUser = async (req, res) => {
 };
 
 /**
- * GET /api/users
+ * - GET /api/users
  * Lista usuários da company (sem passwordHash)
  */
 export const getAllUsers = async (req, res) => {
@@ -65,7 +65,7 @@ export const getAllUsers = async (req, res) => {
 };
 
 /**
- * GET /api/users/profile/me
+ * - GET /api/users/profile/me
  * Retorna dados do perfil do usuário logado
  */
 export const getProfile = async (req, res) => {
@@ -80,7 +80,7 @@ export const getProfile = async (req, res) => {
 };
 
 /**
- * PUT /api/users/:id
+ * - PUT /api/users/:id
  * Atualiza user (não altera password aqui)
  */
 export const updateUser = async (req, res) => {
@@ -105,7 +105,7 @@ export const updateUser = async (req, res) => {
 };
 
 /**
- * DELETE /api/users/:id
+ * - DELETE /api/users/:id
  * Remove user (por simplicidade: deleção física; em produção, use flag active=false)
  */
 export const deleteUser = async (req, res) => {
@@ -130,7 +130,7 @@ export const deleteUser = async (req, res) => {
 };
 
 /**
- * POST /api/users/change-password
+ * - POST /api/users/change-password
  * Permite usuário alterar sua senha atual (oldPassword, newPassword)
  */
 export const changePassword = async (req, res) => {

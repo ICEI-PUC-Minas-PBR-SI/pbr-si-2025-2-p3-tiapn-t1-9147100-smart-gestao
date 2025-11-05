@@ -5,17 +5,17 @@
 // ===========================================
 
 /**
- * roleMiddleware(allowedRoles)
+ * - roleMiddleware(allowedRoles)
  * - allowedRoles: array de strings com roles permitidos
  * - retorna middleware que verifica req.user.role
  */
 export function roleMiddleware(allowedRoles = []) {
   return (req, res, next) => {
     try {
-      const userRole = req.user?.role;
+      const userRole = req.user?.role; // Obtém a permissão do usuário, que foi adicionada pelo `authMiddleware`.
       if (!userRole) return res.status(403).json({ message: "Role do usuário não encontrado" });
 
-      // se permitted contém role do usuário, segue; caso contrário, 403
+      // Verifica se a permissão do usuário está na lista de permissões autorizadas para esta rota.
       if (!allowedRoles.includes(userRole)) {
         return res.status(403).json({ message: "Acesso negado: permissão insuficiente" });
       }

@@ -16,16 +16,16 @@ import { auditMiddleware } from "../middlewares/auditMiddleware.js";
 
 const router = express.Router();
 
-// 🔹 Listar metas financeiras
+// - Listar metas financeiras
 router.get("/", authMiddleware, companyScopeMiddleware, getAllMetas);
 
-// 🔹 Criar nova meta
+// - Criar nova meta
 router.post("/", authMiddleware, companyScopeMiddleware, auditMiddleware("CREATE_META"), createMeta);
 
-// 🔹 Atualizar meta existente
+// - Atualizar meta existente
 router.put("/:id", authMiddleware, companyScopeMiddleware, auditMiddleware("UPDATE_META"), updateMeta);
 
-// 🔹 Excluir meta
+// - Excluir meta
 router.delete("/:id", authMiddleware, companyScopeMiddleware, auditMiddleware("DELETE_META"), deleteMeta);
 
 export default router;

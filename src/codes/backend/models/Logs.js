@@ -4,15 +4,21 @@
 import mongoose from "mongoose";
 const { Schema, model } = mongoose;
 
-const LogSchema = new Schema({
-  empresaId: { type: Schema.Types.ObjectId, ref: "Empresa" },
-  usuarioId: { type: Schema.Types.ObjectId, ref: "User" },
-  acao: { type: String, required: true },
-  descricao: { type: String },
-  ip_origem: { type: String },
-  user_agent: { type: String },
-  detalhes: { type: Schema.Types.Mixed },
-  data_evento: { type: Date, default: Date.now }
-});
+// - Schema para auditoria de ações no sistema
+const LogSchema = new Schema(
+  {
+    companyId: { type: Schema.Types.ObjectId, ref: "Company" },
+    userId: { type: Schema.Types.ObjectId, ref: "User" },
+    action: { type: String, required: true },
+    description: { type: String },
+    route: { type: String },
+    ip: { type: String },
+    userAgent: { type: String },
+    details: { type: Schema.Types.Mixed },
+  },
+  { timestamps: true } // Adiciona createdAt e updatedAt automaticamente
+);
+
+LogSchema.index({ companyId: 1, createdAt: -1 });
 
 export default model("Log", LogSchema);

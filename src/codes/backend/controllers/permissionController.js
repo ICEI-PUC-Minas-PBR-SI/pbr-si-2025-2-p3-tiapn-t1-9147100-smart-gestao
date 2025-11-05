@@ -3,6 +3,9 @@
 import Permission from "../models/Permission.js";
 import { createLog } from "../utils/logger.js";
 
+/**
+ * - Lista todas as permissões do sistema.
+ */
 export const getAllPermissions = async (req, res) => {
   try {
     const items = await Permission.find().sort({ name: 1 });
@@ -13,6 +16,9 @@ export const getAllPermissions = async (req, res) => {
   }
 };
 
+/**
+ * - Cria uma nova permissão.
+ */
 export const createPermission = async (req, res) => {
   try {
     const { name, description } = req.body;
@@ -38,6 +44,9 @@ export const createPermission = async (req, res) => {
   }
 };
 
+/**
+ * - Atualiza uma permissão existente.
+ */
 export const updatePermission = async (req, res) => {
   try {
     const updated = await Permission.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -58,6 +67,9 @@ export const updatePermission = async (req, res) => {
   }
 };
 
+/**
+ * - Remove uma permissão.
+ */
 export const deletePermission = async (req, res) => {
   try {
     const removed = await Permission.findByIdAndDelete(req.params.id);

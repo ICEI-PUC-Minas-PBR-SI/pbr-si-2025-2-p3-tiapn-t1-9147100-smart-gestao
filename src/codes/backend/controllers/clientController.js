@@ -5,7 +5,7 @@ import Client from "../models/Client.js";
 import { createLog } from "../utils/logger.js";
 
 /**
- * GET /api/clients
+ * - GET /api/clients
  * Lista todos clients da company do usuário
  */
 export const getAllClients = async (req, res) => {
@@ -20,7 +20,7 @@ export const getAllClients = async (req, res) => {
 };
 
 /**
- * POST /api/clients
+ * - POST /api/clients
  * Cria client (tipo: 'client' | 'supplier')
  */
 export const createClient = async (req, res) => {
@@ -47,7 +47,7 @@ export const createClient = async (req, res) => {
 };
 
 /**
- * PUT /api/clients/:id
+ * - PUT /api/clients/:id
  * Atualiza client (somente na mesma company)
  */
 export const updateClient = async (req, res) => {
@@ -76,7 +76,7 @@ export const updateClient = async (req, res) => {
 };
 
 /**
- * DELETE /api/clients/:id
+ * - DELETE /api/clients/:id
  * Remove client (dentro da company)
  */
 export const deleteClient = async (req, res) => {

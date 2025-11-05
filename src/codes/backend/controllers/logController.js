@@ -4,7 +4,7 @@
 import Logs from "../models/Logs.js";
 
 /**
- * GET /api/logs
+ * - GET /api/logs
  * Lista logs; requisito: role ROOT ou ADMIN_COMPANY
  * Aceita query params: userId, companyId, action, page, limit
  */
@@ -33,7 +33,7 @@ export const getAllLogs = async (req, res) => {
 };
 
 /**
- * GET /api/logs/user/:userId
+ * - GET /api/logs/user/:userId
  * Lista logs de um usuário específico
  */
 export const getLogsByUser = async (req, res) => {

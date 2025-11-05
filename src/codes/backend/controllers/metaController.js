@@ -5,7 +5,7 @@ import Meta from "../models/Meta.js";
 import { createLog } from "../utils/logger.js";
 
 /**
- * GET /api/meta
+ * - GET /api/meta
  * Lista metas da company
  */
 export const getAllMetas = async (req, res) => {
@@ -20,7 +20,7 @@ export const getAllMetas = async (req, res) => {
 };
 
 /**
- * POST /api/meta
+ * - POST /api/meta
  * Cria meta financeira
  */
 export const createMeta = async (req, res) => {
@@ -47,7 +47,7 @@ export const createMeta = async (req, res) => {
 };
 
 /**
- * PUT /api/meta/:id
+ * - PUT /api/meta/:id
  * Atualiza meta
  */
 export const updateMeta = async (req, res) => {
@@ -72,7 +72,7 @@ export const updateMeta = async (req, res) => {
 };
 
 /**
- * DELETE /api/meta/:id
+ * - DELETE /api/meta/:id
  * Remove meta (física) — em produção prefira marcar active=false
  */
 export const deleteMeta = async (req, res) => {

@@ -16,16 +16,16 @@ import { auditMiddleware } from "../middlewares/auditMiddleware.js";
 
 const router = express.Router();
 
-// 🔹 Listar todas as permissões
+// - Listar todas as permissões
 router.get("/", authMiddleware, roleMiddleware(["ROOT"]), getAllPermissions);
 
-// 🔹 Criar nova permissão
+// - Criar nova permissão
 router.post("/", authMiddleware, roleMiddleware(["ROOT"]), auditMiddleware("CREATE_PERMISSION"), createPermission);
 
-// 🔹 Atualizar permissão
+// - Atualizar permissão
 router.put("/:id", authMiddleware, roleMiddleware(["ROOT"]), auditMiddleware("UPDATE_PERMISSION"), updatePermission);
 
-// 🔹 Excluir permissão
+// - Excluir permissão
 router.delete("/:id", authMiddleware, roleMiddleware(["ROOT"]), auditMiddleware("DELETE_PERMISSION"), deletePermission);
 
 export default router;
