@@ -29,6 +29,22 @@ Modelagem BPMN: <img width="1081" height="661" alt="metas (2)" src="https://gith
 
 #### Detalhamento das atividades
 
+> **Ponto de Melhoria (Revisado por Heron):** Olá, equipe! Durante a validação dos testes automatizados, foi identificado que o detalhamento das atividades deste processo está desalinhado com a implementação atual do backend (`models/Meta.js` e `controllers/metaController.js`).
+>
+> **Guia para o ajuste:**
+> O responsável pela documentação poderia, por favor, reescrever a seção "Detalhamento das atividades" para refletir o fluxo correto de criação de uma meta? A nova estrutura deve descrever os campos que o sistema de fato utiliza, como `title`, `targetAmount`, `currentAmount`, `deadline` e `type`, garantindo que a documentação do processo seja um espelho fiel da funcionalidade implementada.
+>
+> **Tabela de Correspondência (Português -> Inglês):**
+> | Campo em Português para documentação | Campo no Backend (padronizado em inglês) |
+> |:------------------------------|:--------------------------|
+> | Título da Meta                | `title`                   |
+> | Tipo                          | `type`                    |
+> | Valor Alvo                    | `targetAmount`            |
+> | Valor Atual                   | `currentAmount`           |
+> | Prazo Final                   | `deadline`                |
+
+---
+
 ## Atividade 1 – Preencher Dados Cadastrais (Usuário)
 
 Esta atividade envolve o preenchimento das informações necessárias para a criação da conta.
