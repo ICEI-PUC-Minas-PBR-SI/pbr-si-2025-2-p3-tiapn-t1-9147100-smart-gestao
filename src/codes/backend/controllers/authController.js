@@ -4,6 +4,7 @@ import crypto from 'crypto';
 import User from '../models/User.js';
 import Company from '../models/Company.js';
 import Permission from '../models/Permission.js';
+import Transaction from '../models/Transaction.js';
 import { USER_COMPANY } from '../utils/constants.js';
 
 // =============================================================
@@ -106,4 +107,46 @@ export const refreshToken = async (req, res) => {
   // e se for válido, gerar um novo access token e um novo refresh token.
   // Por enquanto, é um placeholder.
   res.status(200).json({ message: "Token atualizado (placeholder)." });
+};
+
+// =============================================================
+// - Função: deleteCurrentUser
+// =============================================================
+export const deleteCurrentUser = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const companyId = req.user.companyId;
+
+    // Valida se o token contém as informações necessárias.
+    if (!userId || !companyId) {
+      return res.status(400).json({ message: 'Informações de usuário inválidas no token.' });
+    }
+
+    /*
+     * COMENTÁRIO SOBRE LGPD E BOAS PRÁTICAS:
+     * No mundo real, a exclusão de dados de usuário deve seguir regras de negócio e
+     * leis como a LGPD. A abordagem ideal não seria uma exclusão permanente imediata (hard delete).
+     *
+     * O correto seria:
+     * 1.  **Soft Delete:** Marcar o usuário e a empresa como "inativos" no banco de dados (ex: `user.active = false`).
+     *     Isso impede o login, mas mantém os dados para fins fiscais ou legais.
+     * 2.  **Quarentena:** Os dados permaneceriam em um estado de "quarentena" pelo período exigido por lei
+     *     (ex: 5 anos para dados fiscais no Brasil).
+     * 3.  **Exclusão Definitiva:** Apenas após o término do período legal, um processo automatizado (job)
+     *     realizaria a exclusão permanente dos dados do banco.
+     *
+     * Para o propósito deste projeto e dos nossos testes, implementaremos a exclusão direta (hard delete).
+    */
+
+    // 1. Exclui todas as transações associadas à empresa.
+    await Transaction.deleteMany({ companyId: companyId });
+    // 2. Exclui o usuário.
+    await User.findByIdAndDelete(userId);
+    // 3. Exclui a empresa.
+    await Company.findByIdAndDelete(companyId);
+
+    res.status(200).json({ message: 'Usuário e todos os dados associados foram excluídos com sucesso.' });
+  } catch (error) {
+    res.status(500).json({ message: 'Erro no servidor ao tentar excluir o usuário.', error: error.message });
+  }
 };

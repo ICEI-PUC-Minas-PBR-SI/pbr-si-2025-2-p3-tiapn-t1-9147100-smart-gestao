@@ -91,3 +91,58 @@ Com o ambiente de testes estabilizado e a geração de logs detalhados funcionan
 -   **Próximo Passo:** Seguir para o próximo módulo crítico ou para o "2. Teste de Isolamento de Dados" conforme indicado no `api.test.js`.
 
 ---
+
+### 7. Otimização da Suíte de Testes (Setup Global e Teardown)
+
+-   **Problema 7.1: Redundância e Lentidão nos Testes**
+    -   **Sintoma:** Cada arquivo de teste (`.test.js`) estava criando seus próprios usuários e empresas, tornando a suíte de testes lenta e poluindo o banco de dados a cada execução.
+    -   **Solução (Em Andamento):**
+        1.  **Criação de um Setup Global:** Foi implementado o arquivo `Testes/test-setup.js`, configurado no `jest.config.cjs` para rodar **uma única vez** antes de todos os testes.
+        2.  **Centralização de Dados:** Este script cria um conjunto fixo de empresas de teste (Empresa A e Empresa B) e salva suas credenciais e tokens em um arquivo temporário (`test-setup.json`).
+        3.  **Refatoração dos Testes:** Os arquivos `api.test.js`, `isolamento.test.js` e `transactions.test.js` foram ajustados para ler os dados deste arquivo de setup, em vez de criarem seus próprios usuários, tornando os testes mais rápidos e eficientes.
+
+-   **Problema 7.2: Limpeza de Dados de Teste (Teardown)**
+    -   **Sintoma:** O teste `multi-tenant.test.js`, que cria 5 empresas para testes de estresse, deixava esses dados no banco após a execução.
+    -   **Solução:**
+        1.  **Criação do Endpoint de Exclusão:** Foi criada a rota `DELETE /api/users/me`, que permite a um usuário autenticado excluir sua própria conta e todos os dados associados (empresa, transações, etc.).
+        2.  **Implementação do `afterAll`:** O teste `multi-tenant.test.js` foi atualizado com um bloco `afterAll`, que é executado após todos os testes do arquivo. Este bloco itera sobre as 5 empresas criadas e chama a nova rota de exclusão para cada uma, limpando o banco de dados automaticamente.
+
+-   **Problema 7.3: Instabilidade na Execução com `concurrently`**
+    -   **Sintoma:** O comando `npm test` estava instável, apresentando o erro `EADDRINUSE: address already in use` e falhas na geração do log `.txt`.
+    -   **Causa:** O `nodemon` (iniciado pelo script `npm:dev`) detectava a criação de arquivos pelos testes (como `test-setup.json`) e tentava reiniciar o servidor, causando um conflito de portas.
+    -   **Solução (Em Andamento):**
+        1.  **Criação do `nodemon.json`:** Foi criado um arquivo de configuração para o `nodemon`, instruindo-o a ignorar completamente a pasta `Testes/` e seus subdiretórios, evitando reinicializações indesejadas durante os testes.
+        2.  **Ajuste nos Scripts do `package.json`:** Os scripts de teste foram refatorados para usar um `test:server` com `node server.js` (sem `nodemon`), garantindo um ambiente estável para a execução dos testes.
+        3.  **Ajuste no `run-test-log.js`:** O script foi ajustado para ser o único executor dos testes, capturando a saída, exibindo-a no console e salvando uma versão limpa no arquivo `.txt`.
+
+---
+
+### 6. Estabilização do Ambiente de Testes e Frontend (Pós-Validação Inicial)
+
+-   **Problema 6.1: Erro 404 para `favicon.ico` no console do frontend**
+    -   **Sintoma:** O log do `http-server` mostrava um erro 404 (Not Found) para o arquivo `favicon.ico` a cada carregamento de página.
+    -   **Causa:** Comportamento padrão dos navegadores, que tentam buscar um ícone para a aba.
+    -   **Solução:** Adicionamos a tag `<link rel="icon" href="data:,">` ao `<head>` de todas as páginas HTML do frontend. Isso instrui o navegador a não fazer a requisição, limpando o console de erros desnecessários.
+
+-   **Problema 6.2: Falha no `npm start` para iniciar ambos os servidores**
+    -   **Sintoma:** O comando `npm start` estava iniciando apenas o backend, ignorando o servidor do frontend.
+    -   **Causa:** O script `start` no `package.json` havia sido simplificado e não usava mais o `concurrently`.
+    -   **Solução:** O `package.json` foi reajustado para usar `concurrently` no script `start`, orquestrando a execução dos scripts `start:backend` and `start:frontend` simultaneamente.
+
+-   **Problema 6.3: Falhas em cascata no teste `multi-tenant.test.js`**
+    -   **Sintoma:** O teste falhava com erro `500 Internal Server Error` ao tentar criar empresas e transações.
+    -   **Causa Raiz (Identificada em etapas):**
+        1.  **CNPJ Duplicado:** A lógica inicial para gerar CNPJs no teste criava valores duplicados, causando um erro de violação de unicidade no banco de dados.
+        2.  **Campos Obrigatórios Ausentes:** A criação de transações falhava porque os campos `status` e `paymentMethod`, obrigatórios no modelo, não estavam sendo enviados.
+        3.  **Enum Inválido:** A causa final era que o modelo `Transaction.js` no backend não permitia os novos métodos de pagamento (`debit_card`, `pix`, `cash`) que o teste tentava usar.
+    -   **Solução:**
+        1.  A geração de CNPJ no teste foi ajustada para usar um timestamp, garantindo sua unicidade.
+        2.  O modelo `models/Transaction.js` foi corrigido para incluir os novos métodos de pagamento em sua validação `enum`, tornando o backend mais robusto e alinhado às necessidades.
+        3.  O teste foi ajustado para enviar todos os campos obrigatórios e ciclar entre os métodos de pagamento agora válidos.
+
+-   **Problema 6.4: Falha no Login via Frontend**
+    -   **Sintoma:** O login na página `login.html` não funcionava, mesmo com credenciais corretas de usuários criados pelos testes.
+    -   **Causa:** O script `login.js` chamava a API, mas não armazenava o token de autenticação recebido no `localStorage` do navegador. Sem o token salvo, o usuário não era considerado "logado".
+    -   **Solução:** O arquivo `login.js` foi ajustado para, após uma resposta de sucesso da API, salvar o `token`, `refreshToken` e os dados do `user` no `localStorage`, e só então redirecionar para a `startPage.html`. Também foram adicionados `console.log` detalhados para facilitar a depuração no navegador.
+
+---

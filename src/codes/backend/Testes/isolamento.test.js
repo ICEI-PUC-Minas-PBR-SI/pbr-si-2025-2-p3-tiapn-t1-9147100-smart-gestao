@@ -1,81 +1,24 @@
-/**
- * @file Testes de isolamento de dados da API Smart Gestão
- * @description Este arquivo automatiza os testes para garantir que os dados de diferentes empresas
- * permaneçam isolados e inacessíveis umas às outras.
- *
- * Para rodar: `npm test` (após configurar o Jest)
- */
 import axios from 'axios';
+import fs from 'fs';
+import path from 'path';
 
 // URL base da sua API. Altere se for diferente.
 const API_URL = 'http://localhost:5000/api';
-
-// --- Dados de Teste (Reutilizando de api.test.js) ---
-const empresaA = {
-    email: `empresaA_${Date.now()}@test.com`,
-    password: 'password123',
-    companyName: `Empresa A Teste ${Date.now()}`,
-    cnpj: `${Date.now()}`.slice(0, 14).padStart(14, '0'),
-    name: 'Usuário A'
-};
-
-const empresaB = {
-    email: `empresaB_${Date.now()}@test.com`,
-    password: 'password123',
-    companyName: `Empresa B Teste ${Date.now()}`,
-    cnpj: `${Date.now()}`.slice(1, 15).padStart(14, '0'),
-    name: 'Usuário B'
-};
+const SETUP_FILE = path.join('Testes', 'test-setup.json');
 
 // Variáveis para armazenar os tokens de autenticação
 let tokenEmpresaA;
 let tokenEmpresaB;
+let transactionIdEmpresaA;
 
 /**
  * Bloco de testes para o Módulo de Isolamento de Dados.
  */
 describe('2. Teste de Isolamento de Dados (Transações)', () => {
-
-
-     beforeAll(async () => {
-        // --- 1. Cadastrar e Logar Empresa A ---
-        console.log('\n--- Configurando Empresa A ---');
-        await axios.post(`${API_URL}/auth/register`, {
-            name: empresaA.name,
-            email: empresaA.email,
-            password: empresaA.password,
-            companyName: empresaA.companyName,
-            cnpj: empresaA.cnpj
-        });
-        const loginA = await axios.post(`${API_URL}/auth/login`, {
-            email: empresaA.email,
-            password: empresaA.password
-        });
-        tokenEmpresaA = loginA.data.token;
-        console.log('Empresa A configurada e logada.');
-
-         // --- 2. Cadastrar e Logar Empresa B ---
-        console.log('\n--- Configurando Empresa B ---');
-        const registerB = await axios.post(`${API_URL}/auth/register`, {
-            name: empresaB.name,
-            email: empresaB.email,
-            password: empresaB.password,
-            companyName: empresaB.companyName,
-            cnpj: empresaB.cnpj
-        });
-
-        console.log('Empresa B - Cadastro (Status):', registerB.status);
-        console.log('Empresa B - Cadastro (Corpo):', JSON.stringify(registerB.data, null, 2));
-        expect(registerB.status).toBe(201);
-
-        const loginB = await axios.post(`${API_URL}/auth/login`, {
-            email: empresaB.email,
-            password: empresaB.password
-        });
-
-        // Armazena o token da Empresa B
-        tokenEmpresaB = loginB.data.token;
-        console.log('Empresa B configurada e logada.');
+    beforeAll(async () => {
+        const testData = JSON.parse(fs.readFileSync(SETUP_FILE, 'utf8'));
+        tokenEmpresaA = testData.companyA.token;
+        tokenEmpresaB = testData.companyB.token;
     }, 30000); // Aumenta o timeout para o setup, pois envolve várias requisições
 
     // Este teste agora é mais robusto e cobre múltiplos cenários de isolamento
@@ -97,8 +40,8 @@ describe('2. Teste de Isolamento de Dados (Transações)', () => {
         console.log('Empresa A - Criar Transação (Status):', createTransaction.status);
         console.log('Empresa A - Criar Transação (Corpo):', JSON.stringify(createTransaction.data, null, 2));
         expect(createTransaction.status).toBe(201); // ou o status de sucesso que sua API retorna
-
-        const transactionIdEmpresaA = createTransaction.data._id; // Assumindo que sua API retorna o ID da transação criada
+        
+        transactionIdEmpresaA = createTransaction.data._id; // Assumindo que sua API retorna o ID da transação criada
         console.log('Empresa A - ID da Transação Criada:', transactionIdEmpresaA);
 
         // --- 2. Tentar buscar essa transação com tokenEmpresaB ---

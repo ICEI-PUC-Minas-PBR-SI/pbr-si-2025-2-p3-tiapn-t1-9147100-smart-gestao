@@ -1,0 +1,18 @@
+{
+  "companyA": {
+    "name": "Usuário Padrão 1",
+    "email": "empresa_padrao_1762398369849@test.com",
+    "password": "password123",
+    "companyName": "Empresa Padrão 1762398369849",
+    "cnpj": "01762398369849",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTBjMTBhMmE2ZjFlODE3MzY0Nzk4YzkiLCJyb2xlIjoiNjhmMzExMmE2OWUzZjY1ZDI3NTA1ZDQ3IiwiaWF0IjoxNzYyMzk4MzcwLCJleHAiOjE3NjIzOTkyNzB9.gVWTNbdOYk6FDP0amRnfCjpHXrdLNiNzwdsVbgOh8M8"
+  },
+  "companyB": {
+    "name": "Usuário Padrão 2",
+    "email": "empresa_padrao_1762398370274@test.com",
+    "password": "password123",
+    "companyName": "Empresa Padrão 1762398370274",
+    "cnpj": "01762398370274",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTBjMTBhMmE2ZjFlODE3MzY0Nzk4ZDUiLCJyb2xlIjoiNjhmMzExMmE2OWUzZjY1ZDI3NTA1ZDQ3IiwiaWF0IjoxNzYyMzk4MzcwLCJleHAiOjE3NjIzOTkyNzB9.n9J4cFK-zv1rw7RH0rgOEaGfo8ciTImgyfg6TPhOvqU"
+  }
+}

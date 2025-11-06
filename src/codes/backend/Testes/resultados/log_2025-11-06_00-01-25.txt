@@ -1,0 +1,364 @@
+
+--- 🚀 Iniciando Setup Global de Testes ---
+✅ Empresa Padrão 1 criada para os testes.
+✅ Empresa Padrão 2 criada para os testes.
+--- ✅ Setup Global Concluído. Dados salvos em Testes\test-setup.json ---
+
+(node:6044) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+[0m[7m[1m[31m FAIL [39m[22m[27m[0m [2mTestes/[22m[1mtransactions.test.js[22m
+  4. Módulo de Transações (CRUD)
+    [31m×[39m [2mRF-002: deve CRIAR uma nova transação com sucesso (16 ms)[22m
+    [31m×[39m [2mRF-003: deve LISTAR as transações do usuário logado (1 ms)[22m
+    [31m×[39m [2mRF-004: deve OBTER uma transação específica pelo ID[22m
+    [31m×[39m [2mRF-005: deve ATUALIZAR uma transação existente[22m
+    [31m×[39m [2mRF-006: deve EXCLUIR uma transação existente (1 ms)[22m
+
+[1m[31m  [1m● [22m[1m4. Módulo de Transações (CRUD) › RF-002: deve CRIAR uma nova transação com sucesso[39m[22m
+
+    write ECONNRESET
+[2m[22m
+[2m      28 |         };[22m
+[2m      29 |[22m
+[2m    > 30 |         const response = await axios.post(`${API_URL}/transactions`, transactionData, {[22m
+[2m         |                          ^[22m
+[2m      31 |             headers: { Authorization: `Bearer ${userToken}` }[22m
+[2m      32 |         });[22m
+[2m      33 |[22m
+[2m[22m
+[2m      [2mat AxiosError.from ([22m[2m../node_modules/axios/lib/core/AxiosError.js[2m:96:14)[22m[2m[22m
+[2m      [2mat RedirectableRequest.handleRequestError ([22m[2m../node_modules/axios/lib/adapters/http.js[2m:817:25)[22m[2m[22m
+[2m      [2mat ClientRequest.eventHandlers.<computed> ([22m[2m../node_modules/follow-redirects/index.js[2m:49:24)[22m[2m[22m
+[2m      [2mat Axios.request ([22m[2m../node_modules/axios/lib/core/Axios.js[2m:45:41)[22m[2m[22m
+[2m      [2mat Object.<anonymous> ([22m[2m[0m[36mtransactions.test.js[39m[0m[2m:30:26)[22m[2m[22m
+
+    Cause:
+    write ECONNRESET
+
+
+[1m[31m  [1m● [22m[1m4. Módulo de Transações (CRUD) › RF-003: deve LISTAR as transações do usuário logado[39m[22m
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeDefined[2m()[22m
+
+    Received: [31mundefined[39m
+[2m[22m
+[2m      43 |     it('RF-003: deve LISTAR as transações do usuário logado', async () => {[22m
+[2m      44 |         // Este teste depende que o anterior tenha criado uma transação[22m
+[2m    > 45 |         expect(createdTransactionId).toBeDefined();[22m
+[2m         |                                      ^[22m
+[2m      46 |[22m
+[2m      47 |         const response = await axios.get(`${API_URL}/transactions`, {[22m
+[2m      48 |             headers: { Authorization: `Bearer ${userToken}` }[22m
+[2m[22m
+[2m      [2mat Object.toBeDefined ([22m[2m[0m[36mtransactions.test.js[39m[0m[2m:45:38)[22m[2m[22m
+
+[1m[31m  [1m● [22m[1m4. Módulo de Transações (CRUD) › RF-004: deve OBTER uma transação específica pelo ID[39m[22m
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeDefined[2m()[22m
+
+    Received: [31mundefined[39m
+[2m[22m
+[2m      59 |[22m
+[2m      60 |     it('RF-004: deve OBTER uma transação específica pelo ID', async () => {[22m
+[2m    > 61 |         expect(createdTransactionId).toBeDefined();[22m
+[2m         |                                      ^[22m
+[2m      62 |[22m
+[2m      63 |         const response = await axios.get(`${API_URL}/transactions/${createdTransactionId}`, {[22m
+[2m      64 |             headers: { Authorization: `Bearer ${userToken}` }[22m
+[2m[22m
+[2m      [2mat Object.toBeDefined ([22m[2m[0m[36mtransactions.test.js[39m[0m[2m:61:38)[22m[2m[22m
+
+[1m[31m  [1m● [22m[1m4. Módulo de Transações (CRUD) › RF-005: deve ATUALIZAR uma transação existente[39m[22m
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeDefined[2m()[22m
+
+    Received: [31mundefined[39m
+[2m[22m
+[2m      71 |[22m
+[2m      72 |     it('RF-005: deve ATUALIZAR uma transação existente', async () => {[22m
+[2m    > 73 |         expect(createdTransactionId).toBeDefined();[22m
+[2m         |                                      ^[22m
+[2m      74 |[22m
+[2m      75 |         const updatedData = {[22m
+[2m      76 |             description: 'Venda de consultoria (Valor Atualizado)',[22m
+[2m[22m
+[2m      [2mat Object.toBeDefined ([22m[2m[0m[36mtransactions.test.js[39m[0m[2m:73:38)[22m[2m[22m
+
+[1m[31m  [1m● [22m[1m4. Módulo de Transações (CRUD) › RF-006: deve EXCLUIR uma transação existente[39m[22m
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeDefined[2m()[22m
+
+    Received: [31mundefined[39m
+[2m[22m
+[2m      89 |[22m
+[2m      90 |     it('RF-006: deve EXCLUIR uma transação existente', async () => {[22m
+[2m    > 91 |         expect(createdTransactionId).toBeDefined();[22m
+[2m         |                                      ^[22m
+[2m      92 |[22m
+[2m      93 |         const response = await axios.delete(`${API_URL}/transactions/${createdTransactionId}`, {[22m
+[2m      94 |             headers: { Authorization: `Bearer ${userToken}` }[22m
+[2m[22m
+[2m      [2mat Object.toBeDefined ([22m[2m[0m[36mtransactions.test.js[39m[0m[2m:91:38)[22m[2m[22m
+
+  [2mconsole.log[22m
+    
+    --- Configurando 5 empresas para o teste multi-tenant ---
+[2m[22m
+[2m      [2mat Object.log ([22m[2m[0m[36mmulti-tenant.test.js[39m[0m[2m:12:17)[22m[2m[22m
+
+  [2mconsole.log[22m
+    
+    --- Limpando dados de teste (Teardown) ---
+[2m[22m
+[2m      [2mat Object.log ([22m[2m[0m[36mmulti-tenant.test.js[39m[0m[2m:124:17)[22m[2m[22m
+
+[0m[7m[1m[31m FAIL [39m[22m[27m[0m [2mTestes/[22m[1mmulti-tenant.test.js[22m
+  3. Teste de Isolamento de Dados em Larga Escala (Multi-Tenant)
+    [31m×[39m [2mdeve criar uma transação para cada empresa[22m
+    [31m×[39m [2mdeve impedir que uma empresa acesse a transação de outra[22m
+    [31m×[39m [2mdeve garantir que cada empresa liste apenas suas próprias transações[22m
+
+[1m[31m  [1m● [22m[1m3. Teste de Isolamento de Dados em Larga Escala (Multi-Tenant) › deve criar uma transação para cada empresa[39m[22m
+
+    AggregateError: Error
+[2m[22m
+[2m      23 |[22m
+[2m      24 |             // Cadastrar[22m
+[2m    > 25 |             await axios.post(`${API_URL}/auth/register`, companyData);[22m
+[2m         |             ^[22m
+[2m      26 |[22m
+[2m      27 |             // Logar para obter o token[22m
+[2m      28 |             const loginResponse = await axios.post(`${API_URL}/auth/login`, {[22m
+[2m[22m
+[2m      [2mat AxiosError.from ([22m[2m../node_modules/axios/lib/core/AxiosError.js[2m:96:14)[22m[2m[22m
+[2m      [2mat RedirectableRequest.handleRequestError ([22m[2m../node_modules/axios/lib/adapters/http.js[2m:817:25)[22m[2m[22m
+[2m      [2mat ClientRequest.eventHandlers.<computed> ([22m[2m../node_modules/follow-redirects/index.js[2m:49:24)[22m[2m[22m
+[2m      [2mat Axios.request ([22m[2m../node_modules/axios/lib/core/Axios.js[2m:45:41)[22m[2m[22m
+[2m      [2mat Object.<anonymous> ([22m[2m[0m[36mmulti-tenant.test.js[39m[0m[2m:25:13)[22m[2m[22m
+
+    Cause:
+    AggregateError:
+
+
+[1m[31m  [1m● [22m[1m3. Teste de Isolamento de Dados em Larga Escala (Multi-Tenant) › deve impedir que uma empresa acesse a transação de outra[39m[22m
+
+    AggregateError: Error
+[2m[22m
+[2m      23 |[22m
+[2m      24 |             // Cadastrar[22m
+[2m    > 25 |             await axios.post(`${API_URL}/auth/register`, companyData);[22m
+[2m         |             ^[22m
+[2m      26 |[22m
+[2m      27 |             // Logar para obter o token[22m
+[2m      28 |             const loginResponse = await axios.post(`${API_URL}/auth/login`, {[22m
+[2m[22m
+[2m      [2mat AxiosError.from ([22m[2m../node_modules/axios/lib/core/AxiosError.js[2m:96:14)[22m[2m[22m
+[2m      [2mat RedirectableRequest.handleRequestError ([22m[2m../node_modules/axios/lib/adapters/http.js[2m:817:25)[22m[2m[22m
+[2m      [2mat ClientRequest.eventHandlers.<computed> ([22m[2m../node_modules/follow-redirects/index.js[2m:49:24)[22m[2m[22m
+[2m      [2mat Axios.request ([22m[2m../node_modules/axios/lib/core/Axios.js[2m:45:41)[22m[2m[22m
+[2m      [2mat Object.<anonymous> ([22m[2m[0m[36mmulti-tenant.test.js[39m[0m[2m:25:13)[22m[2m[22m
+
+    Cause:
+    AggregateError:
+
+
+[1m[31m  [1m● [22m[1m3. Teste de Isolamento de Dados em Larga Escala (Multi-Tenant) › deve garantir que cada empresa liste apenas suas próprias transações[39m[22m
+
+    AggregateError: Error
+[2m[22m
+[2m      23 |[22m
+[2m      24 |             // Cadastrar[22m
+[2m    > 25 |             await axios.post(`${API_URL}/auth/register`, companyData);[22m
+[2m         |             ^[22m
+[2m      26 |[22m
+[2m      27 |             // Logar para obter o token[22m
+[2m      28 |             const loginResponse = await axios.post(`${API_URL}/auth/login`, {[22m
+[2m[22m
+[2m      [2mat AxiosError.from ([22m[2m../node_modules/axios/lib/core/AxiosError.js[2m:96:14)[22m[2m[22m
+[2m      [2mat RedirectableRequest.handleRequestError ([22m[2m../node_modules/axios/lib/adapters/http.js[2m:817:25)[22m[2m[22m
+[2m      [2mat ClientRequest.eventHandlers.<computed> ([22m[2m../node_modules/follow-redirects/index.js[2m:49:24)[22m[2m[22m
+[2m      [2mat Axios.request ([22m[2m../node_modules/axios/lib/core/Axios.js[2m:45:41)[22m[2m[22m
+[2m      [2mat Object.<anonymous> ([22m[2m[0m[36mmulti-tenant.test.js[39m[0m[2m:25:13)[22m[2m[22m
+
+    Cause:
+    AggregateError:
+
+
+  [2mconsole.log[22m
+    
+    --- Criando transação para Empresa A ---
+[2m[22m
+[2m      [2mat Object.log ([22m[2m[0m[36misolamento.test.js[39m[0m[2m:27:17)[22m[2m[22m
+
+  [2mconsole.log[22m
+    
+    --- Tentando listar transações com token da Empresa B ---
+[2m[22m
+[2m      [2mat Object.log ([22m[2m[0m[36misolamento.test.js[39m[0m[2m:104:17)[22m[2m[22m
+
+  [2mconsole.log[22m
+    Enviando: GET para http://localhost:5000/api/transactions com token da Empresa B
+[2m[22m
+[2m      [2mat Object.log ([22m[2m[0m[36misolamento.test.js[39m[0m[2m:105:17)[22m[2m[22m
+
+[0m[7m[1m[31m FAIL [39m[22m[27m[0m [2mTestes/[22m[1misolamento.test.js[22m
+  2. Teste de Isolamento de Dados (Transações)
+    [31m×[39m [2mdeve impedir o acesso, modificação e exclusão de transações entre empresas (27 ms)[22m
+    [31m×[39m [2mdeve impedir que a Empresa B liste todas as transações da Empresa A (6 ms)[22m
+
+[1m[31m  [1m● [22m[1m2. Teste de Isolamento de Dados (Transações) › deve impedir o acesso, modificação e exclusão de transações entre empresas[39m[22m
+
+    AggregateError: Error
+[2m[22m
+[2m      27 |         console.log('\n--- Criando transação para Empresa A ---');[22m
+[2m      28 |[22m
+[2m    > 29 |         const createTransaction = await axios.post(`${API_URL}/transactions`, {[22m
+[2m         |                                   ^[22m
+[2m      30 |             description: 'Transação de Teste Empresa A',[22m
+[2m      31 |             amount: 100,[22m
+[2m      32 |             type: 'expense', // Campo obrigatório, usando o nome padronizado[22m
+[2m[22m
+[2m      [2mat AxiosError.from ([22m[2m../node_modules/axios/lib/core/AxiosError.js[2m:96:14)[22m[2m[22m
+[2m      [2mat RedirectableRequest.handleRequestError ([22m[2m../node_modules/axios/lib/adapters/http.js[2m:817:25)[22m[2m[22m
+[2m      [2mat ClientRequest.eventHandlers.<computed> ([22m[2m../node_modules/follow-redirects/index.js[2m:49:24)[22m[2m[22m
+[2m      [2mat Axios.request ([22m[2m../node_modules/axios/lib/core/Axios.js[2m:45:41)[22m[2m[22m
+[2m      [2mat Object.<anonymous> ([22m[2m[0m[36misolamento.test.js[39m[0m[2m:29:35)[22m[2m[22m
+
+    Cause:
+    AggregateError:
+
+
+[1m[31m  [1m● [22m[1m2. Teste de Isolamento de Dados (Transações) › deve impedir que a Empresa B liste todas as transações da Empresa A[39m[22m
+
+    AggregateError: Error
+[2m[22m
+[2m      107 |         // A requisição para listar transações da Empresa B precisa do token da Empresa B[22m
+[2m      108 |         // para que o backend possa filtrar corretamente.[22m
+[2m    > 109 |         const responseB = await axios.get(`${API_URL}/transactions`, { [22m
+[2m          |                           ^[22m
+[2m      110 |             headers: { Authorization: `Bearer ${tokenEmpresaB}` }[22m
+[2m      111 |         });[22m
+[2m      112 |[22m
+[2m[22m
+[2m      [2mat AxiosError.from ([22m[2m../node_modules/axios/lib/core/AxiosError.js[2m:96:14)[22m[2m[22m
+[2m      [2mat RedirectableRequest.handleRequestError ([22m[2m../node_modules/axios/lib/adapters/http.js[2m:817:25)[22m[2m[22m
+[2m      [2mat ClientRequest.eventHandlers.<computed> ([22m[2m../node_modules/follow-redirects/index.js[2m:49:24)[22m[2m[22m
+[2m      [2mat Axios.request ([22m[2m../node_modules/axios/lib/core/Axios.js[2m:45:41)[22m[2m[22m
+[2m      [2mat Object.<anonymous> ([22m[2m[0m[36misolamento.test.js[39m[0m[2m:109:27)[22m[2m[22m
+
+    Cause:
+    AggregateError:
+
+
+  [2mconsole.log[22m
+    
+    --- Teste: Validar setup do usuário ---
+[2m[22m
+[2m      [2mat Object.log ([22m[2m[0m[36mapi.test.js[39m[0m[2m:28:17)[22m[2m[22m
+
+  [2mconsole.log[22m
+    ✅ Usuário da Empresa A carregado do setup.
+[2m[22m
+[2m      [2mat Object.log ([22m[2m[0m[36mapi.test.js[39m[0m[2m:31:17)[22m[2m[22m
+
+  [2mconsole.log[22m
+    
+    --- Teste: Barrar e-mail duplicado ---
+[2m[22m
+[2m      [2mat Object.log ([22m[2m[0m[36mapi.test.js[39m[0m[2m:43:17)[22m[2m[22m
+
+  [2mconsole.log[22m
+    
+    --- Teste: Login com senha incorreta ---
+[2m[22m
+[2m      [2mat Object.log ([22m[2m[0m[36mapi.test.js[39m[0m[2m:63:17)[22m[2m[22m
+
+  [2mconsole.log[22m
+    
+    --- Teste: Login com sucesso ---
+[2m[22m
+[2m      [2mat Object.log ([22m[2m[0m[36mapi.test.js[39m[0m[2m:81:17)[22m[2m[22m
+
+  [2mconsole.log[22m
+    
+    --- Teste: Acesso a rota protegida sem token ---
+[2m[22m
+[2m      [2mat Object.log ([22m[2m[0m[36mapi.test.js[39m[0m[2m:94:17)[22m[2m[22m
+
+[0m[7m[1m[31m FAIL [39m[22m[27m[0m [2mTestes/[22m[1mapi.test.js[22m
+  1. Módulo de Autenticação
+    [32m√[39m [2mRF-001: deve ter cadastrado a Empresa A com sucesso no setup global (4 ms)[22m
+    [31m×[39m [2mdeve barrar o cadastro de um usuário com e-mail já existente (12 ms)[22m
+    [31m×[39m [2mdeve falhar o login com senha incorreta (3 ms)[22m
+    [31m×[39m [2mdeve realizar o login com sucesso para a Empresa A (3 ms)[22m
+    [31m×[39m [2mdeve proteger rotas, barrando acesso sem token (2 ms)[22m
+
+[1m[31m  [1m● [22m[1m1. Módulo de Autenticação › deve barrar o cadastro de um usuário com e-mail já existente[39m[22m
+
+    TypeError: Cannot read properties of undefined (reading 'status')
+[2m[22m
+[2m      50 |         } catch (error) {[22m
+[2m      51 |             // Espera-se um erro 409 (Conflict)[22m
+[2m    > 52 |             expect(error.response.status).toBe(409);[22m
+[2m         |                                   ^[22m
+[2m      53 |             expect(error.response.data.message).toContain('E-mail já cadastrado');[22m
+[2m      54 |             console.log('✅ E-mail duplicado barrado com sucesso (Status 409).');[22m
+[2m      55 |         }[22m
+[2m[22m
+[2m      [2mat Object.status ([22m[2m[0m[36mapi.test.js[39m[0m[2m:52:35)[22m[2m[22m
+
+[1m[31m  [1m● [22m[1m1. Módulo de Autenticação › deve falhar o login com senha incorreta[39m[22m
+
+    TypeError: Cannot read properties of undefined (reading 'status')
+[2m[22m
+[2m      68 |         } catch (error) {[22m
+[2m      69 |             // Espera-se um erro 401 (Unauthorized)[22m
+[2m    > 70 |             expect(error.response.status).toBe(401);[22m
+[2m         |                                   ^[22m
+[2m      71 |             expect(error.response.data.message).toBe('Credenciais inválidas.');[22m
+[2m      72 |             console.log('✅ Login com senha incorreta falhou como esperado (Status 401).');[22m
+[2m      73 |         }[22m
+[2m[22m
+[2m      [2mat Object.status ([22m[2m[0m[36mapi.test.js[39m[0m[2m:70:35)[22m[2m[22m
+
+[1m[31m  [1m● [22m[1m1. Módulo de Autenticação › deve realizar o login com sucesso para a Empresa A[39m[22m
+
+    AggregateError: Error
+[2m[22m
+[2m      81 |         console.log('\n--- Teste: Login com sucesso ---');[22m
+[2m      82 |[22m
+[2m    > 83 |         const response = await axios.post(`${API_URL}/auth/login`, requestBody);[22m
+[2m         |                          ^[22m
+[2m      84 |[22m
+[2m      85 |         // Espera-se que o login retorne status 200 (OK) e os tokens[22m
+[2m      86 |         expect(response.status).toBe(200);[22m
+[2m[22m
+[2m      [2mat AxiosError.from ([22m[2m../node_modules/axios/lib/core/AxiosError.js[2m:96:14)[22m[2m[22m
+[2m      [2mat RedirectableRequest.handleRequestError ([22m[2m../node_modules/axios/lib/adapters/http.js[2m:817:25)[22m[2m[22m
+[2m      [2mat ClientRequest.eventHandlers.<computed> ([22m[2m../node_modules/follow-redirects/index.js[2m:49:24)[22m[2m[22m
+[2m      [2mat Axios.request ([22m[2m../node_modules/axios/lib/core/Axios.js[2m:45:41)[22m[2m[22m
+[2m      [2mat Object.<anonymous> ([22m[2m[0m[36mapi.test.js[39m[0m[2m:83:26)[22m[2m[22m
+
+    Cause:
+    AggregateError:
+
+
+[1m[31m  [1m● [22m[1m1. Módulo de Autenticação › deve proteger rotas, barrando acesso sem token[39m[22m
+
+    TypeError: Cannot read properties of undefined (reading 'status')
+[2m[22m
+[2m      100 |         } catch (error) {[22m
+[2m      101 |             // O middleware de autenticação deve retornar 401 (Unauthorized)[22m
+[2m    > 102 |             expect(error.response.status).toBe(401);[22m
+[2m          |                                   ^[22m
+[2m      103 |             expect(error.response.data.message).toBe('Token ausente ou formato inválido');[22m
+[2m      104 |             console.log('✅ Acesso sem token foi barrado como esperado (Status 401).');[22m
+[2m      105 |         }[22m
+[2m[22m
+[2m      [2mat Object.status ([22m[2m[0m[36mapi.test.js[39m[0m[2m:102:35)[22m[2m[22m
+
+[1mTest Suites: [22m[1m[31m4 failed[39m[22m, 4 total
+[1mTests:       [22m[1m[31m14 failed[39m[22m, [1m[32m1 passed[39m[22m, 15 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        0.812 s, estimated 1 s
+[2mRan all test suites[22m[2m.[22m

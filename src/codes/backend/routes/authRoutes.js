@@ -4,7 +4,7 @@
 // ===========================================
 
 import express from "express";
-import { registerUser, loginUser, logoutUser, refreshToken } from '../controllers/authController.js';
+import { registerUser, loginUser, logoutUser, refreshToken, deleteCurrentUser } from '../controllers/authController.js';
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 import { auditMiddleware } from "../middlewares/auditMiddleware.js";
 
@@ -27,5 +27,9 @@ router.post("/logout", authMiddleware, auditMiddleware("LOGOUT_USER"), logoutUse
 // O `authMiddleware` valida o token (que pode estar expirado) para extrair dados.
 // A lógica de validação do Refresh Token fica no controller.
 router.post("/refresh", authMiddleware, refreshToken);
+
+// - Rota protegida para excluir a conta do usuário logado e todos os seus dados.
+// O `authMiddleware` garante que apenas o próprio usuário possa disparar esta ação.
+router.delete('/users/me', authMiddleware, auditMiddleware('DELETE_CURRENT_USER'), deleteCurrentUser);
 
 export default router;

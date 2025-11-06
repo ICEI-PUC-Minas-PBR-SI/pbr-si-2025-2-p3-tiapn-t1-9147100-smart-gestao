@@ -10,24 +10,24 @@ Este arquivo será excluido após a validação destes testes.
 
 O básico, pra ver se o acesso tá seguro.
 
-- [ ] **Cadastro de Usuário Novo:**
+- [x] **Cadastro de Usuário Novo:**
     - Acessar a página de cadastro.
     - Criar um usuário para a "Empresa A".
     - Tentar cadastrar de novo com o mesmo e-mail e ver se o sistema barra.
 
-- [ ] **Login:**
+- [x] **Login:**
     - Fazer login com o usuário da "Empresa A".
     - Tentar fazer login com uma senha errada e ver se dá erro.
 
-- [ ] **Proteção de Rota:**
+- [x] **Proteção de Rota:**
     - Fazer logout.
     - Tentar acessar a URL do dashboard direto (ex: `startPage.html`). O sistema tem que te jogar de volta pra tela de login.
 
-- [ ] **Recuperação de Senha:**
+- [x] **Recuperação de Senha:**
     - Clicar em "Esqueci minha senha".
     - Seguir o fluxo para ver se a redefinição funciona.
 
-- [ ] **Logout:**
+- [x] **Logout:**
     - Clicar no botão de sair e confirmar que a sessão foi encerrada (redirecionado para o login).
 
 ---
@@ -36,13 +36,13 @@ O básico, pra ver se o acesso tá seguro.
 
 Esse teste é crucial pra provar que uma empresa não vê os dados da outra.
 
-- [ ] **Cenário:**
+- [x] **Cenário:**
     1.  Cadastre e faça login com um usuário da **"Empresa A"**.
     2.  Crie uma transação (ex: "Venda de Produto A", R$ 100,00).
     3.  Crie uma meta (ex: "Comprar Cadeira Nova").
     4.  Faça logout.
 
-- [ ] **Validação:**
+- [x] **Validação:**
     1.  Agora, cadastre e faça login com um usuário da **"Empresa B"**.
     2.  Vá para a página de transações. A transação "Venda de Produto A" **NÃO PODE** aparecer.
     3.  Vá para a página de metas. A meta "Comprar Cadeira Nova" **NÃO PODE** aparecer.

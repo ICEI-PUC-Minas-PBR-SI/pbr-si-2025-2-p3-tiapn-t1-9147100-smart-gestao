@@ -100,9 +100,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     } catch (error) {
       console.error('Falha no cadastro:', error);
-      // Exibe a mensagem de erro retornada pela API (ex: "E-mail já cadastrado").
-      // Se não houver mensagem específica, mostra uma genérica.
-      showError(error.message || 'Ocorreu um erro inesperado. Tente novamente.');
+      // Verifica se o erro é de conflito (cadastro duplicado)
+      if (error.response && error.response.status === 409) {
+        showError('Cadastro já existente. Por favor, entre em contato com o suporte para validar a situação.');
+      } else {
+        // Para outros erros, exibe a mensagem da API ou uma genérica.
+        const message = error.response ? error.response.data.message : error.message;
+        showError(message || 'Ocorreu um erro inesperado. Tente novamente.');
+      }
+
     } finally {
       const submitButton = registerForm.querySelector('button[type="submit"]');
       // Reabilita o botão e restaura o texto original, independentemente do resultado.

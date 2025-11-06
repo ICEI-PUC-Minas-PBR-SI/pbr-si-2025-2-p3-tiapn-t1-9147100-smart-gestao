@@ -1,10 +1,3 @@
-/**
- * Script responsável pelo gerenciamento da página de login
- * - Manipula o formulário de login
- * - Realiza validações
- * - Integra com a API de autenticação
- */
-
 // Importa funções necessárias de outros módulos
 import { login } from '/js/api/auth.js';
 import { validateEmail, validateRequired } from '/js/utils/validators.js';
@@ -12,11 +5,11 @@ import { validateEmail, validateRequired } from '/js/utils/validators.js';
 // Aguarda o carregamento completo do DOM
 document.addEventListener('DOMContentLoaded', () => {
     // Busca o formulário de login na página
-    const loginForm = document.querySelector('.auth-form');
+    const loginForm = document.querySelector('#login-form');
     // Busca o elemento que exibirá as mensagens de erro.
     const errorMessageDiv = document.querySelector('#error-message');
 
-    // Adiciona o listener de submit se o formulário existir
+    // Adiciona o listener de submit se o formulário existir.
     if (loginForm) {
         loginForm.addEventListener('submit', (event) => handleLogin(event, errorMessageDiv));
     }
@@ -32,12 +25,15 @@ async function handleLogin(event, errorMessageDiv) {
     // (que seria recarregar a página).
     event.preventDefault();
 
+    const submitButton = event.target.querySelector('button[type="submit"]');
+
     // Esconde mensagens de erro anteriores
     errorMessageDiv.style.display = 'none';
+    errorMessageDiv.textContent = '';
 
     // Obtém os valores dos campos
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
+    const email = document.getElementById('email').value.trim().toLowerCase();
+    const password = document.getElementById('password').value.trim();
 
     // --- Validações no lado do cliente (Client-Side) ---
 
@@ -54,18 +50,44 @@ async function handleLogin(event, errorMessageDiv) {
     }
 
     try {
+        // Desabilita o botão e mostra feedback de carregamento
+        submitButton.disabled = true;
+        submitButton.textContent = 'Entrando...';
+        console.log('[LOGIN] Tentando fazer login com o e-mail:', email);
+
         // Tenta realizar o login através da API
         const response = await login(email, password);
-        // Se a API retornar um token, o login foi bem-sucedido.
-        if (response.token) {
-            // Redireciona o usuário para a página inicial do sistema.
-            window.location.href = 'startPage.html';
-        }
+
+        console.log('[LOGIN] Resposta da API recebida com sucesso:', response);
+
+        // Salva os dados da sessão no localStorage para uso em outras páginas
+        localStorage.setItem('user', JSON.stringify(response.user));
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('refreshToken', response.refreshToken);
+        console.log('[LOGIN] Token e dados do usuário salvos no localStorage.');
+
+        // Redireciona o usuário para a página inicial do sistema.
+        console.log('[LOGIN] Redirecionando para startPage.html...');
+        window.location.href = 'startPage.html';
+
     } catch (error) {
-        // exibe a mensagem da API ou uma mensagem genérica.
-        // Se a API retornar uma mensagem (ex: "Senha incorreta"), ela será exibida.
-        const message = error.message || 'Falha no login. Verifique seu e-mail e senha e tente novamente.';
-        showError(message, errorMessageDiv);
+        // Log detalhado do erro no console do navegador
+        console.error('[LOGIN] Falha no login. Detalhes do erro:', error);
+
+        if (error.response) {
+            // Erro vindo da API (ex: 401, 404, 500)
+            console.error('[LOGIN] Status do erro:', error.response.status);
+            console.error('[LOGIN] Dados do erro:', error.response.data);
+            showError(error.response.data.message || 'Credenciais inválidas ou erro no servidor.', errorMessageDiv);
+        } else {
+            // Erro de rede ou outro problema antes da resposta do servidor
+            console.error('[LOGIN] Erro de rede ou de script:', error.message);
+            showError('Não foi possível conectar ao servidor. Verifique sua rede.', errorMessageDiv);
+        }
+    } finally {
+        // Reabilita o botão e restaura o texto original, independentemente do resultado.
+        submitButton.disabled = false;
+        submitButton.textContent = 'Entrar';
     }
 }
 

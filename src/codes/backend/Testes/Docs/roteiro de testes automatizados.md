@@ -55,13 +55,25 @@ Este comando foi configurado para realizar duas ações simultaneamente:
 
 ### Cenários de Teste Implementados
 
-O arquivo `Testes/api.test.js` atualmente valida o **Módulo de Autenticação**:
+#### Módulo de Autenticação
+- **Status:** ✅ **Validado**
+- **Arquivo de Teste:** `Testes/api.test.js`
+- **Descrição:** Este conjunto de testes valida o fluxo completo de autenticação, garantindo que o acesso ao sistema é seguro e funcional.
+- **Cenários Cobertos:**
+    - **`RF-001: deve cadastrar um novo usuário e empresa`**: Verifica se um usuário pode ser criado com sucesso (Status 201).
+    - **`deve barrar o cadastro de um usuário com e-mail já existente`**: Garante que a API retorna um erro de conflito (Status 409) ao tentar usar um e-mail duplicado.
+    - **`deve falhar o login com senha incorreta`**: Valida se a API retorna um erro de não autorizado (Status 401) para credenciais inválidas.
+    - **`deve realizar o login com sucesso para a Empresa A`**: Confirma que um usuário válido consegue fazer login e receber os tokens de autenticação.
+    - **`deve proteger rotas, barrando acesso sem token`**: Assegura que rotas protegidas não podem ser acessadas sem um token de autenticação válido.
 
-- **`RF-001: deve cadastrar um novo usuário e empresa`**: Verifica se um usuário pode ser criado com sucesso (Status 201).
-- **`deve barrar o cadastro de um usuário com e-mail já existente`**: Garante que a API retorna um erro de conflito (Status 409) ao tentar usar um e-mail duplicado.
-- **`deve falhar o login com senha incorreta`**: Valida se a API retorna um erro de não autorizado (Status 401) para credenciais inválidas.
-- **`deve realizar o login com sucesso para a Empresa A`**: Confirma que um usuário válido consegue fazer login e receber os tokens de autenticação.
-- **`deve proteger rotas, barrando acesso sem token`**: Assegura que rotas protegidas não podem ser acessadas sem um token de autenticação válido.
+#### Módulo de Isolamento de Dados (Multi-Tenant)
+- **Status:** ✅ **Validado**
+- **Arquivo de Teste:** `Testes/multi-tenant.test.js`
+- **Descrição:** Este é um dos testes mais críticos do sistema. Ele cria múltiplas empresas (atualmente 5) e valida rigorosamente que os dados de uma empresa não podem ser acessados, modificados ou listados por outra.
+- **Cenários Cobertos:**
+    - **`deve criar uma transação para cada empresa`**: Garante que o ambiente de teste com múltiplos inquilinos seja configurado corretamente.
+    - **`deve impedir que uma empresa acesse a transação de outra`**: Tenta, propositalmente, que cada empresa acesse os dados das outras, esperando um erro 404 (Não Encontrado), o que prova o isolamento.
+    - **`deve garantir que cada empresa liste apenas suas próprias transações`**: Confirma que o endpoint de listagem retorna apenas os dados pertencentes à empresa autenticada.
 
 ---
 *Este documento deve ser atualizado conforme novos blocos de teste (Isolamento de Dados, Transações, etc.) forem adicionados.*

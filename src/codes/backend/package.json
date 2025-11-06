@@ -1,15 +1,17 @@
 {
   "name": "smart-gestao-backend",
   "version": "1.0.0",
+  "description": "Backend da aplicação Smart Gestão, construído com Node.js, Express e MongoDB.",
+  "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "concurrently \"npm:start-backend\" \"npm:start-frontend\"",
-    "start-backend": "node server.js",
-    "start-frontend": "http-server ../frontend -p 3000",
-    "test": "concurrently \"npm:test-console\" \"npm:test-log\"",
-    "test-console": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --config ./Testes/jest.config.cjs --detectOpenHandles --coverage --verbose",
-    "test-log": "SET FORCE_COLOR=0 && node --experimental-vm-modules ./node_modules/jest/bin/jest.js --config ./Testes/jest.config.cjs --detectOpenHandles --coverage --verbose --no-color > Testes/resultados/log_%date:~10,4%-%date:~4,2%-%date:~7,2%_%time:~0,2%-%time:~3,2%-%time:~6,2%.txt 2>&1",
-    "dev": "nodemon server.js"
+    "start": "concurrently \"npm:start:backend\" \"npm:start:frontend\"",
+    "start:backend": "node server.js",
+    "start:frontend": "http-server ../frontend -p 3000",
+    "dev": "nodemon server.js",
+    "test": "concurrently -k -s first \"npm:test:server\" \"npm:test:runner\"",
+    "test:server": "node server.js",
+    "test:runner": "npx wait-on http://localhost:5000/api/health && node Testes/run-test-log.js"
   },
   "dependencies": {
     "axios": "^1.7.2",
@@ -26,6 +28,7 @@
     "concurrently": "^8.2.2",
     "http-server": "^14.1.1",
     "jest": "^30.2.0",
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "wait-on": "^7.2.0"
   }
 }
