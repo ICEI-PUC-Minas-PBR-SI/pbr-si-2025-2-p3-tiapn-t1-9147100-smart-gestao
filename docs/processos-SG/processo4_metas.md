@@ -8,9 +8,8 @@ O processo de criação de metas permite que os usuários definam objetivos fina
 3. O usuário clica em “Salvar Meta”.
 4. O sistema valida os dados fornecidos.
 5. O sistema registra a nova meta.
-6. O sistema registra a nova meta.
-7. O usuário é redirecionado para a tela de listagem de metas.
 6. O usuário é redirecionado para a tela de listagem de metas.
+
 
 
 > **Ponto de Melhoria (Revisado por Heron):** Pessoal, a etapa "O sistema registra a nova meta" está duplicada neste fluxo (passos 5 e 6 originais). O responsável pela documentação poderia remover a etapa repetida para deixar o fluxo correto?
