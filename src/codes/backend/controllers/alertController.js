@@ -10,8 +10,8 @@ import { createLog } from "../utils/logger.js";
  */
 export const getAllAlerts = async (req, res) => {
   try {
-    const companyId = req.user.companyId;
-    const alerts = await Alert.find({ companyId }).sort({ createdAt: -1 });
+    const companyId = req.user.companyId; // companyId já é ObjectId do authMiddleware
+    const alerts = await Alert.find({ companyId: companyId }).sort({ createdAt: -1 });
     return res.status(200).json(alerts);
   } catch (error) {
     console.error("Erro ao listar alertas:", error);
@@ -26,9 +26,9 @@ export const getAllAlerts = async (req, res) => {
 export const getAlertById = async (req, res) => {
   try {
     const { id } = req.params;
-    const companyId = req.user.companyId;
+    const companyId = req.user.companyId; // companyId já é ObjectId do authMiddleware
 
-    const alert = await Alert.findOne({ _id: id, companyId });
+    const alert = await Alert.findOne({ _id: id, companyId: companyId });
     if (!alert) return res.status(404).json({ message: "Alerta não encontrado." });
 
     return res.status(200).json(alert);
@@ -44,14 +44,14 @@ export const getAlertById = async (req, res) => {
  */
 export const createAlert = async (req, res) => {
   try {
-    const companyId = req.user.companyId;
+    const companyId = req.user.companyId; // companyId já é ObjectId do authMiddleware
     const { title, message, type, severity } = req.body;
 
     const newAlert = new Alert({
-      companyId,
+      companyId: companyId,
       title,
       message,
-      type,
+      type, // type já é validado pelo schema
       severity,
     });
 
@@ -73,10 +73,10 @@ export const createAlert = async (req, res) => {
 export const updateAlert = async (req, res) => {
   try {
     const { id } = req.params;
-    const companyId = req.user.companyId;
+    const companyId = req.user.companyId; // companyId já é ObjectId do authMiddleware
     const update = req.body;
 
-    const updated = await Alert.findOneAndUpdate(
+    const updated = await Alert.findOneAndUpdate( // Padronizado para companyId
       { _id: id, companyId },
       { $set: update },
       { new: true }
@@ -99,10 +99,10 @@ export const updateAlert = async (req, res) => {
 export const markAlertAsRead = async (req, res) => {
   try {
     const { id } = req.params;
-    const companyId = req.user.companyId;
+    const companyId = req.user.companyId; // companyId já é ObjectId do authMiddleware
 
-    const updated = await Alert.findOneAndUpdate(
-      { _id: id, companyId },
+    const updated = await Alert.findOneAndUpdate( // Padronizado para companyId
+      { _id: id, companyId: companyId },
       { $set: { read: true } },
       { new: true }
     );
@@ -124,8 +124,8 @@ export const markAlertAsRead = async (req, res) => {
 export const deleteAlert = async (req, res) => {
   try {
     const { id } = req.params;
-    const companyId = req.user.companyId;
-    const alert = await Alert.findOneAndDelete({ _id: id, companyId });
+    const companyId = req.user.companyId; // companyId já é ObjectId do authMiddleware
+    const alert = await Alert.findOneAndDelete({ _id: id, companyId: companyId });
 
     if (!alert) {
       return res.status(404).json({ message: "Alerta não encontrado." });

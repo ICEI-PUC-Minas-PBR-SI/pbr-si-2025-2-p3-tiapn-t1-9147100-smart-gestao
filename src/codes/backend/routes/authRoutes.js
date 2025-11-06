@@ -32,4 +32,9 @@ router.post("/refresh", authMiddleware, refreshToken);
 // O `authMiddleware` garante que apenas o próprio usuário possa disparar esta ação.
 router.delete('/users/me', authMiddleware, auditMiddleware('DELETE_CURRENT_USER'), deleteCurrentUser);
 
+// Rota para excluir um usuário específico por ID (usada nos testes de limpeza)
+// authMiddleware garante que apenas usuários autenticados podem chamar esta rota.
+// auditMiddleware registra a ação.
+router.delete('/users/:id', authMiddleware, auditMiddleware('DELETE_USER_BY_ID'), deleteCurrentUser);
+
 export default router;

@@ -11,10 +11,10 @@ import Logs from "../models/Logs.js";
 export const getAllLogs = async (req, res) => {
   try {
     // controle de acesso (apenas ROOT ou ADMIN_COMPANY)
-    if (!["ROOT", "ADMIN_COMPANY"].includes(req.user.role)) return res.status(403).json({ message: "Acesso negado" });
+    if (!["ROOT", "ADMIN_COMPANY"].includes(req.user.role)) return res.status(403).json({ message: "Acesso negado" }); // req.user.role já é string
 
     const filter = {};
-    if (req.query.userId) filter.userId = req.query.userId;
+    if (req.query.userId) filter.userId = req.query.userId; // userId já é ObjectId
     if (req.query.companyId) filter.companyId = req.query.companyId;
     if (req.query.action) filter.action = req.query.action;
 
@@ -38,7 +38,7 @@ export const getAllLogs = async (req, res) => {
  */
 export const getLogsByUser = async (req, res) => {
   try {
-    const userId = req.params.userId;
+    const userId = req.params.userId; // userId já é ObjectId
     // validação básica de acesso: se não for ROOT, só pode ver logs da própria company
     if (req.user.role !== "ROOT" && req.user.userId !== userId) {
       // administradores da mesma company podem consultar logs de usuários da sua company,

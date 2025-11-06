@@ -16,7 +16,7 @@ import Alert from "../models/Alert.js";
  */
 export const getFinancialSummary = async (req, res) => {
   try {
-    const { companyId } = req.user; // obtém a empresa do usuário logado
+    const { companyId } = req.user; // companyId já é ObjectId do authMiddleware
 
     // Busca todas as transações da empresa
     const transactions = await Transaction.find({ companyId });
@@ -50,7 +50,7 @@ export const getFinancialSummary = async (req, res) => {
  */
 export const getMonthlyReport = async (req, res) => {
   try {
-    const { companyId } = req.user;
+    const { companyId } = req.user; // companyId já é ObjectId do authMiddleware
 
     // Utiliza o Aggregation Framework do MongoDB para agrupar transações por mês e calcular os totais.
     const report = await Transaction.aggregate([
@@ -83,7 +83,7 @@ export const getMonthlyReport = async (req, res) => {
  */
 export const getAlertsReport = async (req, res) => {
   try {
-    const { companyId } = req.user;
+    const { companyId } = req.user; // companyId já é ObjectId do authMiddleware
 
     // Busca todos os alertas vinculados à empresa do usuário logado e os ordena por data de criação.
     const alerts = await Alert.find({ companyId }).sort({ createdAt: -1 });

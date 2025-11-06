@@ -2,6 +2,7 @@
 // CRUD de financial goals (metas)
 
 import Meta from "../models/Meta.js";
+import mongoose from 'mongoose'; // Importar mongoose para usar ObjectId
 import { createLog } from "../utils/logger.js";
 
 /**
@@ -20,6 +21,25 @@ export const getAllMetas = async (req, res) => {
 };
 
 /**
+ * - GET /api/meta/:id
+ * Busca uma meta pelo ID
+ */
+export const getMetaById = async (req, res) => {
+    try {
+        const companyId = req.user.companyId;
+        const meta = await Meta.findOne({ _id: req.params.id, companyId });
+
+        if (!meta) {
+            return res.status(404).json({ message: "Meta não encontrada" });
+        }
+
+        return res.status(200).json(meta);
+    } catch (error) {
+        console.error("getMetaById:", error);
+        return res.status(500).json({ message: "Erro ao buscar meta", error: error.message });
+    }
+};
+/**
  * - POST /api/meta
  * Cria meta financeira
  */
@@ -27,7 +47,8 @@ export const createMeta = async (req, res) => {
   try {
     const companyId = req.user.companyId;
     const userId = req.user.userId;
-    const payload = { ...req.body, companyId };
+    // Payload alinhado com o modelo padronizado
+    const payload = { ...req.body, companyId, userId };
 
     const meta = await Meta.create(payload);
 

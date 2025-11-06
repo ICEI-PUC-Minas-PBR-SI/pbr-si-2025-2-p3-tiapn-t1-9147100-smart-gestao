@@ -29,6 +29,7 @@ function createLogFilePath() {
     return path.join(logDir, `log_${timestamp}.txt`);
 }
 
+// Revertido para a versão funcional que executa o Jest
 const logFilePath = createLogFilePath();
 
 try {
@@ -36,20 +37,24 @@ try {
     ==================================================================================
     COMENTÁRIO IMPORTANTE:
     Este bloco é o coração da geração de logs e da exibição no console.
-    
+
     1.  `jestCommand`: Executa o Jest com as flags necessárias.
     2.  `execSync`: Roda o comando e captura TODA a sua saída (stdout e stderr).
     3.  `process.stdout.write(rawOutput)`: Imprime a saída capturada (com cores) no console.
     4.  `rawOutput.replace(...)`: Remove os códigos de cor ANSI.
     5.  `fs.writeFileSync(...)`: Salva a saída limpa no arquivo .txt.
-    
+
     NÃO MODIFICAR ESTE BLOCO PARA GARANTIR A CRIAÇÃO E FORMATAÇÃO CORRETA DOS LOGS.
     ==================================================================================
     */
-    const jestCommand = `node --experimental-vm-modules ./node_modules/jest/bin/jest.js --config ./Testes/jest.config.cjs --runInBand`;
-    
+    const jestCommand = `node --experimental-vm-modules ./node_modules/jest/bin/jest.js --config ./Testes/jest.config.cjs --runInBand --forceExit`;
+
     // Executa o Jest e captura a saída completa (incluindo códigos ANSI para cores).
-    const rawOutput = execSync(jestCommand, { encoding: 'utf8', stdio: 'pipe' });
+    let rawOutput = execSync(jestCommand, { encoding: 'utf8', stdio: 'pipe' }); // Alterado para let
+
+    // Adiciona um marcador de fim de testes
+    const endMarker = "\n--- FIM DOS TESTES AUTOMATIZADOS ---\n";
+    rawOutput += endMarker; // Adiciona ao output bruto para console e arquivo
 
     // Imprime a saída bruta (com cores) no console.
     process.stdout.write(rawOutput);
@@ -57,23 +62,25 @@ try {
     // Remove os códigos de formatação ANSI para o arquivo de log.
     const cleanOutput = rawOutput.replace(/\x1b\[[0-9;]*m/g, '');
     fs.writeFileSync(logFilePath, cleanOutput);
-
-    console.log(`\n--- Validação de Log ---`);
-    console.log(`✅ Arquivo de log TXT gerado em: ${logFilePath}`);
+    
+    console.log('\n[1] ✅ Testes validados com sucesso');
 
 } catch (error) {
     // Se o Jest falhar, execSync lançará um erro. Capturamos a saída e o erro para o log.
-    const rawOutput = error.stdout ? error.stdout.toString() : '';
-    const rawError = error.stderr ? error.stderr.toString() : '';
-    
+    let rawOutput = error.stdout ? error.stdout.toString() : ''; // Alterado para let
+    let rawError = error.stderr ? error.stderr.toString() : ''; // Alterado para let
+
+    // Adiciona um marcador de fim de testes (mesmo em caso de erro)
+    const endMarker = "\n--- FIM DOS TESTES AUTOMATIZADOS (COM FALHAS) ---\n";
+    rawOutput += endMarker; // Adiciona ao output bruto para console e arquivo
+
     process.stdout.write(rawOutput); // Imprime a saída no console
     process.stderr.write(rawError); // Imprime o erro no console
-
+    
     const cleanOutput = (rawOutput + rawError).replace(/\x1b\[[0-9;]*m/g, '');
     fs.writeFileSync(logFilePath, cleanOutput);
 
-    console.error(`\n--- Validação de Log ---`);
-    console.error(`❌ Ocorreram erros durante a execução dos testes. Verifique o log para mais detalhes.`);
-    console.error(`❌ Arquivo de log TXT gerado em: ${logFilePath}`);
+    console.error('\n[1] ❌ Ocorreram erros durante a execução dos testes. Verifique o log para mais detalhes.');
+
     process.exit(1); // Garante que o comando de teste saia com um código de falha
 }

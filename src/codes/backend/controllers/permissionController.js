@@ -8,7 +8,7 @@ import { createLog } from "../utils/logger.js";
  */
 export const getAllPermissions = async (req, res) => {
   try {
-    const items = await Permission.find().sort({ name: 1 });
+    const items = await Permission.find().sort({ name: 1 }); // Busca todas as permissões
     return res.status(200).json(items);
   } catch (error) {
     console.error("getAllPermissions:", error);
@@ -22,7 +22,7 @@ export const getAllPermissions = async (req, res) => {
 export const createPermission = async (req, res) => {
   try {
     const { name, description } = req.body;
-    if (!name) return res.status(400).json({ message: "name é obrigatório" });
+    if (!name) return res.status(400).json({ message: "Name é obrigatório" }); // Padronizado para Name
 
     const exists = await Permission.findOne({ name: name.toUpperCase() });
     if (exists) return res.status(400).json({ message: "Permissão já existe" });
@@ -49,7 +49,7 @@ export const createPermission = async (req, res) => {
  */
 export const updatePermission = async (req, res) => {
   try {
-    const updated = await Permission.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const updated = await Permission.findByIdAndUpdate(req.params.id, req.body, { new: true }); // Atualiza pelo ID
     if (!updated) return res.status(404).json({ message: "Permissão não encontrada" });
 
     await createLog({
@@ -72,7 +72,7 @@ export const updatePermission = async (req, res) => {
  */
 export const deletePermission = async (req, res) => {
   try {
-    const removed = await Permission.findByIdAndDelete(req.params.id);
+    const removed = await Permission.findByIdAndDelete(req.params.id); // Remove pelo ID
     if (!removed) return res.status(404).json({ message: "Permissão não encontrada" });
 
     await createLog({

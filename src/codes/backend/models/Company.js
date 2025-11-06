@@ -6,19 +6,19 @@ import mongoose from "mongoose";
 const { Schema, model } = mongoose;
 
 // Estrutura básica da Empresa
-const EmpresaSchema = new Schema({
-  nome: { type: String, required: true, trim: true },       // Nome da empresa
+const CompanySchema = new Schema({ // Padronizado para inglês e camelCase
+  name: { type: String, required: true, trim: true },
   cnpj: { type: String, required: true, unique: true, trim: true }, // CNPJ único
-  email_contato: { type: String, trim: true },               // E-mail de contato da empresa
-  telefone: { type: String, trim: true },                    // Telefone de contato
-  endereco: { type: String, trim: true },                    // Endereço da empresa
-  plano: { type: String, enum: ["BASICO", "PRO", "PREMIUM"], default: "BASICO" }, // Tipo de plano
-  ativo: { type: Boolean, default: true },                   // Se a empresa está ativa no sistema
-  data_cadastro: { type: Date, default: Date.now }           // Data de registro da empresa
+  email: { type: String, trim: true }, // Padronizado para 'email'
+  phone: { type: String, trim: true },
+  address: { type: String, trim: true },
+  plan: { type: String, enum: ["BASIC", "PRO", "PREMIUM"], default: "BASIC" },
+  isActive: { type: Boolean, default: true },
+  registrationDate: { type: Date, default: Date.now }
 }, { timestamps: true });
 
 // Índices úteis
-EmpresaSchema.index({ nome: 1 });
-EmpresaSchema.index({ cnpj: 1 }, { unique: true });
+CompanySchema.index({ name: 1 });
+CompanySchema.index({ cnpj: 1 }, { unique: true });
 
-export default model("Company", EmpresaSchema);
+export default model("Company", CompanySchema);

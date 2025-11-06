@@ -1,0 +1,11 @@
+
+--- 🚀 Iniciando Setup Global de Testes ---
+
+--- FIM DOS TESTES AUTOMATIZADOS (COM FALHAS) ---
+Error: Jest: Got error running globalSetup - F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\Testes\test-setup.js, reason: [AxiosError: Request failed with status code 500]
+    at runGlobalHook (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\@jest\core\build\index.js:3173:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async runJest (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\@jest\core\build\index.js:3429:5)
+    at async _run10000 (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\@jest\core\build\index.js:1543:5)
+    at async runCLI (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\@jest\core\build\index.js:1444:3)
+    at async Object.run (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\jest-cli\build\index.js:656:9)

@@ -14,6 +14,6 @@ const router = express.Router();
 router.get("/", authMiddleware, roleMiddleware(["ROOT", "ADMIN_COMPANY"]), getAllLogs);
 
 // - Listar logs filtrados por usuário
-router.get("/user/:userId", authMiddleware, getLogsByUser);
+router.get("/user/:userId", authMiddleware, roleMiddleware(["ROOT", "ADMIN_COMPANY"]), getLogsByUser); // Acesso restrito
 
 export default router;

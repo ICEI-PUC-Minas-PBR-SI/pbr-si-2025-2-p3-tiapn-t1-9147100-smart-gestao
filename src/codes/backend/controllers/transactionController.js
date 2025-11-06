@@ -1,5 +1,6 @@
 // controllers/transactionController.js
 // CRUD de transactions (income/expense)
+import mongoose from 'mongoose'; // Importar mongoose para usar ObjectId
 
 import Transaction from "../models/Transaction.js";
 import { createLog } from "../utils/logger.js";
@@ -30,13 +31,34 @@ export const getAllTransactions = async (req, res) => {
 };
 
 /**
+ * - GET /api/transactions/:id
+ * Busca uma transaction pelo ID
+ */
+export const getTransactionById = async (req, res) => {
+    try {
+        const transactionId = new mongoose.Types.ObjectId(req.params.id);
+        const companyId = req.user.companyId; // companyId já é ObjectId do authMiddleware
+
+        const transaction = await Transaction.findOne({ _id: transactionId, companyId: companyId });
+        
+       if (!transaction) {
+            return res.status(404).json({ message: "Transaction não encontrada" });
+        }
+
+        return res.status(200).json(transaction);
+    } catch (error) {
+        console.error("getTransactionById:", error);
+        return res.status(500).json({ message: "Erro ao buscar transaction", error: error.message });
+    }
+};
+/**
  * - POST /api/transactions
  * Cria transaction; corpo: { type, description, category, value, date, paymentMethod, clientId }
  */
 export const createTransaction = async (req, res) => {
   try {
     const companyId = req.user.companyId;
-    // Garante que o companyId do token seja usado, ignorando qualquer um que venha no corpo
+    // Garante que o companyId e userId do token sejam usados, ignorando qualquer um que venha no corpo. companyId e userId já são ObjectIds do req.user
     const payload = { ...req.body, companyId: companyId, userId: req.user.userId }; 
 
     // A validação agora é primariamente feita pelo Mongoose Schema.

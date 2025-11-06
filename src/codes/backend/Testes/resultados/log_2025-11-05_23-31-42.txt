@@ -1,9 +1,0 @@
-
---- 🚀 Iniciando Setup Global de Testes ---
-Error: Jest: Got error running globalSetup - C:\Users\HERON-ACER\Documents\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\Testes\test-setup.js, reason: [AggregateError: Error]
-    at runGlobalHook (C:\Users\HERON-ACER\Documents\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\@jest\core\build\index.js:3173:15)
-    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
-    at async runJest (C:\Users\HERON-ACER\Documents\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\@jest\core\build\index.js:3429:5)
-    at async _run10000 (C:\Users\HERON-ACER\Documents\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\@jest\core\build\index.js:1543:5)
-    at async runCLI (C:\Users\HERON-ACER\Documents\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\@jest\core\build\index.js:1444:3)
-    at async Object.run (C:\Users\HERON-ACER\Documents\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\jest-cli\build\index.js:656:9)

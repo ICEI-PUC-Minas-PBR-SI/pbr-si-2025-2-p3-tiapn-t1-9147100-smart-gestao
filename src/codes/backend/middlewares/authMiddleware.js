@@ -52,8 +52,8 @@ export async function authMiddleware(req, res, next) {
 
     // 5. Anexa os dados essenciais do usuário ao objeto `req` para uso nos próximos middlewares e controllers.
     req.user = {
-      userId: String(user._id),
-      companyId: user.companyId ? String(user.companyId) : null,
+      userId: user._id, // Popula como ObjectId
+      companyId: user.companyId, // Popula como ObjectId
       role: user.role,
       email: user.email,
       uuid: user.uuid || null,

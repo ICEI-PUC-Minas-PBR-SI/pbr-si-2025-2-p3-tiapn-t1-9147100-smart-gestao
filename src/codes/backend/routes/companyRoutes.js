@@ -21,7 +21,7 @@ const router = express.Router();
 router.post("/", authMiddleware, roleMiddleware(["ROOT"]), auditMiddleware("CREATE_COMPANY"), createCompany);
 
 // - Listar empresas cadastradas
-router.get("/", authMiddleware, roleMiddleware(["ROOT"]), getCompanies);
+router.get("/", authMiddleware, roleMiddleware(["ROOT"]), getCompanies); // Acesso apenas para ROOT
 
 // - Buscar empresa pelo ID
 router.get("/:id", authMiddleware, getCompanyById);

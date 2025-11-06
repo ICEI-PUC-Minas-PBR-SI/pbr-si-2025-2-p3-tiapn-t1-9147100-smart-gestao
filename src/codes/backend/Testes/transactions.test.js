@@ -14,6 +14,7 @@ describe('4. Módulo de Transações (CRUD)', () => {
         const testData = JSON.parse(fs.readFileSync(SETUP_FILE, 'utf8'));
         // Este teste usará apenas a "Empresa A" para suas operações.
         userToken = testData.companyA.token;
+        // console.log(`Debug transactions.test.js beforeAll: userToken=${userToken}, companyA.userId=${testData.companyA.userId}, companyA.companyId=${testData.companyA.companyId}`); // Removido log de depuração
     });
 
     it('RF-002: deve CRIAR uma nova transação com sucesso', async () => {

@@ -12,8 +12,8 @@ import { createLog } from "../utils/logger.js";
  */
 export const createUser = async (req, res) => {
   try {
-    const companyId = req.user.companyId;
-    const creatorId = req.user.userId;
+    const companyId = req.user.companyId; // companyId já é ObjectId do authMiddleware
+    const creatorId = req.user.userId; // userId já é ObjectId do authMiddleware
     const { name, email, password, role } = req.body;
 
     if (!name || !email || !password) return res.status(400).json({ message: "name, email e password obrigatórios" });
@@ -30,7 +30,7 @@ export const createUser = async (req, res) => {
       passwordHash,
       companyId,
       role: role || "USER",
-    });
+    }); // role já é ObjectId
 
     await createLog({
       userId: creatorId,
@@ -55,7 +55,7 @@ export const createUser = async (req, res) => {
  */
 export const getAllUsers = async (req, res) => {
   try {
-    const companyId = req.user.companyId;
+    const companyId = req.user.companyId; // companyId já é ObjectId do authMiddleware
     const users = await User.find({ companyId }).select("-passwordHash").sort({ name: 1 });
     return res.status(200).json(users);
   } catch (error) {
@@ -70,7 +70,7 @@ export const getAllUsers = async (req, res) => {
  */
 export const getProfile = async (req, res) => {
   try {
-    const user = await User.findById(req.user.userId).select("-passwordHash");
+    const user = await User.findById(req.user.userId).select("-passwordHash"); // userId já é ObjectId do authMiddleware
     if (!user) return res.status(404).json({ message: "User não encontrado" });
     return res.status(200).json(user);
   } catch (error) {
@@ -85,8 +85,8 @@ export const getProfile = async (req, res) => {
  */
 export const updateUser = async (req, res) => {
   try {
-    const companyId = req.user.companyId;
-    const updated = await User.findOneAndUpdate({ _id: req.params.id, companyId }, { $set: req.body }, { new: true }).select("-passwordHash");
+    const companyId = req.user.companyId; // companyId já é ObjectId do authMiddleware
+    const updated = await User.findOneAndUpdate({ _id: req.params.id, companyId: companyId }, { $set: req.body }, { new: true }).select("-passwordHash"); // Atualiza pelo ID
     if (!updated) return res.status(404).json({ message: "User não encontrado" });
 
     await createLog({
@@ -110,8 +110,8 @@ export const updateUser = async (req, res) => {
  */
 export const deleteUser = async (req, res) => {
   try {
-    const companyId = req.user.companyId;
-    const removed = await User.findOneAndDelete({ _id: req.params.id, companyId });
+    const companyId = req.user.companyId; // companyId já é ObjectId do authMiddleware
+    const removed = await User.findOneAndDelete({ _id: req.params.id, companyId: companyId }); // Remove pelo ID
     if (!removed) return res.status(404).json({ message: "User não encontrado" });
 
     await createLog({
@@ -135,7 +135,7 @@ export const deleteUser = async (req, res) => {
  */
 export const changePassword = async (req, res) => {
   try {
-    const userId = req.user.userId;
+    const userId = req.user.userId; // userId já é ObjectId do authMiddleware
     const { oldPassword, newPassword } = req.body;
     if (!oldPassword || !newPassword) return res.status(400).json({ message: "oldPassword e newPassword obrigatórios" });
 

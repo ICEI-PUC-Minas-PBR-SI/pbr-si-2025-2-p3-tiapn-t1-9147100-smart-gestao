@@ -11,10 +11,10 @@ import { companyScopeMiddleware } from "../middlewares/companyScopeMiddleware.js
 const router = express.Router();
 
 // - Resumo financeiro geral (receitas/despesas)
-router.get("/summary", authMiddleware, companyScopeMiddleware, getFinancialSummary);
+router.get("/summary", authMiddleware, companyScopeMiddleware, getFinancialSummary); // companyScopeMiddleware já filtra por companyId
 
 // - Relatório financeiro mensal
-router.get("/monthly", authMiddleware, companyScopeMiddleware, getMonthlyReport);
+router.get("/monthly", authMiddleware, companyScopeMiddleware, getMonthlyReport); // companyScopeMiddleware já filtra por companyId
 
 // - Relatório de alertas (metas atingidas)
 router.get("/alerts", authMiddleware, companyScopeMiddleware, getAlertsReport);

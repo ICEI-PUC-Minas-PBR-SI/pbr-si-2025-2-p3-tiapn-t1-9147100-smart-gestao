@@ -30,15 +30,9 @@ Antes de executar os testes, certifique-se de que o ambiente está configurado c
     npm install
     ```
 
-2.  **Iniciar o Servidor Backend**: Os testes de integração precisam que a API esteja no ar para receber as requisições. Em um terminal, na pasta `src/codes/backend`, inicie o servidor em modo de desenvolvimento.
-    ```bash
-    npm run dev
-    ```
-    Aguarde a mensagem "🚀 Servidor rodando na porta 5000" para confirmar que o servidor iniciou com sucesso.
-
 ## 4. Execução e Validação dos Testes
 
-Com o servidor backend rodando, abra um **segundo terminal** na mesma pasta (`src/codes/backend`) para executar os testes.
+Para executar os testes, certifique-se de que **nenhum outro servidor esteja rodando** na porta 5000. Em seguida, abra um terminal na pasta `src/codes/backend`.
 
 ### Comando Principal de Teste
 
@@ -75,5 +69,25 @@ Este comando foi configurado para realizar duas ações simultaneamente:
     - **`deve impedir que uma empresa acesse a transação de outra`**: Tenta, propositalmente, que cada empresa acesse os dados das outras, esperando um erro 404 (Não Encontrado), o que prova o isolamento.
     - **`deve garantir que cada empresa liste apenas suas próprias transações`**: Confirma que o endpoint de listagem retorna apenas os dados pertencentes à empresa autenticada.
 
+#### Módulo de Transações (CRUD)
+- **Status:** ✅ **Validado**
+- **Arquivo de Teste:** `Testes/transactions.test.js`
+- **Descrição:** Valida o ciclo de vida completo (Criar, Ler, Atualizar, Excluir) de uma transação, garantindo que as operações básicas do dia a dia do usuário estão funcionando.
+- **Cenários Cobertos:**
+    - **`RF-002: deve CRIAR uma nova transação com sucesso`**: Verifica a criação de uma transação e a resposta da API.
+    - **`RF-003: deve LISTAR as transações do usuário logado`**: Confirma que a transação criada aparece na listagem geral.
+    - **`RF-004: deve OBTER uma transação específica pelo ID`**: Garante que uma transação pode ser acessada diretamente pelo seu ID.
+    - **`RF-005: deve ATUALIZAR uma transação existente`**: Testa a edição de dados de uma transação.
+    - **`RF-006: deve EXCLUIR uma transação existente`**: Valida a exclusão de uma transação e confirma que ela não pode mais ser acessada.
+
+#### Módulo de Metas (CRUD)
+- **Status:** ✅ **Validado**
+- **Arquivo de Teste:** `Testes/metas.test.js`
+- **Descrição:** Valida o ciclo de vida completo (Criar, Ler, Atualizar, Excluir) de uma meta financeira.
+- **Cenários Cobertos:**
+    - **`deve CRIAR uma nova meta com sucesso`**: Verifica a criação de uma meta e a resposta da API.
+    - **`deve LISTAR as metas do usuário logado`**: Confirma que a meta criada aparece na listagem geral.
+    - **`deve ATUALIZAR uma meta existente`**: Testa a edição de dados de uma meta.
+    - **`deve EXCLUIR uma meta existente`**: Valida a exclusão de uma meta e confirma que ela não pode mais ser acessada.
 ---
 *Este documento deve ser atualizado conforme novos blocos de teste (Isolamento de Dados, Transações, etc.) forem adicionados.*

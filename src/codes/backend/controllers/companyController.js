@@ -10,14 +10,13 @@ import Company from "../models/Company.js";
  */
 export const createCompany = async (req, res) => {
   try {
-    const { name, cnpj, email, phone, address } = req.body;
+    const { name, cnpj, email, phone, address, plan } = req.body; // Padronizado para 'email'
 
     // Verifica se já existe uma empresa com o mesmo CNPJ
     const existingCompany = await Company.findOne({ cnpj });
     if (existingCompany) {
       return res.status(400).json({ message: "CNPJ já cadastrado no sistema." });
     }
-
     const newCompany = await Company.create({
       name,
       cnpj,
@@ -25,6 +24,7 @@ export const createCompany = async (req, res) => {
       phone,
       address,
       isActive: true,
+      plan: plan || "BASIC", // Adicionado plan com default
     });
 
     return res.status(201).json({
@@ -42,7 +42,7 @@ export const createCompany = async (req, res) => {
  */
 export const getCompanies = async (req, res) => {
   try {
-    const companies = await Company.find();
+    const companies = await Company.find(); // Já busca todas as empresas
     return res.status(200).json(companies);
   } catch (error) {
     console.error("Erro ao listar empresas:", error);
@@ -55,7 +55,7 @@ export const getCompanies = async (req, res) => {
  */
 export const getCompanyById = async (req, res) => {
   try {
-    const company = await Company.findById(req.params.id);
+    const company = await Company.findById(req.params.id); // Busca pelo ID
     if (!company) {
       return res.status(404).json({ message: "Empresa não encontrada." });
     }
@@ -71,7 +71,7 @@ export const getCompanyById = async (req, res) => {
  */
 export const updateCompany = async (req, res) => {
   try {
-    const updated = await Company.findByIdAndUpdate(req.params.id, req.body, {
+    const updated = await Company.findByIdAndUpdate(req.params.id, req.body, { // Atualiza pelo ID
       new: true,
     });
 
@@ -94,7 +94,7 @@ export const updateCompany = async (req, res) => {
  */
 export const deactivateCompany = async (req, res) => {
   try {
-    const company = await Company.findById(req.params.id);
+    const company = await Company.findById(req.params.id); // Busca pelo ID
     if (!company) {
       return res.status(404).json({ message: "Empresa não encontrada." });
     }

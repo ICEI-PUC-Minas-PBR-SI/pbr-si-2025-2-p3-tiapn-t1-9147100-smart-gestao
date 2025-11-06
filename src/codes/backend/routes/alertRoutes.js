@@ -24,7 +24,7 @@ router.get("/", authMiddleware, companyScopeMiddleware, getAllAlerts);
 router.get("/:id", authMiddleware, companyScopeMiddleware, getAlertById);
 
 // - Criar alerta
-router.post("/", authMiddleware, auditMiddleware("CREATE_ALERT"), createAlert);
+router.post("/", authMiddleware, companyScopeMiddleware, auditMiddleware("CREATE_ALERT"), createAlert); // Adicionado companyScopeMiddleware
 
 // - Atualizar alerta
 router.put("/:id", authMiddleware, auditMiddleware("UPDATE_ALERT"), updateAlert);

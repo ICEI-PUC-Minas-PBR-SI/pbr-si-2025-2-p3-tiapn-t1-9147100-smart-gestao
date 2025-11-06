@@ -5,16 +5,16 @@ import mongoose from "mongoose";
 const { Schema, model } = mongoose;
 
 const SessionTokenSchema = new Schema({
-  usuarioId: { type: Schema.Types.ObjectId, ref: "User", required: true },
-  token_hash: { type: String, required: true }, // hash do token (não armazene token puro)
-  dispositivo: { type: String }, // ex.: 'Chrome - Windows'
-  ip_origem: { type: String },
-  criado_em: { type: Date, default: Date.now },
-  expiracao: { type: Date },
-  ativo: { type: Boolean, default: true }
+  userId: { type: Schema.Types.ObjectId, ref: "User", required: true }, // Padronizado para userId
+  tokenHash: { type: String, required: true }, // Padronizado para tokenHash
+  device: { type: String }, // Padronizado para device
+  originIp: { type: String }, // Padronizado para originIp
+  createdAt: { type: Date, default: Date.now }, // Padronizado para createdAt
+  expiration: { type: Date }, // Padronizado para expiration
+  active: { type: Boolean, default: true } // Padronizado para active
 });
 
-SessionTokenSchema.index({ usuarioId: 1 });
-SessionTokenSchema.index({ token_hash: 1 });
+SessionTokenSchema.index({ userId: 1 });
+SessionTokenSchema.index({ tokenHash: 1 });
 
 export default model("SessionToken", SessionTokenSchema);

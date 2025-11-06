@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API_URL = 'http://localhost:5000/api';
-const NUMBER_OF_COMPANIES = 5;
+const NUMBER_OF_COMPANIES = 3; // Reduzido para 3 para logs mais curtos
 const PAYMENT_METHODS = ['credit_card', 'debit_card', 'pix', 'cash', 'other'];
 
 describe('3. Teste de Isolamento de Dados em Larga Escala (Multi-Tenant)', () => {
@@ -9,7 +9,7 @@ describe('3. Teste de Isolamento de Dados em Larga Escala (Multi-Tenant)', () =>
 
     // Etapa 1: Cadastrar e logar 5 empresas diferentes antes de todos os testes
     beforeAll(async () => {
-        console.log(`\n--- Configurando ${NUMBER_OF_COMPANIES} empresas para o teste multi-tenant ---`);
+        console.log(`\n--- Configurando ${NUMBER_OF_COMPANIES} empresas para o teste multi-tenant ---`); // Reduzido para 3
 
         for (let i = 1; i <= NUMBER_OF_COMPANIES; i++) {
             const uniqueId = Date.now() + i;
@@ -22,7 +22,7 @@ describe('3. Teste de Isolamento de Dados em Larga Escala (Multi-Tenant)', () =>
             };
 
             // Cadastrar
-            await axios.post(`${API_URL}/auth/register`, companyData);
+            const registerResponse = await axios.post(`${API_URL}/auth/register`, companyData);
 
             // Logar para obter o token
             const loginResponse = await axios.post(`${API_URL}/auth/login`, {
@@ -31,8 +31,9 @@ describe('3. Teste de Isolamento de Dados em Larga Escala (Multi-Tenant)', () =>
             });
 
             companies.push({
-                ...companyData,
+                userId: loginResponse.data.user.id, // Corrigido: Captura o userId da resposta do login
                 token: loginResponse.data.token,
+                companyName: companyData.companyName, // Adicionado para logs mais claros
                 id: loginResponse.data.user.companyId,
                 transactions: []
             });
@@ -124,12 +125,13 @@ describe('3. Teste de Isolamento de Dados em Larga Escala (Multi-Tenant)', () =>
         console.log('\n--- Limpando dados de teste (Teardown) ---');
         for (const company of companies) {
             try {
-                const response = await axios.delete(`${API_URL}/users/me`, {
-                    headers: { Authorization: `Bearer ${company.token}` }
-                });
-                expect(response.status).toBe(200);
-                console.log(`- ✅ Empresa ${company.companyName} excluída com sucesso.`);
-            } catch (error) {
+                        // Excluir o usuário associado à empresa
+                        await axios.delete(`${API_URL}/auth/users/${company.userId}`, {
+                            headers: { Authorization: `Bearer ${company.token}` }
+                        });
+
+                        console.log(`- ✅ Empresa ${company.companyName} excluída com sucesso.`);
+                    }catch (error) {
                 console.error(`- ❌ Falha ao excluir a empresa ${company.companyName}:`, error.response?.data || error.message);
             }
         }

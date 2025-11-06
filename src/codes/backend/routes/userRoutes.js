@@ -25,7 +25,7 @@ router.get("/", authMiddleware, companyScopeMiddleware, getAllUsers);
 router.post("/", authMiddleware, roleMiddleware(["ROOT", "ADMIN_COMPANY"]), companyScopeMiddleware, auditMiddleware("CREATE_USER"), createUser);
 
 // - Atualizar dados de um usuário
-router.put("/:id", authMiddleware, companyScopeMiddleware, auditMiddleware("UPDATE_USER"), updateUser);
+router.put("/:id", authMiddleware, companyScopeMiddleware, auditMiddleware("UPDATE_USER"), updateUser); // companyScopeMiddleware já filtra por companyId
 
 // - Excluir usuário (desativar)
 router.delete("/:id", authMiddleware, companyScopeMiddleware, auditMiddleware("DELETE_USER"), deleteUser);

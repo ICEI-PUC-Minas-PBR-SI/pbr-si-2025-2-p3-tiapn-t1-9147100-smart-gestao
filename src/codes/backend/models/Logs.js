@@ -11,7 +11,7 @@ const LogSchema = new Schema(
     userId: { type: Schema.Types.ObjectId, ref: "User" },
     action: { type: String, required: true },
     description: { type: String },
-    route: { type: String },
+    route: { type: String }, // Padronizado para camelCase
     ip: { type: String },
     userAgent: { type: String },
     details: { type: Schema.Types.Mixed },

@@ -8,6 +8,7 @@ import {
   createTransaction,
   getAllTransactions,
   updateTransaction,
+  getTransactionById,
   deleteTransaction,
 } from "../controllers/transactionController.js";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
@@ -18,6 +19,9 @@ const router = express.Router();
 
 // - Listar todas as transações financeiras
 router.get("/", authMiddleware, companyScopeMiddleware, getAllTransactions);
+
+// - Obter uma transação específica por ID
+router.get("/:id", authMiddleware, companyScopeMiddleware, getTransactionById);
 
 // - Criar nova transação
 router.post("/", authMiddleware, companyScopeMiddleware, auditMiddleware("CREATE_TRANSACTION"), createTransaction);

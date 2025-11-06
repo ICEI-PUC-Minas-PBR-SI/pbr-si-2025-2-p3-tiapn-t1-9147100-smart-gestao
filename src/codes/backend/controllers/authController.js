@@ -30,16 +30,21 @@ export const registerUser = async (req, res) => {
     }
 
     // 3. Criação da Empresa: Salva a nova empresa no banco de dados.
-    const newCompany = await new Company({ nome: companyName, cnpj }).save();
+    const newCompany = await new Company({ name: companyName, cnpj, email: email }).save();
 
     // 4. Criptografia da Senha - Gera um "sal" e cria um hash seguro da senha.
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(password, salt);
 
     // 5. Criação do Usuário: Salva o novo usuário com a senha criptografada e os IDs da empresa e permissão.
-    await new User({ name, email, passwordHash, companyId: newCompany._id, role: userPermission._id }).save();
+    const newUser = await new User({ name, email, passwordHash, companyId: newCompany._id, role: userPermission._id }).save();
 
-    res.status(201).json({ message: 'Usuário cadastrado com sucesso!' });
+    // Adicionado para retornar o ID do usuário, necessário para os testes
+    const userResponse = newUser.toObject();
+    delete userResponse.passwordHash;
+
+    res.status(201).json({ message: 'Usuário cadastrado com sucesso!', userId: userResponse._id });
+
   } catch (error) {
     console.error('Erro no registerUser:', error);
     return res.status(500).json({ message: 'Erro interno ao cadastrar usuário.' });
@@ -66,7 +71,7 @@ export const loginUser = async (req, res) => {
     // --- Geração dos Tokens ---
     // 3. Geração do Access Token: um token de curta duração para autenticar as próximas requisições.
     const accessToken = jwt.sign(
-      { userId: user._id, role: user.role },
+      { userId: user._id, role: user.role, companyId: user.companyId }, // Adicionado companyId ao payload
       process.env.JWT_SECRET, // Chave secreta do .env
       { expiresIn: '15m' } // Expira em 15 minutos
     );
@@ -82,7 +87,7 @@ export const loginUser = async (req, res) => {
     return res.status(200).json({
       token: accessToken,
      refreshToken: refreshTokenValue,
-     user: { name: user.name, email: user.email }
+     user: { id: user._id, name: user.name, email: user.email, companyId: user.companyId } // Garante que companyId está na resposta
     });
   } catch (error) {
     console.error('Erro no loginUser:', error);
@@ -114,12 +119,12 @@ export const refreshToken = async (req, res) => {
 // =============================================================
 export const deleteCurrentUser = async (req, res) => {
   try {
-    const userId = req.user.id;
-    const companyId = req.user.companyId;
+    const userId = req.params.id; // Corrigido: Obter o ID do parâmetro da rota
+    const userToDelete = await User.findById(userId);
 
-    // Valida se o token contém as informações necessárias.
-    if (!userId || !companyId) {
-      return res.status(400).json({ message: 'Informações de usuário inválidas no token.' });
+    // Valida se o usuário existe antes de prosseguir
+    if (!userToDelete) {
+      return res.status(404).json({ message: 'Usuário a ser deletado não encontrado.' });
     }
 
     /*
@@ -138,10 +143,12 @@ export const deleteCurrentUser = async (req, res) => {
      * Para o propósito deste projeto e dos nossos testes, implementaremos a exclusão direta (hard delete).
     */
 
+    const companyId = userToDelete.companyId;
+
     // 1. Exclui todas as transações associadas à empresa.
     await Transaction.deleteMany({ companyId: companyId });
     // 2. Exclui o usuário.
-    await User.findByIdAndDelete(userId);
+    await User.findOneAndDelete({ _id: userId }); // Use findOneAndDelete com _id
     // 3. Exclui a empresa.
     await Company.findByIdAndDelete(companyId);
 

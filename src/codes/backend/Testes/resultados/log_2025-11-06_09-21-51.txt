@@ -1,0 +1,296 @@
+
+--- 🚀 Iniciando Setup Global de Testes ---
+✅ Empresa Padrão 1 criada para os testes.
+✅ Empresa Padrão 2 criada para os testes.
+--- ✅ Setup Global Concluído. Dados salvos em Testes\test-setup.json ---
+
+  console.log
+    
+    --- Configurando 5 empresas para o teste multi-tenant ---
+
+      at Object.log (multi-tenant.test.js:12:17)
+
+  console.log
+    
+    --- Limpando dados de teste (Teardown) ---
+
+      at Object.log (multi-tenant.test.js:124:17)
+
+  console.log
+    
+    --- Teste: Validar setup do usuário ---
+
+      at Object.log (api.test.js:28:17)
+
+  console.log
+    ✅ Usuário da Empresa A carregado do setup.
+
+      at Object.log (api.test.js:31:17)
+
+  console.log
+    
+    --- Teste: Barrar e-mail duplicado ---
+
+      at Object.log (api.test.js:43:17)
+
+  console.log
+    ✅ E-mail duplicado barrado com sucesso (Status 409).
+
+      at Object.log (api.test.js:54:21)
+
+  console.log
+    
+    --- Teste: Login com senha incorreta ---
+
+      at Object.log (api.test.js:63:17)
+
+  console.log
+    ✅ Login com senha incorreta falhou como esperado (Status 401).
+
+      at Object.log (api.test.js:72:21)
+
+  console.log
+    
+    --- Teste: Login com sucesso ---
+
+      at Object.log (api.test.js:81:17)
+
+  console.log
+    ✅ Login realizado com sucesso.
+
+      at Object.log (api.test.js:90:17)
+
+  console.log
+    
+    --- Teste: Acesso a rota protegida sem token ---
+
+      at Object.log (api.test.js:94:17)
+
+  console.log
+    ✅ Acesso sem token foi barrado como esperado (Status 401).
+
+      at Object.log (api.test.js:104:21)
+
+  console.log
+    
+    --- Criando transação para Empresa A ---
+
+      at Object.log (isolamento.test.js:27:17)
+
+  console.log
+    Empresa A - Criar Transação (Status): 201
+
+      at Object.log (isolamento.test.js:40:17)
+
+  console.log
+    Empresa A - Criar Transação (Corpo): {
+      "companyId": "690c92e06074eb08e1b8b1f3",
+      "userId": "690c92e06074eb08e1b8b1f5",
+      "type": "expense",
+      "description": "Transação de Teste Empresa A",
+      "amount": 100,
+      "date": "2025-11-06T12:21:54.412Z",
+      "paymentMethod": "other",
+      "status": "pending",
+      "_id": "690c92e26074eb08e1b8b233",
+      "createdAt": "2025-11-06T12:21:54.443Z",
+      "updatedAt": "2025-11-06T12:21:54.443Z",
+      "__v": 0
+    }
+
+      at Object.log (isolamento.test.js:41:17)
+
+  console.log
+    Empresa A - ID da Transação Criada: 690c92e26074eb08e1b8b233
+
+      at Object.log (isolamento.test.js:45:17)
+
+  console.log
+    
+    --- Tentando acessar transação da Empresa A com token da Empresa B ---
+
+      at Object.log (isolamento.test.js:48:17)
+
+  console.log
+    Enviando: GET para http://localhost:5000/api/transactions/690c92e26074eb08e1b8b233 com token da Empresa B
+
+      at Object.log (isolamento.test.js:49:17)
+
+  console.log
+    Empresa B - Acessar Transação (Status): 404
+
+      at Object.log (isolamento.test.js:57:21)
+
+  console.log
+    Empresa B - Acessar Transação (Corpo): "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot GET /api/transactions/690c92e26074eb08e1b8b233</pre>\n</body>\n</html>\n"
+
+      at Object.log (isolamento.test.js:58:21)
+
+  console.log
+    
+    --- Tentando modificar transação da Empresa A com token da Empresa B ---
+
+      at Object.log (isolamento.test.js:68:17)
+
+  console.log
+    Enviando: PUT para http://localhost:5000/api/transactions/690c92e26074eb08e1b8b233 com token da Empresa B
+
+      at Object.log (isolamento.test.js:70:17)
+
+  console.log
+    Dados da atualização: {
+      "description": "Tentativa de Modificação pela Empresa B",
+      "amount": 999
+    }
+
+      at Object.log (isolamento.test.js:71:17)
+
+  console.log
+    Empresa B - Modificar Transação (Status): 404
+
+      at Object.log (isolamento.test.js:79:21)
+
+  console.log
+    Empresa B - Modificar Transação (Corpo): {
+      "message": "Transaction não encontrada"
+    }
+
+      at Object.log (isolamento.test.js:80:21)
+
+  console.log
+    
+    --- Tentando excluir transação da Empresa A com token da Empresa B ---
+
+      at Object.log (isolamento.test.js:86:17)
+
+  console.log
+    Enviando: DELETE para http://localhost:5000/api/transactions/690c92e26074eb08e1b8b233 com token da Empresa B
+
+      at Object.log (isolamento.test.js:87:17)
+
+  console.log
+    Empresa B - Excluir Transação (Status): 404
+
+      at Object.log (isolamento.test.js:95:21)
+
+  console.log
+    Empresa B - Excluir Transação (Corpo): {
+      "message": "Transaction não encontrada"
+    }
+
+      at Object.log (isolamento.test.js:96:21)
+
+  console.log
+    
+    --- Tentando listar transações com token da Empresa B ---
+
+      at Object.log (isolamento.test.js:104:17)
+
+  console.log
+    Enviando: GET para http://localhost:5000/api/transactions com token da Empresa B
+
+      at Object.log (isolamento.test.js:105:17)
+
+  console.log
+    Empresa B - Listar Transações (Status): 200
+
+      at Object.log (isolamento.test.js:113:17)
+
+  console.log
+    Empresa B - Listar Transações (Corpo): []
+
+      at Object.log (isolamento.test.js:114:17)
+
+(node:5092) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+ FAIL  Testes/transactions.test.js
+  4. Módulo de Transações (CRUD)
+    √ RF-002: deve CRIAR uma nova transação com sucesso (84 ms)
+    √ RF-003: deve LISTAR as transações do usuário logado (38 ms)
+    × RF-004: deve OBTER uma transação específica pelo ID (14 ms)
+    √ RF-005: deve ATUALIZAR uma transação existente (73 ms)
+    √ RF-006: deve EXCLUIR uma transação existente (70 ms)
+
+  ● 4. Módulo de Transações (CRUD) › RF-004: deve OBTER uma transação específica pelo ID
+
+    AxiosError: Request failed with status code 404
+
+      61 |         expect(createdTransactionId).toBeDefined();
+      62 |
+    > 63 |         const response = await axios.get(`${API_URL}/transactions/${createdTransactionId}`, {
+         |                          ^
+      64 |             headers: { Authorization: `Bearer ${userToken}` }
+      65 |         });
+      66 |
+
+      at settle (../node_modules/axios/lib/core/settle.js:19:12)
+      at IncomingMessage.handleStreamEnd (../node_modules/axios/lib/adapters/http.js:793:11)
+      at Axios.request (../node_modules/axios/lib/core/Axios.js:45:41)
+      at Object.<anonymous> (transactions.test.js:63:26)
+
+ FAIL  Testes/multi-tenant.test.js
+  3. Teste de Isolamento de Dados em Larga Escala (Multi-Tenant)
+    × deve criar uma transação para cada empresa (1 ms)
+    × deve impedir que uma empresa acesse a transação de outra
+    × deve garantir que cada empresa liste apenas suas próprias transações
+
+  ● 3. Teste de Isolamento de Dados em Larga Escala (Multi-Tenant) › deve criar uma transação para cada empresa
+
+    ReferenceError: registerResponse is not defined
+
+      32 |
+      33 |             companies.push({
+    > 34 |                 userId: registerResponse.data.userId, // Armazena o userId retornado no cadastro
+         |                         ^
+      35 |                 token: loginResponse.data.token,
+      36 |                 id: loginResponse.data.user.companyId,
+      37 |                 transactions: []
+
+      at Object.registerResponse (multi-tenant.test.js:34:25)
+
+  ● 3. Teste de Isolamento de Dados em Larga Escala (Multi-Tenant) › deve impedir que uma empresa acesse a transação de outra
+
+    ReferenceError: registerResponse is not defined
+
+      32 |
+      33 |             companies.push({
+    > 34 |                 userId: registerResponse.data.userId, // Armazena o userId retornado no cadastro
+         |                         ^
+      35 |                 token: loginResponse.data.token,
+      36 |                 id: loginResponse.data.user.companyId,
+      37 |                 transactions: []
+
+      at Object.registerResponse (multi-tenant.test.js:34:25)
+
+  ● 3. Teste de Isolamento de Dados em Larga Escala (Multi-Tenant) › deve garantir que cada empresa liste apenas suas próprias transações
+
+    ReferenceError: registerResponse is not defined
+
+      32 |
+      33 |             companies.push({
+    > 34 |                 userId: registerResponse.data.userId, // Armazena o userId retornado no cadastro
+         |                         ^
+      35 |                 token: loginResponse.data.token,
+      36 |                 id: loginResponse.data.user.companyId,
+      37 |                 transactions: []
+
+      at Object.registerResponse (multi-tenant.test.js:34:25)
+
+ PASS  Testes/api.test.js
+  1. Módulo de Autenticação
+    √ RF-001: deve ter cadastrado a Empresa A com sucesso no setup global (4 ms)
+    √ deve barrar o cadastro de um usuário com e-mail já existente (37 ms)
+    √ deve falhar o login com senha incorreta (104 ms)
+    √ deve realizar o login com sucesso para a Empresa A (100 ms)
+    √ deve proteger rotas, barrando acesso sem token (4 ms)
+
+ PASS  Testes/isolamento.test.js
+  2. Teste de Isolamento de Dados (Transações)
+    √ deve impedir o acesso, modificação e exclusão de transações entre empresas (163 ms)
+    √ deve impedir que a Empresa B liste todas as transações da Empresa A (37 ms)
+
+Test Suites: 2 failed, 2 passed, 4 total
+Tests:       4 failed, 11 passed, 15 total
+Snapshots:   0 total
+Time:        2.052 s, estimated 4 s
+Ran all test suites.

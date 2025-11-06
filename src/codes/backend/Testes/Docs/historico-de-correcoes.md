@@ -145,4 +145,32 @@ Com o ambiente de testes estabilizado e a geração de logs detalhados funcionan
     -   **Causa:** O script `login.js` chamava a API, mas não armazenava o token de autenticação recebido no `localStorage` do navegador. Sem o token salvo, o usuário não era considerado "logado".
     -   **Solução:** O arquivo `login.js` foi ajustado para, após uma resposta de sucesso da API, salvar o `token`, `refreshToken` e os dados do `user` no `localStorage`, e só então redirecionar para a `startPage.html`. Também foram adicionados `console.log` detalhados para facilitar a depuração no navegador.
 
+-   **Problema 6.5: Falha na Criação de Metas (Erro 500)**
+    -   **Sintoma:** O teste `deve CRIAR uma nova meta com sucesso` falhava com erro 500.
+    -   **Causa Raiz:** Incompatibilidade de dados entre o teste (`metas.test.js`) e o modelo (`Meta.js`). O teste enviava campos como `title` e `targetAmount`, enquanto o backend esperava `tipo_meta`, `valor_meta`, etc. Além disso, o `metaController.js` não estava adicionando o `usuarioId` ao criar a meta.
+    -   **Solução:**
+        1.  **Ajuste no Teste:** O arquivo `metas.test.js` foi corrigido para enviar os dados no formato correto que o backend espera.
+        2.  **Ajuste no Controller:** O `metaController.js` foi corrigido para adicionar o `usuarioId` e `empresaId` (convertidos para `ObjectId`) ao criar uma nova meta, garantindo que todos os campos obrigatórios do modelo sejam preenchidos.
+
+---
+
+### 7. Otimização da Suíte de Testes (Setup Global e Teardown)
+    -   **Sintoma:** O login na página `login.html` não funcionava, mesmo com credenciais corretas de usuários criados pelos testes.
+    -   **Causa:** O script `login.js` chamava a API, mas não armazenava o token de autenticação recebido no `localStorage` do navegador. Sem o token salvo, o usuário não era considerado "logado".
+    -   **Solução:** O arquivo `login.js` foi ajustado para, após uma resposta de sucesso da API, salvar o `token`, `refreshToken` e os dados do `user` no `localStorage`, e só então redirecionar para a `startPage.html`. Também foram adicionados `console.log` detalhados para facilitar a depuração no navegador.
+
+-   **Problema 6.5: Falha na Criação de Metas (Erro 500)**
+    -   **Sintoma:** O teste `deve CRIAR uma nova meta com sucesso` falhava com erro 500.
+    -   **Causa Raiz:** Incompatibilidade de dados entre o teste (`metas.test.js`) e o modelo (`Meta.js`). O teste enviava campos como `title` e `targetAmount`, enquanto o backend esperava `tipo_meta`, `valor_meta`, etc. Além disso, o `metaController.js` não estava adicionando o `usuarioId` ao criar a meta.
+    -   **Solução:**
+        1.  **Ajuste no Teste:** O arquivo `metas.test.js` foi corrigido para enviar os dados no formato correto que o backend espera.
+        2.  **Ajuste no Controller:** O `metaController.js` foi corrigido para adicionar o `usuarioId` e `empresaId` (convertidos para `ObjectId`) ao criar uma nova meta, garantindo que todos os campos obrigatórios do modelo sejam preenchidos.
+
+---
+
+### 7. Otimização da Suíte de Testes (Setup Global e Teardown)
+    -   **Sintoma:** O login na página `login.html` não funcionava, mesmo com credenciais corretas de usuários criados pelos testes.
+    -   **Causa:** O script `login.js` chamava a API, mas não armazenava o token de autenticação recebido no `localStorage` do navegador. Sem o token salvo, o usuário não era considerado "logado".
+    -   **Solução:** O arquivo `login.js` foi ajustado para, após uma resposta de sucesso da API, salvar o `token`, `refreshToken` e os dados do `user` no `localStorage`, e só então redirecionar para a `startPage.html`. Também foram adicionados `console.log` detalhados para facilitar a depuração no navegador.
+
 ---

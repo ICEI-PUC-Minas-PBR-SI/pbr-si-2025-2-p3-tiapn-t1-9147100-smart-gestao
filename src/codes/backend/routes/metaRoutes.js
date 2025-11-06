@@ -8,6 +8,7 @@ import {
   createMeta,
   getAllMetas,
   updateMeta,
+  getMetaById,
   deleteMeta,
 } from "../controllers/metaController.js";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
@@ -18,6 +19,9 @@ const router = express.Router();
 
 // - Listar metas financeiras
 router.get("/", authMiddleware, companyScopeMiddleware, getAllMetas);
+
+// - Obter uma meta específica por ID
+router.get("/:id", authMiddleware, companyScopeMiddleware, getMetaById);
 
 // - Criar nova meta
 router.post("/", authMiddleware, companyScopeMiddleware, auditMiddleware("CREATE_META"), createMeta);

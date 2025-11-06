@@ -10,8 +10,8 @@ import { createLog } from "../utils/logger.js";
  */
 export const getAllClients = async (req, res) => {
   try {
-    const companyId = req.user.companyId;
-    const clients = await Client.find({ companyId }).sort({ name: 1 });
+    const companyId = req.user.companyId; // companyId já é ObjectId do authMiddleware
+    const clients = await Client.find({ companyId: companyId }).sort({ name: 1 });
     return res.status(200).json(clients);
   } catch (error) {
     console.error("getAllClients:", error);
@@ -25,10 +25,10 @@ export const getAllClients = async (req, res) => {
  */
 export const createClient = async (req, res) => {
   try {
-    const companyId = req.user.companyId;
-    const userId = req.user.userId;
-    const payload = { ...req.body, companyId };
-
+    const companyId = req.user.companyId; // companyId já é ObjectId do authMiddleware
+    const userId = req.user.userId; // userId já é ObjectId do authMiddleware
+    // Payload alinhado com o modelo padronizado
+    const payload = { ...req.body, companyId: companyId, userId: userId };
     const client = await Client.create(payload);
 
     await createLog({
@@ -52,10 +52,10 @@ export const createClient = async (req, res) => {
  */
 export const updateClient = async (req, res) => {
   try {
-    const companyId = req.user.companyId;
+    const companyId = req.user.companyId; // companyId já é ObjectId do authMiddleware
     const client = await Client.findOneAndUpdate(
-      { _id: req.params.id, companyId },
-      { $set: req.body },
+      { _id: req.params.id, companyId: companyId }, // Padronizado para companyId
+      { $set: req.body }, // req.body já deve ter os campos padronizados
       { new: true }
     );
     if (!client) return res.status(404).json({ message: "Client não encontrado" });
@@ -81,8 +81,8 @@ export const updateClient = async (req, res) => {
  */
 export const deleteClient = async (req, res) => {
   try {
-    const companyId = req.user.companyId;
-    const removed = await Client.findOneAndDelete({ _id: req.params.id, companyId });
+    const companyId = req.user.companyId; // companyId já é ObjectId do authMiddleware
+    const removed = await Client.findOneAndDelete({ _id: req.params.id, companyId: companyId }); // Padronizado para companyId
     if (!removed) return res.status(404).json({ message: "Client não encontrado" });
 
     await createLog({
