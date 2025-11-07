@@ -16,9 +16,8 @@ O processo de geração de relatórios permite que o usuário visualize e analis
 
 ## **Wireframe (esboço previo da tela)**
 
-
+<img width="418" height="658" alt="Captura de tela 2025-11-07 190107" src="https://github.com/user-attachments/assets/bf46d818-0a51-4c94-b25b-fc417ef33b67" />
 <img width="406" height="333" alt="Captura de tela 2025-11-07 184929" src="https://github.com/user-attachments/assets/e4a9c9e8-ca9a-4b99-9dd9-ab114c73caea" />
-
 
 #### Detalhamento das atividades
 
