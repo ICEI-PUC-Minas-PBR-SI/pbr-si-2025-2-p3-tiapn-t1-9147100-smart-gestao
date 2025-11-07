@@ -20,11 +20,10 @@ Modelagem BPMN:
 
 Wireframe (esboço previo da tela)
 
-
-<img width="478" height="346" alt="wiredespesa" src="https://github.com/user-attachments/assets/1f3013cc-4c4f-4a59-b7d5-adc3b5021825" />
-
+<img width="478" height="346" alt="wiredespesa" src="https://github.com/user-attachments/assets/48f6ffee-03b3-421c-98c5-bb8f172a334f" />
  
 #### Detalhamento das atividades
+
 
 ## Atividade 1 – Visualizar e Filtrar Transações (Usuário) 
 
