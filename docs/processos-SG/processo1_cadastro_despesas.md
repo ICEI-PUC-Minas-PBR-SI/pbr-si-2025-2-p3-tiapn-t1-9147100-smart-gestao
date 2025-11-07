@@ -18,22 +18,6 @@ Modelagem BPMN:
 
 <img width="1571" height="521" alt="dese drawio" src="https://github.com/user-attachments/assets/e8646374-8849-4f73-acc2-310b8e8ae77a" />
 
-> **Ponto de Melhoria (Revisado por Heron):** Olá, equipe! Para alinharmos o diagrama BPMN com o feedback da professora, o responsável pela documentação poderia, por favor, fazer um pequeno ajuste?
->
-> **Guia para o ajuste:**
-> 1.  No diagrama, mova a tarefa "Salva o registro no banco de dados" para dentro da raia "Sistema".
-> 2.  Depois, remova completamente a raia "Banco de Dados", pois o banco é um componente do sistema, não um participante do processo.
-
----
-
-> **Ponto de Melhoria (Revisado por Heron):** Olá, equipe! Para deixar a documentação mais lógica e completa, o responsável poderia fazer os seguintes ajustes na seção "Detalhamento das atividades"?
->
-> **Guia para o ajuste:**
-> 1.  **Inverta a ordem das atividades:** A "Atividade 2 – Adicionar Nova Transação" deve vir primeiro, pois é a ação principal. Mova todo o seu bloco para antes da "Atividade 1 – Visualizar e Filtrar Transações".
-> 2.  **Renumere os títulos:** Após a troca, ajuste os números para que a primeira seja "Atividade 1" e a segunda "Atividade 2".
-> 3.  **Detalhe os comandos:** Na atividade de adicionar transação, descreva o que acontece após o usuário clicar em "Salvar" e "Cancelar", conforme a sugestão que estava no final do arquivo.
->
-> *Após realizar os ajustes, pode remover este bloco de revisão e o que está no final do arquivo sobre os comandos.*
  
 #### Detalhamento das atividades
 
