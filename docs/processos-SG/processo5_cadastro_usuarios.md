@@ -1,4 +1,4 @@
-### 3.3.2 Processo 2 – Gerar Relatórios
+### 3.3.5 Processo 5 – Cadastro de Usuários
 
 O processo de geração de relatórios permite que o usuário visualize e analise suas informações financeiras de forma organizada. Esta funcionalidade é crucial para o acompanhamento da saúde financeira do MEI, oferecendo diferentes perspectivas através de filtros, gráficos e tabelas detalhadas.
 
@@ -12,11 +12,11 @@ O processo de geração de relatórios permite que o usuário visualize e analis
 
 ## **Modelo BPMN:**
 
-<img width="1221" height="541" alt="relatoriodiagrama drawio" src="https://github.com/user-attachments/assets/ab000018-f1c9-46cd-b66e-c123509a1186" />
+
 
 ## **Wireframe (esboço previo da tela)**
 
-<img width="597" height="430" alt="Captura de tela 2025-11-07 164919" src="https://github.com/user-attachments/assets/aa03297f-a6c3-4ad1-8e87-16e527cfe0ef" />
+
 
 #### Detalhamento das atividades
 
