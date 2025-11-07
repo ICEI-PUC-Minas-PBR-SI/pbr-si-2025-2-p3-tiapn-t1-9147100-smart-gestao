@@ -16,6 +16,10 @@ Modelo BPMN:
 
 ---
 
+> **Ponto de Melhoria (Revisado por Heron):** Olá, equipe! Para um pequeno refinamento, o responsável poderia ajustar os títulos das atividades 2, 3 e 4? Atualmente, eles estão descritos sob a perspectiva do "Sistema".
+>
+> **Guia para o ajuste:** Altere os títulos para que reflitam a ação do **usuário** (ex: "Analisar Dados Visuais (Usuário)"), tornando a documentação mais consistente. O conteúdo das seções não precisa ser alterado.
+
 #### Detalhamento das atividades
 
 ## Atividade 1 – Selecionar Filtros de Relatório (Usuário)

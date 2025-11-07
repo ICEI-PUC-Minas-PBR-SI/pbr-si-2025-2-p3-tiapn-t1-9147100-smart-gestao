@@ -31,34 +31,30 @@ Esta seção orienta como executar o sistema localmente para fins acadêmicos/de
 - Conta MongoDB Atlas (ou outra instância MongoDB acessível) e string de conexão
 
 ### Configuração (uma única vez)
-1) Backend: instalar dependências
+1.  **Navegue até a pasta do backend:**
+    ```bash
+    cd src/codes/backend
+    ```
+2.  **Crie o arquivo de ambiente:**
+    Copie o arquivo `.env.example` (se existir) para um novo arquivo chamado `.env` na mesma pasta (`src/codes/backend`).
+3.  **Configure as variáveis de ambiente:**
+    Abra o arquivo `.env` e preencha com suas informações, como a string de conexão do MongoDB e os segredos JWT.
+    ```env
+    MONGODB_URI=sua_string_conexao_mongodb
+    PORT=5000
+    JWT_SECRET=um_segredo_aleatorio_seguro_para_access_token
+    JWT_REFRESH_SECRET=outro_segredo_aleatorio_seguro_para_refresh_token
+    ACCESS_TOKEN_EXPIRATION=30m
+    REFRESH_TOKEN_EXPIRATION=7d
+    ```
+4.  **Instale as dependências do projeto:**
    ```bash
-   cd src/codes/backend
    npm install
    ```
-2) Backend: criar arquivo .env (baseado em .env.example se houver)
-   Crie src/codes/backend/.env com conteúdo semelhante:
-   ```env
-   MONGODB_URI=sua_string_conexao_mongodb
-   PORT=5000
 
-   # Segredos para os tokens JWT (use valores longos e aleatórios)
-   JWT_SECRET=um_segredo_aleatorio_seguro_para_access_token
-   JWT_REFRESH_SECRET=outro_segredo_aleatorio_seguro_para_refresh_token
-
-   # Tempo de expiração da sessão (inatividade) e do refresh token
-   ACCESS_TOKEN_EXPIRATION=30m
-   REFRESH_TOKEN_EXPIRATION=7d
-   ```
-   Observações:
-   - MONGODB_URI: pegue no MongoDB Atlas (libere seu IP em Network Access).
-   - JWT_SECRET: qualquer string segura para assinar tokens.
-   - PORT: 5000 é o padrão esperado pelo frontend.
-
-### Execução (sobe backend e frontend juntos)
-Para iniciar a aplicação completa (backend e frontend), execute o seguinte comando a partir da pasta do backend:
+### Execução
+Para iniciar os servidores do backend e frontend, execute o seguinte comando a partir da pasta `src/codes/backend`:
 ```bash
-cd src/codes/backend
 npm start
 ```
 Isso inicia:
@@ -133,6 +129,10 @@ Notas:
 
 ## Histórico de versões
 
+* 0.3.3
+    * CHANGE: Implementação de uma suíte de testes automatizados de integração para a API, cobrindo os módulos de Autenticação, Isolamento de Dados (Multi-Tenant), Transações (CRUD) e Metas (CRUD) para garantir a estabilidade e qualidade do backend.
+* 0.3.2
+    * CHANGE: Implementação da funcionalidade de exclusão de usuário e todos os seus dados associados (empresa, transações, metas), em conformidade com as boas práticas de gestão de dados.
 * 0.3.1
     * CHANGE: Implementação do fluxo de recuperação de senha ("Esqueci minha senha"), incluindo novas rotas no backend e a criação das páginas de solicitação e redefinição no frontend.
 * 0.3.0
@@ -157,22 +157,6 @@ Notas:
     * CHANGE: Definição da arquitetura do sistema. Escolha das tecnologias e frameworks. Configuração inicial do ambiente de desenvolvimento.
 * 0.1.5
     * CHANGE: Finalização da modelagem de processos. Definição dos requisitos técnicos e regras de negócio.
-* 0.3.1
-    * CHANGE: Implementação do fluxo de recuperação de senha ("Esqueci minha senha"), incluindo novas rotas no backend e a criação das páginas de solicitação e redefinição no frontend.
-* 0.3.0
-    * CHANGE: Implementação de segurança de sessão avançada com expiração de token por inatividade (30 min), renovação automática (refresh token) e proteção contra roubo de token (fingerprinting). Adição de `authGuard` para proteger rotas do frontend. Correção da inicialização do servidor de desenvolvimento.
-* 0.2.3
-    * CHANGE: Padronização do feedback de erro e carregamento no frontend, removendo `alerts` e adicionando indicadores visuais para melhorar a experiência do usuário. 
-* 0.2.2
-    * CHANGE: Refatoração do backend para incluir um middleware de escopo (`companyScopeMiddleware`), garantindo que os dados de uma empresa não sejam acessados por outra.
-* 0.2.1
-    * CHANGE: Criação de modelos JSON para requisições da API e organização da documentação técnica para padronizar o desenvolvimento.
-* 0.2.0
-    * CHANGE: Implementação completa da integração frontend-backend. Sistema de autenticação JWT implementado. Reorganização da estrutura de arquivos para melhor manutenção. Documentação técnica detalhada adicionada.
-* 0.1.9
-    * CHANGE: Desenvolvimento do backend em Node.js/Express. Implementação das APIs RESTful para transações e metas financeiras. Configuração do MongoDB e modelos de dados.
-* 0.1.8
-    * CHANGE: Desenvolvimento do frontend com HTML5/CSS3/JS. Implementação das telas de cadastro, login, transações e relatórios. Adição de validações e feedback visual.
 * 0.1.4
     * CHANGE: Atualização das documentações. Códigos de estruturação do programa ajustados para simular as melhores práticas de programação. Reajuste na estrutura das pastas do projeto.
 * 0.1.3

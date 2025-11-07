@@ -24,15 +24,18 @@ Modelagem BPMN: <img width="1461" height="632" alt="despesasatualizada drawio" s
 
 ---
 
-> **Ponto de Melhoria (Revisado por Heron):** Pessoal, para deixarmos a documentação mais consistente, o responsável poderia reorganizar a seção "Detalhamento das atividades" abaixo?
+> **Ponto de Melhoria (Revisado por Heron):** Olá, equipe! Para deixar a documentação mais lógica e completa, o responsável poderia fazer os seguintes ajustes na seção "Detalhamento das atividades"?
 >
 > **Guia para o ajuste:**
-> 1.  **Reorganize as atividades:** O foco principal do diagrama é adicionar uma transação. Então, a atividade de "Adicionar Nova Transação" (que hoje é a Atividade 2) deve vir primeiro.
-> 2.  **Ajuste os títulos:** A atividade de "Visualizar e Filtrar" (que hoje é a Atividade 1) pode se tornar a "Atividade 2", já que é uma ação complementar na mesma tela.
-
+> 1.  **Inverta a ordem das atividades:** A "Atividade 2 – Adicionar Nova Transação" deve vir primeiro, pois é a ação principal. Mova todo o seu bloco para antes da "Atividade 1 – Visualizar e Filtrar Transações".
+> 2.  **Renumere os títulos:** Após a troca, ajuste os números para que a primeira seja "Atividade 1" e a segunda "Atividade 2".
+> 3.  **Detalhe os comandos:** Na atividade de adicionar transação, descreva o que acontece após o usuário clicar em "Salvar" e "Cancelar", conforme a sugestão que estava no final do arquivo.
+>
+> *Após realizar os ajustes, pode remover este bloco de revisão e o que está no final do arquivo sobre os comandos.*
+ 
 #### Detalhamento das atividades
 
-## Atividade 1 – Visualizar e Filtrar Transações (Usuário)
+## Atividade 1 – Visualizar e Filtrar Transações (Usuário) 
 
 Esta atividade permite ao usuário visualizar todas as transações existentes e aplicar filtros para refinar a busca.
 
@@ -75,11 +78,6 @@ Esta atividade permite ao usuário registrar uma nova receita ou despesa no sist
 - Preencher os campos "Data", "Descrição", "Categoria", "Tipo" e "Valor".
 - Clicar em "Salvar" para registrar a transação.
 - Clicar em "Cancelar" para fechar o formulário sem salvar.
-> **Ponto de Melhoria (Revisado por Heron):** Para deixar a documentação ainda mais clara, o responsável poderia descrever o que acontece após cada comando?
->
-> **Guia para o ajuste:**
-> - No comando "Clicar em 'Salvar'", adicione o resultado: `-> A transação é salva, o formulário é limpo e a lista de transações é atualizada na tela.`
-> - No comando "Clicar em 'Cancelar'", adicione o resultado: `-> O formulário é fechado e os dados preenchidos são descartados.`
 
 ---
 

@@ -15,14 +15,11 @@ Modelagem BPMN: <img width="1602" height="381" alt="Processo3 drawio" src="https
 
 ---
 
-> **Ponto de Melhoria (Revisado por Heron):** Olá, equipe! Para mantermos a documentação alinhada com o nosso código (`cadastro.js`), o responsável poderia, por favor, fazer alguns ajustes na seção "Detalhamento das atividades" abaixo?
+> **Ponto de Melhoria (Revisado por Heron):** Olá, equipe! Para alinhar a documentação com o backend (`cadastro.js`), o responsável poderia ajustar a "Atividade 1 – Preencher Dados Cadastrais" abaixo?
 >
 > **Guia para o ajuste:**
-> 1.  **Na tabela "Atividade 1"**:
->     - Remova a linha do campo `Tipo de Negócio`.
->     - Adicione duas novas linhas para os campos `Nome da Empresa` e `CNPJ`.
-> 2.  **Nos "Comandos" da Atividade 1**: Substitua o comando de "Selecionar o tipo de negócio" pelos comandos para preencher o nome da empresa e o CNPJ.
-> 3.  **Simplificação**: A "Atividade 3 – Navegar para Login" pode ser removida, pois o link de login é um elemento padrão da página, não uma atividade principal do fluxo.
+> 1.  **Ajuste a Tabela de Campos:** O campo `Tipo de Negócio` está incorreto. Ele deve ser substituído pelos campos `Nome da Empresa` e `CNPJ`.
+> 2.  **Ajuste a Lista de Comandos:** Atualize a lista de comandos para refletir a remoção do campo `Tipo de Negócio` e a adição dos novos campos.
 
 #### Detalhamento das atividades
 

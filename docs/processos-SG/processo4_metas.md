@@ -6,42 +6,19 @@ O processo de criação de metas permite que os usuários definam objetivos fina
 1. O usuário acessa a página de criação de metas.
 2. O usuário preenche os dados da meta.
 3. O usuário clica em “Salvar Meta”.
-4. O sistema valida os dados fornecidos.
-5. O sistema registra a nova meta.
-6. O usuário é redirecionado para a tela de listagem de metas.
+4. O sistema valida e registra a nova meta.
+5. O usuário é redirecionado para a tela de listagem de metas.
 
 
 
-> **Ponto de Melhoria (Revisado por Heron):** Pessoal, a etapa "O sistema registra a nova meta" está duplicada neste fluxo (passos 5 e 6 originais). O responsável pela documentação poderia remover a etapa repetida para deixar o fluxo correto?
+> **Ponto de Melhoria Crítico (Revisado por Heron):** Olá, equipe! Ao validar os processos, notei que toda a seção "Detalhamento das atividades" abaixo está incorreta (o conteúdo é do processo de cadastro de usuário). Peço ao responsável que a substitua completamente pelo conteúdo correto, conforme o guia abaixo.
+> 
+> **Guia para a reescrita ("mastigado"):**
+> Apague todo o conteúdo desde `#### Detalhamento das atividades` até o final do arquivo e substitua-o por uma nova seção que descreva o processo correto de **criação de metas**.
+>
+> A nova seção deve conter uma única atividade, "Definir Nova Meta Financeira", detalhando os campos necessários (`Título da Meta`, `Tipo`, `Valor Alvo`, etc.) e os comandos do usuário, de forma semelhante aos outros documentos de processo.
    
 Modelagem BPMN: <img width="1081" height="661" alt="metas (2)" src="https://github.com/user-attachments/assets/0b32a756-a7cf-428b-b1a3-83886ee2a48e" />
-
-
-
----
-
-> **Ponto de Melhoria Importante (Revisado por Heron):** Olá, equipe! Um ponto de atenção aqui: a seção "Detalhamento das atividades" precisa ser refeita, pois o conteúdo é do cadastro de usuário.
->
-> **Guia para a reescrita:**
-> O responsável pela documentação pode substituir todo o conteúdo abaixo por uma única atividade chamada **"Definir Nova Meta Financeira"**. A estrutura deve ter:
-> - **Uma tabela de campos com:** `Nome da Meta`, `Valor Alvo`, `Prazo` e `Botão: Salvar Meta`.
-> - **Uma lista de comandos** descrevendo como preencher cada campo e clicar no botão para salvar.
-
-#### Detalhamento das atividades
-
-> **Ponto de Melhoria (Revisado por Heron):** Olá, equipe! Durante a validação dos testes automatizados, foi identificado que o detalhamento das atividades deste processo está desalinhado com a implementação atual do backend (`models/Meta.js` e `controllers/metaController.js`).
->
-> **Guia para o ajuste:**
-> O responsável pela documentação poderia, por favor, reescrever a seção "Detalhamento das atividades" para refletir o fluxo correto de criação de uma meta? A nova estrutura deve descrever os campos que o sistema de fato utiliza, como `title`, `targetAmount`, `currentAmount`, `deadline` e `type`, garantindo que a documentação do processo seja um espelho fiel da funcionalidade implementada.
->
-> **Tabela de Correspondência (Português -> Inglês):**
-> | Campo em Português para documentação | Campo no Backend (padronizado em inglês) |
-> |:------------------------------|:--------------------------|
-> | Título da Meta                | `title`                   |
-> | Tipo                          | `type`                    |
-> | Valor Alvo                    | `targetAmount`            |
-> | Valor Atual                   | `currentAmount`           |
-> | Prazo Final                   | `deadline`                |
 
 ---
 

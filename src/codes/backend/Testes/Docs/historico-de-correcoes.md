@@ -64,6 +64,15 @@ Este documento serve como um registro dos principais erros encontrados durante a
     -   Envolvemos a lógica do teste de cadastro em um bloco `try...catch`. Isso nos permitiu capturar o erro, registrar os detalhes da resposta de forma limpa usando `console.log`, e então relançar o erro para que o Jest o marcasse corretamente como uma falha, resultando em um log de erro muito mais legível.
 
 ---
+### 4.3: Erro 500 na Criação de Transações
+    -   **Sintoma:** Os testes de isolamento de dados falhavam com erro `500 Internal Server Error` ao tentar criar uma transação (`POST /api/transactions`).
+    -   **Causa Raiz:** Inconsistência de nomes de campos entre os testes, o controller e o modelo `Transaction.js`. O teste enviava `amount`, mas o modelo esperava `valor`. Além disso, outros campos obrigatórios como `type` e `date` não estavam sendo enviados consistentemente.
+    -   **Solução:**
+        1.  **Padronização do Modelo:** O `models/Transaction.js` foi atualizado para usar nomes de campos em inglês e camelCase (ex: `valor` -> `amount`, `empresaId` -> `companyId`, `usuarioId` -> `userId`, etc.), seguindo as melhores práticas.
+        2.  **Ajuste no Controller:** O `controllers/transactionController.js` foi ajustado para passar o `userId` do usuário autenticado ao criar uma nova transação.
+        3.  **Ajuste nos Testes:** O arquivo `Testes/isolamento.test.js` foi corrigido para enviar o corpo da requisição com os nomes de campos corretos e todos os dados obrigatórios, resolvendo o erro de validação do Mongoose.
+
+---
 
 ### 5. Processo de Validação Prioritário
 
@@ -89,31 +98,6 @@ Com o ambiente de testes estabilizado e a geração de logs detalhados funcionan
     -   `deve realizar o login com sucesso para a Empresa A`: Confirma o acesso bem-sucedido ao sistema.
     -   `deve proteger rotas, barrando acesso sem token`: Valida a segurança básica das rotas protegidas.
 -   **Próximo Passo:** Seguir para o próximo módulo crítico ou para o "2. Teste de Isolamento de Dados" conforme indicado no `api.test.js`.
-
----
-
-### 7. Otimização da Suíte de Testes (Setup Global e Teardown)
-
--   **Problema 7.1: Redundância e Lentidão nos Testes**
-    -   **Sintoma:** Cada arquivo de teste (`.test.js`) estava criando seus próprios usuários e empresas, tornando a suíte de testes lenta e poluindo o banco de dados a cada execução.
-    -   **Solução (Em Andamento):**
-        1.  **Criação de um Setup Global:** Foi implementado o arquivo `Testes/test-setup.js`, configurado no `jest.config.cjs` para rodar **uma única vez** antes de todos os testes.
-        2.  **Centralização de Dados:** Este script cria um conjunto fixo de empresas de teste (Empresa A e Empresa B) e salva suas credenciais e tokens em um arquivo temporário (`test-setup.json`).
-        3.  **Refatoração dos Testes:** Os arquivos `api.test.js`, `isolamento.test.js` e `transactions.test.js` foram ajustados para ler os dados deste arquivo de setup, em vez de criarem seus próprios usuários, tornando os testes mais rápidos e eficientes.
-
--   **Problema 7.2: Limpeza de Dados de Teste (Teardown)**
-    -   **Sintoma:** O teste `multi-tenant.test.js`, que cria 5 empresas para testes de estresse, deixava esses dados no banco após a execução.
-    -   **Solução:**
-        1.  **Criação do Endpoint de Exclusão:** Foi criada a rota `DELETE /api/users/me`, que permite a um usuário autenticado excluir sua própria conta e todos os dados associados (empresa, transações, etc.).
-        2.  **Implementação do `afterAll`:** O teste `multi-tenant.test.js` foi atualizado com um bloco `afterAll`, que é executado após todos os testes do arquivo. Este bloco itera sobre as 5 empresas criadas e chama a nova rota de exclusão para cada uma, limpando o banco de dados automaticamente.
-
--   **Problema 7.3: Instabilidade na Execução com `concurrently`**
-    -   **Sintoma:** O comando `npm test` estava instável, apresentando o erro `EADDRINUSE: address already in use` e falhas na geração do log `.txt`.
-    -   **Causa:** O `nodemon` (iniciado pelo script `npm:dev`) detectava a criação de arquivos pelos testes (como `test-setup.json`) e tentava reiniciar o servidor, causando um conflito de portas.
-    -   **Solução (Em Andamento):**
-        1.  **Criação do `nodemon.json`:** Foi criado um arquivo de configuração para o `nodemon`, instruindo-o a ignorar completamente a pasta `Testes/` e seus subdiretórios, evitando reinicializações indesejadas durante os testes.
-        2.  **Ajuste nos Scripts do `package.json`:** Os scripts de teste foram refatorados para usar um `test:server` com `node server.js` (sem `nodemon`), garantindo um ambiente estável para a execução dos testes.
-        3.  **Ajuste no `run-test-log.js`:** O script foi ajustado para ser o único executor dos testes, capturando a saída, exibindo-a no console e salvando uma versão limpa no arquivo `.txt`.
 
 ---
 
@@ -150,27 +134,19 @@ Com o ambiente de testes estabilizado e a geração de logs detalhados funcionan
     -   **Causa Raiz:** Incompatibilidade de dados entre o teste (`metas.test.js`) e o modelo (`Meta.js`). O teste enviava campos como `title` e `targetAmount`, enquanto o backend esperava `tipo_meta`, `valor_meta`, etc. Além disso, o `metaController.js` não estava adicionando o `usuarioId` ao criar a meta.
     -   **Solução:**
         1.  **Ajuste no Teste:** O arquivo `metas.test.js` foi corrigido para enviar os dados no formato correto que o backend espera.
-        2.  **Ajuste no Controller:** O `metaController.js` foi corrigido para adicionar o `usuarioId` e `empresaId` (convertidos para `ObjectId`) ao criar uma nova meta, garantindo que todos os campos obrigatórios do modelo sejam preenchidos.
+        2.  **Ajuste no Controller:** O `metaController.js` foi corrigido para adicionar o `usuarioId` e `empresaId` ao criar uma nova meta, garantindo que todos os campos obrigatórios do modelo sejam preenchidos.
 
 ---
 
 ### 7. Otimização da Suíte de Testes (Setup Global e Teardown)
-    -   **Sintoma:** O login na página `login.html` não funcionava, mesmo com credenciais corretas de usuários criados pelos testes.
-    -   **Causa:** O script `login.js` chamava a API, mas não armazenava o token de autenticação recebido no `localStorage` do navegador. Sem o token salvo, o usuário não era considerado "logado".
-    -   **Solução:** O arquivo `login.js` foi ajustado para, após uma resposta de sucesso da API, salvar o `token`, `refreshToken` e os dados do `user` no `localStorage`, e só então redirecionar para a `startPage.html`. Também foram adicionados `console.log` detalhados para facilitar a depuração no navegador.
-
--   **Problema 6.5: Falha na Criação de Metas (Erro 500)**
-    -   **Sintoma:** O teste `deve CRIAR uma nova meta com sucesso` falhava com erro 500.
-    -   **Causa Raiz:** Incompatibilidade de dados entre o teste (`metas.test.js`) e o modelo (`Meta.js`). O teste enviava campos como `title` e `targetAmount`, enquanto o backend esperava `tipo_meta`, `valor_meta`, etc. Além disso, o `metaController.js` não estava adicionando o `usuarioId` ao criar a meta.
+-   **Problema 7.1: Redundância e Lentidão nos Testes**
+    -   **Sintoma:** Cada arquivo de teste (`.test.js`) estava criando seus próprios usuários e empresas, tornando a suíte de testes lenta e poluindo o banco de dados a cada execução.
     -   **Solução:**
-        1.  **Ajuste no Teste:** O arquivo `metas.test.js` foi corrigido para enviar os dados no formato correto que o backend espera.
-        2.  **Ajuste no Controller:** O `metaController.js` foi corrigido para adicionar o `usuarioId` e `empresaId` (convertidos para `ObjectId`) ao criar uma nova meta, garantindo que todos os campos obrigatórios do modelo sejam preenchidos.
-
----
-
-### 7. Otimização da Suíte de Testes (Setup Global e Teardown)
-    -   **Sintoma:** O login na página `login.html` não funcionava, mesmo com credenciais corretas de usuários criados pelos testes.
-    -   **Causa:** O script `login.js` chamava a API, mas não armazenava o token de autenticação recebido no `localStorage` do navegador. Sem o token salvo, o usuário não era considerado "logado".
-    -   **Solução:** O arquivo `login.js` foi ajustado para, após uma resposta de sucesso da API, salvar o `token`, `refreshToken` e os dados do `user` no `localStorage`, e só então redirecionar para a `startPage.html`. Também foram adicionados `console.log` detalhados para facilitar a depuração no navegador.
-
----
+        1.  **Criação de um Setup Global:** Foi implementado o arquivo `Testes/test-setup.js`, configurado no `jest.config.cjs` para rodar **uma única vez** antes de todos os testes.
+        2.  **Centralização de Dados:** Este script cria um conjunto fixo de empresas de teste (Empresa A e Empresa B) e salva suas credenciais e tokens em um arquivo temporário (`test-setup.json`).
+        3.  **Refatoração dos Testes:** Os arquivos de teste foram ajustados para ler os dados deste arquivo de setup, em vez de criarem seus próprios usuários, tornando os testes mais rápidos e eficientes.
+-   **Problema 7.2: Limpeza de Dados de Teste (Teardown)**
+    -   **Sintoma:** Testes que criavam múltiplos dados (como o de multi-tenant) deixavam "sujeira" no banco de dados.
+    -   **Solução:**
+        1.  **Criação do Endpoint de Exclusão:** Foi criada a rota `DELETE /api/users/me`, que permite a um usuário autenticado excluir sua própria conta e todos os dados associados.
+        2.  **Implementação do `afterAll`:** Testes que criam dados em massa foram atualizados com um bloco `afterAll`, que chama a nova rota de exclusão para cada entidade criada, limpando o banco de dados automaticamente.

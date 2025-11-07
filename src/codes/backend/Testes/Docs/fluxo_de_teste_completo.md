@@ -147,3 +147,43 @@ Este é o teste mais crítico. Ele garante que os dados de uma empresa não vaze
 
 *   **Resultado Esperado (Frontend):**
     *   A sessão do usuário é encerrada no navegador e ele é levado para a tela de login. Qualquer tentativa de voltar para uma página interna usando o botão "Voltar" do navegador deve ser barrada pelo `authGuard.js`.
+
+---
+
+## Fluxo 5: Recuperação de Senha
+
+Este fluxo permite que um usuário que esqueceu sua senha possa redefini-la de forma segura.
+
+#### **Etapa 1: Solicitação de Redefinição**
+
+*   **Ação do Usuário (Frontend):**
+    *   Na página de login, clica em "Esqueci minha senha".
+    *   Na página `forgot-password.html`, insere o e-mail cadastrado e clica em "Enviar".
+
+*   **O que o Frontend Faz (`forgot-password.js`):**
+    *   Envia uma requisição `POST` para `/api/auth/forgot-password` com o e-mail do usuário.
+
+*   **O que o Backend Faz (`authController.js`):**
+    *   Busca o usuário pelo e-mail. Se não existir, retorna um erro que (idealmente) não informa se o e-mail é válido ou não, por segurança.
+    *   Gera um token de redefinição de senha único e com tempo de expiração curto.
+    *   Salva o token (ou seu hash) no documento do usuário no banco de dados.
+    *   **(Simulação)** Em um ambiente real, enviaria um e-mail para o usuário com um link contendo este token. No nosso ambiente de teste, o token pode ser retornado na resposta para simular o clique no link.
+
+#### **Etapa 2: Redefinição da Nova Senha**
+
+*   **Ação do Usuário (Frontend):**
+    *   Acessa a página `reset-password.html` com o token de redefinição na URL.
+    *   Digita a nova senha e a confirmação.
+
+*   **O que o Frontend Faz (`reset-password.js`):**
+    *   Extrai o token da URL.
+    *   Envia uma requisição `POST` para `/api/auth/reset-password/:token` com a nova senha.
+
+*   **O que o Backend Faz (`authController.js`):**
+    *   Valida o token (se existe, não expirou e corresponde ao usuário).
+    *   Criptografa a nova senha e a atualiza no banco de dados.
+    *   Invalida o token de redefinição para que não possa ser usado novamente.
+    *   Retorna uma mensagem de sucesso.
+
+*   **Resultado Esperado (Frontend):**
+    *   Exibe uma mensagem "Senha redefinida com sucesso!" e redireciona para a página de login, onde o usuário agora pode entrar com a nova senha.

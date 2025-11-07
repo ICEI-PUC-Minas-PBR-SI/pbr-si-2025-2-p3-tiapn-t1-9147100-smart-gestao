@@ -74,11 +74,12 @@ Este comando foi configurado para realizar duas ações simultaneamente:
 - **Arquivo de Teste:** `Testes/transactions.test.js`
 - **Descrição:** Valida o ciclo de vida completo (Criar, Ler, Atualizar, Excluir) de uma transação, garantindo que as operações básicas do dia a dia do usuário estão funcionando.
 - **Cenários Cobertos:**
-    - **`RF-002: deve CRIAR uma nova transação com sucesso`**: Verifica a criação de uma transação e a resposta da API.
-    - **`RF-003: deve LISTAR as transações do usuário logado`**: Confirma que a transação criada aparece na listagem geral.
-    - **`RF-004: deve OBTER uma transação específica pelo ID`**: Garante que uma transação pode ser acessada diretamente pelo seu ID.
-    - **`RF-005: deve ATUALIZAR uma transação existente`**: Testa a edição de dados de uma transação.
-    - **`RF-006: deve EXCLUIR uma transação existente`**: Valida a exclusão de uma transação e confirma que ela não pode mais ser acessada.
+    - **`deve CRIAR uma nova transação com sucesso`**: Verifica a criação de uma transação e a resposta da API.
+    - **`deve LISTAR as transações do usuário logado`**: Confirma que a transação criada aparece na listagem geral.
+    - **`deve falhar ao tentar criar uma transação com dados inválidos`**: Garante que a API retorne um erro de validação (Status 400) se campos obrigatórios estiverem faltando.
+    - **`deve OBTER uma transação específica pelo ID`**: Garante que uma transação pode ser acessada diretamente pelo seu ID.
+    - **`deve ATUALIZAR uma transação existente`**: Testa a edição de dados de uma transação.
+    - **`deve EXCLUIR uma transação existente`**: Valida a exclusão de uma transação e confirma que ela não pode mais ser acessada.
 
 #### Módulo de Metas (CRUD)
 - **Status:** ✅ **Validado**
@@ -89,5 +90,14 @@ Este comando foi configurado para realizar duas ações simultaneamente:
     - **`deve LISTAR as metas do usuário logado`**: Confirma que a meta criada aparece na listagem geral.
     - **`deve ATUALIZAR uma meta existente`**: Testa a edição de dados de uma meta.
     - **`deve EXCLUIR uma meta existente`**: Valida a exclusão de uma meta e confirma que ela não pode mais ser acessada.
+
+#### Módulo de Relatórios
+- **Status:** 🟡 **Pendente**
+- **Arquivo de Teste:** `Testes/reports.test.js` (sugestão)
+- **Descrição:** Valida a capacidade do sistema de agregar dados e gerar resumos financeiros corretamente.
+- **Cenários Sugeridos:**
+    - **`deve gerar um relatório de resumo financeiro com sucesso`**: Verifica se os totais de receitas, despesas e saldo correspondem às transações criadas.
+    - **`deve retornar um relatório vazio para um período sem transações`**: Garante que o sistema lida corretamente com a ausência de dados.
+    - **`deve barrar o acesso ao relatório sem autenticação`**: Confirma que o endpoint de relatórios está protegido.
 ---
 *Este documento deve ser atualizado conforme novos blocos de teste (Isolamento de Dados, Transações, etc.) forem adicionados.*
