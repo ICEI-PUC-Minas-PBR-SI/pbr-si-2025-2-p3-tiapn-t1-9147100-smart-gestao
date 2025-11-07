@@ -14,11 +14,11 @@ O processo de cadastro de despesas permite ao usuário registrar e gerenciar sua
 9. Caso o usuário não confirme, pode corrigir os dados.
 10. Caso confirme, o sistema salva o registro no banco de dados.
 
-Modelagem BPMN:
+##**Modelagem BPMN:**
 
 <img width="1571" height="521" alt="dese drawio" src="https://github.com/user-attachments/assets/e8646374-8849-4f73-acc2-310b8e8ae77a" />
 
-Wireframe (esboço previo da tela)
+##**Wireframe (esboço previo da tela)**
 
 <img width="478" height="346" alt="wiredespesa" src="https://github.com/user-attachments/assets/48f6ffee-03b3-421c-98c5-bb8f172a334f" />
  
