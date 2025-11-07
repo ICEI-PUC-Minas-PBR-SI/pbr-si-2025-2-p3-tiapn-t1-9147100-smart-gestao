@@ -1,30 +1,29 @@
-// ============================================================
-// - Arquivo: models/User.js
-// - Função: Estrutura do usuário (User) no banco MongoDB
-// ============================================================
+// =================================================================================
+// ARQUIVO: models/User.js
+// DESCRIÇÃO: Define o Schema para a coleção 'Users' no MongoDB.
+//            Este modelo representa cada usuário individual do sistema, contendo
+//            suas credenciais de acesso e informações de perfil.
+// =================================================================================
 
 import mongoose from "mongoose";
 const { Schema } = mongoose;
 
-/**
- * - Schema de Usuário
- * Representa as credenciais e dados de cada usuário do sistema.
- * Está vinculado à empresa (Company) para restringir acesso aos dados.
- */
 const UserSchema = new Schema(
   {
-    // Chave estrangeira que vincula o usuário à sua empresa. Essencial para o isolamento de dados (multi-tenant).
-    // `ref: "Company"` cria uma referência ao modelo 'Company'.
+    // Chave estrangeira que vincula o usuário à sua empresa.
+    // Este é o campo mais crítico para garantir o isolamento de dados (multi-tenant).
     companyId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Company",
       required: true,
     },
+    // Nome completo do usuário.
     name: {
       type: String,
       required: true,
       trim: true,
     },
+    // E-mail de login do usuário. Deve ser único em todo o sistema.
     email: {
       type: String,
       required: true,
@@ -32,27 +31,30 @@ const UserSchema = new Schema(
       lowercase: true,
       trim: true,
     },
-    // Armazena a senha de forma segura, já criptografada (hash).
+    // Armazena o hash da senha do usuário, nunca a senha em texto plano.
+    // O campo é selecionado apenas quando explicitamente solicitado por segurança.
     passwordHash: {
       type: String,
       required: true,
+      select: false, // Por padrão, não retorna este campo em consultas.
     },
-    // --- CAMPOS PARA RECUPERAÇÃO DE SENHA ---
+    // Token temporário gerado para o fluxo de recuperação de senha.
     passwordResetToken: {
       type: String,
-      select: false, // Não retorna este campo em queries por padrão
+      select: false,
     },
+    // Data de expiração do token de recuperação de senha.
     passwordResetExpires: {
       type: Date,
-      select: false, // Não retorna este campo em queries por padrão
+      select: false,
     },
-    // -----------------------------------------
-    // Chave estrangeira que define o nível de acesso do usuário.
+    // Chave estrangeira que define o nível de permissão do usuário (ex: ADMIN, USER).
     role: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Permission", // Permissão associada (ADMIN_COMPANY, USER_COMPANY, etc.)
+      ref: "Permission",
       required: true,
     },
+    // Flag para "soft delete". Se `false`, o usuário não pode logar.
     active: {
       type: Boolean,
       default: true,
@@ -63,10 +65,4 @@ const UserSchema = new Schema(
   }
 );
 
-/**
- * - Antes de remover o usuário, pode-se implementar um middleware
- * de auditoria ou bloqueio de exclusão de administradores.
- */
-
-// Cria o model 'User' com base no schema (evita recriação em hot reload)
 export default mongoose.model("User", UserSchema);

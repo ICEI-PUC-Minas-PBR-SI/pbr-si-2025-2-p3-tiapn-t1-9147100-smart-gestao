@@ -23,11 +23,11 @@ A aplicação é dividida em módulos independentes e interligados, garantindo m
 
 | Módulo | Descrição | Tecnologias Envolvidas |
 |--------|------------|------------------------|
-| **Frontend** | Interface de acesso e visualização de dados, projetada para ser responsiva e intuitiva. | React.js, HTML5, CSS3, JavaScript ES6 |
+| **Frontend (Principal)** | Interface principal de acesso e visualização de dados, projetada para ser responsiva e intuitiva. | HTML5, CSS3, JavaScript ES6 |
 | **Backend (API REST)** | Camada de lógica e controle do sistema, responsável pelas rotas, autenticações e integrações com o banco. | Node.js, Express.js |
-| **Banco de Dados** | Armazena e organiza todas as informações persistentes da aplicação. | MongoDB Atlas (NoSQL) e MySQL (SQL local) |
+| **Banco de Dados** | Armazena e organiza todas as informações persistentes da aplicação. **O projeto implementa MongoDB Atlas (NoSQL)**, com MySQL (SQL local) apresentado como modelo teórico. | MongoDB Atlas (NoSQL) e MySQL (SQL local) |
 | **Autenticação e Criptografia** | Controle de acesso de usuários e segurança das informações. | JWT (JSON Web Token), bcryptjs |
-| **Validação e Segurança** | Validação dos dados e sanitização de entradas. | Joi, CORS, dotenv |
+| **Validação e Segurança** | Validação dos dados e sanitização de entradas. | CORS, dotenv |
 | **Auditoria e Logs** | Registro das ações e acessos ao sistema para rastreabilidade e segurança. | Morgan, Winston |
 | **Integração com BI (Futuro)** | Módulo de análise de dados e relatórios preditivos. | Python, Power BI |
 
@@ -42,7 +42,7 @@ A estrutura segue o seguinte fluxo:
 
 1. O **usuário** acessa o sistema por meio de um navegador ou dispositivo móvel.  
 2. O **frontend (interface React.js)** envia requisições HTTP (GET, POST, PUT, DELETE) para o **backend Node.js**, que funciona como uma API REST.  
-3. O **backend** processa as requisições, aplica regras de negócio e acessa o **banco de dados MongoDB ou MySQL**.  
+3. O **backend** processa as requisições, aplica regras de negócio e acessa o **banco de dados MongoDB**.  
 4. As respostas são devolvidas em formato **JSON**, sendo apresentadas ao usuário por meio de componentes gráficos intuitivos.
 
 ---
@@ -96,8 +96,8 @@ Cada classe (como Usuário, Empresa, Transação, Meta e Alerta) possui seus pr�
 O modelo de dados do **Smart Gestão** foi projetado para garantir **integridade, segurança e escalabilidade**.  
 Para maior flexibilidade, o sistema suporta dois modelos distintos de persistência:
 
-1. **Modelo Relacional (MySQL)** — utilizado em instalações locais, ideal para empresas com infraestrutura própria.  
-2. **Modelo Não Relacional (MongoDB Atlas)** — utilizado no ambiente em nuvem, oferecendo alta disponibilidade e fácil escalabilidade.
+1. **Modelo Relacional (MySQL)** — Apresentado como um modelo teórico para demonstração de conhecimento em bancos de dados relacionais.  
+2. **Modelo Não Relacional (MongoDB Atlas)** — **Este é o modelo implementado no projeto**, utilizado no ambiente em nuvem, oferecendo alta disponibilidade e fácil escalabilidade.
 
 ---
 
@@ -121,9 +121,10 @@ O **Diagrama Entidade-Relacionamento (DER)** representa as principais entidades 
  
 ---
 
-#### 4.3.2 Esquema Relacional (MySQL)
+#### 4.3.2 Esquema Relacional (SQL)
+O modelo relacional é apresentado aqui para demonstrar a compreensão de como a estrutura de dados seria implementada em um banco de dados SQL, como MySQL. Ele é ideal para ambientes corporativos locais, com suporte a chaves primárias e estrangeiras que garantem integridade referencial.
 
-O modelo relacional é ideal para ambientes corporativos locais, com suporte a chaves primárias e estrangeiras que garantem integridade referencial.
+**Nota:** Embora este esquema SQL seja detalhado, a implementação prática do projeto utiliza **MongoDB** como banco de dados principal.
 
 ```sql
 CREATE TABLE users (
@@ -201,6 +202,9 @@ CREATE TABLE alerts (
 
 O **MongoDB** utiliza um formato orientado a documentos JSON, permitindo maior flexibilidade na inserção de dados e melhor desempenho em consultas não estruturadas.
 
+**Estrutura e Mapeamento:**
+Cada documento JSON abaixo representa um registro em uma coleção do MongoDB. Os campos e seus tipos correspondem diretamente aos Schemas definidos na pasta `src/codes/backend/models/`. Os `ObjectId`s são chaves primárias geradas automaticamente pelo MongoDB e usadas para referenciar documentos entre coleções.
+
 ```json
 {
   "users": {
@@ -276,7 +280,7 @@ A seleção das tecnologias foi realizada considerando os seguintes critérios:
 
 1. O usuário acessa o sistema pelo navegador e interage com o **frontend React.js**.  
 2. As requisições são enviadas para o **backend Node.js** por meio de endpoints RESTful.  
-3. O backend processa as solicitações, aplica as regras de negócio e se comunica com o **banco de dados MongoDB ou MySQL**.  
+3. O backend processa as solicitações, aplica as regras de negócio e se comunica com o **banco de dados MongoDB**.  
 4. As respostas são retornadas em **JSON**, exibidas na interface visual.  
 5. As ações do usuário são registradas em **logs de auditoria**, garantindo rastreabilidade e segurança.  
 

@@ -1,38 +1,33 @@
-// ============================================================
-// - models/Permission.js
-// - Estrutura da collection de permissões de acesso no sistema
-// ============================================================
+// =================================================================================
+// ARQUIVO: models/Permission.js
+// DESCRIÇÃO: Define o Schema para a coleção 'Permissions' no MongoDB.
+//            Este modelo armazena os diferentes níveis de acesso (papéis/roles)
+//            que um usuário pode ter no sistema, como 'ROOT', 'ADMIN_COMPANY', etc.
+// =================================================================================
 
 import mongoose from "mongoose";
-
 const { Schema, model } = mongoose;
 
-// - Schema das permissões do sistema
-// Cada permissão define o nível de acesso que um usuário pode ter.
 const PermissionSchema = new Schema(
   {
-    // Nome da permissão (ex: ROOT, ADMIN_COMPANY)
+    // Nome único da permissão, usado internamente para verificações de autorização.
     name: {
       type: String,
-      required: true, // campo obrigatório
-      unique: true,   // evita duplicações
-      trim: true,     // remove espaços desnecessários
-      uppercase: true // mantém padrão consistente
+      required: true,
+      unique: true,   // Garante que não existam permissões com o mesmo nome.
+      trim: true,
+      uppercase: true // Padroniza todos os nomes para maiúsculas para evitar inconsistências (ex: 'admin' vs 'ADMIN').
     },
-
-    // Descrição explicando o que essa permissão representa
+    // Descrição amigável explicando o que a permissão concede ao usuário.
     description: {
       type: String,
       required: true
     },
-
-    // Data de criação automática
-    createdAt: {
-      type: Date,
-      default: Date.now
-    }
   },
   {
+    // Adiciona os campos `createdAt` e `updatedAt` automaticamente.
+    timestamps: true,
+    // Define explicitamente o nome da coleção no banco de dados.
     collection: "Permissions"
   }
 );

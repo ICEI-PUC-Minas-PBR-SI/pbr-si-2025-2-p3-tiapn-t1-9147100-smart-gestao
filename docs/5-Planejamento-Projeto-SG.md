@@ -72,7 +72,8 @@ Considerando a complexidade e as fases de desenvolvimento, o cronograma inicial 
 **Infraestrutura:**
 
 - Servidor para hospedagem do Backend  
-- Banco de Dados MySQL  
+- Banco de Dados Relacional MySQL / MSSQL (Aplicação teorica)
+- Banco de Dados NoSQL MongoDB (Aplicação prática API WEB) 
 - Serviço de deploy: GitHub Pages
 
 ## 5.5 Riscos Identificados

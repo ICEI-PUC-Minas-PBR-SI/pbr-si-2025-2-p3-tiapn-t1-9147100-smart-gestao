@@ -1,5 +1,9 @@
-// routes/alertRoutes.js
-// Rotas para gerenciamento de alertas
+// =================================================================================
+// ARQUIVO: routes/alertRoutes.js
+// DESCRIÇÃO: Define as rotas para o gerenciamento de alertas (Alerts).
+//            Todas as rotas são protegidas e garantem que um usuário só possa
+//            interagir com os alertas de sua própria empresa.
+// =================================================================================
 
 import express from "express";
 import {
@@ -8,7 +12,7 @@ import {
   createAlert,
   updateAlert,
   markAlertAsRead,
-  deleteAlert
+  deleteAlert,
 } from "../controllers/alertController.js";
 
 import { authMiddleware } from "../middlewares/authMiddleware.js";
@@ -17,22 +21,29 @@ import { auditMiddleware } from "../middlewares/auditMiddleware.js";
 
 const router = express.Router();
 
-// - Listar alertas
+// Rota para listar todos os alertas da empresa do usuário autenticado.
+// GET /api/alerts
 router.get("/", authMiddleware, companyScopeMiddleware, getAllAlerts);
 
-// - Obter alerta por id
+// Rota para obter um alerta específico por ID.
+// O `companyScopeMiddleware` garante que o usuário só possa acessar alertas de sua empresa.
+// GET /api/alerts/:id
 router.get("/:id", authMiddleware, companyScopeMiddleware, getAlertById);
 
-// - Criar alerta
-router.post("/", authMiddleware, companyScopeMiddleware, auditMiddleware("CREATE_ALERT"), createAlert); // Adicionado companyScopeMiddleware
+// Rota para criar um novo alerta.
+// POST /api/alerts
+router.post("/", authMiddleware, companyScopeMiddleware, auditMiddleware("CREATE_ALERT"), createAlert);
 
-// - Atualizar alerta
-router.put("/:id", authMiddleware, auditMiddleware("UPDATE_ALERT"), updateAlert);
+// Rota para atualizar um alerta existente.
+// PUT /api/alerts/:id
+router.put("/:id", authMiddleware, companyScopeMiddleware, auditMiddleware("UPDATE_ALERT"), updateAlert);
 
-// - Marcar como lido
-router.put("/:id/read", authMiddleware, auditMiddleware("READ_ALERT"), markAlertAsRead);
+// Rota para marcar um alerta como lido.
+// PUT /api/alerts/:id/read
+router.put("/:id/read", authMiddleware, companyScopeMiddleware, auditMiddleware("READ_ALERT"), markAlertAsRead);
 
-// - Remover alerta
-router.delete("/:id", authMiddleware, auditMiddleware("DELETE_ALERT"), deleteAlert);
+// Rota para excluir um alerta.
+// DELETE /api/alerts/:id
+router.delete("/:id", authMiddleware, companyScopeMiddleware, auditMiddleware("DELETE_ALERT"), deleteAlert);
 
 export default router;

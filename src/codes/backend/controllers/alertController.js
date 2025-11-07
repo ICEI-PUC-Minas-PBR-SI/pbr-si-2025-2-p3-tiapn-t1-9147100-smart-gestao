@@ -1,12 +1,18 @@
-// controllers/alertController.js
-// Gerencia alertas financeiros (CRUD mínimo)
+// =================================================================================
+// ARQUIVO: controllers/alertController.js
+// DESCRIÇÃO: Controladores para o gerenciamento de alertas (Alerts).
+//            As funções aqui implementam as operações CRUD (Create, Read, Update,
+//            Delete) para alertas, garantindo que todas as ações sejam restritas
+//            ao escopo da empresa do usuário autenticado (multi-tenant).
+// =================================================================================
 
 import Alert from "../models/Alert.js";
 import { createLog } from "../utils/logger.js";
 
 /**
- * - GET /api/alerts
- * Lista alertas da company do usuário autenticado.
+ * Lista todos os alertas pertencentes à empresa do usuário autenticado.
+ * @param {object} req - O objeto de requisição do Express, contendo `req.user` do middleware de autenticação.
+ * @param {object} res - O objeto de resposta do Express.
  */
 export const getAllAlerts = async (req, res) => {
   try {
@@ -20,8 +26,9 @@ export const getAllAlerts = async (req, res) => {
 };
 
 /**
- * - GET /api/alerts/:id
- * Retorna um alerta por ID (se pertencer à mesma company do usuário).
+ * Busca um alerta específico por ID, garantindo que ele pertença à empresa do usuário.
+ * @param {object} req - O objeto de requisição do Express.
+ * @param {object} res - O objeto de resposta do Express.
  */
 export const getAlertById = async (req, res) => {
   try {
@@ -39,8 +46,9 @@ export const getAlertById = async (req, res) => {
 };
 
 /**
- * - POST /api/alerts
- * Cria um novo alerta (vinculado à company do usuário).
+ * Cria um novo alerta, associando-o automaticamente à empresa do usuário.
+ * @param {object} req - O objeto de requisição do Express.
+ * @param {object} res - O objeto de resposta do Express.
  */
 export const createAlert = async (req, res) => {
   try {
@@ -56,7 +64,7 @@ export const createAlert = async (req, res) => {
     });
 
     const saved = await newAlert.save();
-    // cria log de auditoria
+    // Registra a ação de criação em um log de auditoria.
     await createLog(req.user, req, "CREATE_ALERT", 201);
 
     return res.status(201).json(saved);
@@ -67,8 +75,9 @@ export const createAlert = async (req, res) => {
 };
 
 /**
- * - PUT /api/alerts/:id
- * Atualiza um alerta (apenas se pertencer à mesma company).
+ * Atualiza um alerta existente, verificado pelo ID e pela empresa do usuário.
+ * @param {object} req - O objeto de requisição do Express.
+ * @param {object} res - O objeto de resposta do Express.
  */
 export const updateAlert = async (req, res) => {
   try {
@@ -76,7 +85,7 @@ export const updateAlert = async (req, res) => {
     const companyId = req.user.companyId; // companyId já é ObjectId do authMiddleware
     const update = req.body;
 
-    const updated = await Alert.findOneAndUpdate( // Padronizado para companyId
+    const updated = await Alert.findOneAndUpdate(
       { _id: id, companyId },
       { $set: update },
       { new: true }
@@ -84,6 +93,7 @@ export const updateAlert = async (req, res) => {
 
     if (!updated) return res.status(404).json({ message: "Alerta não encontrado." });
 
+    // Registra a ação de atualização no log de auditoria.
     await createLog(req.user, req, "UPDATE_ALERT", 200);
     return res.status(200).json(updated);
   } catch (error) {
@@ -93,15 +103,15 @@ export const updateAlert = async (req, res) => {
 };
 
 /**
- * - PUT /api/alerts/:id/read
- * Marca um alerta como lido.
+ * Marca um alerta específico como lido.
+ * @param {object} req - O objeto de requisição do Express.
+ * @param {object} res - O objeto de resposta do Express.
  */
 export const markAlertAsRead = async (req, res) => {
   try {
     const { id } = req.params;
     const companyId = req.user.companyId; // companyId já é ObjectId do authMiddleware
-
-    const updated = await Alert.findOneAndUpdate( // Padronizado para companyId
+    const updated = await Alert.findOneAndUpdate(
       { _id: id, companyId: companyId },
       { $set: { read: true } },
       { new: true }
@@ -109,6 +119,7 @@ export const markAlertAsRead = async (req, res) => {
 
     if (!updated) return res.status(404).json({ message: "Alerta não encontrado." });
 
+    // Registra a ação de leitura no log de auditoria.
     await createLog(req.user, req, "READ_ALERT", 200);
     return res.status(200).json(updated);
   } catch (error) {
@@ -118,8 +129,9 @@ export const markAlertAsRead = async (req, res) => {
 };
 
 /**
- * - DELETE /api/alerts/:id
- * Remove um alerta (caso esteja autorizado e pertença à mesma company).
+ * Exclui um alerta, garantindo que pertença à empresa do usuário.
+ * @param {object} req - O objeto de requisição do Express.
+ * @param {object} res - O objeto de resposta do Express.
  */
 export const deleteAlert = async (req, res) => {
   try {
@@ -131,6 +143,7 @@ export const deleteAlert = async (req, res) => {
       return res.status(404).json({ message: "Alerta não encontrado." });
     }
 
+    // Registra a ação de exclusão no log de auditoria.
     await createLog(req.user, req, "DELETE_ALERT", 200);
     return res.status(200).json({ message: "Alerta removido com sucesso." });
   } catch (error) {

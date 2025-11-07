@@ -1,7 +1,8 @@
-// ===========================================
-// Arquivo: routes/companyRoutes.js
-// Descrição: Gerencia os cadastros das empresas no sistema
-// ===========================================
+// =================================================================================
+// ARQUIVO: routes/companyRoutes.js
+// DESCRIÇÃO: Define as rotas para o gerenciamento de Empresas.
+//            O acesso a estas rotas é altamente restrito, geralmente a superusuários (ROOT).
+// =================================================================================
 
 import express from "express";
 import {
@@ -17,19 +18,25 @@ import { auditMiddleware } from "../middlewares/auditMiddleware.js";
 
 const router = express.Router();
 
-// - Cadastrar nova empresa (acesso ROOT)
+// Rota para cadastrar uma nova empresa. Acesso restrito a usuários com permissão 'ROOT'.
+// POST /api/companies
 router.post("/", authMiddleware, roleMiddleware(["ROOT"]), auditMiddleware("CREATE_COMPANY"), createCompany);
 
-// - Listar empresas cadastradas
-router.get("/", authMiddleware, roleMiddleware(["ROOT"]), getCompanies); // Acesso apenas para ROOT
+// Rota para listar todas as empresas cadastradas no sistema. Acesso restrito a 'ROOT'.
+// GET /api/companies
+router.get("/", authMiddleware, roleMiddleware(["ROOT"]), getCompanies);
 
-// - Buscar empresa pelo ID
+// Rota para buscar uma empresa específica por ID.
+// GET /api/companies/:id
 router.get("/:id", authMiddleware, getCompanyById);
 
-// - Atualizar dados da empresa
+// Rota para atualizar os dados de uma empresa.
+// Permite que um 'ADMIN_COMPANY' atualize sua própria empresa ou que um 'ROOT' atualize qualquer uma.
+// PUT /api/companies/:id
 router.put("/:id", authMiddleware, roleMiddleware(["ROOT", "ADMIN_COMPANY"]), auditMiddleware("UPDATE_COMPANY"), updateCompany);
 
-// - Desativar empresa
+// Rota para desativar uma empresa (soft delete). Acesso restrito a 'ROOT'.
+// PATCH /api/companies/:id/deactivate
 router.patch("/:id/deactivate", authMiddleware, roleMiddleware(["ROOT"]), auditMiddleware("DEACTIVATE_COMPANY"), deactivateCompany);
 
 export default router;

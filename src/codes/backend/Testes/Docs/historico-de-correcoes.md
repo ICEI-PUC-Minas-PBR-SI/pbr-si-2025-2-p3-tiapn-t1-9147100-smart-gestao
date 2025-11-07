@@ -92,10 +92,10 @@ Com o ambiente de testes estabilizado e a geração de logs detalhados funcionan
 -   **Status:** Concluído e Validado.
 -   **Descrição:** Este é o primeiro passo do processo de validação prioritário. Os testes existentes no `api.test.js` para o módulo de autenticação já cobrem as funcionalidades mais críticas e o "caminho feliz" de acesso ao sistema.
 -   **Testes Cobertos:**
-    -   `RF-001: deve cadastrar um novo usuário e empresa (Empresa A)`: Valida a criação de um novo usuário e empresa, porta de entrada para o sistema.
+-    -   `deve ter carregado os dados da Empresa A do setup global` (em `auth.legacy.test.js`): Valida a criação de um novo usuário e empresa, porta de entrada para o sistema.
     -   `deve barrar o cadastro de um usuário com e-mail já existente`: Garante a integridade dos dados e a validação de unicidade.
     -   `deve falhar o login com senha incorreta`: Valida o tratamento de credenciais inválidas.
-    -   `deve realizar o login com sucesso para a Empresa A`: Confirma o acesso bem-sucedido ao sistema.
+-    -   `deve realizar o login com sucesso para a Empresa A`: Confirma o acesso bem-sucedido ao sistema.
     -   `deve proteger rotas, barrando acesso sem token`: Valida a segurança básica das rotas protegidas.
 -   **Próximo Passo:** Seguir para o próximo módulo crítico ou para o "2. Teste de Isolamento de Dados" conforme indicado no `api.test.js`.
 
@@ -124,6 +124,40 @@ Com o ambiente de testes estabilizado e a geração de logs detalhados funcionan
         2.  O modelo `models/Transaction.js` foi corrigido para incluir os novos métodos de pagamento em sua validação `enum`, tornando o backend mais robusto e alinhado às necessidades.
         3.  O teste foi ajustado para enviar todos os campos obrigatórios e ciclar entre os métodos de pagamento agora válidos.
 
+---
+
+### 8. Implementação e Validação da Sessão Stateful
+
+-   **Problema 8.1: `SessionToken.js` não utilizado e logout stateless**
+    -   **Sintoma:** O modelo `SessionToken.js` existia, mas não havia lógica nos controladores para utilizá-lo, tornando o logout uma operação puramente do lado do cliente e sem capacidade de revogação de sessão no servidor.
+    -   **Causa:** A implementação inicial focava em um modelo de autenticação mais simples (stateless) para o `refreshToken`.
+    -   **Solução:**
+        1.  **`authController.js`:** Modificado para, no `loginUser`, salvar o hash do `refreshToken` e sua expiração na coleção `SessionTokens`. No `logoutUser`, a lógica foi implementada para receber o `refreshToken` do cliente, hasheá-lo e marcar o `SessionToken` correspondente como inativo (`active: false`).
+        2.  **`auth.test.js` (Novo Arquivo):** Criado um novo arquivo de teste dedicado para validar essa funcionalidade.
+            -   `deve criar um SessionToken no banco de dados após o login`: Verifica se o registro é criado.
+            -   `deve invalidar o SessionToken no banco de dados após o logout`: Verifica se o registro é marcado como inativo.
+
+-   **Problema 8.2: Erros de `__dirname` e typos em `auth.test.js`**
+    -   **Sintoma:** O novo arquivo `auth.test.js` falhava ao ser executado.
+    -   **Causa:** `__dirname` não é compatível com ES Modules e havia um erro de digitação (`API URL` em vez de `API_URL`).
+    -   **Solução:** Adicionada a lógica para definir `__dirname` de forma compatível com ES Modules e corrigido o typo na URL.
+---
+
+### 8. Implementação e Validação da Sessão Stateful
+
+-   **Problema 8.1: `SessionToken.js` não utilizado e logout stateless**
+    -   **Sintoma:** O modelo `SessionToken.js` existia, mas não havia lógica nos controladores para utilizá-lo, tornando o logout uma operação puramente do lado do cliente e sem capacidade de revogação de sessão no servidor.
+    -   **Causa:** A implementação inicial focava em um modelo de autenticação mais simples (stateless) para o `refreshToken`.
+    -   **Solução:**
+        1.  **`authController.js`:** Modificado para, no `loginUser`, salvar o hash do `refreshToken` e sua expiração na coleção `SessionTokens`. No `logoutUser`, a lógica foi implementada para receber o `refreshToken` do cliente, hasheá-lo e marcar o `SessionToken` correspondente como inativo (`active: false`).
+        2.  **`auth.test.js` (Novo Arquivo):** Criado um novo arquivo de teste dedicado para validar essa funcionalidade.
+            -   `deve criar um SessionToken no banco de dados após o login`: Verifica se o registro é criado.
+            -   `deve invalidar o SessionToken no banco de dados após o logout`: Verifica se o registro é marcado como inativo.
+
+-   **Problema 8.2: Erros de `__dirname` e typos em `auth.test.js`**
+    -   **Sintoma:** O novo arquivo `auth.test.js` falhava ao ser executado.
+    -   **Causa:** `__dirname` não é compatível com ES Modules e havia um erro de digitação (`API URL` em vez de `API_URL`).
+    -   **Solução:** Adicionada a lógica para definir `__dirname` de forma compatível com ES Modules e corrigido o typo na URL.
 -   **Problema 6.4: Falha no Login via Frontend**
     -   **Sintoma:** O login na página `login.html` não funcionava, mesmo com credenciais corretas de usuários criados pelos testes.
     -   **Causa:** O script `login.js` chamava a API, mas não armazenava o token de autenticação recebido no `localStorage` do navegador. Sem o token salvo, o usuário não era considerado "logado".

@@ -1,12 +1,17 @@
-// controllers/clientController.js
-// CRUD para clients (clientes e suppliers)
+// =================================================================================
+// ARQUIVO: controllers/clientController.js
+// DESCRIÇÃO: Controladores para as operações CRUD relacionadas a Clientes e
+//            Fornecedores (entidade 'Client'). Garante que todas as operações
+//            sejam executadas dentro do escopo da empresa do usuário autenticado.
+// =================================================================================
 
 import Client from "../models/Client.js";
 import { createLog } from "../utils/logger.js";
 
 /**
- * - GET /api/clients
- * Lista todos clients da company do usuário
+ * Lista todos os clientes/fornecedores da empresa do usuário autenticado.
+ * @param {object} req - O objeto de requisição do Express.
+ * @param {object} res - O objeto de resposta do Express.
  */
 export const getAllClients = async (req, res) => {
   try {
@@ -20,17 +25,20 @@ export const getAllClients = async (req, res) => {
 };
 
 /**
- * - POST /api/clients
- * Cria client (tipo: 'client' | 'supplier')
+ * Cria um novo cliente ou fornecedor.
+ * O tipo ('client' ou 'supplier') é definido no corpo da requisição.
+ * O novo registro é automaticamente associado à empresa e ao usuário que o criou.
+ * @param {object} req - O objeto de requisição do Express.
+ * @param {object} res - O objeto de resposta do Express.
  */
 export const createClient = async (req, res) => {
   try {
     const companyId = req.user.companyId; // companyId já é ObjectId do authMiddleware
     const userId = req.user.userId; // userId já é ObjectId do authMiddleware
-    // Payload alinhado com o modelo padronizado
     const payload = { ...req.body, companyId: companyId, userId: userId };
     const client = await Client.create(payload);
 
+    // Registra um log de auditoria detalhado para a criação.
     await createLog({
       userId,
       companyId,
@@ -47,14 +55,16 @@ export const createClient = async (req, res) => {
 };
 
 /**
- * - PUT /api/clients/:id
- * Atualiza client (somente na mesma company)
+ * Atualiza um cliente/fornecedor existente.
+ * A busca é feita pelo ID do cliente e pelo ID da empresa para garantir a segurança.
+ * @param {object} req - O objeto de requisição do Express.
+ * @param {object} res - O objeto de resposta do Express.
  */
 export const updateClient = async (req, res) => {
   try {
     const companyId = req.user.companyId; // companyId já é ObjectId do authMiddleware
     const client = await Client.findOneAndUpdate(
-      { _id: req.params.id, companyId: companyId }, // Padronizado para companyId
+      { _id: req.params.id, companyId: companyId },
       { $set: req.body }, // req.body já deve ter os campos padronizados
       { new: true }
     );
@@ -76,13 +86,15 @@ export const updateClient = async (req, res) => {
 };
 
 /**
- * - DELETE /api/clients/:id
- * Remove client (dentro da company)
+ * Exclui um cliente/fornecedor existente.
+ * A operação também é restrita ao escopo da empresa do usuário.
+ * @param {object} req - O objeto de requisição do Express.
+ * @param {object} res - O objeto de resposta do Express.
  */
 export const deleteClient = async (req, res) => {
   try {
     const companyId = req.user.companyId; // companyId já é ObjectId do authMiddleware
-    const removed = await Client.findOneAndDelete({ _id: req.params.id, companyId: companyId }); // Padronizado para companyId
+    const removed = await Client.findOneAndDelete({ _id: req.params.id, companyId: companyId });
     if (!removed) return res.status(404).json({ message: "Client não encontrado" });
 
     await createLog({

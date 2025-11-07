@@ -1,37 +1,33 @@
-// ============================================================
-// 🛡️ Arquivo: scripts/initPermissions.js
-// 🎯 Função: Cria e inicializa as permissões padrão do sistema Smart Gestão
-// ============================================================
+// =================================================================================
+// ARQUIVO: scripts/initPermissions.js
+// DESCRIÇÃO: Contém um script de inicialização que garante que as permissões
+//            (roles) essenciais do sistema existam no banco de dados.
+//            Este script é executado na inicialização do servidor.
+// =================================================================================
 
-import Permission from "../models/Permission.js"; // Importa o model de permissões
+import Permission from "../models/Permission.js";
 
 /**
- * 🔧 Função initPermissions()
- * ----------------------------------------
- * Responsável por verificar se já existem permissões cadastradas no banco.
- * Caso não existam, insere automaticamente as permissões padrão:
- *  - ROOT → acesso total ao sistema
- *  - ADMIN_COMPANY → administrador de uma empresa
- *  - USER_COMPANY → usuário comum vinculado à empresa
- *  - READ_ONLY → acesso apenas para leitura
- *
- * Essa função é executada no startup do servidor (server.js),
- * logo após a conexão com o MongoDB ser estabelecida.
+ * Garante que as permissões de acesso padrão existam no banco de dados.
+ * Esta função é idempotente: ela primeiro verifica se alguma permissão já existe.
+ * Se a coleção 'Permissions' estiver vazia, ela a popula com os papéis
+ * essenciais para o funcionamento do sistema. Caso contrário, não faz nada.
+ * É chamada durante a inicialização do servidor (`server.js`).
  */
 export const initPermissions = async () => {
   try {
-    console.log("🔍 Verificando permissões existentes...");
+    console.log("Verificando permissões de sistema...");
 
-    // Conta quantos documentos existem na coleção Permission
+    // Conta eficientemente o número de documentos na coleção de permissões.
     const count = await Permission.countDocuments();
 
-    // Se já houver permissões cadastradas, não cria novamente
+    // Se já existir pelo menos uma permissão, assume-se que o banco já foi inicializado.
     if (count > 0) {
-      console.log("🔒 Permissões já existentes no banco. Nenhuma alteração necessária.");
+      console.log("Permissões de sistema já existem. Nenhuma ação necessária.");
       return;
     }
 
-    // Define o conjunto padrão de permissões do sistema
+    // Array contendo as permissões padrão que são a base do controle de acesso.
     const permissions = [
       {
         name: "ROOT",
@@ -51,14 +47,15 @@ export const initPermissions = async () => {
       },
     ];
 
-    // Insere os documentos no banco (criação em lote)
+    // Usa `insertMany` para inserir todas as permissões em uma única operação de banco de dados.
     await Permission.insertMany(permissions);
 
-    console.log("✅ Permissões padrão criadas com sucesso!");
+    console.log("Permissões padrão criadas com sucesso!");
     console.table(permissions.map((p) => ({ Nome: p.name, Descrição: p.description })));
   } catch (error) {
-    // Captura e exibe erros durante o processo de inicialização
-    console.error("❌ Erro ao inicializar permissões padrão:");
+    // Em caso de falha, loga o erro e permite que a aplicação continue,
+    // embora o controle de acesso possa não funcionar como esperado.
+    console.error("Erro crítico ao inicializar permissões padrão:");
     console.error(error.message);
   }
 };

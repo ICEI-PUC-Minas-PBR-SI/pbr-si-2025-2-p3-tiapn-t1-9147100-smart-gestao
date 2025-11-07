@@ -1,7 +1,8 @@
-// ===========================================
-// Arquivo: routes/transactionRoutes.js
-// Descrição: Gerencia as transações financeiras do sistema
-// ===========================================
+// =================================================================================
+// ARQUIVO: routes/transactionRoutes.js
+// DESCRIÇÃO: Define as rotas para as operações CRUD de Transações Financeiras.
+//            Estas são rotas essenciais e protegidas do sistema.
+// =================================================================================
 
 import express from "express";
 import {
@@ -17,19 +18,24 @@ import { auditMiddleware } from "../middlewares/auditMiddleware.js";
 
 const router = express.Router();
 
-// - Listar todas as transações financeiras
+// Rota para listar todas as transações financeiras da empresa, com suporte a filtros.
+// GET /api/transactions
 router.get("/", authMiddleware, companyScopeMiddleware, getAllTransactions);
 
-// - Obter uma transação específica por ID
+// Rota para obter uma transação específica por ID.
+// GET /api/transactions/:id
 router.get("/:id", authMiddleware, companyScopeMiddleware, getTransactionById);
 
-// - Criar nova transação
+// Rota para criar uma nova transação (receita ou despesa).
+// POST /api/transactions
 router.post("/", authMiddleware, companyScopeMiddleware, auditMiddleware("CREATE_TRANSACTION"), createTransaction);
 
-// - Atualizar transação existente
+// Rota para atualizar uma transação existente.
+// PUT /api/transactions/:id
 router.put("/:id", authMiddleware, companyScopeMiddleware, auditMiddleware("UPDATE_TRANSACTION"), updateTransaction);
 
-// - Excluir transação
+// Rota para excluir uma transação.
+// DELETE /api/transactions/:id
 router.delete("/:id", authMiddleware, companyScopeMiddleware, auditMiddleware("DELETE_TRANSACTION"), deleteTransaction);
 
 export default router;

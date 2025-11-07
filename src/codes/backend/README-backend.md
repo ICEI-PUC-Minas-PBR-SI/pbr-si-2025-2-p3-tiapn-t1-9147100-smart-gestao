@@ -1,231 +1,133 @@
-# Backend - Smart Gestão
+# 🚀 Backend - Smart Gestão API
 
-Backend da aplicação Smart Gestão, construído com Node.js, Express e MongoDB. Este documento serve como um guia técnico para desenvolvedores.
+Este documento é o guia técnico completo para o backend da aplicação Smart Gestão. Ele detalha a arquitetura, a estrutura de pastas, os arquivos principais e as instruções para configuração, execução e teste do servidor.
 
-## 1. Arquitetura
+## 1. Arquitetura e Tecnologias
 
-A arquitetura segue um padrão modular, inspirado em MVC (Model-View-Controller), com uma forte ênfase em middlewares para lidar com responsabilidades transversais como autenticação, autorização e auditoria.
+O backend é uma API RESTful construída sobre a stack **Node.js**, utilizando as seguintes tecnologias principais:
 
-- **Modularidade**: O código é dividido por funcionalidade (`routes`, `controllers`, `models`), facilitando a manutenção e a escalabilidade.
-- **Stateless (Sem Estado)**: A autenticação via JWT garante que o servidor não precise armazenar informações de sessão, tornando-o ideal para ambientes distribuídos e escaláveis.
-- **Multi-empresa (Multi-tenant)**: O sistema é projetado para isolar os dados de diferentes empresas de forma segura, utilizando o `empresaId` como chave de separação em todas as operações.
+-   **Node.js**: Ambiente de execução para JavaScript no servidor.
+-   **Express.js**: Framework web minimalista para a criação da API, gerenciamento de rotas e middlewares.
+-   **MongoDB**: Banco de dados NoSQL orientado a documentos, utilizado para armazenar todos os dados da aplicação.
+-   **Mongoose**: Biblioteca de modelagem de dados (ODM) para o MongoDB, que facilita a definição de schemas, validações e interações com o banco.
+-   **JSON Web Tokens (JWT)**: Padrão utilizado para a autenticação segura e stateless dos usuários.
 
-## 2. Estrutura de Diretórios
+## 2. Estrutura de Pastas
 
-- **`config/`**: Configurações centrais, como a conexão com o banco de dados (`db.js`).
-- **`controllers/`**: Contém a lógica de negócio. Cada função aqui manipula a requisição, interage com os models e envia uma resposta.
-- **`middlewares/`**: Funções que interceptam e processam requisições antes de chegarem aos controllers. Usado para autenticação (`authMiddleware`), auditoria (`auditMiddleware`), autorização (`roleMiddleware`) e tratamento de erros (`errorHandler`).
-- **`models/`**: Define os schemas do Mongoose, que representam a estrutura dos documentos nas coleções do MongoDB.
-- **`modelJson/`**: Contém exemplos de payloads JSON para as requisições da API, servindo como documentação e guia para testes.
-- **`routes/`**: Define os endpoints da API, associando URLs e métodos HTTP (GET, POST, etc.) às funções dos controllers.
-- **`scripts/`**: Scripts utilitários, como `initPermissions.js` para popular o banco com dados iniciais.
-- **`utils/`**: Funções auxiliares reutilizáveis (helpers) para tarefas como criptografia, manipulação de JWT e formatação de respostas.
-- **`server.js`**: Ponto de entrada da aplicação. Inicializa o Express, registra os middlewares globais e as rotas.
+O projeto é organizado de forma modular para separar as responsabilidades e facilitar a manutenção.
 
-## 3. Ciclo de Vida de uma Requisição
-
-Uma requisição HTTP para uma rota protegida segue o fluxo abaixo:
-
-1.  **`server.js`**: A requisição chega e é direcionada para o arquivo de rotas correspondente (ex: `transactionRoutes.js`).
-2.  **`routes/*.js`**: A rota específica é encontrada. Ela define quais middlewares serão executados em sequência.
-3.  **`authMiddleware.js`**: Valida o token JWT do cabeçalho `Authorization`. Se for válido, anexa os dados do usuário (`req.user`) à requisição. Caso contrário, bloqueia com erro `401`.
-4.  **`roleMiddleware.js` (se aplicável)**: Verifica se o `req.user.role` tem permissão para acessar a rota. Bloqueia com erro `403` se não tiver.
-5.  **`*Controller.js`**: A função do controller é executada. Ela lê os dados da requisição (`req.body`, `req.params`), aplica a lógica de negócio e usa os `Models` para interagir com o banco de dados.
-6.  **`Models/*.js`**: O Mongoose executa a operação no MongoDB (ex: `Transaction.find()`).
-7.  **`*Controller.js`**: O controller recebe os dados do model e formata uma resposta de sucesso.
-8.  **`auditMiddleware.js` (se aplicável)**: Se a rota for de escrita (POST, PUT, DELETE), este middleware é executado *após* a resposta ser enviada, registrando a ação no log de auditoria.
-9.  **`errorHandler.js`**: Se ocorrer qualquer erro durante o processo, este middleware captura o erro e envia uma resposta JSON padronizada.
-
-## 4. Fluxo de Autenticação (JWT)
-
-O sistema usa um par de tokens (Access e Refresh) com **Token Fingerprinting** para aumentar a segurança.
-
-1.  **Login**: O usuário envia credenciais. O backend gera uma "impressão digital" (`fingerprint`) a partir do IP e User-Agent do usuário.
-2.  **Geração de Tokens**:
-    *   **Access Token**: É gerado com curta duração (ex: `30m`). Contém o `userId` e o `fingerprint`. É usado para autorizar o acesso a rotas protegidas.
-    *   **Refresh Token**: É gerado com longa duração (ex: `7d`). Também contém o `userId` e o `fingerprint`. Sua única finalidade é obter um novo Access Token.
-3.  **Validação em Cada Requisição**: O `authMiddleware` verifica:
-    *   A validade e expiração do Access Token.
-    *   Se o `fingerprint` da requisição atual corresponde ao `fingerprint` armazenado no token. Se não corresponder, a requisição é negada, impedindo o uso de tokens roubados.
-4.  **Renovação de Token**:
-    *   Se o Access Token expira, o frontend usa o Refresh Token para chamar a rota `/api/auth/refresh`.
-    *   O backend valida o Refresh Token e seu `fingerprint` antes de emitir um novo Access Token.
-    *   Se o Refresh Token também estiver expirado, o usuário é deslogado.
-
-## 5. Arquitetura Multi-empresa (Isolamento de Dados)
-
-A segurança para que uma empresa não acesse dados de outra é a principal premissa da arquitetura.
-
-- **`empresaId` nos Models**: Quase todos os documentos no banco de dados (usuários, transações, clientes, etc.) possuem um campo `empresaId` obrigatório.
-- **`empresaId` nas Queries**: Todas as operações de banco de dados nos controllers **devem** usar o `empresaId` do usuário logado (`req.user.empresaId`) como filtro.
-
-**Exemplo de consulta segura em um controller:**
-```javascript
-const transactions = await Transaction.find({ empresaId: req.user.empresaId });
 ```
-Isso garante que, mesmo que um usuário tente forçar um ID de outro recurso na URL, a consulta ao banco sempre estará restrita ao escopo de sua própria empresa.
+backend/
+├── config/             # Configuração da conexão com o banco de dados.
+├── controllers/        # Contém a lógica de negócio da aplicação.
+├── coverage/           # Relatórios de cobertura de testes (gerado automaticamente).
+├── Examples/           # Exemplos de documentos completos (como são retornados pela API).
+├── middlewares/        # Funções que interceptam requisições (autenticação, autorização, logs).
+├── models/             # Definição dos Schemas do Mongoose (a estrutura dos dados).
+├── modelsJson/         # Exemplos de payloads de requisição (o que o cliente envia).
+├── node_modules/       # Dependências do projeto (ignorado pelo Git).
+├── routes/             # Definição dos endpoints (rotas) da API.
+├── Scripts/            # Scripts de inicialização e manutenção.
+├── Testes/             # Suíte de testes automatizados (Jest).
+├── utils/              # Funções utilitárias reutilizáveis (helpers).
+├── .env                # Arquivo de variáveis de ambiente (local, ignorado pelo Git).
+├── .env.example        # Arquivo de exemplo para as variáveis de ambiente.
+├── .gitignore          # Especifica arquivos e pastas a serem ignorados pelo Git.
+├── package.json        # Define os metadados do projeto e suas dependências.
+├── package-lock.json   # Registra as versões exatas das dependências.
+└── server.js           # Ponto de entrada principal da aplicação.
+```
 
----
+## 3. Arquivos Principais Explicados
 
-## 6. Configuração e Execução
+Alguns arquivos são a espinha dorsal do projeto e não permitem comentários internos. Sua função é explicada aqui.
+
+### `server.js`
+
+É o coração da aplicação. Suas responsabilidades são:
+1.  Importar todas as dependências e módulos necessários.
+2.  Configurar os middlewares globais (como `cors` para permitir acesso do frontend e `express.json` para interpretar requisições).
+3.  Registrar todas as rotas da API, associando cada endpoint (ex: `/api/transactions`) ao seu respectivo arquivo de rotas.
+4.  Iniciar a conexão com o banco de dados MongoDB.
+5.  Executar scripts de inicialização, como o `initPermissions`.
+6.  "Subir" o servidor, fazendo-o ouvir por requisições na porta configurada.
+
+### `package.json`
+
+Este arquivo é o manifesto do projeto Node.js. Ele define:
+-   **`name`, `version`, `description`**: Metadados básicos do projeto.
+-   **`main`**: O ponto de entrada da aplicação (`server.js`).
+-   **`type`: "module"**: Especifica que o projeto utiliza a sintaxe de ES Modules (`import`/`export`).
+-   **`dependencies`**: Pacotes necessários para a aplicação rodar em produção (Express, Mongoose, etc.).
+-   **`devDependencies`**: Pacotes usados apenas durante o desenvolvimento e teste (Nodemon, Jest, etc.).
+-   **`scripts`**: Comandos de atalho para executar tarefas comuns:
+    -   `npm start`: Inicia o backend e o frontend simultaneamente para uso normal.
+    -   `npm run dev`: Inicia o backend em modo de desenvolvimento com `nodemon`, que reinicia o servidor automaticamente a cada alteração no código.
+    -   `npm test`: Executa a suíte completa de testes automatizados.
+    -   `npm run start:full-demo`: Inicia todos os servidores (backend, frontend legado e a prova de conceito em React) para a demonstração completa da arquitetura.
+
+### `.gitignore`
+
+Este arquivo instrui o Git sobre quais arquivos e pastas ele deve **ignorar** e **nunca** enviar para o repositório remoto (como o GitHub). Sua importância é crucial para:
+-   **Segurança**: Impede que arquivos com informações sensíveis, como o `.env` (que contém senhas de banco de dados e segredos de token), sejam acidentalmente expostos.
+-   **Eficiência**: Evita o envio de pastas pesadas e desnecessárias, como `node_modules`, que podem ser facilmente reinstaladas a partir do `package.json`.
+-   **Limpeza**: Mantém o repositório livre de arquivos temporários, logs e arquivos de configuração de IDEs.
+
+## 4. Configuração e Execução
+
+Siga os passos abaixo para executar o backend localmente.
 
 ### Pré-requisitos
-- Node.js v18 ou superior.
-- Uma string de conexão do MongoDB (local ou Atlas).
 
-### Instalação
-1.  Clone o repositório.
-2.  Navegue até `src/codes/backend`.
-3.  Crie um arquivo `.env` na raiz de `src/codes/backend` com base no `.env.example` e preencha as variáveis:
-    ```env
-    # Porta do servidor
-    PORT=5000
+-   Node.js (versão 16 ou superior)
+-   Uma instância do MongoDB (local ou em um serviço como o MongoDB Atlas)
 
-    # String de conexão do MongoDB
-    MONGO_URI=mongodb+srv://...
+### Passos
 
-    # Segredos para os tokens JWT
-    JWT_SECRET=sua_chave_secreta_aqui
-    JWT_REFRESH_SECRET=sua_outra_chave_secreta_aqui
+1.  **Clone o Repositório**: Se ainda não o fez, clone o projeto para a sua máquina.
 
-    # Tempo de expiração dos tokens (ex: 30m, 1h, 7d)
-    ACCESS_TOKEN_EXPIRATION=30m
-    REFRESH_TOKEN_EXPIRATION=7d
-    ```
-4.  Instale as dependências:
+2.  **Instale as Dependências**: Navegue até a pasta `src/codes/backend` e execute:
     ```bash
     npm install
     ```
 
-### Execução
-- Para desenvolvimento (com auto-reload):
-  ```bash
-  npm run dev
-  ```
-- Para produção:
-  ```bash
-  npm start
-  ```
-O servidor estará disponível em `http://localhost:5000`.
+3.  **Configure as Variáveis de Ambiente**:
+    -   Na pasta `src/codes/backend`, crie uma cópia do arquivo `.env.example` e renomeie-a para `.env`.
+    -   Abra o arquivo `.env` e preencha as variáveis com suas informações:
+        ```env
+        # String de conexão com seu banco de dados MongoDB
+        MONGO_URI=mongodb+srv://<user>:<password>@cluster.mongodb.net/smartgestao?retryWrites=true&w=majority
 
-### Health Check
-Para verificar se o servidor está no ar, acesse: `GET http://localhost:5000/api/health`.
+        # Porta em que o servidor irá rodar
+        PORT=5000
 
----
+        # Chaves secretas para gerar os tokens JWT. Use geradores de senhas fortes.
+        JWT_SECRET=SEU_SEGREDO_SUPER_SEGURO_PARA_ACCESS_TOKEN
+        REFRESH_TOKEN_SECRET=OUTRO_SEGREDO_SUPER_SEGURO_PARA_REFRESH_TOKEN
+        ```
 
-## 7. Guia de Testes com API (Postman/cURL)
+4.  **Inicie o Servidor**:
+    -   Para desenvolvimento (com reinício automático):
+        ```bash
+        npm run dev
+        ```
+    -   Para iniciar o backend e o frontend juntos (simulando produção):
+        ```bash
+        npm start
+        ```
 
-Este projeto está documentado para uso tanto via Postman quanto via curl. Os exemplos abaixo usam as mesmas URLs, headers e payloads, garantindo consistência entre ferramentas.
+O servidor backend estará disponível em `http://localhost:5000`. Você pode verificar seu status acessando a rota de "health check": `http://localhost:5000/api/health`.
 
-## Variáveis e convenções
+## 5. Executando os Testes
 
-- BASE_URL: http://localhost:5000
-- Endpoints iniciam com /api
-- Content-Type: application/json (quando houver body)
-- Authorization: Bearer <token> (para rotas protegidas)
+A suíte de testes automatizados valida a integridade da API. Para executá-la, certifique-se de que o servidor de testes não esteja rodando e execute o comando na pasta `src/codes/backend`:
 
-No Postman, configure um Environment com as variáveis:
-- baseUrl = http://localhost:5000
-- token = (preenchido após login)
-- refreshToken = (preenchido após login)
-
-No curl (Windows cmd), use os exemplos prontos abaixo. Substitua os placeholders SEU_TOKEN_AQUI e SEU_REFRESH_TOKEN_AQUI.
-
-## Auth
-
-1) Login — POST {{baseUrl}}/api/auth/login
-- Requisitos: email e password no body.
-
-Postman
-- Body -> raw -> JSON:
-{
-  "email": "usuario@empresa.com",
-  "password": "Senha123"
-}
-
-curl (Windows cmd)
-```
-curl -X POST http://localhost:5000/api/auth/login ^
-  -H "Content-Type: application/json" ^
-  -d "{\"email\":\"usuario@empresa.com\",\"password\":\"Senha123\"}"
+```bash
+npm test
 ```
 
-Resposta esperada (200):
-{
-  "message": "Login realizado com sucesso!",
-  "token": "...",
-  "refreshToken": "...",
-  "user": { "id": "...", "name": "...", "email": "...", "role": "..." }
-}
-
-2) Refresh — POST {{baseUrl}}/api/auth/refresh
-- Requisitos: refresh token válido no body.
-- Observação: esta rota não deve exigir o access token; ela valida o refresh token.
-
-Postman
-- Body -> raw -> JSON:
-{ "token": "{{refreshToken}}" }
-
-curl (Windows cmd)
-```
-curl -X POST http://localhost:5000/api/auth/refresh ^
-  -H "Content-Type: application/json" ^
-  -d "{\"token\":\"SEU_REFRESH_TOKEN_AQUI\"}"
-```
-
-Resposta esperada (200):
-{
-  "token": "NOVO_ACCESS_TOKEN"
-}
-
-3) Logout — POST {{baseUrl}}/api/auth/logout
-- Requisitos: Authorization: Bearer {{token}}
-- Observação: atualmente, apenas responde sucesso; em evolução futura, poderá invalidar refresh tokens persistidos (SessionToken).
-
-Postman
-- Headers -> Authorization: Bearer {{token}}
-
-curl (Windows cmd)
-```
-curl -X POST http://localhost:5000/api/auth/logout ^
-  -H "Authorization: Bearer SEU_TOKEN_AQUI"
-```
-
-Resposta esperada (200):
-{
-  "message": "Logout realizado com sucesso."
-}
-
-## Rotas protegidas (exemplo: GET /api/clients)
-
-Postman
-- Authorization -> Type: Bearer Token -> Token: {{token}}
-
-curl (Windows cmd)
-```
-curl http://localhost:5000/api/clients ^
-  -H "Authorization: Bearer SEU_TOKEN_AQUI"
-```
-
-## Boas práticas
-
-- Versione no repositório uma Collection do Postman e um Environment em docs/postman/:
-  - docs/postman/collection.json
-  - docs/postman/environment-local.json
-- Sempre que atualizar um endpoint, mantenha os exemplos do Postman e os comandos curl sincronizados neste README.
-- Padronize respostas usando utils/responseHelper.js nos controllers para consistência: 
-  - Sucesso: { success: true, message, data }
-  - Erro: { success: false, message, errors }
-- Use .env.example como base; garanta as variáveis: MONGO_URI, JWT_SECRET, JWT_REFRESH_SECRET, PORT.
-
-## Observações sobre Windows PowerShell e Linux/macOS
-
-- Se usar PowerShell ou shells Unix, remova o acento circunflexo (^) e use uma única linha ou a barra invertida (\) apropriada do shell.
-- Exemplo em PowerShell (uma linha):
-```
-curl -Method POST http://localhost:5000/api/auth/login -H "Content-Type: application/json" -Body '{"email":"usuario@empresa.com","password":"Senha123"}'
-```
-
----
-
-Com este guia, qualquer membro da equipe pode optar por Postman ou cURL mantendo a mesma experiência de teste e validação.
+Este comando irá:
+1.  Iniciar um servidor de teste temporário.
+2.  Executar todos os arquivos de teste (`*.test.js`) na pasta `Testes/`.
+3.  Exibir os resultados no console.
+4.  Salvar um log detalhado da execução na pasta `Testes/resultados/`.

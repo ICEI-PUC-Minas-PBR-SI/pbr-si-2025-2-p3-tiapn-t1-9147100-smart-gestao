@@ -1,30 +1,39 @@
-// ===========================================
-// Arquivo: middlewares/errorMiddleware.js
-// Função: Tratador global de erros Express
-// Uso: deve ser registrado por último (app.use(errorMiddleware))
-// ===========================================
+// =================================================================================
+// ARQUIVO: middlewares/errorMiddleware.js
+// DESCRIÇÃO: Middleware global para tratamento de erros (Error Handler).
+//            Este é o último middleware na cadeia do Express e sua função é
+//            capturar quaisquer erros que ocorram durante o processamento de
+//            uma requisição, garantindo que a aplicação não quebre e que uma
+//            resposta de erro padronizada e segura seja enviada ao cliente.
+// =================================================================================
 
 /**
- * - errorHandler(err, req, res, next)
- * - Centraliza respostas de erro
- * - Registra no console (ou sistema de logs) os detalhes do erro
- * - Retorna um JSON padronizado ao cliente
+ * Tratador de erros global para a aplicação Express.
+ * A assinatura com 4 argumentos (err, req, res, next) é o que o Express
+ * reconhece como um middleware de tratamento de erros.
+ * @param {Error} err - O objeto de erro capturado.
+ * @param {object} req - O objeto de requisição do Express.
+ * @param {object} res - O objeto de resposta do Express.
+ * @param {function} next - A função de callback (não utilizada aqui, mas necessária na assinatura).
  */
-import { errorResponse } from "../utils/responseHelper.js";
-
 export function errorHandler(err, req, res, next) {
-  // Se o erro não tiver um status code definido, assume 500 (Internal Server Error) como padrão.
+  // Define o código de status da resposta. Se o erro já tiver um `statusCode`
+  // (definido em um controlador, por exemplo), ele é usado. Caso contrário,
+  // assume-se um erro inesperado e o padrão é 500 (Internal Server Error).
   const statusCode = err.statusCode || 500;
 
-  // Loga o erro no console para depuração. Em produção, isso seria substituído por um sistema de logging mais robusto (Winston, Sentry, etc.).
+  // Registra o erro no console para fins de depuração. Em um ambiente de produção,
+  // isso seria substituído por um sistema de logging mais robusto (como Winston,
+  // Pino ou serviços como Sentry) para monitoramento e alertas.
   console.error(`[ERROR] ${new Date().toISOString()} - ${req.method} ${req.originalUrl}`);
   console.error(err);
 
-  // Monta o payload de erros. Se o objeto de erro já tiver uma estrutura de erros, ela é reutilizada.
-  const payloadErrors = err.errors || (
-    err.message ? [{ message: err.message }] : [{ message: "Erro interno no servidor" }]
-  );
-
-  // Envia uma resposta padronizada para o cliente, sem vazar detalhes internos (stack trace) em ambiente de produção.
-  return errorResponse(res, { status: statusCode, message: "Falha ao processar requisição.", errors: payloadErrors });
+  // Envia uma resposta de erro padronizada em formato JSON para o cliente.
+  // É uma boa prática não vazar detalhes internos do erro (como o stack trace)
+  // para o cliente em um ambiente de produção, por isso enviamos uma mensagem genérica.
+  res.status(statusCode).json({
+    message: err.message || "Ocorreu um erro inesperado no servidor.",
+    // Opcional: pode-se adicionar um campo 'code' para erros específicos da aplicação.
+    // error_code: err.code || 'INTERNAL_SERVER_ERROR'
+  });
 }

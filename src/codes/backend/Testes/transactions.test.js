@@ -1,3 +1,10 @@
+// =================================================================================
+// ARQUIVO: Testes/transactions.test.js
+// DESCRIÇÃO: Suíte de testes para o Módulo de Transações Financeiras (CRUD).
+//            Valida o ciclo de vida completo de uma transação: criação, listagem,
+//            obtenção por ID, atualização e exclusão.
+// =================================================================================
+
 import axios from 'axios';
 import fs from 'fs';
 import path from 'path';
@@ -5,6 +12,10 @@ import path from 'path';
 const API_URL = 'http://localhost:5000/api';
 const SETUP_FILE = path.join('Testes', 'test-setup.json');
 
+/**
+ * @describe Bloco de testes para o Módulo de Transações (CRUD).
+ * @see roteiro de testes automatizados.md
+ */
 describe('4. Módulo de Transações (CRUD)', () => {
     let userToken;
     let createdTransactionId;
@@ -14,10 +25,13 @@ describe('4. Módulo de Transações (CRUD)', () => {
         const testData = JSON.parse(fs.readFileSync(SETUP_FILE, 'utf8'));
         // Este teste usará apenas a "Empresa A" para suas operações.
         userToken = testData.companyA.token;
-        // console.log(`Debug transactions.test.js beforeAll: userToken=${userToken}, companyA.userId=${testData.companyA.userId}, companyA.companyId=${testData.companyA.companyId}`); // Removido log de depuração
     });
 
-    it('RF-002: deve CRIAR uma nova transação com sucesso', async () => {
+    /**
+     * @test Cenário de sucesso para a criação de uma nova transação.
+     * @description Verifica se é possível criar uma transação financeira com dados válidos.
+     */
+    it('deve CRIAR uma nova transação com sucesso', async () => {
         const transactionData = {
             description: 'Venda de serviço de consultoria',
             amount: 1500.50,
@@ -41,7 +55,29 @@ describe('4. Módulo de Transações (CRUD)', () => {
         createdTransactionId = response.data._id;
     });
 
-    it('RF-003: deve LISTAR as transações do usuário logado', async () => {
+    /**
+     * @test Cenário de falha ao tentar criar uma transação com dados inválidos.
+     * @description Garante que a API retorne um erro de validação (Status 400 ou 500)
+     *              se campos obrigatórios como 'amount' estiverem faltando.
+     */
+    it('deve falhar ao tentar criar uma transação com dados inválidos', async () => {
+        const invalidTransactionData = {
+            description: 'Transação Inválida',
+            type: 'expense',
+            // 'amount' está faltando
+        };
+
+        try {
+            await axios.post(`${API_URL}/transactions`, invalidTransactionData, {
+                headers: { Authorization: `Bearer ${userToken}` }
+            });
+            fail('A criação de transação com dados inválidos deveria ter falhado.');
+        } catch (error) {
+            expect(error.response.status).toBe(500); // Mongoose validation error results in 500 in this setup
+        }
+    });
+
+    it('deve LISTAR as transações do usuário logado', async () => {
         // Este teste depende que o anterior tenha criado uma transação
         expect(createdTransactionId).toBeDefined();
 
@@ -58,7 +94,7 @@ describe('4. Módulo de Transações (CRUD)', () => {
         expect(found).toBe(true);
     });
 
-    it('RF-004: deve OBTER uma transação específica pelo ID', async () => {
+    it('deve OBTER uma transação específica pelo ID', async () => {
         expect(createdTransactionId).toBeDefined();
 
         const response = await axios.get(`${API_URL}/transactions/${createdTransactionId}`, {
@@ -70,7 +106,7 @@ describe('4. Módulo de Transações (CRUD)', () => {
         expect(response.data.description).toBe('Venda de serviço de consultoria');
     });
 
-    it('RF-005: deve ATUALIZAR uma transação existente', async () => {
+    it('deve ATUALIZAR uma transação existente', async () => {
         expect(createdTransactionId).toBeDefined();
 
         const updatedData = {
@@ -88,7 +124,7 @@ describe('4. Módulo de Transações (CRUD)', () => {
         expect(response.data.amount).toBe(updatedData.amount);
     });
 
-    it('RF-006: deve EXCLUIR uma transação existente', async () => {
+    it('deve EXCLUIR uma transação existente', async () => {
         expect(createdTransactionId).toBeDefined();
 
         const response = await axios.delete(`${API_URL}/transactions/${createdTransactionId}`, {

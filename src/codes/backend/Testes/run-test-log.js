@@ -1,14 +1,18 @@
 /**
- * @file Script para executar os testes do Jest e salvar a saída em um arquivo de log.
- * @description Este script gera um nome de arquivo com timestamp, executa o Jest
- * com a saída redirecionada para este arquivo e, ao final, exibe uma mensagem de confirmação.
+ * =================================================================================
+ * ARQUIVO: Testes/run-test-log.js
+ * DESCRIÇÃO: Script executor para a suíte de testes automatizados.
+ *            Ele orquestra a execução do Jest, captura toda a saída (incluindo
+ *            cores) para exibição no console e, simultaneamente, salva uma
+ *            versão limpa (sem códigos de cor) em um arquivo de log com timestamp.
+ * =================================================================================
  */
 import { execSync } from 'child_process'; // Usar execSync para capturar a saída de forma síncrona
 import fs from 'fs';
 import path from 'path';
 
 /**
- * Gera um nome de arquivo de log com timestamp.
+ * Gera um caminho de arquivo de log único com base na data e hora atuais.
  * @returns {string} O caminho completo para o arquivo de log.
  */
 function createLogFilePath() {
@@ -29,24 +33,13 @@ function createLogFilePath() {
     return path.join(logDir, `log_${timestamp}.txt`);
 }
 
-// Revertido para a versão funcional que executa o Jest
 const logFilePath = createLogFilePath();
 
 try {
-    /*
-    ==================================================================================
-    COMENTÁRIO IMPORTANTE:
-    Este bloco é o coração da geração de logs e da exibição no console.
-
-    1.  `jestCommand`: Executa o Jest com as flags necessárias.
-    2.  `execSync`: Roda o comando e captura TODA a sua saída (stdout e stderr).
-    3.  `process.stdout.write(rawOutput)`: Imprime a saída capturada (com cores) no console.
-    4.  `rawOutput.replace(...)`: Remove os códigos de cor ANSI.
-    5.  `fs.writeFileSync(...)`: Salva a saída limpa no arquivo .txt.
-
-    NÃO MODIFICAR ESTE BLOCO PARA GARANTIR A CRIAÇÃO E FORMATAÇÃO CORRETA DOS LOGS.
-    ==================================================================================
-    */
+    // Comando para executar o Jest. As flags são importantes:
+    // --experimental-vm-modules: Habilita o suporte a ES Modules nos testes.
+    // --runInBand: Executa os testes sequencialmente, o que é ideal para testes de integração que dependem de estado.
+    // --forceExit: Força o Jest a sair após a conclusão dos testes, evitando processos pendentes.
     const jestCommand = `node --experimental-vm-modules ./node_modules/jest/bin/jest.js --config ./Testes/jest.config.cjs --runInBand --forceExit`;
 
     // Executa o Jest e captura a saída completa (incluindo códigos ANSI para cores).

@@ -1,9 +1,12 @@
 /**
- * @file Script de setup global para os testes do Jest.
- * @description Este script é executado uma única vez antes de toda a suíte de testes.
- * Ele cria um conjunto fixo de usuários/empresas e salva suas informações
- * (tokens, IDs) em um arquivo temporário para que possam ser reutilizados
- * por todos os arquivos de teste, evitando a criação repetida de dados.
+ * =================================================================================
+ * ARQUIVO: Testes/test-setup.js
+ * DESCRIÇÃO: Script de configuração global para a suíte de testes do Jest.
+ *            Este script é executado uma única vez ANTES de todos os testes.
+ *            Sua função é criar um ambiente de teste consistente, cadastrando
+ *            usuários/empresas padrão e salvando seus dados (IDs, tokens) em um
+ *            arquivo temporário para que os testes possam reutilizá-los.
+ * =================================================================================
  */
 import axios from 'axios';
 import fs from 'fs';
@@ -13,9 +16,10 @@ const API_URL = 'http://localhost:5000/api';
 const SETUP_FILE = path.join('Testes', 'test-setup.json');
 
 /**
- * Cria uma empresa de teste, faz login e retorna seus dados.
- * @param {number} index - Um número para garantir a unicidade.
- * @returns {Promise<object>} Os dados da empresa, incluindo o token.
+ * Cria uma empresa de teste, realiza o login e retorna seus dados essenciais.
+ * @param {number} index - Um número para garantir a unicidade dos dados (email, CNPJ).
+ * @returns {Promise<object>} Um objeto contendo os dados da empresa criada,
+ *                            incluindo seu token de acesso, ID do usuário e ID da empresa.
  */
 async function createTestCompany(index) {
     const uniqueId = Date.now() + index;
@@ -44,6 +48,10 @@ async function createTestCompany(index) {
     };
 }
 
+/**
+ * Função principal de setup, exportada para ser usada pelo Jest.
+ * Cria duas empresas de teste (A e B) e salva seus dados no arquivo `test-setup.json`.
+ */
 export default async () => {
     console.log('\n--- 🚀 Iniciando Setup Global de Testes ---');
 

@@ -1,25 +1,38 @@
-// ===========================================
-// Arquivo: middlewares/roleMiddleware.js
-// Função: Verificar se o usuário possui um dos papéis (roles) permitidos
-// Uso: roleMiddleware(['ADMIN_COMPANY', 'ROOT'])
-// ===========================================
+// =================================================================================
+// ARQUIVO: middlewares/roleMiddleware.js
+// DESCRIÇÃO: Middleware de autorização baseado em papéis (roles/permissões).
+//            Ele utiliza uma função de ordem superior para criar um middleware
+//            configurável que verifica se o usuário autenticado possui uma das
+//            permissões necessárias para acessar uma determinada rota.
+// =================================================================================
 
 /**
- * - roleMiddleware(allowedRoles)
- * - allowedRoles: array de strings com roles permitidos
- * - retorna middleware que verifica req.user.role
+ * Cria um middleware que restringe o acesso a uma rota com base nas permissões do usuário.
+ * @param {string[]} allowedRoles - Um array de strings contendo os nomes das permissões
+ *                                  que são autorizadas a acessar a rota.
+ *                                  Ex: ['ADMIN_COMPANY', 'ROOT']
+ * @returns {function} Um middleware Express pronto para ser usado em uma rota.
  */
 export function roleMiddleware(allowedRoles = []) {
+  // A função externa retorna a função de middleware real.
+  // Isso permite que `allowedRoles` seja "lembrado" graças ao conceito de closure.
   return (req, res, next) => {
     try {
-      const userRole = req.user?.role; // Obtém a permissão do usuário, que foi adicionada pelo `authMiddleware`.
-      if (!userRole) return res.status(403).json({ message: "Role do usuário não encontrado" });
+      // Pré-requisito: O `authMiddleware` deve ter sido executado antes,
+      // populando `req.user` com os dados do usuário, incluindo sua permissão.
+      const userRole = req.user?.role;
+      if (!userRole) {
+        // Este erro indica um problema de configuração, pois o `authMiddleware` deveria ter falhado antes.
+        return res.status(500).json({ message: "Permissão do usuário não identificada na requisição." });
+      }
 
       // Verifica se a permissão do usuário está na lista de permissões autorizadas para esta rota.
       if (!allowedRoles.includes(userRole)) {
-        return res.status(403).json({ message: "Acesso negado: permissão insuficiente" });
+        // Se a permissão do usuário não estiver na lista, o acesso é negado.
+        return res.status(403).json({ message: "Acesso negado. Você não tem permissão para executar esta ação." });
       }
 
+      // Se o usuário tem a permissão necessária, permite que a requisição continue.
       return next();
     } catch (error) {
       console.error("Erro em roleMiddleware:", error);

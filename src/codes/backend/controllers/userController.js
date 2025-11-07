@@ -1,14 +1,18 @@
-// controllers/userController.js
-// CRUD e perfil de users
+// =================================================================================
+// ARQUIVO: controllers/userController.js
+// DESCRIÇÃO: Controladores para o gerenciamento de usuários (Users), incluindo
+//            operações CRUD, consulta de perfil e alteração de senha.
+// =================================================================================
 
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import { createLog } from "../utils/logger.js";
 
 /**
- * - POST /api/users
- * Cria usuário dentro da mesma company (admin cria para sua company)
- * Body: { name, email, password, role }
+ * Cria um novo usuário dentro da mesma empresa do usuário autenticado.
+ * Geralmente, esta ação é executada por um administrador da empresa.
+ * @param {object} req - O objeto de requisição do Express.
+ * @param {object} res - O objeto de resposta do Express.
  */
 export const createUser = async (req, res) => {
   try {
@@ -18,10 +22,11 @@ export const createUser = async (req, res) => {
 
     if (!name || !email || !password) return res.status(400).json({ message: "name, email e password obrigatórios" });
 
-    // evita duplicidade email por company
+    // Evita duplicidade de e-mail dentro da mesma empresa.
     const exists = await User.findOne({ companyId, email: email.toLowerCase() });
     if (exists) return res.status(400).json({ message: "Email já cadastrado nesta company" });
 
+    // Criptografa a senha antes de salvar no banco.
     const passwordHash = await bcrypt.hash(password, 10);
 
     const user = await User.create({
@@ -32,6 +37,7 @@ export const createUser = async (req, res) => {
       role: role || "USER",
     }); // role já é ObjectId
 
+    // Registra a criação do usuário no log de auditoria.
     await createLog({
       userId: creatorId,
       companyId,
@@ -40,6 +46,7 @@ export const createUser = async (req, res) => {
       route: req.originalUrl,
     });
 
+    // Remove o hash da senha do objeto de resposta por segurança.
     const result = user.toObject();
     delete result.passwordHash;
     return res.status(201).json(result);
@@ -50,8 +57,10 @@ export const createUser = async (req, res) => {
 };
 
 /**
- * - GET /api/users
- * Lista usuários da company (sem passwordHash)
+ * Lista todos os usuários da empresa do usuário autenticado.
+ * O hash da senha é explicitamente removido da resposta.
+ * @param {object} req - O objeto de requisição do Express.
+ * @param {object} res - O objeto de resposta do Express.
  */
 export const getAllUsers = async (req, res) => {
   try {
@@ -65,8 +74,9 @@ export const getAllUsers = async (req, res) => {
 };
 
 /**
- * - GET /api/users/profile/me
- * Retorna dados do perfil do usuário logado
+ * Retorna os dados de perfil do próprio usuário autenticado.
+ * @param {object} req - O objeto de requisição do Express.
+ * @param {object} res - O objeto de resposta do Express.
  */
 export const getProfile = async (req, res) => {
   try {
@@ -80,13 +90,15 @@ export const getProfile = async (req, res) => {
 };
 
 /**
- * - PUT /api/users/:id
- * Atualiza user (não altera password aqui)
+ * Atualiza os dados de um usuário (exceto a senha).
+ * Apenas usuários da mesma empresa podem ser atualizados.
+ * @param {object} req - O objeto de requisição do Express.
+ * @param {object} res - O objeto de resposta do Express.
  */
 export const updateUser = async (req, res) => {
   try {
     const companyId = req.user.companyId; // companyId já é ObjectId do authMiddleware
-    const updated = await User.findOneAndUpdate({ _id: req.params.id, companyId: companyId }, { $set: req.body }, { new: true }).select("-passwordHash"); // Atualiza pelo ID
+    const updated = await User.findOneAndUpdate({ _id: req.params.id, companyId: companyId }, { $set: req.body }, { new: true }).select("-passwordHash");
     if (!updated) return res.status(404).json({ message: "User não encontrado" });
 
     await createLog({
@@ -105,13 +117,16 @@ export const updateUser = async (req, res) => {
 };
 
 /**
- * - DELETE /api/users/:id
- * Remove user (por simplicidade: deleção física; em produção, use flag active=false)
+ * Exclui um usuário (exclusão física).
+ * Nota: Em produção, a melhor prática é a exclusão lógica (soft delete),
+ * alterando um campo `active` para `false` para preservar o histórico.
+ * @param {object} req - O objeto de requisição do Express.
+ * @param {object} res - O objeto de resposta do Express.
  */
 export const deleteUser = async (req, res) => {
   try {
     const companyId = req.user.companyId; // companyId já é ObjectId do authMiddleware
-    const removed = await User.findOneAndDelete({ _id: req.params.id, companyId: companyId }); // Remove pelo ID
+    const removed = await User.findOneAndDelete({ _id: req.params.id, companyId: companyId });
     if (!removed) return res.status(404).json({ message: "User não encontrado" });
 
     await createLog({
@@ -130,20 +145,22 @@ export const deleteUser = async (req, res) => {
 };
 
 /**
- * - POST /api/users/change-password
- * Permite usuário alterar sua senha atual (oldPassword, newPassword)
+ * Permite que o usuário autenticado altere sua própria senha.
+ * Requer a senha antiga para verificação e a nova senha.
+ * @param {object} req - O objeto de requisição do Express.
+ * @param {object} res - O objeto de resposta do Express.
  */
 export const changePassword = async (req, res) => {
   try {
     const userId = req.user.userId; // userId já é ObjectId do authMiddleware
     const { oldPassword, newPassword } = req.body;
-    if (!oldPassword || !newPassword) return res.status(400).json({ message: "oldPassword e newPassword obrigatórios" });
+    if (!oldPassword || !newPassword) return res.status(400).json({ message: "Senha antiga e nova senha são obrigatórias." });
 
-    const user = await User.findById(userId);
+    const user = await User.findById(userId).select("+passwordHash");
     if (!user) return res.status(404).json({ message: "User não encontrado" });
 
     const match = await bcrypt.compare(oldPassword, user.passwordHash);
-    if (!match) return res.status(401).json({ message: "Old password incorreta" });
+    if (!match) return res.status(401).json({ message: "Senha antiga incorreta." });
 
     user.passwordHash = await bcrypt.hash(newPassword, 10);
     await user.save();

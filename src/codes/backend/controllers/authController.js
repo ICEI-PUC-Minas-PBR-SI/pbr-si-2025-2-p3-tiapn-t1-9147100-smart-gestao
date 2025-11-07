@@ -1,7 +1,15 @@
+// =================================================================================
+// ARQUIVO: controllers/authController.js
+// DESCRIÇÃO: Contém os controladores responsáveis pela autenticação e gerenciamento
+//            de sessão dos usuários, incluindo registro, login, logout e exclusão
+//            de contas. Este é um ponto central da segurança da aplicação.
+// =================================================================================
+
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import User from '../models/User.js';
+import SessionToken from '../models/SessionToken.js';
 import Company from '../models/Company.js';
 import Permission from '../models/Permission.js';
 import Transaction from '../models/Transaction.js';
@@ -83,6 +91,21 @@ export const loginUser = async (req, res) => {
       { expiresIn: '7d' } // Expira em 7 dias
     );
 
+    // Etapa 5: Armazenamento do Refresh Token (Uso básico do SessionToken)
+    // Para dar uma utilidade ao modelo SessionToken, vamos salvar o hash do refresh token.
+    // Isso transforma o logout em uma operação stateful, aumentando a segurança.
+    const refreshTokenHash = crypto.createHash('sha256').update(refreshTokenValue).digest('hex');
+    const expirationDate = new Date();
+    expirationDate.setDate(expirationDate.getDate() + 7); // Adiciona 7 dias à data atual.
+
+    await SessionToken.create({
+      userId: user._id,
+      tokenHash: refreshTokenHash,
+      expiration: expirationDate,
+      originIp: req.ip,
+      device: req.headers['user-agent'],
+    });
+
     // Retorna os tokens e informações básicas do usuário
     return res.status(200).json({
       token: accessToken,
@@ -96,60 +119,82 @@ export const loginUser = async (req, res) => {
 };
 
 // =============================================================
-// - Função: logoutUser
-// =============================================================
+
+/**
+ * Realiza o logout do usuário.
+ * Esta função implementa um logout *stateful*. O cliente envia o `refreshToken`
+ * que possui, e o servidor o localiza no banco de dados e o marca como inativo,
+ * impedindo que ele seja usado para gerar novos tokens de acesso.
+ * @param {object} req - O objeto de requisição do Express.
+ * @param {object} res - O objeto de resposta do Express.
+ */
 export const logoutUser = async (req, res) => {
-  // Em uma implementação real, aqui você limparia o cookie do refresh token
-  // e poderia adicionar o access token a uma "blacklist" para invalidá-lo imediatamente.
-  res.status(200).json({ message: "Logout bem-sucedido." });
+  // O cliente envia o refresh token que possui, e o servidor o invalida.
+  const { refreshToken } = req.body;
+
+  if (refreshToken) {
+    try {
+      const refreshTokenHash = crypto.createHash('sha256').update(refreshToken).digest('hex');
+      // Encontra o token e o marca como inativo.
+      await SessionToken.findOneAndUpdate(
+        { tokenHash: refreshTokenHash },
+        { active: false }
+      );
+    } catch (error) {
+      // A falha em invalidar o token não deve impedir o logout do lado do cliente.
+      console.error("Erro ao invalidar refresh token durante o logout:", error);
+    }
+  }
+
+  res.status(200).json({ message: "Logout realizado com sucesso. A sessão foi invalidada no servidor." });
 };
 
 // =============================================================
-// - Função: refreshToken
-// =============================================================
+
+/**
+ * Gera um novo Access Token usando um Refresh Token válido.
+ * (Implementação atual é um placeholder).
+ * @param {object} req - O objeto de requisição do Express.
+ * @param {object} res - O objeto de resposta do Express.
+ */
 export const refreshToken = async (req, res) => {
-  // A lógica real aqui seria verificar o refresh token (geralmente de um cookie),
-  // e se for válido, gerar um novo access token e um novo refresh token.
-  // Por enquanto, é um placeholder.
+  // A lógica real verificaria o refresh token (geralmente vindo de um cookie httpOnly),
+  // e se válido, geraria um novo access token (e opcionalmente um novo refresh token).
   res.status(200).json({ message: "Token atualizado (placeholder)." });
 };
 
 // =============================================================
-// - Função: deleteCurrentUser
-// =============================================================
+
+/**
+ * Exclui um usuário e todos os seus dados associados (empresa e transações).
+ * Esta é uma operação destrutiva (hard delete) implementada para fins de teste e simplicidade.
+ * @param {object} req - O objeto de requisição do Express.
+ * @param {object} res - O objeto de resposta do Express.
+ */
 export const deleteCurrentUser = async (req, res) => {
   try {
-    const userId = req.params.id; // Corrigido: Obter o ID do parâmetro da rota
+    const userId = req.params.id;
     const userToDelete = await User.findById(userId);
 
-    // Valida se o usuário existe antes de prosseguir
+    // Valida se o usuário a ser deletado realmente existe.
     if (!userToDelete) {
       return res.status(404).json({ message: 'Usuário a ser deletado não encontrado.' });
     }
 
-    /*
-     * COMENTÁRIO SOBRE LGPD E BOAS PRÁTICAS:
-     * No mundo real, a exclusão de dados de usuário deve seguir regras de negócio e
-     * leis como a LGPD. A abordagem ideal não seria uma exclusão permanente imediata (hard delete).
-     *
-     * O correto seria:
-     * 1.  **Soft Delete:** Marcar o usuário e a empresa como "inativos" no banco de dados (ex: `user.active = false`).
-     *     Isso impede o login, mas mantém os dados para fins fiscais ou legais.
-     * 2.  **Quarentena:** Os dados permaneceriam em um estado de "quarentena" pelo período exigido por lei
-     *     (ex: 5 anos para dados fiscais no Brasil).
-     * 3.  **Exclusão Definitiva:** Apenas após o término do período legal, um processo automatizado (job)
-     *     realizaria a exclusão permanente dos dados do banco.
-     *
-     * Para o propósito deste projeto e dos nossos testes, implementaremos a exclusão direta (hard delete).
-    */
-
+    // NOTA SOBRE BOAS PRÁTICAS E LGPD:
+    // A exclusão permanente (hard delete) não é recomendada em produção. A abordagem
+    // ideal seria o "soft delete" (marcar como inativo), mantendo os dados por um
+    // período legal antes da exclusão definitiva por um processo automatizado.
+    // Esta implementação de exclusão direta serve para simplificar o escopo do projeto.
+    
     const companyId = userToDelete.companyId;
 
-    // 1. Exclui todas as transações associadas à empresa.
+    // Executa a exclusão em cascata de forma manual.
+    // Etapa 1: Exclui todas as transações associadas à empresa.
     await Transaction.deleteMany({ companyId: companyId });
-    // 2. Exclui o usuário.
-    await User.findOneAndDelete({ _id: userId }); // Use findOneAndDelete com _id
-    // 3. Exclui a empresa.
+    // Etapa 2: Exclui o próprio usuário.
+    await User.findOneAndDelete({ _id: userId });
+    // Etapa 3: Exclui a empresa associada.
     await Company.findByIdAndDelete(companyId);
 
     res.status(200).json({ message: 'Usuário e todos os dados associados foram excluídos com sucesso.' });

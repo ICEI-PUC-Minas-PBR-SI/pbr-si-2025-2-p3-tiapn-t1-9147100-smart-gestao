@@ -1,6 +1,6 @@
 # 📦 Modelos JSON para Requisições da API
 
-Esta pasta contém exemplos de corpos de requisição (payloads) em formato JSON para os principais endpoints `POST` e `PUT` da API do Smart Gestão.
+Esta pasta contém exemplos de **corpos de requisição (payloads)** em formato JSON para os principais endpoints de escrita (`POST` e `PUT`) da API do Smart Gestão.
 
 ## Propósito
 
@@ -9,6 +9,15 @@ O objetivo destes arquivos é servir como:
 1.  **Documentação Viva**: Fornecem um exemplo claro e prático da estrutura de dados esperada pelo backend.
 2.  **Guia para o Frontend**: A equipe de frontend pode usar estes modelos como base para construir os objetos que serão enviados para a API.
 3.  **Facilitador de Testes**: Podem ser facilmente copiados e colados em ferramentas de teste de API como Postman, Insomnia ou em comandos `curl`.
+
+## Diferença entre `modelsJson` e a pasta `Examples`
+
+É importante entender a diferença entre as duas pastas para utilizá-las corretamente:
+
+-   **`modelsJson` (Esta pasta):** Contém exemplos do que o **cliente envia** para o servidor. Representa o corpo de uma requisição `POST` ou `PUT`, contendo apenas os campos que o usuário precisa fornecer.
+-   **`Examples`:** Contém exemplos da **estrutura de dados completa**, representando como um objeto é armazenado no banco de dados ou como ele é **retornado** pelo servidor em uma requisição `GET`. Inclui campos gerenciados pelo servidor, como `_id`, `companyId`, `createdAt`, etc.
+
+Em resumo: `modelsJson` é sobre **enviar dados**, e `Examples` é sobre **receber ou visualizar dados**.
 
 ## Como Utilizar
 

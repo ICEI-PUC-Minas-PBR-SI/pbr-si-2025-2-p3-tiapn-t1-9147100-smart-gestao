@@ -1,61 +1,54 @@
-// utils/logger.js
-// Helper para gravação de logs/ auditoria.
-// Aceita duas formas de uso:
-// 1) createLog(req, "ACTION_NAME", "description text")
-// 2) createLog({ userId, companyId, action, description, route, ip, userAgent, statusCode, details })
-//
-// Os comentários explicam em português cada parte.
+// =================================================================================
+// ARQUIVO: utils/logger.js
+// DESCRIÇÃO: Helper centralizado para a gravação de logs de auditoria.
+//            Esta função desacopla a lógica de criação de logs dos controladores,
+//            permitindo um ponto único de manutenção e maior consistência.
+// =================================================================================
 
 import Logs from "../models/Logs.js";
 
 /**
- * createLog - grava log de auditoria no MongoDB (coleção Logs).
- * Suporta chamadas por objeto (forma 2) ou por request Express (forma 1).
+ * Grava um log de auditoria no banco de dados.
+ * A função é sobrecarregada e pode ser chamada de duas maneiras:
+ *
+ * 1. **Com objeto de requisição (Express):**
+ *    `createLog(req, "NOME_DA_ACAO", "Descrição opcional")`
+ *    Extrai automaticamente `userId`, `companyId`, `ip`, etc., do objeto `req`.
+ *
+ * 2. **Com objeto de dados direto:**
+ *    `createLog({ userId, companyId, action, description, ... })`
+ *    Permite a criação de logs de forma mais manual e flexível.
  */
 export const createLog = async (arg1, arg2, arg3) => {
   try {
     let payload = {};
 
-    // Forma 1: createLog(req, action, description)
+    // Detecta a Forma 1: o primeiro argumento é um objeto de requisição do Express.
     if (arg1 && arg1.headers && typeof arg2 === "string") {
       const req = arg1;
       payload = {
-        userId: req.user ? req.user.userId : null,
-        companyId: req.user ? req.user.companyId : null,
+        userId: req.user?.userId || null,
+        companyId: req.user?.companyId || null,
         action: arg2,
         description: arg3 || null,
         route: req.originalUrl || null,
         ip: req.ip || req.headers["x-forwarded-for"] || null,
         userAgent: req.headers["user-agent"] || null,
-        statusCode: req.res ? req.res.statusCode : null,
-        details: req.body ? req.body : undefined,
       };
     }
-    // Forma 2: createLog({ userId, companyId, action, ... })
+    // Detecta a Forma 2: o primeiro argumento é um objeto de dados.
     else if (arg1 && typeof arg1 === "object") {
       payload = { ...arg1 };
-    } else {
-      payload = {
-        action: String(arg2 || "LOG").toUpperCase(),
-        description: arg3 || null,
-      };
     }
 
-    // Normalização mínima: garante que action exista
-    if (!payload.action) payload.action = "UNSPECIFIED_ACTION";
+    // Cria e salva o documento de log no banco de dados.
+    await Logs.create(payload);
 
-    // Cria o documento de log e salva no MongoDB
-    const logDoc = new Logs({
-      ...payload,
-      createdAt: new Date(),
-    });
-
-    await logDoc.save();
-
-    // Exibe no console para debug (resumido)
-    console.log(`🧾 [${logDoc.action}] user:${logDoc.userId || "-"} company:${logDoc.companyId || "-"} route:${logDoc.route || "-"}`);
+    // Loga uma versão resumida no console para depuração em tempo real.
+    console.log(`[LOG] Ação: ${payload.action} | Usuário: ${payload.userId || "N/A"}`);
   } catch (error) {
-    // Em caso de falha ao salvar o log, apenas reportamos no console — não interrompe fluxo da API
-    console.error("Falha ao gravar log:", error);
+    // Uma falha na gravação do log não deve quebrar a aplicação.
+    // Apenas registramos o erro no console para análise posterior.
+    console.error("Falha crítica ao gravar log de auditoria:", error);
   }
 };

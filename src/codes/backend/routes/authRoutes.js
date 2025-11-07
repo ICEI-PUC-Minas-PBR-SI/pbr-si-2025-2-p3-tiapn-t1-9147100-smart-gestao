@@ -1,7 +1,8 @@
-// ===========================================
-// Arquivo: routes/authRoutes.js
-// Descrição: Rotas de autenticação — registro, login, logout, renovação de token
-// ===========================================
+// =================================================================================
+// ARQUIVO: routes/authRoutes.js
+// DESCRIÇÃO: Define as rotas relacionadas à autenticação, registro e gerenciamento
+//            de sessão dos usuários.
+// =================================================================================
 
 import express from "express";
 import { registerUser, loginUser, logoutUser, refreshToken, deleteCurrentUser } from '../controllers/authController.js';
@@ -10,31 +11,27 @@ import { auditMiddleware } from "../middlewares/auditMiddleware.js";
 
 const router = express.Router();
 
-// - Rota pública para criar uma nova empresa e seu primeiro usuário.
-// O `auditMiddleware` registra a tentativa de cadastro.
+// Rota pública para registrar um novo usuário e sua respectiva empresa.
+// POST /api/auth/register
 router.post('/register', auditMiddleware('REGISTER_COMPANY_USER'), registerUser);
 
-// - Rota pública para autenticar um usuário.
-// Se as credenciais estiverem corretas, retorna um Access Token e um Refresh Token.
+// Rota pública para autenticar um usuário e obter os tokens de acesso e de atualização.
+// POST /api/auth/login
 router.post("/login", auditMiddleware("LOGIN_USER"), loginUser);
 
-// - Rota protegida para deslogar um usuário.
-// O `authMiddleware` garante que apenas usuários autenticados possam chamar esta rota.
-// Atualmente, é um placeholder para futuras lógicas de invalidação de sessão.
+// Rota para deslogar um usuário, invalidando o Refresh Token no servidor.
+// Esta rota é pública, mas a lógica no controller só funciona se um refreshToken válido for enviado.
+// POST /api/auth/logout
 router.post("/logout", authMiddleware, auditMiddleware("LOGOUT_USER"), logoutUser);
 
-// - Rota protegida para renovar um Access Token expirado.
-// O `authMiddleware` valida o token (que pode estar expirado) para extrair dados.
-// A lógica de validação do Refresh Token fica no controller.
+// Rota para renovar um Access Token expirado usando um Refresh Token válido.
+// (Atualmente um placeholder).
+// POST /api/auth/refresh
 router.post("/refresh", authMiddleware, refreshToken);
 
-// - Rota protegida para excluir a conta do usuário logado e todos os seus dados.
-// O `authMiddleware` garante que apenas o próprio usuário possa disparar esta ação.
-router.delete('/users/me', authMiddleware, auditMiddleware('DELETE_CURRENT_USER'), deleteCurrentUser);
-
-// Rota para excluir um usuário específico por ID (usada nos testes de limpeza)
-// authMiddleware garante que apenas usuários autenticados podem chamar esta rota.
-// auditMiddleware registra a ação.
+// Rota protegida para excluir um usuário específico por ID.
+// Esta rota é destrutiva e foi implementada principalmente para facilitar a limpeza durante os testes.
+// DELETE /api/auth/users/:id
 router.delete('/users/:id', authMiddleware, auditMiddleware('DELETE_USER_BY_ID'), deleteCurrentUser);
 
 export default router;

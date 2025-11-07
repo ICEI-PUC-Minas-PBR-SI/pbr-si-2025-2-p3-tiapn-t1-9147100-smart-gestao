@@ -1,13 +1,18 @@
-// controllers/metaController.js
-// CRUD de financial goals (metas)
+// =================================================================================
+// ARQUIVO: controllers/metaController.js
+// DESCRIÇÃO: Controladores para as operações CRUD relacionadas a Metas Financeiras
+//            ('Meta'). Garante que todas as operações sejam executadas dentro
+//            do escopo da empresa do usuário autenticado.
+// =================================================================================
 
 import Meta from "../models/Meta.js";
 import mongoose from 'mongoose'; // Importar mongoose para usar ObjectId
 import { createLog } from "../utils/logger.js";
 
 /**
- * - GET /api/meta
- * Lista metas da company
+ * Lista todas as metas financeiras da empresa do usuário autenticado.
+ * @param {object} req - O objeto de requisição do Express.
+ * @param {object} res - O objeto de resposta do Express.
  */
 export const getAllMetas = async (req, res) => {
   try {
@@ -21,8 +26,9 @@ export const getAllMetas = async (req, res) => {
 };
 
 /**
- * - GET /api/meta/:id
- * Busca uma meta pelo ID
+ * Busca uma meta financeira específica por ID.
+ * @param {object} req - O objeto de requisição do Express.
+ * @param {object} res - O objeto de resposta do Express.
  */
 export const getMetaById = async (req, res) => {
     try {
@@ -40,14 +46,15 @@ export const getMetaById = async (req, res) => {
     }
 };
 /**
- * - POST /api/meta
- * Cria meta financeira
+ * Cria uma nova meta financeira.
+ * A meta é automaticamente associada à empresa e ao usuário que a criou.
+ * @param {object} req - O objeto de requisição do Express.
+ * @param {object} res - O objeto de resposta do Express.
  */
 export const createMeta = async (req, res) => {
   try {
     const companyId = req.user.companyId;
     const userId = req.user.userId;
-    // Payload alinhado com o modelo padronizado
     const payload = { ...req.body, companyId, userId };
 
     const meta = await Meta.create(payload);
@@ -68,8 +75,9 @@ export const createMeta = async (req, res) => {
 };
 
 /**
- * - PUT /api/meta/:id
- * Atualiza meta
+ * Atualiza uma meta financeira existente.
+ * @param {object} req - O objeto de requisição do Express.
+ * @param {object} res - O objeto de resposta do Express.
  */
 export const updateMeta = async (req, res) => {
   try {
@@ -93,8 +101,11 @@ export const updateMeta = async (req, res) => {
 };
 
 /**
- * - DELETE /api/meta/:id
- * Remove meta (física) — em produção prefira marcar active=false
+ * Exclui uma meta financeira (exclusão física).
+ * Nota: Em um ambiente de produção, a melhor prática seria uma exclusão lógica
+ * (soft delete), marcando a meta como inativa (`active: false`).
+ * @param {object} req - O objeto de requisição do Express.
+ * @param {object} res - O objeto de resposta do Express.
  */
 export const deleteMeta = async (req, res) => {
   try {

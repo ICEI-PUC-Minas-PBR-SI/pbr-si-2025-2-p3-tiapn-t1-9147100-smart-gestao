@@ -19,7 +19,11 @@ info:
   title: Smart Gestão API - Autenticação
   version: 1.0.0
   description: |
-    Especificação inicial dos endpoints de autenticação do backend Smart Gestão.
+    Especificação dos endpoints de autenticação do backend Smart Gestão.
+
+    A API foi projetada para ser agnóstica à tecnologia do cliente. Como prova de conceito dessa flexibilidade, foi criada uma página de login em **React** que consome estes mesmos endpoints, demonstrando a viabilidade de uma modernização futura do frontend.
+    Para mais detalhes, consulte a documentação na pasta `src/codes/react/`.
+
     Ambiente padrão local em Windows.
 servers:
   - url: http://localhost:5000

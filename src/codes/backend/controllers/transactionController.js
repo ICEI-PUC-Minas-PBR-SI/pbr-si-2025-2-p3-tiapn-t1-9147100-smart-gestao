@@ -1,17 +1,24 @@
-// controllers/transactionController.js
-// CRUD de transactions (income/expense)
-import mongoose from 'mongoose'; // Importar mongoose para usar ObjectId
+// =================================================================================
+// ARQUIVO: controllers/transactionController.js
+// DESCRIÇÃO: Controladores para as operações CRUD da entidade 'Transaction'.
+//            Este é um dos principais controladores do sistema, responsável por
+//            gerenciar todas as receitas e despesas.
+// =================================================================================
 
+import mongoose from 'mongoose'; // Importar mongoose para usar ObjectId
 import Transaction from "../models/Transaction.js";
 import { createLog } from "../utils/logger.js";
 
 /**
- * - GET /api/transactions
- * Lista transações da company, com filtros opcionais: start,end,category,type
+ * Lista as transações da empresa do usuário, com suporte a filtros.
+ * Filtros disponíveis via query string: `start`, `end`, `category`, `type`.
+ * @param {object} req - O objeto de requisição do Express.
+ * @param {object} res - O objeto de resposta do Express.
  */
 export const getAllTransactions = async (req, res) => {
   try {
     const companyId = req.user.companyId; // Vem do authMiddleware
+    // O filtro base sempre garante o escopo da empresa.
     const filter = { companyId: companyId };
 
     if (req.query.start || req.query.end) {
@@ -31,8 +38,9 @@ export const getAllTransactions = async (req, res) => {
 };
 
 /**
- * - GET /api/transactions/:id
- * Busca uma transaction pelo ID
+ * Busca uma transação específica pelo seu ID.
+ * @param {object} req - O objeto de requisição do Express.
+ * @param {object} res - O objeto de resposta do Express.
  */
 export const getTransactionById = async (req, res) => {
     try {
@@ -52,20 +60,21 @@ export const getTransactionById = async (req, res) => {
     }
 };
 /**
- * - POST /api/transactions
- * Cria transaction; corpo: { type, description, category, value, date, paymentMethod, clientId }
+ * Cria uma nova transação (receita ou despesa).
+ * Garante que `companyId` e `userId` sejam extraídos do token de autenticação,
+ * ignorando quaisquer valores que possam vir no corpo da requisição por segurança.
+ * @param {object} req - O objeto de requisição do Express.
+ * @param {object} res - O objeto de resposta do Express.
  */
 export const createTransaction = async (req, res) => {
   try {
     const companyId = req.user.companyId;
-    // Garante que o companyId e userId do token sejam usados, ignorando qualquer um que venha no corpo. companyId e userId já são ObjectIds do req.user
     const payload = { ...req.body, companyId: companyId, userId: req.user.userId }; 
 
-    // A validação agora é primariamente feita pelo Mongoose Schema.
-    // O controller pode focar na lógica de negócio.
+    // A validação dos campos é feita pelo Schema do Mongoose.
     const tx = await Transaction.create(payload);
 
-    // Exemplo de log de auditoria
+    // Registra um log de auditoria detalhado para a criação da transação.
     await createLog({
       userId: req.user.userId,
       companyId,
@@ -82,8 +91,11 @@ export const createTransaction = async (req, res) => {
 };
 
 /**
- * - PUT /api/transactions/:id
- * Atualiza transaction (dentro da mesma company)
+ * Atualiza uma transação existente.
+ * A opção `runValidators: true` força o Mongoose a re-validar os dados
+ * com base no Schema durante a atualização.
+ * @param {object} req - O objeto de requisição do Express.
+ * @param {object} res - O objeto de resposta do Express.
  */
 export const updateTransaction = async (req, res) => {
   try {
@@ -91,7 +103,7 @@ export const updateTransaction = async (req, res) => {
     const updated = await Transaction.findOneAndUpdate(
       { _id: req.params.id, companyId: companyId }, // Garante que só pode editar da própria empresa
       { $set: req.body },
-      { new: true, runValidators: true } // 'runValidators' força a validação do schema na atualização
+      { new: true, runValidators: true }
     );
     if (!updated) return res.status(404).json({ message: "Transaction não encontrada" });
 
@@ -111,8 +123,9 @@ export const updateTransaction = async (req, res) => {
 };
 
 /**
- * - DELETE /api/transactions/:id
- * Remove transaction (dentro da mesma company)
+ * Exclui uma transação existente.
+ * @param {object} req - O objeto de requisição do Express.
+ * @param {object} res - O objeto de resposta do Express.
  */
 export const deleteTransaction = async (req, res) => {
   try {

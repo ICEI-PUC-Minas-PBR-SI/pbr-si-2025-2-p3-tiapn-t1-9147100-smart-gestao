@@ -40,12 +40,15 @@ Esta seção orienta como executar o sistema localmente para fins acadêmicos/de
 3.  **Configure as variáveis de ambiente:**
     Abra o arquivo `.env` e preencha com suas informações, como a string de conexão do MongoDB e os segredos JWT.
     ```env
-    MONGODB_URI=sua_string_conexao_mongodb
+    # String de conexão com seu banco de dados MongoDB
+    MONGO_URI=mongodb+srv://<user>:<password>@cluster.mongodb.net/smartgestao?retryWrites=true&w=majority
+
+    # Porta em que o servidor irá rodar
     PORT=5000
-    JWT_SECRET=um_segredo_aleatorio_seguro_para_access_token
-    JWT_REFRESH_SECRET=outro_segredo_aleatorio_seguro_para_refresh_token
-    ACCESS_TOKEN_EXPIRATION=30m
-    REFRESH_TOKEN_EXPIRATION=7d
+
+    # Chaves secretas para gerar os tokens JWT. Use geradores de senhas fortes.
+    JWT_SECRET=SEU_SEGREDO_SUPER_SEGURO_PARA_ACCESS_TOKEN
+    REFRESH_TOKEN_SECRET=OUTRO_SEGREDO_SUPER_SEGURO_PARA_REFRESH_TOKEN
     ```
 4.  **Instale as dependências do projeto:**
    ```bash
@@ -100,11 +103,26 @@ Objetivo: validar o fluxo ponta a ponta sem ferramentas complexas.
 - Relatórios
   - Acessar a página ou endpoint GET /api/reports com filtros básicos.
 
+> **Nota**: Para uma validação mais completa e automatizada, consulte a documentação da suíte de testes em `src/codes/backend/Testes/Docs/roteiro de testes automatizados.md`.
+
 Critérios de sucesso:
 - Respostas 2xx com payload esperado; em 401, redireciona para login; erros 4xx/5xx exibem mensagem clara.
 
 Notas:
 - Estes testes são para a equipe/admin em ambiente local. Usuário final não precisa executar servidores ou testes.
+
+## Arquitetura e Prova de Conceito com React
+
+O projeto foi desenvolvido com uma arquitetura desacoplada, onde o **backend (API RESTful)** é totalmente independente do **frontend**. Embora a implementação principal do frontend utilize HTML, CSS e JavaScript puro, a robustez da API permite que ela seja consumida por qualquer tipo de cliente.
+
+Para demonstrar essa flexibilidade e a viabilidade de uma futura modernização, foi criada uma **prova de conceito** com a implementação da página de login utilizando **React**.
+
+### Objetivo da Prova de Conceito
+- **Validar a API**: Demonstrar que o backend está pronto para servir aplicações modernas.
+- **Simular Migração Gradual**: Mostrar como novas funcionalidades poderiam ser desenvolvidas em React e integradas ao sistema legado.
+- **Interoperabilidade**: Provar que a autenticação via React funciona em conjunto com o sistema legado, compartilhando a mesma sessão de usuário.
+
+> Para executar e entender os detalhes desta demonstração, consulte a documentação específica no diretório: [`src/codes/react/Readme-React.md`](src/codes/react/Readme-React.md).
 
 # Documentação
 
@@ -121,7 +139,7 @@ Notas:
 
 # Código
 
-<li><a href="src/README.md"> Código Fonte</a></li>
+<li><a href="src/codes/README.md"> Código Fonte</a></li>
 
 # Apresentação
 
@@ -129,6 +147,12 @@ Notas:
 
 ## Histórico de versões
 
+* 0.3.6
+    * CHANGE: Criação de uma prova de conceito com React para a página de login, demonstrando a flexibilidade da API do backend. Adição de scripts (`start:full-demo`) para orquestrar a execução simultânea de todos os ambientes (backend, frontend legado e React).
+* 0.3.5
+    * CHANGE: Validação final de toda a estrutura de documentação e comentários do projeto. Ajustes de consistência e correção de informações nos arquivos README principais e documentos de planejamento.
+* 0.3.4
+    * CHANGE: Refatoração completa dos comentários em todo o código do backend (controllers, models, routes, middlewares, utils, scripts) para melhorar a clareza e a manutenibilidade. Criação e aprimoramento da documentação técnica (`README.md`) em todas as pastas principais.
 * 0.3.3
     * CHANGE: Implementação de uma suíte de testes automatizados de integração para a API, cobrindo os módulos de Autenticação, Isolamento de Dados (Multi-Tenant), Transações (CRUD) e Metas (CRUD) para garantir a estabilidade e qualidade do backend.
 * 0.3.2

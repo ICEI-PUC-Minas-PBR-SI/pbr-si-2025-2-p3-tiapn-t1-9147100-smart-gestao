@@ -92,7 +92,7 @@ As tabelas que se seguem apresentam os requisitos funcionais e não funcionais q
 | RNF-003 | O sistema deve ser compatível com navegadores modernos (Chrome, Firefox, Edge) | ALTA |
 | RNF-004 | Os dados do usuário devem ser armazenados de forma segura em banco de dados | ALTA |
 | RNF-005 | O banco de dados deve suportar ao menos **1.000 registros de transações** sem perda de desempenho | MÉDIA |
-| RNF-006 | O sistema deve ser implementado de forma modular, facilitando futuras expansões | MÉDIA |
+| RNF-006 | O sistema deve ser implementado de forma modular (backend desacoplado do frontend), facilitando futuras expansões. A viabilidade desta abordagem foi validada através de uma prova de conceito com React. | MÉDIA |
 | RNF-007 | A interface deve ser simples, intuitiva e de fácil navegação para usuários não técnicos | ALTA |
 | RNF-008 | O login deve exigir usuário e senha, com recuperação básica de senha por e-mail | MÉDIA |
 | RNF-009 | A arquitetura deve possibilitar futura integração com APIs externas (ex.: serviços contábeis) | BAIXA |

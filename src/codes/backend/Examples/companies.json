@@ -6,7 +6,8 @@
     "phone": "31999999999",
     "address": "Rua das Palmeiras, 123 - Betim/MG",
     "isActive": true,
-    "createdAt": "2025-10-18T00:00:00Z"
+    "plan": "PRO",
+    "registrationDate": "2025-10-18T00:00:00Z"
   },
   {
     "name": "Tech Solutions BR",
@@ -14,7 +15,8 @@
     "email": "suporte@techsolutions.com",
     "phone": "31988887777",
     "address": "Av. PUC Minas, 2000 - Contagem/MG",
-    "isActive": true,
-    "createdAt": "2025-10-18T00:00:00Z"
+    "isActive": false,
+    "plan": "BASIC",
+    "registrationDate": "2025-10-18T00:00:00Z"
   }
 ]
