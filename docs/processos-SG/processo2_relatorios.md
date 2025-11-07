@@ -11,7 +11,8 @@ O processo de geração de relatórios permite que o usuário visualize e analis
 6. Sistema exibe insights financeiros relevantes.
 
 Modelo BPMN:
-<img width="1221" height="721" alt="processo2" src="https://github.com/user-attachments/assets/48187ecb-aff2-46a9-b4ab-c637984a265d" />
+
+<img width="1221" height="541" alt="relatoriodiagrama drawio" src="https://github.com/user-attachments/assets/ab000018-f1c9-46cd-b66e-c123509a1186" />
 
 
 ---
