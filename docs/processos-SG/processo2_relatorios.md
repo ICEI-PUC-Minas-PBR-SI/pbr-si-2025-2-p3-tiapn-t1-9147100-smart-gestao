@@ -14,12 +14,9 @@ Modelo BPMN:
 
 <img width="1221" height="541" alt="relatoriodiagrama drawio" src="https://github.com/user-attachments/assets/ab000018-f1c9-46cd-b66e-c123509a1186" />
 
+Wireframe (esboço previo da tela)
 
----
-
-> **Ponto de Melhoria (Revisado por Heron):** Olá, equipe! Para um pequeno refinamento, o responsável poderia ajustar os títulos das atividades 2, 3 e 4? Atualmente, eles estão descritos sob a perspectiva do "Sistema".
->
-> **Guia para o ajuste:** Altere os títulos para que reflitam a ação do **usuário** (ex: "Analisar Dados Visuais (Usuário)"), tornando a documentação mais consistente. O conteúdo das seções não precisa ser alterado.
+<img width="597" height="430" alt="Captura de tela 2025-11-07 164919" src="https://github.com/user-attachments/assets/aa03297f-a6c3-4ad1-8e87-16e527cfe0ef" />
 
 #### Detalhamento das atividades
 
