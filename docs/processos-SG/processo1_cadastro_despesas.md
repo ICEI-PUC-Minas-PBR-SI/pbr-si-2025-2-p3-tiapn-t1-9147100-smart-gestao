@@ -25,55 +25,61 @@ O processo de cadastro de despesas permite ao usuário registrar e gerenciar sua
 #### Detalhamento das atividades
 
 
-## Atividade 1 – Visualizar e Filtrar Transações (Usuário) 
+## 2. Detalhamento das Atividades
+
+### 2.1. Atividade 1 – Visualizar e Filtrar Transações (Usuário )
 
 Esta atividade permite ao usuário visualizar todas as transações existentes e aplicar filtros para refinar a busca.
 
-| Campo/Elemento           | Tipo          | Restrições                                  |
-|:-------------------------|:--------------|:--------------------------------------------|
-| Botão: Filtrar           | Botão         | Abre opções de filtro.                      |
-| Seleção: Período         | Seleção Única | Opções: Últimos 30 dias, Este mês, Mês passado, Personalizado. |
-| Seleção: Tipo            | Seleção Única | Opções: Todos, Receitas, Despesas.          |
-| Seleção: Categoria       | Seleção Única | Opções: Todas, Materiais, Serviços, Transporte, Impostos, etc. |
-| Tabela de Transações     | Tabela        | Exibe Data, Descrição, Categoria, Tipo, Valor e Ações. |
-| Botão: Editar (Transação)| Botão         | Permite editar uma transação específica.    |
-| Botão: Excluir (Transação)| Botão         | Permite excluir uma transação específica.   |
-| Paginação                | Navegação     | Permite navegar entre as páginas de transações. |
+#### Campos e Elementos
 
-**Comandos**
-- Clicar em "Filtrar" para exibir as opções de filtro.
-- Selecionar opções nos dropdowns "Período", "Tipo" e "Categoria".
-- Clicar nos botões de ação (Editar/Excluir) para gerenciar transações individuais.
-- Clicar nos botões "Anterior" ou "Próxima" para navegar na paginação.
+| Campo/Elemento | Tipo | Restrições |
+| :--- | :--- | :--- |
+| Botão: Filtrar | Botão | Abre opções de filtro. |
+| Seleção: Período | Seleção Única | Opções: Últimos 30 dias, Este mês, Mês passado, Personalizado. |
+| Seleção: Tipo | Seleção Única | Opções: Todos, Receitas, Despesas. |
+| Seleção: Categoria | Seleção Única | Opções: Todas, Materiais, Serviços, Transporte, Impostos, etc. |
+| Tabela de Transações | Tabela | Exibe Data, Descrição, Categoria, Tipo, Valor e Ações. |
+| Botão: Editar (Transação) | Botão | Permite editar uma transação específica. |
+| Botão: Excluir (Transação) | Botão | Permite excluir uma transação específica. |
+| Paginação | Navegação | Permite navegar entre as páginas de transações. |
+
+#### Comandos de Interação
+
+*   Clicar em "Filtrar" para exibir as opções de filtro.
+*   Selecionar opções nos dropdowns "Período", "Tipo" e "Categoria".
+*   Clicar nos botões de ação (Editar/Excluir) para gerenciar transações individuais.
+*   Clicar nos botões "Anterior" ou "Próxima" para navegar na paginação.
 
 ---
 
-## Atividade 2 – Adicionar Nova Transação (Usuário)
+### 2.2. Atividade 2 – Adicionar Nova Transação (Usuário)
 
 Esta atividade permite ao usuário registrar uma nova receita ou despesa no sistema.
 
-| Campo/Elemento           | Tipo          | Restrições                                  |
-|:-------------------------|:--------------|:--------------------------------------------|
-| Botão: Nova Transação    | Botão         | Abre um formulário para adicionar transação. |
-| Campo: Data              | Data          | Obrigatório. Data da transação.             |
-| Campo: Descrição         | Texto         | Obrigatório. Breve descrição da transação.  |
-| Campo: Categoria         | Seleção Única | Obrigatório. Categoria da transação (ex: Vendas, Materiais, Serviços). |
-| Campo: Tipo              | Seleção Única | Obrigatório. Tipo da transação (Receita ou Despesa). |
-| Campo: Valor             | Número        | Obrigatório. Valor monetário da transação.  |
-| Botão: Salvar            | Botão         | Salva a nova transação.                     |
-| Botão: Cancelar          | Botão         | Cancela a adição da transação.              |
+#### Campos e Elementos
 
-**Comandos**
-- Clicar em "Nova Transação".
-- Preencher os campos "Data", "Descrição", "Categoria", "Tipo" e "Valor".
-- Clicar em "Salvar" para registrar a transação.
-- Clicar em "Cancelar" para fechar o formulário sem salvar.
+| Campo/Elemento | Tipo | Restrições |
+| :--- | :--- | :--- |
+| Botão: Nova Transação | Botão | Abre um formulário para adicionar transação. |
+| Campo: Data | Data | Obrigatório. Data da transação. |
+| Campo: Descrição | Texto | Obrigatório. Breve descrição da transação. |
+| Campo: Categoria | Seleção Única | Obrigatório. Categoria da transação (ex: Vendas, Materiais, Serviços). |
+| Campo: Tipo | Seleção Única | Obrigatório. Tipo da transação (Receita ou Despesa). |
+| Campo: Valor | Número | Obrigatório. Valor monetário da transação. |
+| Botão: Salvar | Botão | Salva a nova transação. |
+| Botão: Cancelar | Botão | Cancela a adição da transação. |
+
+#### Comandos de Interação
+
+*   Clicar em "Nova Transação".
+*   Preencher os campos "Data", "Descrição", "Categoria", "Tipo" e "Valor".
+*   Clicar em "Salvar" para registrar a transação.
+*   Clicar em "Cancelar" para fechar o formulário sem salvar.
 
 ---
 
-> **Ponto de Melhoria (Revisado por Heron):** Pessoal, para completar a documentação deste processo, o responsável poderia criar e adicionar os wireframes (esboços de tela) aqui? Um esboço simples da tela de transações, mostrando a lista e o formulário, já seria excelente.
-
-_Tipos de dados utilizados:_
+## 3. Tipos de Dados Utilizados
 
 *   **Área de texto** - campo texto de múltiplas linhas
 *   **Caixa de texto** - campo texto de uma linha
@@ -87,3 +93,40 @@ _Tipos de dados utilizados:_
 *   **Arquivo** - campo de upload de documento
 *   **Link** - campo que armazena uma URL
 *   **Tabela** - campo formado por uma matriz de valores
+
+---
+
+## 4. Comandos Git para o Projeto APN
+
+Os comandos a seguir são sugeridos para inicializar o repositório Git e adicionar os arquivos do projeto (`APN.zip` descompactado) para controle de versão.
+
+**Arquivos do Projeto:**
+- `APN/cadastro.html`
+- `APN/index.html`
+- `APN/login.html`
+- `APN/metas.html`
+- `APN/perfil.html`
+- `APN/relatorios.html`
+- `APN/style.css`
+- `APN/transacoes.html`
+
+```bash
+# 1. Inicializa um novo repositório Git no diretório raiz do projeto
+git init
+
+# 2. Adiciona todos os arquivos do projeto ao stage
+# (Assumindo que os arquivos estão no diretório 'APN/')
+git add APN/
+
+# OU, se você estiver no diretório raiz e quiser adicionar todos os arquivos
+# git add .
+
+# 3. Confirma (commit) os arquivos adicionados com uma mensagem descritiva
+git commit -m "Commit inicial: Adição de todas as páginas HTML e folha de estilo CSS do projeto APN"
+
+# 4. (Opcional) Adiciona um repositório remoto (ex: GitHub)
+# Substitua <URL_DO_SEU_REPOSITORIO> pela URL real
+# git remote add origin <URL_DO_SEU_REPOSITORIO>
+
+# 5. (Opcional) Envia (push) o código para o repositório remoto
+# git push -u origin main
