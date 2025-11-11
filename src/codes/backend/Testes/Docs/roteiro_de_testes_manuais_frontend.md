@@ -6,13 +6,18 @@ Este documento fornece um guia passo a passo para validar manualmente as funcion
 
 ### Empresas de Teste Pré-configuradas
 
-Para agilizar os testes, utilize as credenciais das empresas criadas pelo ambiente de testes automatizados.
+Para garantir um ambiente estável e previsível, utilize as empresas de teste fixas. Se elas ainda não existirem, execute o script `node Scripts/create-test-companies.js` (com o backend rodando) para criá-las.
 
-- **Empresa A:**
-  - **E-mail:** `empresa-a@test.com`
+As credenciais completas (incluindo tokens) estão no arquivo `dados-empresas-teste.md`.
+
+- **Empresa Frontend:**
+  - **E-mail:** `empresa-frontend@test.com`
   - **Senha:** `password123`
-- **Empresa B:**
-  - **E-mail:** `empresa-b@test.com`
+- **Empresa Backend:**
+  - **E-mail:** `empresa-backend@test.com`
+  - **Senha:** `password123`
+- **Empresa React:**
+  - **E-mail:** `empresa-react@test.com`
   - **Senha:** `password123`
 
 ---
@@ -20,6 +25,9 @@ Para agilizar os testes, utilize as credenciais das empresas criadas pelo ambien
 ## 1. Autenticação e Acesso
 
 O objetivo é garantir que o fluxo de login, logout e proteção de rotas está funcionando.
+
+- [ ] **Execução do Ambiente Completo:**
+    - **Ação:** No terminal, a partir da pasta `backend`, execute `npm run start:full-demo` para iniciar todos os servidores.
 
 - [ ] **Login com Sucesso:**
     - **Ação:** Acesse a página de login, insira as credenciais da **Empresa A** e clique em "Entrar".
@@ -37,6 +45,10 @@ O objetivo é garantir que o fluxo de login, logout e proteção de rotas está 
     - **Ação:** Faça login com qualquer empresa e, em seguida, clique no botão "Sair".
     - **Resultado Esperado:** A sessão deve ser encerrada e o usuário redirecionado para a página de login.
 
+- [ ] **Login com Sucesso (Prova de Conceito React):**
+    - **Ação:** Acesse a URL da aplicação React: `http://localhost:3001`. Insira as credenciais da **Empresa React** e clique em "Entrar".
+    - **Resultado Esperado:** O usuário deve ser redirecionado para a página inicial do **sistema legado** (`http://localhost:3000/pages/startPage.html`) e a sessão deve estar ativa (nome do usuário no cabeçalho).
+
 - [ ] **Recuperação de Senha:**
     - **Ação:** Na tela de login, clique em "Esqueci minha senha", insira um e-mail válido e siga o fluxo (em ambiente de teste, pode ser necessário simular o clique no link recebido).
     - **Resultado Esperado:** O usuário deve conseguir definir uma nova senha e, em seguida, fazer login com ela.
@@ -48,17 +60,17 @@ O objetivo é garantir que o fluxo de login, logout e proteção de rotas está 
 Este é o teste mais crítico para o frontend. Valida que a interface de um usuário não exibe dados de outro.
 
 - [ ] **Cenário de Preparação (Empresa A):**
-    1.  Faça login com a **Empresa A**.
+    1.  Faça login com a **Empresa Frontend**.
     2.  Navegue até "Transações" e crie uma nova transação de receita: `Venda de Consultoria` | `R$ 500,00`.
     3.  Navegue até "Metas" e crie uma nova meta: `Comprar notebook novo`.
     4.  Faça logout.
 
 - [ ] **Cenário de Validação (Empresa B):**
-    1.  Faça login com a **Empresa B**.
+    1.  Faça login com a **Empresa Backend**.
     2.  Navegue até a página de "Transações".
-    3.  **Resultado Esperado:** A lista de transações deve estar **vazia** ou conter apenas transações da Empresa B. A transação `Venda de Consultoria` **NÃO** deve aparecer.
+    3.  **Resultado Esperado:** A lista de transações deve estar **vazia** ou conter apenas transações da **Empresa Backend**. A transação `Venda de Consultoria` **NÃO** deve aparecer.
     4.  Navegue até a página de "Metas".
-    5.  **Resultado Esperado:** A lista de metas deve estar **vazia** ou conter apenas metas da Empresa B. A meta `Comprar notebook novo` **NÃO** deve aparecer.
+    5.  **Resultado Esperado:** A lista de metas deve estar **vazia** ou conter apenas metas da **Empresa Backend**. A meta `Comprar notebook novo` **NÃO** deve aparecer.
 
 ---
 

@@ -9,9 +9,7 @@
     "start:backend": "node server.js",
     "start:frontend": "http-server ../frontend -p 3000",
     "dev": "nodemon server.js",
-    "test": "concurrently -k -s first \"npm:test:server\" \"npx wait-on http://localhost:5000/api/health && node Testes/run-test-log.js\"",
-    "test:server": "node server.js",
-    "test:runner": "node Testes/run-test-log.js",
+    "test": "node Testes/run-test-log.js",
     "start:react-demo": "npm start --prefix ../react",
     "start:full-demo": "concurrently \"npm:start:backend\" \"npm:start:frontend\" \"npm:start:react-demo\""
   },
@@ -29,7 +27,7 @@
   "devDependencies": {
     "concurrently": "^8.2.2",
     "http-server": "^14.1.1",
-    "jest": "^30.2.0",
+    "jest": "^30.2.0",    
     "nodemon": "^3.1.10",
     "wait-on": "^7.2.0"
   }

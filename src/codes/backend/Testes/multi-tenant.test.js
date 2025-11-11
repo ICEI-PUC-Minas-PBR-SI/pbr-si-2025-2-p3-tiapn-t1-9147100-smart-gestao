@@ -1,14 +1,18 @@
 import axios from 'axios';
+import fs from 'fs';
+import path from 'path';
 
-const API_URL = 'http://localhost:5000/api';
+const SETUP_FILE = path.join('Testes', 'test-setup.json');
 const NUMBER_OF_COMPANIES = 3; // Reduzido para 3 para logs mais curtos
 const PAYMENT_METHODS = ['credit_card', 'debit_card', 'pix', 'cash', 'other'];
 
 describe('3. Teste de Isolamento de Dados em Larga Escala (Multi-Tenant)', () => {
     let companies = [];
+    let API_URL;
 
     // Etapa 1: Cadastrar e logar 5 empresas diferentes antes de todos os testes
     beforeAll(async () => {
+        API_URL = JSON.parse(fs.readFileSync(SETUP_FILE, 'utf8')).apiUrl;
         console.log(`\n--- Configurando ${NUMBER_OF_COMPANIES} empresas para o teste multi-tenant ---`); // Reduzido para 3
 
         for (let i = 1; i <= NUMBER_OF_COMPANIES; i++) {

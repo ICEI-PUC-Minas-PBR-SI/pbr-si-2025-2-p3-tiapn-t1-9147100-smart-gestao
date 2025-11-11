@@ -1,23 +1,27 @@
 import axios from 'axios';
 import fs from 'fs';
 import path from 'path';
-
 // URL base da sua API. Altere se for diferente.
-const API_URL = 'http://localhost:5000/api';
 const SETUP_FILE = path.join('Testes', 'test-setup.json');
 
 // Variáveis para armazenar os tokens de autenticação
 let tokenEmpresaA;
 let empresaA;
+let API_URL;
 
 /**
- * Bloco de testes para o Módulo de Autenticação.
+ * Bloco de testes para o Módulo de Autenticação (Legado).
  * Corresponde à seção "1. Cadastro e Login" do roteiro de testes.
  */
-describe('1. Módulo de Autenticação', () => {
+describe('1. Módulo de Autenticação (Legado)', () => {
     // Antes de tudo, lê os dados das empresas criadas pelo setup global
+    // MOTIVO DA MUDANÇA: Todos os testes agora leem os dados de autenticação
+    // do arquivo `test-setup.json`, que é gerado pelo `test-setup.js`
+    // com dados criados diretamente no banco de dados em memória.
+    // O `test-utils.js` foi removido.
     beforeAll(() => {
         const testData = JSON.parse(fs.readFileSync(SETUP_FILE, 'utf8'));
+        API_URL = testData.apiUrl;
         empresaA = testData.companyA;
         tokenEmpresaA = empresaA.token;
     });
@@ -27,7 +31,7 @@ describe('1. Módulo de Autenticação', () => {
     it('RF-001: deve ter cadastrado a Empresa A com sucesso no setup global', () => {
         console.log('\n--- Teste: Validar setup do usuário ---');
         expect(empresaA).toBeDefined();
-        expect(empresaA.email).toContain('empresa_padrao_');
+        expect(empresaA.email).toBe('usera@test.com');
         console.log('✅ Usuário da Empresa A carregado do setup.');
     });
 
@@ -93,7 +97,7 @@ describe('1. Módulo de Autenticação', () => {
         } catch (error) {
             // O middleware de autenticação deve retornar 401 (Unauthorized)
             expect(error.response.status).toBe(401);
-            expect(error.response.data.message).toBe('Token ausente ou formato inválido');
+            expect(error.response.data.message).toBe('Acesso negado. Token de autenticação não fornecido ou em formato inválido.');
             console.log('✅ Acesso sem token foi barrado como esperado (Status 401).');
         }
     });

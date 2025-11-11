@@ -1,0 +1,19 @@
+
+--- 🚀 [SETUP] Conectando e populando o banco de dados de TESTE ---
+
+--- FIM DOS TESTES AUTOMATIZADOS (COM FALHAS) ---
+MongoAPIError: Jest: Got error running globalSetup - C:\Users\HERON-ACER\Documents\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\Testes\test-setup.js, reason: URI must include hostname, domain name, and tld
+    at resolveSRVRecord (C:\Users\HERON-ACER\Documents\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\mongodb\lib\connection_string.js:37:15)
+    at MongoClient._connect (C:\Users\HERON-ACER\Documents\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\mongodb\lib\mongo_client.js:143:74)
+    at MongoClient.connect (C:\Users\HERON-ACER\Documents\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\mongodb\lib\mongo_client.js:122:40)
+    at NativeConnection.createClient (C:\Users\HERON-ACER\Documents\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\mongoose\lib\drivers\node-mongodb-native\connection.js:296:16)
+    at NativeConnection.openUri (C:\Users\HERON-ACER\Documents\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\mongoose\lib\connection.js:766:34)
+    at Mongoose.connect (C:\Users\HERON-ACER\Documents\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\mongoose\lib\index.js:416:15)
+    at setup (file:///C:/Users/HERON-ACER/Documents/GitHub/pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao/src/codes/backend/Testes/test-setup.js:25:20)
+    at C:\Users\HERON-ACER\Documents\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\@jest\core\build\index.js:3166:17
+    at ScriptTransformer.requireAndTranspileModule (C:\Users\HERON-ACER\Documents\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\@jest\transform\build\index.js:623:24)
+    at async runGlobalHook (C:\Users\HERON-ACER\Documents\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\@jest\core\build\index.js:3162:9)
+    at async runJest (C:\Users\HERON-ACER\Documents\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\@jest\core\build\index.js:3429:5)
+    at async _run10000 (C:\Users\HERON-ACER\Documents\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\@jest\core\build\index.js:1543:5)
+    at async runCLI (C:\Users\HERON-ACER\Documents\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\@jest\core\build\index.js:1444:3)
+    at async Object.run (C:\Users\HERON-ACER\Documents\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\jest-cli\build\index.js:656:9)

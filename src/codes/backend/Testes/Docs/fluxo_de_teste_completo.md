@@ -187,3 +187,33 @@ Este fluxo permite que um usuário que esqueceu sua senha possa redefini-la de f
 
 *   **Resultado Esperado (Frontend):**
     *   Exibe uma mensagem "Senha redefinida com sucesso!" e redireciona para a página de login, onde o usuário agora pode entrar com a nova senha.
+
+---
+
+## Fluxo 6: Login via Prova de Conceito (React)
+
+Este fluxo demonstra a capacidade do backend de servir a diferentes clientes e a interoperabilidade entre uma aplicação moderna (React) e o sistema legado.
+
+#### **Etapa 1: Acesso e Login na Aplicação React**
+
+*   **Ação do Usuário (Frontend):**
+    *   Acessa a URL da aplicação React: `http://localhost:3001`.
+    *   A página de login, construída em React, é exibida.
+    *   Insere as credenciais (e-mail e senha) de uma das empresas de teste.
+
+*   **O que o Frontend React Faz:**
+    *   Ao clicar em "Entrar", o componente React envia uma requisição `POST` para o mesmo endpoint de login da API: `http://localhost:5000/api/auth/login`.
+
+*   **O que o Backend Faz (`authController.js`):**
+    *   O processo é idêntico ao do Fluxo 2: o backend valida as credenciais e, se corretas, retorna os tokens de acesso (`token` e `refreshToken`).
+
+#### **Etapa 2: Redirecionamento e Continuidade da Sessão**
+
+*   **O que o Frontend React Faz:**
+    *   Recebe a resposta de sucesso da API.
+    *   Salva o `token` e o `refreshToken` no `localStorage` do navegador.
+    *   Salva também o objeto `user` no `localStorage` para garantir compatibilidade com o `authGuard.js` legado.
+    *   **Redireciona o navegador** para a página inicial do sistema legado: `http://localhost:3000/pages/startPage.html`.
+
+*   **O que o Frontend Legado Faz (`authGuard.js`):**
+    *   Ao carregar a `startPage.html`, o `authGuard.js` é executado. Ele encontra tanto o `token` quanto o objeto `user` salvos pelo React no `localStorage`, considera o usuário autenticado e permite o acesso direto à página. A sessão continua normalmente dentro do sistema legado.

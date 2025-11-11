@@ -37,7 +37,13 @@ src/
 │   ├── backend/        # API REST em Node.js/Express
 │   │   └── README-backend.md  # Documentação específica do backend
 │   └── frontend/       # Interface web em HTML/CSS/JS
-│       └── README-frontend.md # Documentação específica do frontend
+│   │   ├── css/
+│   │   ├── js/
+│   │   │   ├── docs/   # Documentação e guias de integração do frontend
+│   │   │   └── ...
+│   │   └── pages/
+│   └── react/          # Prova de conceito da tela de login em React
+│       └── README-frontend.md # Documentação específica do frontend (legado)
 └── assets/            # Recursos estáticos compartilhados
 ```
 

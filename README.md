@@ -147,6 +147,14 @@ Para demonstrar essa flexibilidade e a viabilidade de uma futura modernização,
 
 ## Histórico de versões
 
+* 0.3.10
+    * CHANGE: Estabilização completa do ambiente de testes automatizados. Refatoração do setup de testes para interação direta com o banco de dados em memória, eliminando condições de corrida e garantindo um ambiente isolado e confiável. Orquestração precisa dos scripts de teste e servidor.
+* 0.3.9
+    * CHANGE: Adição de testes automatizados para funcionalidades pendentes (Exportação de PDF e Cadastro de Clientes), seguindo a abordagem de Desenvolvimento Guiado por Testes (TDD). Organização da suíte de testes em arquivos modulares.
+* 0.3.8
+    * CHANGE: Finalização dos scripts de lógica do frontend (Transações, Metas, Exportação) e criação de um guia de integração detalhado para o desenvolvedor frontend, garantindo a correta vinculação entre HTML e JavaScript.
+* 0.3.7
+    * CHANGE: Finalização e estabilização da prova de conceito em React. Correção do fluxo de login para garantir a interoperabilidade de sessão com o sistema legado sem a necessidade de login duplo. Documentação do processo de depuração e da solução final.
 * 0.3.6
     * CHANGE: Criação de uma prova de conceito com React para a página de login, demonstrando a flexibilidade da API do backend. Adição de scripts (`start:full-demo`) para orquestrar a execução simultânea de todos os ambientes (backend, frontend legado e React).
 * 0.3.5

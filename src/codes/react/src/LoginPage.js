@@ -32,7 +32,9 @@ const LoginPage = () => {
       // Salva os dados no localStorage para o frontend legado usar
       localStorage.setItem('token', data.token);
       localStorage.setItem('refreshToken', data.refreshToken);
-      localStorage.setItem('user', JSON.stringify(data.user));
+      // É crucial salvar o objeto 'user', pois o `authGuard.js` do sistema legado
+      // verifica tanto o token quanto a existência deste objeto para validar a sessão.
+      localStorage.setItem('user', JSON.stringify(data.user)); 
 
       // Redireciona para a página inicial do frontend legado
       // URL absoluta, pois o sistema legado estará em outra porta (3000)

@@ -112,3 +112,19 @@ Este documento detalha a lógica e o comportamento esperado dos scripts do front
 
 *   **Validação:** Este é um fluxo mais complexo de testar manualmente, mas pode ser observado nas Ferramentas de Desenvolvedor (aba "Network"), onde se veria uma falha 401 seguida por uma chamada para `/refresh-token` e, então, o sucesso da requisição original.
 *   **Validação:** Após o logout, qualquer tentativa de usar o botão "Voltar" do navegador para acessar uma página interna deve ser bloqueada pelo `authGuard.js`.
+
+---
+
+## Fluxo 7: Interoperabilidade com a Prova de Conceito (React)
+
+**Objetivo:** Validar que a sessão iniciada por uma aplicação externa (React) é reconhecida e mantida pelo sistema legado.
+
+*   **Scripts Principais:** `authGuard.js`
+*   **Como Funciona:**
+    1.  **Login no React:** O usuário faz login na aplicação React (`http://localhost:3001`).
+    2.  **Armazenamento do Token:** A aplicação React, após receber a confirmação do backend, salva o `token` de autenticação no `localStorage` do navegador.
+    3.  **Armazenamento do Usuário:** Para garantir a compatibilidade, o React também salva o objeto `user` no `localStorage`.
+    3.  **Redirecionamento:** O React redireciona o usuário para uma página protegida do sistema legado (ex: `startPage.html`).
+    4.  **Validação pelo Guardião:** O script `authGuard.js` da página legada é executado. Ele encontra o `token` e o `user` no `localStorage`, considera a sessão válida e permite que a página seja carregada normalmente.
+
+*   **Validação:** Este fluxo demonstra que a autenticação é desacoplada da interface, permitindo uma migração gradual ou a coexistência de diferentes tecnologias de frontend consumindo a mesma API.

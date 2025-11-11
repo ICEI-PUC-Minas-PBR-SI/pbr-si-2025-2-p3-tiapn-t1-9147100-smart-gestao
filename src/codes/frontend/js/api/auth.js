@@ -78,13 +78,25 @@ export async function register(userData) {
 }
 
 /**
- * Remove os dados de autenticação do localStorage.
+ * Realiza o logout do usuário, invalidando a sessão no backend e limpando os dados locais.
  */
-export function logout() {
-  // Limpa todos os dados da sessão do usuário do armazenamento local.
-  localStorage.removeItem('token');
-  localStorage.removeItem('refreshToken');
-  localStorage.removeItem('user');
-  // Redireciona o usuário para a página de login.
-  window.location.href = '/pages/login.html';
+export async function logout() {
+  const refreshToken = localStorage.getItem('refreshToken');
+
+  // Tenta invalidar o token no backend, mas prossegue mesmo se falhar
+  // para garantir que o usuário seja deslogado do frontend.
+  if (refreshToken) {
+    try {
+      await apiRequest('/auth/logout', {
+        method: 'POST',
+        body: JSON.stringify({ token: refreshToken }),
+      });
+    } catch (error) {
+      console.error('Falha ao invalidar a sessão no backend, mas prosseguindo com o logout local:', error);
+    }
+  }
+
+  // Limpa todos os dados da sessão do armazenamento local e redireciona.
+  ['token', 'refreshToken', 'user'].forEach(item => localStorage.removeItem(item));
+  window.location.href = '/pages/login.html'; // Redireciona para a página de login.
 }

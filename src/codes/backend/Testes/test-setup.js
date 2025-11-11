@@ -1,67 +1,101 @@
-/**
- * =================================================================================
- * ARQUIVO: Testes/test-setup.js
- * DESCRIÇÃO: Script de configuração global para a suíte de testes do Jest.
- *            Este script é executado uma única vez ANTES de todos os testes.
- *            Sua função é criar um ambiente de teste consistente, cadastrando
- *            usuários/empresas padrão e salvando seus dados (IDs, tokens) em um
- *            arquivo temporário para que os testes possam reutilizá-los.
- * =================================================================================
- */
-import axios from 'axios';
 import fs from 'fs';
 import path from 'path';
+import User from '../models/User.js';
+import SessionToken from '../models/SessionToken.js';
+import bcrypt from 'bcryptjs';
+import Company from '../models/Company.js';
+import Permission from '../models/Permission.js'; // Corrigido: Importa o modelo correto.
+import { fileURLToPath } from 'url';
+import mongoose from 'mongoose';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 
-const API_URL = 'http://localhost:5000/api';
-const SETUP_FILE = path.join('Testes', 'test-setup.json');
+// Carrega as variáveis de ambiente (como JWT_SECRET) do arquivo .env
+dotenv.config({ path: path.resolve(process.cwd(), '.env') });
 
-/**
- * Cria uma empresa de teste, realiza o login e retorna seus dados essenciais.
- * @param {number} index - Um número para garantir a unicidade dos dados (email, CNPJ).
- * @returns {Promise<object>} Um objeto contendo os dados da empresa criada,
- *                            incluindo seu token de acesso, ID do usuário e ID da empresa.
- */
-async function createTestCompany(index) {
-    const uniqueId = Date.now() + index;
-    const companyData = {
-        name: `Usuário Padrão ${index}`,
-        email: `empresa_padrao_${uniqueId}@test.com`,
-        password: 'password123',
-        companyName: `Empresa Padrão ${uniqueId}`,
-        cnpj: String(uniqueId).slice(-14).padStart(14, '0')
-    };
+// Helper para obter o diretório atual com ES Modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-    // Cadastra e faz login
-    await axios.post(`${API_URL}/auth/register`, companyData);
-    const loginResponse = await axios.post(`${API_URL}/auth/login`, {
-        email: companyData.email,
-        password: companyData.password,
-    });
+const setup = async () => {
+  console.log('\n--- 🚀 [SETUP] Conectando e populando o banco de dados de TESTE online ---');
+  if (mongoose.connection.readyState === 0) {
+    // Conecta-se ao banco de dados de TESTE definido em .env (MONGO_URI_TEST)
+    if (!process.env.MONGO_URI_TEST) throw new Error('ERRO FATAL: A variável MONGO_URI_TEST não está definida no seu arquivo .env');
+    await mongoose.connect(process.env.MONGO_URI_TEST);
+  }
 
-    console.log(`✅ Empresa Padrão ${index} criada para os testes.`);
+  // 3. Limpar coleções existentes
+  await Promise.all([
+    User.deleteMany({}),
+    Company.deleteMany({}),
+    SessionToken.deleteMany({}),
+    Permission.deleteMany({}) // Garante que a coleção de permissões esteja limpa.
+  ]);
 
-    return {
-        ...companyData,
-        token: loginResponse.data.token,
-        companyId: loginResponse.data.user.companyId,
-        userId: loginResponse.data.user.id,
-    };
-}
+  // Gera um hash de senha para os usuários de teste
+  const passwordHash = await bcrypt.hash('password123', 10);
 
-/**
- * Função principal de setup, exportada para ser usada pelo Jest.
- * Cria duas empresas de teste (A e B) e salva seus dados no arquivo `test-setup.json`.
- */
-export default async () => {
-    console.log('\n--- 🚀 Iniciando Setup Global de Testes ---');
+  // Cria uma permissão de teste para associar aos usuários.
+  // Isso resolve o erro 'Cannot find module Role.js' e satisfaz a dependência do modelo User.
+  const testPermission = await Permission.create({
+    name: 'USER_TEST',
+    description: 'Permissão padrão para usuários de teste',
+    level: 1,
+  });
 
-    // Cria 2 empresas que serão usadas em todos os testes
-    const companyA = await createTestCompany(1);
-    const companyB = await createTestCompany(2);
+  // 4. Criar dados de teste (empresas e usuários)
+  const companyA = await Company.create({ name: 'Empresa A de Teste', cnpj: '00000000000001' });
+  const userA = await User.create({
+    name: 'Usuário A',
+    email: 'usera@test.com',
+    passwordHash: passwordHash,
+    companyId: companyA._id,
+    role: testPermission._id, // Associa a permissão de teste criada.
+  });
 
-    const testData = { companyA, companyB };
+  const companyB = await Company.create({ name: 'Empresa B de Teste', cnpj: '00000000000002' });
+  const userB = await User.create({
+    name: 'Usuário B',
+    email: 'userb@test.com',
+    passwordHash: passwordHash,
+    companyId: companyB._id,
+    role: testPermission._id, // Associa a mesma permissão de teste.
+  });
+  console.log('✅ Empresa Padrão 1 criada para os testes.');
+  console.log('✅ Empresa Padrão 2 criada para os testes.');
 
-    // Salva os dados em um arquivo para que os testes possam acessá-los
-    fs.writeFileSync(SETUP_FILE, JSON.stringify(testData, null, 2));
-    console.log(`--- ✅ Setup Global Concluído. Dados salvos em ${SETUP_FILE} ---\n`);
+  // Função auxiliar para gerar um token JWT simples para os testes
+  const generateToken = (userId, companyId) => {
+    return jwt.sign({ userId, companyId }, process.env.JWT_SECRET || 'fallback_secret', { expiresIn: '1h' });
+  };
+
+  // 5. Salvar dados para uso nos testes
+  const setupData = {
+    // Aponta para o servidor principal que estará rodando na porta 5000.
+    apiUrl: 'http://localhost:5000/api',
+    companyA: {
+      _id: companyA._id.toString(),
+      name: companyA.name,
+      userId: userA._id.toString(),
+      email: userA.email,
+      password: 'password123',
+      token: generateToken(userA._id, companyA._id),
+    },
+    companyB: {
+      _id: companyB._id.toString(),
+      name: companyB.name,
+      userId: userB._id.toString(),
+      email: userB.email,
+      password: 'password123',
+      token: generateToken(userB._id, companyB._id),
+    },
+  };
+
+  fs.writeFileSync(path.join(__dirname, 'test-setup.json'), JSON.stringify(setupData, null, 2));
+  console.log(`--- ✅ [SETUP] Dados de teste salvos em test-setup.json ---`);
+
+  // A conexão com o banco de teste permanecerá aberta para os testes e será fechada pelo `test-teardown.js`.
 };
+
+export default setup;

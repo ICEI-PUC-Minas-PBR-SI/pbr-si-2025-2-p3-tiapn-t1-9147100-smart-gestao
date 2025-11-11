@@ -1,0 +1,8 @@
+
+--- 🚀 [SETUP] Populando banco de dados de teste ---
+
+--- FIM DOS TESTES AUTOMATIZADOS (COM FALHAS) ---
+MongooseError: Jest: Got error running globalSetup - C:\Users\HERON-ACER\Documents\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\Testes\test-setup.js, reason: Operation `users.deleteMany()` buffering timed out after 10000ms
+    at Timeout.<anonymous> (C:\Users\HERON-ACER\Documents\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\mongoose\lib\drivers\node-mongodb-native\collection.js:185:23)
+    at listOnTimeout (node:internal/timers:608:17)
+    at process.processTimers (node:internal/timers:543:7)

@@ -9,7 +9,6 @@ import axios from 'axios';
 import fs from 'fs';
 import path from 'path';
 
-const API_URL = 'http://localhost:5000/api';
 const SETUP_FILE = path.join('Testes', 'test-setup.json');
 
 /**
@@ -18,13 +17,16 @@ const SETUP_FILE = path.join('Testes', 'test-setup.json');
  */
 describe('4. Módulo de Transações (CRUD)', () => {
     let userToken;
+    let API_URL;
     let createdTransactionId;
 
-    // Antes de todos os testes, lê os dados da empresa de teste criada pelo setup global.
     beforeAll(async () => {
-        const testData = JSON.parse(fs.readFileSync(SETUP_FILE, 'utf8'));
-        // Este teste usará apenas a "Empresa A" para suas operações.
-        userToken = testData.companyA.token;
+        // MOTIVO DA MUDANÇA: Todos os testes agora leem os dados de autenticação
+        // do arquivo `test-setup.json`, que é gerado pelo `test-setup.js`
+        // com dados criados diretamente no banco de dados em memória.
+        const setupData = JSON.parse(fs.readFileSync(SETUP_FILE, 'utf8'));
+        userToken = setupData.companyA.token;
+        API_URL = setupData.apiUrl;
     });
 
     /**

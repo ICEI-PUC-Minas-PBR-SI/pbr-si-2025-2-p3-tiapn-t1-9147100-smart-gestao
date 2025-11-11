@@ -53,3 +53,14 @@ Para evitar conflitos de porta e simplificar a execução, foi criado um script 
     Abra seu navegador e acesse **`http://localhost:3001`**.
 
 Ao fazer login na página em React, você será redirecionado para o sistema legado em `http://localhost:3000/pages/startPage.html`, com a sessão de usuário funcionando perfeitamente.
+
+## 4. Desafios e Soluções no Desenvolvimento
+
+Durante a configuração e integração desta prova de conceito, diversos desafios técnicos foram encontrados e superados, reforçando a robustez da arquitetura final. Os principais foram:
+
+1.  **Erro de `react-scripts`**: O ambiente React não iniciava devido a uma dependência corrompida no `package-lock.json`. A solução envolveu a limpeza completa das dependências e a fixação da versão do `react-scripts` no `package.json`.
+2.  **Estrutura de Pastas**: A aplicação falhava ao compilar por não encontrar arquivos como `index.html` e os componentes `.js`. Isso foi resolvido ajustando a estrutura de pastas para o padrão esperado pelo `create-react-app` (com as pastas `public` e `src`).
+3.  **Importação de CSS Externo**: O React, por segurança, proíbe a importação de arquivos de fora do diretório `src`. A solução foi copiar o CSS do sistema legado para dentro do projeto React, tornando-o autocontido.
+4.  **Login Duplo**: O desafio final foi um redirecionamento para a tela de login legada após o login no React. A causa era que o React não salvava o objeto `user` no `localStorage`, que era um requisito do `authGuard.js` legado. A solução foi adicionar o salvamento deste objeto, garantindo uma transição de sessão perfeita.
+
+Essas etapas de depuração foram cruciais para validar e solidificar a interoperabilidade entre as duas tecnologias de frontend.

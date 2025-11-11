@@ -1,10 +1,4 @@
-/**
- * @file Configuração do Jest para o projeto Smart Gestão.
- * @description Este arquivo define como o Jest deve se comportar, incluindo o
- * ambiente de teste, o timeout padrão e a execução de um script de setup global.
- */
 module.exports = {
-  // Define o ambiente de execução dos testes. 'node' é ideal para testes de backend/API.
   testEnvironment: 'node',
 
   // Exibe informações detalhadas para cada teste executado.
@@ -16,5 +10,9 @@ module.exports = {
 
   // Aponta para o script que deve ser executado UMA VEZ antes de toda a suíte de testes.
   // É aqui que criamos os usuários/empresas que serão reutilizados em todos os arquivos de teste.
-  globalSetup: './test-setup.js'
+  globalSetup: './test-setup.js',
+
+  // Aponta para o script que deve ser executado UMA VEZ após toda a suíte de testes.
+  // É responsável por fechar a conexão com o banco de dados de teste.
+  globalTeardown: './test-teardown.js'
 };

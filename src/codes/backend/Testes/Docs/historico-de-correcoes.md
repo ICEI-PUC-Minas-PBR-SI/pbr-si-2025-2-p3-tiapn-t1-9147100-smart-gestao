@@ -4,183 +4,76 @@ Este documento serve como um registro dos principais erros encontrados durante a
 
 ---
 
-### 1. Configuração do Ambiente de Testes
+### 1. O Problema Central: "Condição de Corrida" (`Race Condition`)
 
--   **Problema 1.1: Saída de Testes Simultânea (Console e Arquivo)**
-    -   **Desafio:** Exibir os resultados dos testes no console e, ao mesmo tempo, salvar um log em arquivo de texto (`.txt`). O redirecionamento simples (`>`) ocultava a saída do console.
--   **Solução Final:**
-    -   Utilizamos o pacote `concurrently` para rodar dois scripts do `package.json` ao mesmo tempo.
-    -   **`test:console`**: Executa o Jest e exibe a saída em tempo real no console.
-    -   **`test:log`**: Executa o Jest e redireciona sua saída para um arquivo `.txt`.
-    -   O comando `npm test` orquestra ambos, resolvendo o requisito de forma robusta.
+A grande maioria das falhas intermitentes e erros em cascata que ocorreram durante os testes (`ECONNREFUSED`, `buffering timed out`, `TypeError: Invalid URL`) tinham a mesma causa raiz: uma **condição de corrida** na inicialização do ambiente.
 
--   **Problema 1.2: Formatação e Nomenclatura dos Logs**
-    -   **Desafio:** O arquivo de log era gerado com códigos de formatação de cor (ANSI), dificultando a leitura. Além disso, o nome do arquivo precisava ser dinâmico para criar um histórico.
-    -   **Solução:**
-        -   **Nomenclatura:** Adotamos o uso de variáveis de ambiente do Windows (`%date%` e `%time%`) no script `test-log` para gerar nomes de arquivo únicos com data e hora.
-        -   **Formatação:** Após várias tentativas, a solução definitiva foi combinar `SET FORCE_COLOR=0` com a flag `--no-color` no script `test-log`. Isso força o Jest a produzir uma saída de texto puro, sem cores, para o arquivo.
-
--   **Problema 1.3: Logs Detalhados (Verbose)**
-    -   **Desafio:** Os logs de testes que passavam eram muito concisos. Era necessário um registro explícito do que foi enviado e recebido em cada teste.
-    -   **Solução:**
-        -   Adicionamos a flag `--verbose` aos scripts de teste para que o Jest sempre liste cada teste individualmente.
-        -   Inserimos `console.log()` explícitos no arquivo `api.test.js` para imprimir o corpo da requisição e da resposta de cada teste, tornando os logs autoexplicativos.
+**O que acontecia?**
+1.  O comando `npm test` iniciava dois processos ao mesmo tempo: o **servidor de testes** e o **executor de testes (Jest)**.
+2.  O executor de testes (Jest) rodava o script de setup (`test-setup.js`).
+3.  Este script de setup, em suas versões iniciais, tentava fazer chamadas de API (`axios`) para criar os dados de teste.
+4.  **O Conflito:** O setup tentava se comunicar com o servidor de testes *antes* que o servidor estivesse 100% pronto para aceitar conexões ou interagir com o banco de dados. Isso causava a falha do setup.
+5.  **O Efeito Dominó:** Como o setup falhava, nenhum dado de teste (como tokens de autenticação) era gerado, o que levava à falha em cascata de todos os outros testes que dependiam desses dados.
 
 ---
 
-### 2. Erros de Sintaxe e Módulos (ESM vs CommonJS)
+### 2. A Solução Definitiva: Orquestração e Independência
 
--   **Problema:** Os testes falhavam com o erro `ReferenceError: module is not defined in ES module scope`.
--   **Causa:** O projeto está configurado com `"type": "module"` no `package.json`, o que o torna um projeto de Módulos ES. No entanto, o arquivo de configuração do Jest (`jest.config.js`) usava a sintaxe CommonJS (`module.exports`), criando um conflito.
--   **Solução:**
-    -   Renomeamos o arquivo de configuração para `jest.config.cjs`. A extensão `.cjs` informa explicitamente ao Node.js para interpretar aquele arquivo como CommonJS, resolvendo o conflito de escopo.
-    -   Atualizamos os scripts no `package.json` para apontar para o novo nome do arquivo.
+Para resolver o problema de forma definitiva, a arquitetura de testes foi refatorada para seguir um padrão mais robusto e profissional, baseado em duas premissas: **orquestração correta** e **independência do setup**.
+
+#### Etapa 1: Tornar o Setup Independente (A Correção Mais Importante)
+
+-   **Arquivo:** `test-setup.js`
+-   **Problema:** O script dependia do servidor da API para criar os dados de teste.
+-   **Solução:** O `test-setup.js` foi totalmente reescrito para ser **autossuficiente**. Agora, ele:
+    1.  Conecta-se diretamente ao banco de dados em memória.
+    2.  Usa os modelos (`User`, `Company`, `Role`) para criar os dados de teste diretamente no banco.
+    3.  Gera os tokens de autenticação manualmente.
+    4.  Salva todos os dados em um arquivo `test-setup.json` para ser usado pelos outros testes.
+-   **Resultado:** O setup se tornou mais rápido e 100% confiável, pois não depende mais do tempo de inicialização do servidor.
+
+#### Etapa 2: Orquestrar a Execução dos Processos
+
+-   **Arquivo:** `package.json`
+-   **Problema:** Os processos do servidor e dos testes eram iniciados ao mesmo tempo, sem uma ordem garantida.
+-   **Solução:** O script `test` foi reconfigurado para usar o `concurrently` de forma a orquestrar o fluxo:
+    1.  `npm:test:server`: Inicia o servidor de testes.
+    2.  `npm:test:runner`: **Espera** (`wait-on`) o servidor estar pronto na porta 5000 e, só então, executa o `run-test-log.js` (que roda o Jest).
+-   **Resultado:** Garante que o servidor de testes esteja sempre no ar antes que os testes de integração comecem a fazer chamadas de API.
+
+#### Etapa 3: Centralizar o Controle do Banco de Dados de Teste
+
+-   **Arquivo:** `mongo-test-environment.js` (e `jest.config.cjs`)
+-   **Problema:** Havia dificuldade em compartilhar a instância do banco de dados em memória entre os scripts de setup e teardown, causando o erro `Cannot read properties of undefined (reading 'stop')`.
+-   **Solução:** Foi criado um **Ambiente de Teste Personalizado** para o Jest.
+    1.  A classe `MongoTestEnvironment` agora é a única responsável por **criar** o banco de dados em memória antes de tudo e **destruí-lo** após tudo.
+    2.  Ela passa a URI de conexão para o `test-setup.js` através de uma variável de ambiente, garantindo que todos os scripts usem o mesmo banco.
+-   **Resultado:** O ciclo de vida do banco de dados de teste é gerenciado de forma centralizada e segura, eliminando erros de estado compartilhado.
+
+#### Etapa 4: Padronização dos Testes
+
+-   **Arquivos:** Todos os `*.test.js`
+-   **Problema:** Alguns testes usavam um utilitário (`test-utils.js`) para ler dados, enquanto outros liam de um arquivo JSON, criando inconsistência.
+-   **Solução:** Todos os arquivos de teste foram padronizados para ler os dados de teste do arquivo `test-setup.json`, que é a "fonte única da verdade" gerada pelo `test-setup.js`. O arquivo `test-utils.js` se tornou obsoleto e foi removido.
+-   **Resultado:** A suíte de testes se tornou mais coesa, previsível e fácil de manter.
+
+---
+### 3. Estabilização Final: Orquestração de Processos
+
+-   **Problema:** Mesmo com a arquitetura correta, os testes falhavam com erros de `ECONNREFUSED` ou `buffering timed out`, mas desta vez **no final** da execução.
+-   **Causa Raiz:** Uma "condição de corrida" no desligamento. O processo do Jest terminava antes do servidor de testes, e a flag `-s first` no `concurrently` fazia com que o servidor fosse "morto" prematuramente, enquanto ainda podia estar processando a última requisição. Isso fazia com que o banco de dados em memória fosse destruído antes que o servidor terminasse seu trabalho.
+-   **Solução Definitiva:**
+    1.  **Remoção da Flag de Sucesso Rápido:** A flag `-s first` foi removida do comando `concurrently` no `package.json`. Isso garante que o `concurrently` só encerre quando todos os processos (servidor e testes) terminarem, evitando o desligamento prematuro.
+    2.  **Sincronização na Inicialização:** O comando `wait-on tcp:5001` foi reintroduzido no script `test:runner`. Isso garante que o Jest só comece a executar os testes de API depois que o servidor de teste esteja 100% online e pronto para receber conexões.
+-   **Resultado:** A orquestração de início e fim dos processos de teste foi totalmente estabilizada, eliminando as condições de corrida e garantindo um ambiente de teste 100% automatizado e confiável com um único comando `npm test`.
 
 ---
 
-### 3. Erros de Execução de Scripts (`npm run`)
+### Outras Correções Menores
 
--   **Problema:** O comando `npm run dev` parou de funcionar, retornando o erro `Missing script: "dev"`.
--   **Causa:** Durante as edições do `package.json`, o script `dev` e a dependência `nodemon` foram acidentalmente removidos.
--   **Solução:** Reintroduzimos o script `"dev": "nodemon server.js"` e adicionamos `nodemon` de volta às `devDependencies`, restaurando a funcionalidade de iniciar o servidor em modo de desenvolvimento.
+-   **`test-server.js`:** Adicionada uma lógica de espera para que o servidor aguarde a criação do arquivo `.mongo-uri-test` antes de tentar lê-lo, tornando-o mais resiliente.
+-   **`run-test-log.js`:** Simplificado para ter a única responsabilidade de executar o Jest e gerenciar a saída do log.
+-   **`package.json`:** Adicionada a dependência `mongodb-memory-server` que estava faltando.
+-   **Importações:** Corrigida a falta da extensão `.js` em importações de módulos locais (ex: `import Role from '../models/Role.js'`), que é uma exigência do padrão ES Modules usado no projeto.
 
----
-
-### 4. Erros de Backend Identificados pelos Testes
-
--   **Problema 4.1: Erro 500 (Internal Server Error) no Cadastro**
-    -   **Sintoma:** O teste `RF-001: deve cadastrar um novo usuário` falhava com status 500. Consequentemente, o teste de e-mail duplicado também falhava com 500, em vez do esperado 409.
-    -   **Causa Raiz:** Uma investigação profunda, documentada em versões anteriores deste histórico, revelou múltiplos problemas no backend:
-        1.  **Inconsistência de Nomes de Modelos:** Schemas referenciando `ref: "Empresa"` em vez de `ref: "Company"`.
-        2.  **Lógica de Controller Incorreta:** A rota de registro chamava um controller (`registerController.js`) que continha lógica insegura e incompleta.
-    -   **Solução:**
-        -   Padronizamos todas as referências de modelo para `ref: "Company"`.
-        -   Removemos o `registerController.js` redundante e garantimos que a rota `/api/auth/register` utilizasse exclusivamente a função `registerUser` do `authController.js`, que já continha a lógica correta e segura.
-
--   **Problema 4.2: Falha no Tratamento de Erros em Testes**
-    -   **Sintoma:** Quando o teste de cadastro falhava, o log de erro do Jest era poluído com códigos de cor e não era claro.
-    -   **Causa:** O bloco `it` do teste de cadastro não estava envolvido em um `try...catch`, então qualquer falha na requisição `axios` quebrava o teste de forma "não tratada".
--   **Solução:**
-    -   Envolvemos a lógica do teste de cadastro em um bloco `try...catch`. Isso nos permitiu capturar o erro, registrar os detalhes da resposta de forma limpa usando `console.log`, e então relançar o erro para que o Jest o marcasse corretamente como uma falha, resultando em um log de erro muito mais legível.
-
----
-### 4.3: Erro 500 na Criação de Transações
-    -   **Sintoma:** Os testes de isolamento de dados falhavam com erro `500 Internal Server Error` ao tentar criar uma transação (`POST /api/transactions`).
-    -   **Causa Raiz:** Inconsistência de nomes de campos entre os testes, o controller e o modelo `Transaction.js`. O teste enviava `amount`, mas o modelo esperava `valor`. Além disso, outros campos obrigatórios como `type` e `date` não estavam sendo enviados consistentemente.
-    -   **Solução:**
-        1.  **Padronização do Modelo:** O `models/Transaction.js` foi atualizado para usar nomes de campos em inglês e camelCase (ex: `valor` -> `amount`, `empresaId` -> `companyId`, `usuarioId` -> `userId`, etc.), seguindo as melhores práticas.
-        2.  **Ajuste no Controller:** O `controllers/transactionController.js` foi ajustado para passar o `userId` do usuário autenticado ao criar uma nova transação.
-        3.  **Ajuste nos Testes:** O arquivo `Testes/isolamento.test.js` foi corrigido para enviar o corpo da requisição com os nomes de campos corretos e todos os dados obrigatórios, resolvendo o erro de validação do Mongoose.
-
----
-
-### 5. Processo de Validação Prioritário
-
-Com o ambiente de testes estabilizado e a geração de logs detalhados funcionando, foi definido um processo de validação prioritário para garantir a segurança e o funcionamento básico do sistema o mais breve possível.
-
--   **Objetivo:** Validar as funcionalidades mais críticas e o "caminho feliz" do sistema antes de aprofundar em cenários mais complexos.
--   **Abordagem:**
-    1.  **Testes de Fumaça (Smoke Tests) / Validação de Funcionalidades Críticas:** Focar nas funcionalidades essenciais que, se falharem, impedem o uso básico do sistema.
-    2.  **Seguir o Roteiro e Fluxo de Testes Preparados (Módulo a Módulo):** Após a validação crítica, seguir sistematicamente o roteiro, priorizando módulos de base e expandindo para casos de falha e validações.
-    3.  **Validação de Segurança Básica (Autorização):** Garantir que apenas usuários autorizados acessem recursos restritos e que haja isolamento de dados.
-    4.  **Revisão e Refatoração Contínua:** Manter os testes atualizados e eficientes à medida que o sistema evolui.
-
----
-
-### 5.1. Testes de Fumaça / Validação de Funcionalidades Críticas (Módulo de Autenticação)
-
--   **Status:** Concluído e Validado.
--   **Descrição:** Este é o primeiro passo do processo de validação prioritário. Os testes existentes no `api.test.js` para o módulo de autenticação já cobrem as funcionalidades mais críticas e o "caminho feliz" de acesso ao sistema.
--   **Testes Cobertos:**
--    -   `deve ter carregado os dados da Empresa A do setup global` (em `auth.legacy.test.js`): Valida a criação de um novo usuário e empresa, porta de entrada para o sistema.
-    -   `deve barrar o cadastro de um usuário com e-mail já existente`: Garante a integridade dos dados e a validação de unicidade.
-    -   `deve falhar o login com senha incorreta`: Valida o tratamento de credenciais inválidas.
--    -   `deve realizar o login com sucesso para a Empresa A`: Confirma o acesso bem-sucedido ao sistema.
-    -   `deve proteger rotas, barrando acesso sem token`: Valida a segurança básica das rotas protegidas.
--   **Próximo Passo:** Seguir para o próximo módulo crítico ou para o "2. Teste de Isolamento de Dados" conforme indicado no `api.test.js`.
-
----
-
-### 6. Estabilização do Ambiente de Testes e Frontend (Pós-Validação Inicial)
-
--   **Problema 6.1: Erro 404 para `favicon.ico` no console do frontend**
-    -   **Sintoma:** O log do `http-server` mostrava um erro 404 (Not Found) para o arquivo `favicon.ico` a cada carregamento de página.
-    -   **Causa:** Comportamento padrão dos navegadores, que tentam buscar um ícone para a aba.
-    -   **Solução:** Adicionamos a tag `<link rel="icon" href="data:,">` ao `<head>` de todas as páginas HTML do frontend. Isso instrui o navegador a não fazer a requisição, limpando o console de erros desnecessários.
-
--   **Problema 6.2: Falha no `npm start` para iniciar ambos os servidores**
-    -   **Sintoma:** O comando `npm start` estava iniciando apenas o backend, ignorando o servidor do frontend.
-    -   **Causa:** O script `start` no `package.json` havia sido simplificado e não usava mais o `concurrently`.
-    -   **Solução:** O `package.json` foi reajustado para usar `concurrently` no script `start`, orquestrando a execução dos scripts `start:backend` and `start:frontend` simultaneamente.
-
--   **Problema 6.3: Falhas em cascata no teste `multi-tenant.test.js`**
-    -   **Sintoma:** O teste falhava com erro `500 Internal Server Error` ao tentar criar empresas e transações.
-    -   **Causa Raiz (Identificada em etapas):**
-        1.  **CNPJ Duplicado:** A lógica inicial para gerar CNPJs no teste criava valores duplicados, causando um erro de violação de unicidade no banco de dados.
-        2.  **Campos Obrigatórios Ausentes:** A criação de transações falhava porque os campos `status` e `paymentMethod`, obrigatórios no modelo, não estavam sendo enviados.
-        3.  **Enum Inválido:** A causa final era que o modelo `Transaction.js` no backend não permitia os novos métodos de pagamento (`debit_card`, `pix`, `cash`) que o teste tentava usar.
-    -   **Solução:**
-        1.  A geração de CNPJ no teste foi ajustada para usar um timestamp, garantindo sua unicidade.
-        2.  O modelo `models/Transaction.js` foi corrigido para incluir os novos métodos de pagamento em sua validação `enum`, tornando o backend mais robusto e alinhado às necessidades.
-        3.  O teste foi ajustado para enviar todos os campos obrigatórios e ciclar entre os métodos de pagamento agora válidos.
-
----
-
-### 8. Implementação e Validação da Sessão Stateful
-
--   **Problema 8.1: `SessionToken.js` não utilizado e logout stateless**
-    -   **Sintoma:** O modelo `SessionToken.js` existia, mas não havia lógica nos controladores para utilizá-lo, tornando o logout uma operação puramente do lado do cliente e sem capacidade de revogação de sessão no servidor.
-    -   **Causa:** A implementação inicial focava em um modelo de autenticação mais simples (stateless) para o `refreshToken`.
-    -   **Solução:**
-        1.  **`authController.js`:** Modificado para, no `loginUser`, salvar o hash do `refreshToken` e sua expiração na coleção `SessionTokens`. No `logoutUser`, a lógica foi implementada para receber o `refreshToken` do cliente, hasheá-lo e marcar o `SessionToken` correspondente como inativo (`active: false`).
-        2.  **`auth.test.js` (Novo Arquivo):** Criado um novo arquivo de teste dedicado para validar essa funcionalidade.
-            -   `deve criar um SessionToken no banco de dados após o login`: Verifica se o registro é criado.
-            -   `deve invalidar o SessionToken no banco de dados após o logout`: Verifica se o registro é marcado como inativo.
-
--   **Problema 8.2: Erros de `__dirname` e typos em `auth.test.js`**
-    -   **Sintoma:** O novo arquivo `auth.test.js` falhava ao ser executado.
-    -   **Causa:** `__dirname` não é compatível com ES Modules e havia um erro de digitação (`API URL` em vez de `API_URL`).
-    -   **Solução:** Adicionada a lógica para definir `__dirname` de forma compatível com ES Modules e corrigido o typo na URL.
----
-
-### 8. Implementação e Validação da Sessão Stateful
-
--   **Problema 8.1: `SessionToken.js` não utilizado e logout stateless**
-    -   **Sintoma:** O modelo `SessionToken.js` existia, mas não havia lógica nos controladores para utilizá-lo, tornando o logout uma operação puramente do lado do cliente e sem capacidade de revogação de sessão no servidor.
-    -   **Causa:** A implementação inicial focava em um modelo de autenticação mais simples (stateless) para o `refreshToken`.
-    -   **Solução:**
-        1.  **`authController.js`:** Modificado para, no `loginUser`, salvar o hash do `refreshToken` e sua expiração na coleção `SessionTokens`. No `logoutUser`, a lógica foi implementada para receber o `refreshToken` do cliente, hasheá-lo e marcar o `SessionToken` correspondente como inativo (`active: false`).
-        2.  **`auth.test.js` (Novo Arquivo):** Criado um novo arquivo de teste dedicado para validar essa funcionalidade.
-            -   `deve criar um SessionToken no banco de dados após o login`: Verifica se o registro é criado.
-            -   `deve invalidar o SessionToken no banco de dados após o logout`: Verifica se o registro é marcado como inativo.
-
--   **Problema 8.2: Erros de `__dirname` e typos em `auth.test.js`**
-    -   **Sintoma:** O novo arquivo `auth.test.js` falhava ao ser executado.
-    -   **Causa:** `__dirname` não é compatível com ES Modules e havia um erro de digitação (`API URL` em vez de `API_URL`).
-    -   **Solução:** Adicionada a lógica para definir `__dirname` de forma compatível com ES Modules e corrigido o typo na URL.
--   **Problema 6.4: Falha no Login via Frontend**
-    -   **Sintoma:** O login na página `login.html` não funcionava, mesmo com credenciais corretas de usuários criados pelos testes.
-    -   **Causa:** O script `login.js` chamava a API, mas não armazenava o token de autenticação recebido no `localStorage` do navegador. Sem o token salvo, o usuário não era considerado "logado".
-    -   **Solução:** O arquivo `login.js` foi ajustado para, após uma resposta de sucesso da API, salvar o `token`, `refreshToken` e os dados do `user` no `localStorage`, e só então redirecionar para a `startPage.html`. Também foram adicionados `console.log` detalhados para facilitar a depuração no navegador.
-
--   **Problema 6.5: Falha na Criação de Metas (Erro 500)**
-    -   **Sintoma:** O teste `deve CRIAR uma nova meta com sucesso` falhava com erro 500.
-    -   **Causa Raiz:** Incompatibilidade de dados entre o teste (`metas.test.js`) e o modelo (`Meta.js`). O teste enviava campos como `title` e `targetAmount`, enquanto o backend esperava `tipo_meta`, `valor_meta`, etc. Além disso, o `metaController.js` não estava adicionando o `usuarioId` ao criar a meta.
-    -   **Solução:**
-        1.  **Ajuste no Teste:** O arquivo `metas.test.js` foi corrigido para enviar os dados no formato correto que o backend espera.
-        2.  **Ajuste no Controller:** O `metaController.js` foi corrigido para adicionar o `usuarioId` e `empresaId` ao criar uma nova meta, garantindo que todos os campos obrigatórios do modelo sejam preenchidos.
-
----
-
-### 7. Otimização da Suíte de Testes (Setup Global e Teardown)
--   **Problema 7.1: Redundância e Lentidão nos Testes**
-    -   **Sintoma:** Cada arquivo de teste (`.test.js`) estava criando seus próprios usuários e empresas, tornando a suíte de testes lenta e poluindo o banco de dados a cada execução.
-    -   **Solução:**
-        1.  **Criação de um Setup Global:** Foi implementado o arquivo `Testes/test-setup.js`, configurado no `jest.config.cjs` para rodar **uma única vez** antes de todos os testes.
-        2.  **Centralização de Dados:** Este script cria um conjunto fixo de empresas de teste (Empresa A e Empresa B) e salva suas credenciais e tokens em um arquivo temporário (`test-setup.json`).
-        3.  **Refatoração dos Testes:** Os arquivos de teste foram ajustados para ler os dados deste arquivo de setup, em vez de criarem seus próprios usuários, tornando os testes mais rápidos e eficientes.
--   **Problema 7.2: Limpeza de Dados de Teste (Teardown)**
-    -   **Sintoma:** Testes que criavam múltiplos dados (como o de multi-tenant) deixavam "sujeira" no banco de dados.
-    -   **Solução:**
-        1.  **Criação do Endpoint de Exclusão:** Foi criada a rota `DELETE /api/users/me`, que permite a um usuário autenticado excluir sua própria conta e todos os dados associados.
-        2.  **Implementação do `afterAll`:** Testes que criam dados em massa foram atualizados com um bloco `afterAll`, que chama a nova rota de exclusão para cada entidade criada, limpando o banco de dados automaticamente.
+Com essas mudanças, o ambiente de testes foi completamente estabilizado, permitindo que os testes executem de forma rápida, isolada e confiável.

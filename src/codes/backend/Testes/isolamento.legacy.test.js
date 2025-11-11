@@ -8,13 +8,11 @@ import axios from 'axios';
 import fs from 'fs';
 import path from 'path';
 
-const API_URL = 'http://localhost:5000/api';
-const SETUP_FILE = path.join('Testes', 'test-setup.json');
-
 let tokenEmpresaA;
 let tokenEmpresaB;
 let transactionIdEmpresaA;
-
+let API_URL;
+const SETUP_FILE = path.join('Testes', 'test-setup.json');
 /**
  * @describe Bloco de testes para o Módulo de Isolamento de Dados (legado).
  */
@@ -22,8 +20,9 @@ describe('2. Teste de Isolamento de Dados (Transações)', () => {
     beforeAll(async () => {
         const testData = JSON.parse(fs.readFileSync(SETUP_FILE, 'utf8'));
         tokenEmpresaA = testData.companyA.token;
+        API_URL = testData.apiUrl;
         tokenEmpresaB = testData.companyB.token;
-    }, 30000); // Aumenta o timeout para o setup, pois envolve várias requisições
+    });
 
     // Este teste agora é mais robusto e cobre múltiplos cenários de isolamento
     /**

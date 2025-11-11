@@ -8,20 +8,25 @@ import axios from 'axios';
 import fs from 'fs';
 import path from 'path';
 
-const API_URL = 'http://localhost:5000/api';
 const SETUP_FILE = path.join('Testes', 'test-setup.json');
 
 let tokenEmpresaA;
 let tokenEmpresaB;
 let transactionIdEmpresaA;
+let API_URL;
 
 /**
  * @describe Bloco de testes para o Módulo de Isolamento de Dados (Simples).
  */
 describe('2. Teste de Isolamento de Dados (Simples)', () => {
     beforeAll(async () => {
+        // MOTIVO DA MUDANÇA: Todos os testes agora leem os dados de autenticação
+        // do arquivo `test-setup.json`, que é gerado pelo `test-setup.js`
+        // com dados criados diretamente no banco de dados em memória.
+        // O `test-utils.js` foi removido.
         const testData = JSON.parse(fs.readFileSync(SETUP_FILE, 'utf8'));
         tokenEmpresaA = testData.companyA.token;
+        API_URL = testData.apiUrl;
         tokenEmpresaB = testData.companyB.token;
     }, 30000); // Aumenta o timeout para o setup, pois envolve várias requisições
 
@@ -54,7 +59,8 @@ describe('2. Teste de Isolamento de Dados (Simples)', () => {
             });
             fail('Empresa B conseguiu LER a transação da Empresa A.');
         } catch (error) {
-            expect(error.response.status).not.toBe(200);
+            // A melhor prática é retornar 404 para não vazar a informação de que o recurso existe.
+            expect([401, 403, 404]).toContain(error.response.status);
         }
 
         // --- 4. Tentar modificar essa transação com tokenEmpresaB ---
@@ -66,7 +72,7 @@ describe('2. Teste de Isolamento de Dados (Simples)', () => {
             });
             fail('Empresa B conseguiu ATUALIZAR a transação da Empresa A.');
         } catch (error) {
-            expect(error.response.status).not.toBe(200);
+            expect([401, 403, 404]).toContain(error.response.status);
         }
 
         // --- 5. Tentar excluir essa transação com tokenEmpresaB ---
@@ -76,7 +82,7 @@ describe('2. Teste de Isolamento de Dados (Simples)', () => {
             });
             fail('Empresa B conseguiu EXCLUIR a transação da Empresa A.');
         } catch (error) {
-            expect(error.response.status).not.toBe(200);
+            expect([401, 403, 404]).toContain(error.response.status);
         }
     });
 

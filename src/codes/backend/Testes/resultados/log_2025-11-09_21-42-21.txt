@@ -1,0 +1,10 @@
+
+--- FIM DOS TESTES AUTOMATIZADOS (COM FALHAS) ---
+● Validation Error:
+
+  Module ./Testes/test-setup.js in the globalSetup option was not found.
+         <rootDir> is: C:\Users\HERON-ACER\Documents\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\Testes
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+

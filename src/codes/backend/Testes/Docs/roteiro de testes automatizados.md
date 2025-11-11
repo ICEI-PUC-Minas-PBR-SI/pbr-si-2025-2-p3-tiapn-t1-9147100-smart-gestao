@@ -12,13 +12,12 @@ A estrutura de testes está centralizada na pasta `src/codes/backend/Testes/` e 
 
 - **Jest**: Plataforma de testes em JavaScript. É o orquestrador que executa os testes e verifica os resultados.
 - **Axios**: Biblioteca para fazer requisições HTTP. É usada para simular um cliente (como o frontend) se comunicando com a nossa API.
-- **`concurrently`**: Ferramenta que nos permite rodar múltiplos scripts ao mesmo tempo (exibir no console e salvar em log).
 
 ### Arquivos Principais:
 
 - **`package.json`**: Contém os scripts para executar os testes.
-- **`Testes/jest.config.js`**: Arquivo de configuração do Jest. Define onde os testes estão e como devem se comportar.
-- **`Testes/api.test.js`**: O coração dos nossos testes. É aqui que os cenários de teste (cadastro, login, etc.) são escritos.
+- **`Testes/jest.config.cjs`**: Arquivo de configuração do Jest. Define onde os testes estão e como devem se comportar.
+- **`Testes/test-setup.js`**: Script de setup global do Jest, responsável por popular o banco de dados de teste.
 - **`Testes/resultados/`**: Pasta onde os logs de cada execução de teste são salvos.
 
 ## 3. Configuração do Ambiente
@@ -32,20 +31,25 @@ Antes de executar os testes, certifique-se de que o ambiente está configurado c
 
 ## 4. Execução e Validação dos Testes
 
-Para executar os testes, certifique-se de que **nenhum outro servidor esteja rodando** na porta 5000. Em seguida, abra um terminal na pasta `src/codes/backend`.
+Para executar os testes, abra um terminal na pasta `src/codes/backend`.
+
+> **Importante:** O fluxo de teste foi simplificado para usar um banco de dados de teste online e validar o servidor principal. A execução requer dois terminais.
 
 ### Comando Principal de Teste
 
-Execute o seguinte comando:
+1.  **Terminal 1: Inicie o Servidor Principal**
+    ```bash
+    npm run start:backend
+    ```
+    Deixe este terminal aberto. Ele estará conectado ao seu banco de dados de desenvolvimento.
 
-```bash
-npm test
-```
+2.  **Terminal 2: Execute os Testes**
+    ```bash
+    npm test
+    ```
+    Este comando irá se conectar ao seu banco de dados de **teste** (definido em `MONGO_URI_TEST`), prepará-lo e executar os testes de API contra o servidor que está rodando no Terminal 1.
 
-Este comando foi configurado para realizar duas ações simultaneamente:
-
-1.  **Exibição no Console**: Os resultados dos testes (sucessos e falhas) serão exibidos em tempo real no seu console. Isso permite um feedback rápido e visual durante o desenvolvimento.
-2.  **Geração de Log**: Um novo arquivo de log em formato de texto (`.txt`) será criado na pasta `Testes/resultados/`. O nome do arquivo conterá a data e a hora da execução (ex: `log_2025-11-05_23-10-15.txt`), garantindo um histórico completo e organizado de cada execução.
+O resultado é exibido no console e, simultaneamente, um arquivo de log detalhado (`log_AAAA-MM-DD_HH-mm-ss.txt`) é salvo na pasta `Testes/resultados/`.
 
 ### Cenários de Teste Implementados
 
@@ -100,12 +104,38 @@ Este comando foi configurado para realizar duas ações simultaneamente:
     - **`deve invalidar o SessionToken no banco de dados após o logout`**: Garante que, ao fazer logout, o registro da sessão correspondente é marcado como inativo, efetivamente invalidando o Refresh Token.
 
 #### Módulo de Relatórios
-- **Status:** 🟡 **Pendente**
-- **Arquivo de Teste:** `Testes/reports.test.js` (sugestão)
-- **Descrição:** Valida a capacidade do sistema de agregar dados e gerar resumos financeiros corretamente.
-- **Cenários Sugeridos:**
-    - **`deve gerar um relatório de resumo financeiro com sucesso`**: Verifica se os totais de receitas, despesas e saldo correspondem às transações criadas.
-    - **`deve retornar um relatório vazio para um período sem transações`**: Garante que o sistema lida corretamente com a ausência de dados.
-    - **`deve barrar o acesso ao relatório sem autenticação`**: Confirma que o endpoint de relatórios está protegido.
+- **Status:** 🟡 **PENDENTE (TDD)**
+- **Arquivo de Teste:** `Testes/reports.test.js`
+- **Descrição:** Valida a capacidade do sistema de exportar dados.
+- **Cenários Cobertos:**
+    - **`deve EXPORTAR um relatório de transações em formato PDF`**: Verifica se a API responde com um arquivo PDF válido.
+
+#### Módulo de Clientes/Fornecedores
+- **Status:** 🟡 **PENDENTE (TDD)**
+- **Arquivo de Teste:** `Testes/clients.test.js`
+- **Descrição:** Valida o ciclo de vida de clientes e fornecedores.
+- **Cenários Cobertos:**
+    - **`deve CRIAR um novo cliente com sucesso`**: Testa a criação de um novo registro de cliente.
+    - **`deve LISTAR os clientes da empresa`**: Confirma que o cliente criado pode ser listado corretamente.
 ---
 *Este documento deve ser atualizado conforme novos blocos de teste (Isolamento de Dados, Transações, etc.) forem adicionados.*
+
+---
+
+## 5. Scripts de Apoio aos Testes
+
+Além dos testes automatizados, o projeto conta com scripts utilitários para facilitar a configuração do ambiente de testes manuais.
+
+### Criação de Empresas de Teste Fixo
+
+- **Arquivo:** `Scripts/create-test-companies.js`
+- **Objetivo:** Criar um conjunto de três empresas de teste com dados previsíveis (`Empresa Frontend`, `Empresa Backend`, `Empresa React`) para serem usadas em validações manuais do frontend e exploração da API.
+- **Diferença para o Setup Global:** Enquanto o `test-setup.js` cria dados temporários para os testes automatizados, este script cria dados persistentes no banco de dados.
+- **Ciclo de Vida:** As empresas criadas por este script **não são excluídas** pelos testes automatizados. Elas são persistentes para garantir um ambiente estável para testes manuais. Dados temporários criados por testes específicos (como o `multi-tenant.test.js`) são limpos ao final de sua execução.
+- **Como Usar:**
+  1. Certifique-se de que o servidor do backend esteja rodando (`npm run start:backend`).
+  2. Em outro terminal, na pasta `src/codes/backend`, execute:
+     ```bash
+     node Scripts/create-test-companies.js
+     ```
+- **Resultado:** O script cria as empresas (se não existirem) e gera/atualiza o arquivo `Testes/Docs/dados-empresas-teste.md` com as credenciais completas (e-mail, senha, IDs e tokens) para fácil consulta.

@@ -1,2 +1,2 @@
 /* Importa os estilos existentes do projeto frontend */
-@import url('../../frontend/css/style.css');
+@import './legacy-style.css';
