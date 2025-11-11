@@ -121,17 +121,13 @@ O servidor backend estará disponível em `http://localhost:5000`. Você pode ve
 
 ## 5. Executando os Testes
 
-A suíte de testes automatizados valida a integridade da API. Para executá-la, certifique-se de que o servidor de testes não esteja rodando e execute o comando na pasta `src/codes/backend`:
+A suíte de testes automatizados valida a integridade da API. O processo de execução foi simplificado para garantir estabilidade e focar na validação do backend.
 
-```bash
-npm test
-```
+Para instruções detalhadas sobre como configurar e executar a suíte de testes, consulte o guia oficial na pasta de testes:
 
-Este comando irá:
-1.  Iniciar um servidor de teste temporário.
-2.  Executar todos os arquivos de teste (`*.test.js`) na pasta `Testes/`.
-3.  Exibir os resultados no console.
-4.  Salvar um log detalhado da execução na pasta `Testes/resultados/`.
+> **Consulte: Roteiro de Testes Automatizados**
+
+Este guia explica o fluxo de execução em dois terminais, que garante um ambiente de teste estável e previsível.
 
 ## 6. Validação e Conclusão da Função Backend
 

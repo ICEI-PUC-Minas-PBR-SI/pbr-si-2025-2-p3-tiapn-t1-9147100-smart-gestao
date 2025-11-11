@@ -33,7 +33,7 @@ Antes de executar os testes, certifique-se de que o ambiente está configurado c
 
 Para executar os testes, abra um terminal na pasta `src/codes/backend`.
 
-> **Importante:** O fluxo de teste foi simplificado para usar um banco de dados de teste online e validar o servidor principal. A execução requer dois terminais.
+> **Importante:** O fluxo de teste foi simplificado para usar um banco de dados de teste online e validar o servidor principal. A execução requer dois terminais e que a variável `MONGO_URI_TEST` esteja configurada no seu arquivo `.env`.
 
 ### Comando Principal de Teste
 
@@ -41,13 +41,13 @@ Para executar os testes, abra um terminal na pasta `src/codes/backend`.
     ```bash
     npm run start:backend
     ```
-    Deixe este terminal aberto. Ele estará conectado ao seu banco de dados de desenvolvimento.
+    Deixe este terminal aberto. Ele estará conectado ao seu banco de dados de **desenvolvimento** (`MONGO_URI`).
 
 2.  **Terminal 2: Execute os Testes**
     ```bash
     npm test
     ```
-    Este comando irá se conectar ao seu banco de dados de **teste** (definido em `MONGO_URI_TEST`), prepará-lo e executar os testes de API contra o servidor que está rodando no Terminal 1.
+    Este comando irá se conectar ao seu banco de dados de **teste** (definido em `MONGO_URI_TEST`), limpá-lo, popular com dados de teste e, em seguida, executar os testes de API contra o servidor que está rodando no Terminal 1.
 
 O resultado é exibido no console e, simultaneamente, um arquivo de log detalhado (`log_AAAA-MM-DD_HH-mm-ss.txt`) é salvo na pasta `Testes/resultados/`.
 
