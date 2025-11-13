@@ -56,13 +56,20 @@ Esta seção orienta como executar o sistema localmente para fins acadêmicos/de
    ```
 
 ### Execução
-Para iniciar os servidores do backend e frontend, execute o seguinte comando a partir da pasta `src/codes/backend`:
-```bash
-npm start
-```
-Isso inicia:
-- Backend em http://localhost:5000 (health: http://localhost:5000/api/health)
-- Frontend (servidor estático) em http://localhost:3000
+A partir da pasta `src/codes/backend`, você pode usar os seguintes comandos:
+
+- **Para o ambiente de desenvolvimento principal (Backend + Frontend Legado):**
+  ```bash
+  npm start
+  ```
+  - O Backend iniciará em `http://localhost:5000`.
+  - O Frontend iniciará em `http://localhost:3000`.
+
+- **Para a demonstração completa (incluindo a Prova de Conceito em React):**
+  ```bash
+  npm run start:full-demo
+  ```
+  - Isso iniciará o Backend (5000), o Frontend Legado (3000) e o Frontend React (3001) simultaneamente.
 
 ### Acesso rápido (fluxo mínimo)
 1) Abra http://localhost:3000 no seu navegador. Você será redirecionado para a tela de login.
@@ -103,7 +110,7 @@ Objetivo: validar o fluxo ponta a ponta sem ferramentas complexas.
 - Relatórios
   - Acessar a página ou endpoint GET /api/reports com filtros básicos.
 
-> **Nota**: Para uma validação mais completa e automatizada, consulte a documentação da suíte de testes em `src/codes/backend/Testes/Docs/roteiro de testes automatizados.md`.
+> **Nota**: Para uma validação completa e automatizada, execute `npm test` na pasta do backend ou consulte a documentação da suíte de testes em `src/codes/backend/Testes/Docs/roteiro de testes automatizados.md`.
 
 Critérios de sucesso:
 - Respostas 2xx com payload esperado; em 401, redireciona para login; erros 4xx/5xx exibem mensagem clara.
@@ -127,7 +134,7 @@ Para demonstrar essa flexibilidade e a viabilidade de uma futura modernização,
 # Documentação
 
 <ol>
-<li><a href="docs/1-Contexto.md"> Documentação de Contexto</a></li>
+<li><a href="docs/1-Contexto-SG.md"> Documentação de Contexto</a></li>
 <li><a href="docs/2-Especificação.md"> Especificação do Projeto</a></li>
 <li><a href="docs/3-Modelagem-Processos-Negócio.md"> Modelagem dos Processos de Negocio</a></li>
 <li><a href="docs/4-Projeto-Solucao.md"> Projeto da solução</a></li>
@@ -146,9 +153,8 @@ Para demonstrar essa flexibilidade e a viabilidade de uma futura modernização,
 <li><a href="presentation/README.md"> Apresentação da solução</a></li>
 
 ## Histórico de versões
-
-* 0.3.10
-    * CHANGE: Estabilização completa do ambiente de testes automatizados. Refatoração do setup de testes para interação direta com o banco de dados em memória, eliminando condições de corrida e garantindo um ambiente isolado e confiável. Orquestração precisa dos scripts de teste e servidor.
+* 0.3.11
+    * CHANGE: Reorganização e renumeração da suíte de testes automatizados para seguir uma sequência lógica. Atualização da documentação do projeto (planejamento e READMEs) para refletir o estado atual do desenvolvimento e a arquitetura de testes.
 * 0.3.9
     * CHANGE: Adição de testes automatizados para funcionalidades pendentes (Exportação de PDF e Cadastro de Clientes), seguindo a abordagem de Desenvolvimento Guiado por Testes (TDD). Organização da suíte de testes em arquivos modulares.
 * 0.3.8
