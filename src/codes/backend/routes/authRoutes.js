@@ -5,7 +5,7 @@
 // =================================================================================
 
 import express from "express";
-import { registerUser, loginUser, logoutUser, refreshToken, deleteCurrentUser } from '../controllers/authController.js';
+import { registerUser, loginUser, logoutUser, refreshToken, deleteCurrentUser, forgotPassword, resetPassword } from '../controllers/authController.js';
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 import { auditMiddleware } from "../middlewares/auditMiddleware.js";
 
@@ -21,13 +21,21 @@ router.post("/login", auditMiddleware("LOGIN_USER"), loginUser);
 
 // Rota para deslogar um usuário, invalidando o Refresh Token no servidor.
 // Esta rota é pública, mas a lógica no controller só funciona se um refreshToken válido for enviado.
+// O authMiddleware foi removido para permitir que o logout funcione mesmo se o accessToken tiver expirado.
 // POST /api/auth/logout
-router.post("/logout", authMiddleware, auditMiddleware("LOGOUT_USER"), logoutUser);
+router.post("/logout", auditMiddleware("LOGOUT_USER"), logoutUser);
 
 // Rota para renovar um Access Token expirado usando um Refresh Token válido.
-// (Atualmente um placeholder).
 // POST /api/auth/refresh
-router.post("/refresh", authMiddleware, refreshToken);
+router.post("/refresh", refreshToken);
+
+// Rota para solicitar a recuperação de senha
+// POST /api/auth/forgot-password
+router.post('/forgot-password', forgotPassword);
+
+// Rota para efetivamente resetar a senha com um token válido
+// POST /api/auth/reset-password/:token
+router.post('/reset-password/:token', resetPassword);
 
 // Rota protegida para excluir um usuário específico por ID.
 // Esta rota é destrutiva e foi implementada principalmente para facilitar a limpeza durante os testes.

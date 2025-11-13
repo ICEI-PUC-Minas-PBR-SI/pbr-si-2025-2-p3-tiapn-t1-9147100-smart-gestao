@@ -1,0 +1,321 @@
+
+--- 🚀 [ETAPA 1 de 4] Iniciando Ambiente de Teste (Jest Environment) ---
+   - [PROCESSO] Lendo configuração do banco de dados de teste...
+   - [ATENÇÃO] Usando banco de dados de DESENVOLVIMENTO para os testes. As coleções serão limpas.
+
+--- 🚀 [ETAPA 2 de 4] Limpando e populando o banco de dados de TESTE ---
+   - [OK] Dados de teste (empresas e usuários) criados e salvos em test-setup.json.
+(node:31460) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+  console.log
+    
+    --- Configurando 3 empresas para o teste multi-tenant ---
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:19:17)
+
+  console.log
+    ✅ Empresa 1 (Empresa Teste 1762997990984) cadastrada e logada.
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:48:21)
+
+  console.log
+    ✅ Empresa 2 (Empresa Teste 1762997991286) cadastrada e logada.
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:48:21)
+
+  console.log
+    ✅ Empresa 3 (Empresa Teste 1762997991524) cadastrada e logada.
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:48:21)
+
+  console.log
+    --- Configuração multi-tenant concluída ---
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:50:17)
+
+  console.log
+    
+    --- Criando transações individuais para cada empresa ---
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:55:17)
+
+  console.log
+    Transação criada para Empresa Teste 1762997990984. ID: 691536e7b5ae3e14ffa34fe2
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:76:21)
+
+  console.log
+    Transação criada para Empresa Teste 1762997991286. ID: 691536e7b5ae3e14ffa34fe9
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:76:21)
+
+  console.log
+    Transação criada para Empresa Teste 1762997991524. ID: 691536e7b5ae3e14ffa34ff0
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:76:21)
+
+  console.log
+    
+    --- Validando isolamento de dados entre todas as empresas ---
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:82:17)
+
+  console.log
+    
+    Verificando a transação 691536e7b5ae3e14ffa34fe2 da Empresa Teste 1762997990984
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:89:21)
+
+  console.log
+    - OK: Empresa Teste 1762997991286 foi bloqueada (Status 404).
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:107:29)
+
+  console.log
+    - OK: Empresa Teste 1762997991524 foi bloqueada (Status 404).
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:107:29)
+
+  console.log
+    
+    Verificando a transação 691536e7b5ae3e14ffa34fe9 da Empresa Teste 1762997991286
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:89:21)
+
+  console.log
+    - OK: Empresa Teste 1762997990984 foi bloqueada (Status 404).
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:107:29)
+
+  console.log
+    - OK: Empresa Teste 1762997991524 foi bloqueada (Status 404).
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:107:29)
+
+  console.log
+    
+    Verificando a transação 691536e7b5ae3e14ffa34ff0 da Empresa Teste 1762997991524
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:89:21)
+
+  console.log
+    - OK: Empresa Teste 1762997990984 foi bloqueada (Status 404).
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:107:29)
+
+  console.log
+    - OK: Empresa Teste 1762997991286 foi bloqueada (Status 404).
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:107:29)
+
+  console.log
+    
+    --- Validando listagem de transações ---
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:114:17)
+
+  console.log
+    - OK: Empresa Teste 1762997990984 listou apenas sua própria transação.
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:126:21)
+
+  console.log
+    - OK: Empresa Teste 1762997991286 listou apenas sua própria transação.
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:126:21)
+
+  console.log
+    - OK: Empresa Teste 1762997991524 listou apenas sua própria transação.
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:126:21)
+
+  console.log
+    
+    --- Limpando dados de teste (Teardown) ---
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:132:17)
+
+  console.log
+    - ✅ Empresa Empresa Teste 1762997990984 e dados associados excluídos com sucesso.
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:139:25)
+
+  console.log
+    - ✅ Empresa Empresa Teste 1762997991286 e dados associados excluídos com sucesso.
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:139:25)
+
+  console.log
+    - ✅ Empresa Empresa Teste 1762997991524 e dados associados excluídos com sucesso.
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:139:25)
+
+
+--- 🧹 [ENV] Desconectando do banco de dados ---
+--- ✅ [ENV] Ambiente de teste finalizado ---
+ PASS  Testes/3-security/multi-tenant.test.js
+  3. Teste de Isolamento de Dados em Larga Escala (Multi-Tenant)
+    √ deve criar uma transação para cada empresa (166 ms)
+    √ deve impedir que uma empresa acesse a transação de outra (196 ms)
+    √ deve garantir que cada empresa liste apenas suas próprias transações (93 ms)
+
+
+--- 🚀 [ETAPA 1 de 4] Iniciando Ambiente de Teste (Jest Environment) ---
+   - [PROCESSO] Lendo configuração do banco de dados de teste...
+   - [ATENÇÃO] Usando banco de dados de DESENVOLVIMENTO para os testes. As coleções serão limpas.
+
+--- 🚀 [ETAPA 2 de 4] Limpando e populando o banco de dados de TESTE ---
+   - [OK] Dados de teste (empresas e usuários) criados e salvos em test-setup.json.
+  console.log
+    
+    --- Teste: Solicitar reset para e-mail inválido ---
+
+      at Object.log (Testes/1-auth/password.test.js:25:13)
+
+  console.log
+    ✅ Falhou como esperado para e-mail inexistente (Status 404).
+
+      at Object.log (Testes/1-auth/password.test.js:34:15)
+
+  console.log
+    
+    --- Teste: Gerar token de reset com sucesso ---
+
+      at Object.log (Testes/1-auth/password.test.js:39:13)
+
+  console.log
+    ✅ Token de reset gerado e salvo no banco de dados.
+
+      at Object.log (Testes/1-auth/password.test.js:50:13)
+
+  console.log
+    
+    --- Teste: Resetar senha com token válido ---
+
+      at Object.log (Testes/1-auth/password.test.js:54:13)
+
+  console.log
+    ✅ Senha resetada com sucesso via API.
+
+      at Object.log (Testes/1-auth/password.test.js:71:13)
+
+  console.log
+    ✅ Token de reset foi invalidado no banco.
+
+      at Object.log (Testes/1-auth/password.test.js:75:13)
+
+  console.log
+    ✅ Login com a nova senha realizado com sucesso.
+
+      at Object.log (Testes/1-auth/password.test.js:85:13)
+
+
+--- 🧹 [ENV] Desconectando do banco de dados ---
+--- ✅ [ENV] Ambiente de teste finalizado ---
+ PASS  Testes/1-auth/password.test.js
+  9. Módulo de Recuperação de Senha
+    √ deve falhar ao solicitar reset para um e-mail inexistente (35 ms)
+    √ deve gerar e salvar um token de reset para um e-mail válido (38 ms)
+    √ deve resetar a senha com um token válido e permitir login com a nova senha (259 ms)
+
+
+--- 🚀 [ETAPA 1 de 4] Iniciando Ambiente de Teste (Jest Environment) ---
+   - [PROCESSO] Lendo configuração do banco de dados de teste...
+   - [ATENÇÃO] Usando banco de dados de DESENVOLVIMENTO para os testes. As coleções serão limpas.
+
+--- 🚀 [ETAPA 2 de 4] Limpando e populando o banco de dados de TESTE ---
+   - [OK] Dados de teste (empresas e usuários) criados e salvos em test-setup.json.
+
+--- 🧹 [ENV] Desconectando do banco de dados ---
+--- ✅ [ENV] Ambiente de teste finalizado ---
+ PASS  Testes/2-features/transactions.test.js
+  4. Módulo de Transações (CRUD)
+    √ deve CRIAR uma nova transação com sucesso (57 ms)
+    √ deve falhar ao tentar criar uma transação com dados inválidos (24 ms)
+    √ deve LISTAR as transações do usuário logado (30 ms)
+    √ deve OBTER uma transação específica pelo ID (29 ms)
+    √ deve ATUALIZAR uma transação existente (53 ms)
+    √ deve EXCLUIR uma transação existente (78 ms)
+
+
+--- 🚀 [ETAPA 1 de 4] Iniciando Ambiente de Teste (Jest Environment) ---
+   - [PROCESSO] Lendo configuração do banco de dados de teste...
+   - [ATENÇÃO] Usando banco de dados de DESENVOLVIMENTO para os testes. As coleções serão limpas.
+
+--- 🚀 [ETAPA 2 de 4] Limpando e populando o banco de dados de TESTE ---
+   - [OK] Dados de teste (empresas e usuários) criados e salvos em test-setup.json.
+
+--- 🧹 [ENV] Desconectando do banco de dados ---
+--- ✅ [ENV] Ambiente de teste finalizado ---
+ PASS  Testes/2-features/clients.test.js
+  7. Módulo de Clientes/Fornecedores
+    √ deve CRIAR um novo cliente com sucesso (44 ms)
+    √ deve LISTAR os clientes da empresa (29 ms)
+    √ deve ATUALIZAR um cliente existente (34 ms)
+    √ deve EXCLUIR um cliente existente (42 ms)
+
+
+--- 🚀 [ETAPA 1 de 4] Iniciando Ambiente de Teste (Jest Environment) ---
+   - [PROCESSO] Lendo configuração do banco de dados de teste...
+   - [ATENÇÃO] Usando banco de dados de DESENVOLVIMENTO para os testes. As coleções serão limpas.
+
+--- 🚀 [ETAPA 2 de 4] Limpando e populando o banco de dados de TESTE ---
+   - [OK] Dados de teste (empresas e usuários) criados e salvos em test-setup.json.
+
+--- 🧹 [ENV] Desconectando do banco de dados ---
+--- ✅ [ENV] Ambiente de teste finalizado ---
+ PASS  Testes/2-features/goals.test.js
+  5. Módulo de Metas (CRUD)
+    √ deve CRIAR uma nova meta com sucesso (59 ms)
+    √ deve LISTAR as metas do usuário logado (30 ms)
+    √ deve ATUALIZAR uma meta existente (54 ms)
+    √ deve EXCLUIR uma meta existente (88 ms)
+
+
+--- 🚀 [ETAPA 1 de 4] Iniciando Ambiente de Teste (Jest Environment) ---
+   - [PROCESSO] Lendo configuração do banco de dados de teste...
+   - [ATENÇÃO] Usando banco de dados de DESENVOLVIMENTO para os testes. As coleções serão limpas.
+
+--- 🚀 [ETAPA 2 de 4] Limpando e populando o banco de dados de TESTE ---
+   - [OK] Dados de teste (empresas e usuários) criados e salvos em test-setup.json.
+
+--- 🧹 [ENV] Desconectando do banco de dados ---
+--- ✅ [ENV] Ambiente de teste finalizado ---
+ PASS  Testes/1-auth/auth.test.js
+  6. Módulo de Autenticação e Sessão (Stateful)
+    √ deve criar um SessionToken no banco de dados após o login (105 ms)
+    √ deve invalidar o SessionToken no banco de dados após o logout (115 ms)
+
+
+--- 🚀 [ETAPA 1 de 4] Iniciando Ambiente de Teste (Jest Environment) ---
+   - [PROCESSO] Lendo configuração do banco de dados de teste...
+   - [ATENÇÃO] Usando banco de dados de DESENVOLVIMENTO para os testes. As coleções serão limpas.
+
+--- 🚀 [ETAPA 2 de 4] Limpando e populando o banco de dados de TESTE ---
+   - [OK] Dados de teste (empresas e usuários) criados e salvos em test-setup.json.
+
+--- 🧹 [ENV] Desconectando do banco de dados ---
+--- ✅ [ENV] Ambiente de teste finalizado ---
+ FAIL  Testes/4-reports/reports.test.js
+  ● Test suite failed to run
+
+    ReferenceError: require is not defined
+
+      12 | // Esta linha é "hoisted" (movida para o topo) pelo Jest antes da execução.
+      13 | import { generateFinancialReportPDF, generateClientsReportPDF, generateInvoicePDF } from '../../services/pdfService.js';
+    > 14 | jest.mock('../../services/pdfService.js');
+         |                                           ^
+      15 |
+      16 | const SETUP_FILE = path.join('Testes', 'test-setup.json');
+      17 |
+
+      at require (Testes/4-reports/reports.test.js:14:43)
+      at _getJestObj (Testes/4-reports/reports.test.js:14:1)
+
+Test Suites: 1 failed, 6 passed, 7 total
+Tests:       22 passed, 22 total
+Snapshots:   0 total
+Time:        10.37 s
+Ran all test suites.
+
+--- FIM DOS TESTES AUTOMATIZADOS (Status: Falha) ---

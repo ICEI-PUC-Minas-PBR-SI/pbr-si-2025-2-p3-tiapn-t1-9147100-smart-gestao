@@ -30,12 +30,13 @@ O Smart Gestão é uma aplicação web full-stack que utiliza:
 
 ```text
 src/
-├── codes/
-│   ├── backend/        # Contém todo o código da API REST em Node.js/Express.
-│   │   └── README-backend.md  # Documentação específica do backend
-│   └── frontend/       # Contém todo o código da interface web (HTML, CSS, JS).
-│       └── README-frontend.md # Documentação específica do frontend
-└── assets/            # Recursos estáticos compartilhados
+├── codes/              # Diretório raiz do código-fonte.
+│   ├── backend/        # API REST em Node.js/Express. Responsável pela lógica de negócio.
+│   │   └── README-backend.md
+│   ├── frontend/       # Interface web principal em HTML, CSS e JavaScript puro.
+│   │   └── README-frontend.md
+│   └── react/          # Prova de conceito da tela de login em React.
+└── assets/             # Recursos estáticos (imagens, fontes, etc.).
 ```
 
 ## Componentes Principais

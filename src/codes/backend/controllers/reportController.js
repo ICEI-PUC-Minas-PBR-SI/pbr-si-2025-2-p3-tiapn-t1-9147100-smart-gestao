@@ -1,116 +1,138 @@
 // =================================================================================
 // ARQUIVO: controllers/reportController.js
-// DESCRIÇÃO: Controladores responsáveis por agregar dados e gerar relatórios
-//            financeiros e operacionais para a empresa do usuário autenticado.
+// DESCRIÇÃO: Controladores responsáveis por orquestrar a geração de relatórios,
+//            principalmente em formato PDF. Eles buscam os dados necessários
+//            e invocam os serviços correspondentes para criar os arquivos.
 // =================================================================================
 
-import Transaction from "../models/Transaction.js";
-import Meta from "../models/Meta.js";
-import Alert from "../models/Alert.js";
+import Transaction from '../models/Transaction.js';
+import Alert from '../models/Alert.js';
+import Company from '../models/Company.js';
+import Client from '../models/Client.js';
+import mongoose from 'mongoose';
+import { errorResponse } from '../utils/responseHelper.js';
 
-/**
- * Gera um resumo financeiro geral para a empresa.
- * Calcula o total de receitas, o total de despesas e o lucro líquido
- * com base em todas as transações da empresa.
- * @param {object} req - O objeto de requisição do Express.
- * @param {object} res - O objeto de resposta do Express.
- */
+// @desc    Exportar um relatório de transações em PDF
+// @route   GET /api/reports/export/pdf
+// @access  Private
+export const exportTransactionsPDF = async (req, res) => {
+  try {
+    const companyId = new mongoose.Types.ObjectId(req.user.companyId);
+
+    // 1. Busca os dados necessários em paralelo
+    const transactions = await Transaction.find({ companyId }).sort({ date: -1 }).limit(100).lean();
+    const company = await Company.findById(companyId).lean();
+
+    // 2. Chama o serviço de PDF para gerar o relatório
+    // Importa dinamicamente o serviço de PDF no momento da requisição para permitir
+    // que testes que mockam `pdfService` substituam a implementação.
+    const { generateFinancialReportPDF } = await import('../services/pdfService.js');
+    generateFinancialReportPDF({ transactions, company }, res);
+  } catch (error) {
+    return errorResponse(res, 500, "Erro interno ao gerar relatório de transações.", error);
+  }
+};
+
+// @desc    Exportar um relatório de clientes em PDF
+// @route   GET /api/reports/export/clients-pdf
+// @access  Private
+export const exportClientsPDF = async (req, res) => {
+    try {
+        const companyId = req.user.companyId;
+        const company = await Company.findById(companyId);
+        const clients = await Client.find({ companyId });
+
+        // Garante que, mesmo sem clientes, o relatório seja gerado corretamente (com a informação de "nenhum cliente").
+        const { generateClientsReportPDF } = await import('../services/pdfService.js');
+        if (!clients) {
+          return generateClientsReportPDF({ clients: [], company }, res);
+        }
+
+        generateClientsReportPDF({ clients, company }, res);
+    } catch (error) {
+        return errorResponse(res, 500, 'Erro interno ao gerar relatório de clientes.', error);
+    }
+};
+
+// @desc    Obter um resumo financeiro (total de receitas, despesas e balanço)
+// @route   GET /api/reports/summary
+// @access  Private
 export const getFinancialSummary = async (req, res) => {
   try {
-    const { companyId } = req.user; // companyId já é ObjectId do authMiddleware
-
-    // Busca todas as transações da empresa no banco de dados.
-    const transactions = await Transaction.find({ companyId });
-
-    // Calcula os totais de receita e despesa iterando sobre as transações.
-    const totalIncome = transactions
-      .filter(t => t.type === "income")
-      .reduce((sum, t) => sum + t.amount, 0);
-
-    const totalExpense = transactions
-      .filter(t => t.type === "expense")
-      .reduce((sum, t) => sum + t.amount, 0);
-
-    const netProfit = totalIncome - totalExpense;
-
-    res.status(200).json({
-      companyId,
-      totalIncome,
-      totalExpense,
-      netProfit,
-    });
-  } catch (error) {
-    console.error("Erro ao gerar resumo financeiro:", error);
-    res.status(500).json({ message: "Erro ao gerar resumo financeiro." });
-  }
-};
-
-/**
- * Gera um relatório financeiro agrupado por mês.
- * Utiliza o Aggregation Framework do MongoDB para processar os dados de forma
- * eficiente diretamente no banco de dados.
- * @param {object} req - O objeto de requisição do Express.
- * @param {object} res - O objeto de resposta do Express.
- */
-export const getMonthlyReport = async (req, res) => {
-  try {
-    const { companyId } = req.user; // companyId já é ObjectId do authMiddleware
-
-    // Utiliza o Aggregation Framework do MongoDB para agrupar transações por mês e calcular os totais.
-    const report = await Transaction.aggregate([
-      // Filtra apenas as transações da empresa do usuário.
-      { $match: { companyId } },
+    const companyId = new mongoose.Types.ObjectId(req.user.companyId);
+    const summary = await Transaction.aggregate([
+      { $match: { companyId: companyId } },
       {
         $group: {
-          // Agrupa os documentos pelo mês extraído do campo 'date'.
-          _id: { $month: "$date" },
-          totalIncome: {
-            $sum: { $cond: [{ $eq: ["$type", "income"] }, "$amount", 0] },
-          },
-          totalExpense: {
-            $sum: { $cond: [{ $eq: ["$type", "expense"] }, "$amount", 0] },
-          },
+          _id: '$type',
+          total: { $sum: '$amount' },
         },
       },
-      // Ordena os resultados pelo mês em ordem crescente.
-      { $sort: { "_id": 1 } },
     ]);
 
-    res.status(200).json({ companyId, report });
+    const revenue = summary.find(item => item._id === 'revenue')?.total || 0;
+    const expense = summary.find(item => item._id === 'expense')?.total || 0;
+
+    res.json({
+      revenue,
+      expense,
+      balance: revenue - expense,
+    });
   } catch (error) {
-    console.error("Erro ao gerar relatório mensal:", error);
-    res.status(500).json({ message: "Erro ao gerar relatório mensal." });
+    return errorResponse(res, 500, 'Erro ao gerar resumo financeiro.', error);
   }
 };
 
-/**
- * Gera um relatório de todos os alertas da empresa.
- * Permite uma análise dos principais riscos ou eventos operacionais que
- * foram registrados para a empresa.
- * @param {object} req - O objeto de requisição do Express.
- * @param {object} res - O objeto de resposta do Express.
- */
-export const getAlertsReport = async (req, res) => {
+// @desc    Obter um relatório financeiro agrupado por mês
+// @route   GET /api/reports/monthly
+// @access  Private
+export const getMonthlyReport = async (req, res) => {
   try {
-    const { companyId } = req.user; // companyId já é ObjectId do authMiddleware
-
-    // Busca todos os alertas vinculados à empresa do usuário logado e os ordena por data de criação.
-    const alerts = await Alert.find({ companyId }).sort({ createdAt: -1 });
-
-    if (!alerts.length) {
-      return res.status(200).json({
-        message: "Nenhum alerta registrado para esta empresa.",
-        alerts: [],
-      });
-    }
-
-    res.status(200).json({
-      message: "Relatório de alertas gerado com sucesso.",
-      totalAlerts: alerts.length,
-      alerts,
-    });
+    const companyId = new mongoose.Types.ObjectId(req.user.companyId);
+    const report = await Transaction.aggregate([
+      { $match: { companyId: companyId } },
+      {
+        $group: {
+          _id: { year: { $year: '$date' }, month: { $month: '$date' } },
+          totalRevenue: { $sum: { $cond: [{ $eq: ['$type', 'revenue'] }, '$amount', 0] } },
+          totalExpense: { $sum: { $cond: [{ $eq: ['$type', 'expense'] }, '$amount', 0] } },
+        },
+      },
+      { $sort: { '_id.year': -1, '_id.month': -1 } },
+    ]);
+    res.json(report);
   } catch (error) {
-    console.error("Erro ao gerar relatório de alertas:", error);
-    res.status(500).json({ message: "Erro ao gerar relatório de alertas." });
+    return errorResponse(res, 500, 'Erro ao gerar relatório mensal.', error);
   }
+};
+
+// @desc    Obter um relatório de todos os alertas gerados para a empresa
+// @route   GET /api/reports/alerts
+// @access  Private
+export const getAlertsReport = async (req, res) => {
+  const alerts = await Alert.find({ companyId: req.user.companyId }).sort({ createdAt: -1 });
+  res.json(alerts);
+};
+
+// @desc    Exportar uma fatura para uma transação específica
+// @route   GET /api/reports/export/invoice/:transactionId
+// @access  Private
+export const exportInvoicePDF = async (req, res) => {
+    try {
+        const { transactionId } = req.params;
+        const companyId = new mongoose.Types.ObjectId(req.user.companyId);
+
+        const transaction = await Transaction.findOne({ _id: transactionId, companyId });
+        if (!transaction) {
+            return errorResponse(res, 404, "Transação não encontrada.");
+        }
+
+    const company = await Company.findById(companyId).lean();
+    const client = transaction.clientId ? await Client.findById(transaction.clientId).lean() : null;
+
+    const { generateInvoicePDF } = await import('../services/pdfService.js');
+    generateInvoicePDF({ transaction, company, client }, res);
+    } catch (error) {
+        return errorResponse(res, 500, "Erro interno ao gerar fatura.", error);
+    }
 };

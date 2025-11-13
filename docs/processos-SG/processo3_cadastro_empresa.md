@@ -15,13 +15,16 @@ O processo de cadastro de empresa permite que novos usuários criem uma conta no
 
 
 <img width="482" height="353" alt="Captura de tela 2025-11-07 185142" src="https://github.com/user-attachments/assets/409ab0ae-a9d7-445e-bce3-842ea0978105" />
+
 ---
 
-> **Ponto de Melhoria (Revisado por Heron):** Olá, equipe! Para alinhar a documentação com o backend (`cadastro.js`), o responsável poderia ajustar a "Atividade 1 – Preencher Dados Cadastrais" abaixo?
->
+> **Ponto de Melhoria (Revisado por Heron):** Olá, equipe! Para alinhar esta documentação com o formulário de cadastro real (`cadastro.html`) e a lógica do backend, peço ao responsável que ajuste a "Atividade 1 – Preencher Dados Cadastrais" abaixo.
+> 
 > **Guia para o ajuste:**
-> 1.  **Ajuste a Tabela de Campos:** O campo `Tipo de Negócio` está incorreto. Ele deve ser substituído pelos campos `Nome da Empresa` e `CNPJ`.
-> 2.  **Ajuste a Lista de Comandos:** Atualize a lista de comandos para refletir a remoção do campo `Tipo de Negócio` e a adição dos novos campos.
+> 1.  **Ajustar a Tabela de Campos:** Na tabela, remova a linha referente ao `Tipo de Negócio` e adicione duas novas linhas: uma para `Nome da Empresa` (Texto, Obrigatório) e outra para `CNPJ` (Texto, Obrigatório).
+> 2.  **Ajustar a Lista de Comandos:** Na lista de comandos, remova o item sobre "Selecionar o tipo de negócio" e adicione os comandos para "Inserir o nome da empresa" e "Inserir o CNPJ".
+
+--- 
 
 #### Detalhamento das atividades
 

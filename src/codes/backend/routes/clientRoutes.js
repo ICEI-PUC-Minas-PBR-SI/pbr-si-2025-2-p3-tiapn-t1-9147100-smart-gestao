@@ -7,7 +7,7 @@
 import express from "express";
 import {
   createClient,
-  getAllClients,
+  getClients,
   updateClient,
   deleteClient,
 } from "../controllers/clientController.js";
@@ -19,7 +19,7 @@ const router = express.Router();
 
 // Rota para listar todos os clientes e fornecedores da empresa do usuário autenticado.
 // GET /api/clients
-router.get("/", authMiddleware, companyScopeMiddleware, getAllClients);
+router.get("/", authMiddleware, companyScopeMiddleware, getClients);
 
 // Rota para cadastrar um novo cliente ou fornecedor.
 // POST /api/clients

@@ -26,7 +26,6 @@ src/
 │   │   ├── clientController.js
 │   │   ├── companyController.js
 │   │   ├── logController.js
-│   │   ├── metaController.js
 │   │   ├── permissionController.js
 │   │   ├── reportController.js
 │   │   ├── transactionController.js
@@ -34,13 +33,14 @@ src/
 │   ├── middlewares/
 │   │   ├── auditMiddleware.js
 │   │   ├── authMiddleware.js
-│   │   └── errorHandler.js
+│   │   ├── companyScopeMiddleware.js
+│   │   └── roleMiddleware.js
 │   ├── models/
 │   │   ├── Alert.js
 │   │   ├── Client.js
 │   │   ├── Company.js
+│   │   ├── Goal.js
 │   │   ├── Logs.js
-│   │   ├── Meta.js
 │   │   ├── Permission.js
 │   │   ├── SessionToken.js
 │   │   ├── Transaction.js
@@ -50,8 +50,8 @@ src/
 │   │   ├── authRoutes.js
 │   │   ├── clientRoutes.js
 │   │   ├── companyRoutes.js
+│   │   ├── goalRoutes.js
 │   │   ├── logRoutes.js
-│   │   ├── metaRoutes.js
 │   │   ├── permissionRoutes.js
 │   │   ├── reportRoutes.js
 │   │   ├── transactionRoutes.js
@@ -59,9 +59,17 @@ src/
 │   ├── Scripts/
 │   │   └── initPermissions.js
 │   ├── utils/
-│   │   ├── encrypt.js
-│   │   ├── jwt.js
-│   │   └── logger.js
+│   │   ├── logger.js
+│   │   └── responseHelper.js
+│   ├── services/
+│   │   └── pdfService.js
+│   └── Testes/
+│       ├── 1-auth/
+│       ├── 2-features/
+│       ├── 3-security/
+│       ├── 4-reports/
+│       ├── config/
+│       └── Docs/
 │   ├── server.js
 │   └── package.json
 │
@@ -85,13 +93,9 @@ import authRoutes from "./routes/authRoutes.js";
 import clientRoutes from "./routes/clientRoutes.js";
 import companyRoutes from "./routes/companyRoutes.js";
 import transactionRoutes from "./routes/transactionRoutes.js";
-import reportRoutes from "./routes/reportRoutes.js";
-import metaRoutes from "./routes/metaRoutes.js";
+import goalRoutes from "./routes/goalRoutes.js";
 import alertRoutes from "./routes/alertRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
-
-// Middlewares personalizados
-import { errorHandler } from "./middlewares/errorMiddleware.js";
 
 // Inicializa o Express
 dotenv.config();
@@ -110,13 +114,9 @@ app.use("/api/auth", authRoutes);
 app.use("/api/clients", clientRoutes);
 app.use("/api/companies", companyRoutes);
 app.use("/api/transactions", transactionRoutes);
-app.use("/api/reports", reportRoutes);
-app.use("/api/meta", metaRoutes);
+app.use("/api/goals", goalRoutes);
 app.use("/api/alerts", alertRoutes);
 app.use("/api/users", userRoutes);
-
-// Middleware global de tratamento de erros
-app.use(errorHandler);
 
 // Inicialização do servidor
 const PORT = process.env.PORT || 5000;
@@ -159,15 +159,6 @@ Filtra automaticamente todas as requisições pelo empresaId do usuário autenti
 Registra logs automáticos de ações críticas (criação, atualização, exclusão).
 Cada log armazena: empresaId, usuarioId, rota, ação, statusCode, data, IP.
 
-### ⚠️ errorMiddleware.js
-
-Captura erros globais e envia resposta padronizada em JSON.
-
-### 🧍‍♂️ roleMiddleware.js
-
-Valida o papel (role) do usuário antes de acessar uma rota específica.
-Exemplo: apenas ADMIN_COMPANY pode cadastrar novos usuários.
-
 ---
 
 ## 🧮 Models (Mongoose) — Explicação por Arquivo (ordem alfabética)
@@ -192,9 +183,9 @@ Campos: nome, cnpj, email_contato, plano, ativo.
 ### 📜 Logs.js
 
 Armazena logs de atividades via auditMiddleware.
-Campos: empresaId, usuarioId, acao, rota, ip.
-
-### 📈 Meta.js
+Campos: empresaId, usuarioId, action, route, ip.
+ 
+### 📈 Goal.js
 
 Define metas financeiras por categoria e período.
 Relaciona-se com Alert.
@@ -230,8 +221,7 @@ Campos: empresaId, uuid, nome, email, senha_hash, role.
 | Clientes     | `/api/clients`      | `authMiddleware` + `companyScope`    | `clientController.js`      |
 | Empresas     | `/api/companies`    | `authMiddleware`                     | `companyController.js`     |
 | Transações   | `/api/transactions` | `authMiddleware` + `auditMiddleware` | `transactionController.js` |
-| Relatórios   | `/api/reports`      | `authMiddleware`                     | `reportController.js`      |
-| Metas        | `/api/meta`         | `authMiddleware`                     | `metaController.js`        |
+| Metas        | `/api/goals`        | `authMiddleware`                     | `goalController.js`        |
 | Alertas      | `/api/alerts`       | `authMiddleware`                     | `alertController.js`       |
 | Usuários     | `/api/users`        | `authMiddleware` + `roleMiddleware`  | `userController.js`        |
 
@@ -239,19 +229,13 @@ Campos: empresaId, uuid, nome, email, senha_hash, role.
 
 - utils/bcryptHelper.js
 
-> Criptografa e valida senhas com bcrypt.
-
-- utils/jwtHelper.js
-
-> Gera e valida tokens JWT.
-
 - utils/logger.js
 
 > Gerencia logs do sistema.
 
-- utils/validationSchemas.js
+- utils/responseHelper.js
 
-> Define esquemas de validação Joi para entradas de dados.
+> Padroniza as respostas de sucesso e erro da API.
 
 ## 🔒 Segurança e Acesso
 
@@ -337,22 +321,21 @@ src/
 │   │   ├── authController.js
 │   │   ├── clientController.js
 │   │   ├── companyController.js
+│   │   ├── goalController.js
 │   │   ├── logController.js
-│   │   ├── metaController.js
-│   │   ├── permissionController.js
 │   │   ├── reportController.js
 │   │   ├── transactionController.js
 │   │   └── userController.js
 │   ├── middlewares/
 │   │   ├── auditMiddleware.js
 │   │   ├── authMiddleware.js
-│   │   └── errorHandler.js
+│   │   ├── companyScopeMiddleware.js
+│   │   └── roleMiddleware.js
 │   ├── models/
 │   │   ├── Alert.js
 │   │   ├── Client.js
-│   │   ├── Company.js
+│   │   ├── Goal.js
 │   │   ├── Logs.js
-│   │   ├── Meta.js
 │   │   ├── Permission.js
 │   │   ├── SessionToken.js
 │   │   ├── Transaction.js
@@ -362,8 +345,7 @@ src/
 │   │   ├── authRoutes.js
 │   │   ├── clientRoutes.js
 │   │   ├── companyRoutes.js
-│   │   ├── logRoutes.js
-│   │   ├── metaRoutes.js
+│   │   ├── goalRoutes.js
 │   │   ├── permissionRoutes.js
 │   │   ├── reportRoutes.js
 │   │   ├── transactionRoutes.js
@@ -371,9 +353,16 @@ src/
 │   ├── Scripts/
 │   │   └── initPermissions.js
 │   ├── utils/
-│   │   ├── encrypt.js
-│   │   ├── jwt.js
-│   │   └── logger.js
+│   │   ├── logger.js
+│   ├── services/
+│   │   └── pdfService.js
+│   └── Testes/
+│       ├── 1-auth/
+│       ├── 2-features/
+│       ├── 3-security/
+│       ├── 4-reports/
+│       ├── config/
+│       └── Docs/
 │   ├── server.js
 │   └── package.json
 │
@@ -436,7 +425,7 @@ User	Usuário autenticado do sistema	pertence a uma Company
 Company	Empresa cadastrada no sistema	possui muitos Users e Transactions
 Client	Cliente ou fornecedor vinculado a uma empresa	pertence a uma Company
 Transaction	Registro de receita ou despesa	pertence a um Client e a uma Company
-Meta	Metas financeiras	pertence a uma Company
+Goal	Metas financeiras	pertence a uma Company
 Alert	Alertas de desempenho financeiro	pertence a uma Meta
 Permission	Perfis e papéis de acesso (admin, read-only, etc.)	referência em User
 Logs	Auditoria de ações do usuário	pertence a um User e Company
@@ -445,7 +434,6 @@ SessionToken	Armazena tokens ativos e sessões de login	pertence a um User
 Company (1) ───< (N) User  
 Company (1) ───< (N) Client  
 Company (1) ───< (N) Transaction  
-Company (1) ───< (N) MetaFinanceira  
 MetaFinanceira (1) ───< (N) Alert  
 User (1) ───< (N) Logs
 

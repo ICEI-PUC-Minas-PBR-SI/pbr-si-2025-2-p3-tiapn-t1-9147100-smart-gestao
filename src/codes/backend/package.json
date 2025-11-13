@@ -8,8 +8,9 @@
     "start": "concurrently \"npm:start:backend\" \"npm:start:frontend\"",
     "start:backend": "node server.js",
     "start:frontend": "http-server ../frontend -p 3000",
+    "test:server": "node test-server.js",
     "dev": "nodemon server.js",
-    "test": "node Testes/run-test-log.js",
+  "test": "node -r dotenv/config Testes/run-test-log.js",
     "start:react-demo": "npm start --prefix ../react",
     "start:full-demo": "concurrently \"npm:start:backend\" \"npm:start:frontend\" \"npm:start:react-demo\""
   },
@@ -20,15 +21,20 @@
     "dotenv": "^16.0.0",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.0",
-    "mongoose": "^7.0.0",
+    "mongoose": "^8.19.3",
     "morgan": "^1.10.1",
+    "multer": "^2.0.2",
+    "pdfkit": "^0.15.0",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "@faker-js/faker": "^10.1.0",
     "concurrently": "^8.2.2",
     "http-server": "^14.1.1",
-    "jest": "^30.2.0",    
+    "jest": "^30.2.0",
+    "mongodb-memory-server": "^10.3.0",
     "nodemon": "^3.1.10",
+    "pdf-parse": "^2.4.5",
     "wait-on": "^7.2.0"
   }
 }

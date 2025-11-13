@@ -106,8 +106,14 @@ Scrum Master: Izadora Helena
 
 ## 5.1. Quadro de tarefas
 
-> Apresente a divisão de tarefas entre os membros do grupo e o acompanhamento da execução, conforme exemplo abaixo.
+> **Ponto de Melhoria (Revisado por Heron):** Olá, equipe! Para garantir que o planejamento reflita o trabalho de todos, peço ao responsável que revise a alocação de tarefas nas Sprints.
+>
+> **Guia para o ajuste:**
+> 1.  **Revisar a Sprint 2:** Adicionar a responsabilidade de "Desenvolvedor Back-end" para Heron Silva, que atuou na implementação da API, testes e arquitetura.
+> 2.  **Preencher Sprints Futuras (3 a 6):** Detalhar as próximas tarefas planejadas (ex: "Implementar novos testes", "Refatorar Frontend para React") e atribuir os responsáveis, incluindo todos os membros da equipe.
 
+> Apresente a divisão de tarefas entre os membros do grupo e o acompanhamento da execução, conforme exemplo abaixo.
+we
 ## Sprint 1
 
 Atualizado em: 21/04/2024
@@ -126,9 +132,9 @@ Atualizado em: 21/04/2024
 | Responsável   | Tarefa/Requisito | Iniciado em    | Prazo      | Status | Terminado em    |
 | :----         |    :----         |      :----:    | :----:     | :----: | :----:          |
 | Hugo Ferreira        | Desenvolvimento do front-end (HTML/CSS)        | 20/08/2025     | 20/08/2025  | ✔️    | 20/08/2025      |
-| Maria Clara        | Documentação (Relatório Sprint 2)    | 20/08/2025      | 20/09/2025 | 📝    |                 |
-| Júlia Fernanda        | documentação (Relatório Sprint 2) | 20/08/2025      | 20/09/2025 | ⌛     |                 |
-| Izadora Helena        | Documentação (Relatório Sprint 2)  |  20/08/2025     | 20/09/2025 | ⌛    |       |
+| Maria Clara        | Documentação (Relatório Sprint 2)    | 20/08/2025      | 20/09/2025 | ✔️    |   20/09/2025    |
+| Júlia Fernanda        | documentação (Relatório Sprint 2) | 20/08/2025      | 20/09/2025 | ✔️     |   20/09/2025    |
+| Izadora Helena        | Documentação (Relatório Sprint 2)  |  20/08/2025     | 20/09/2025 | ✔️    |   20/09/2025    |
 
 ## Sprint 3
 

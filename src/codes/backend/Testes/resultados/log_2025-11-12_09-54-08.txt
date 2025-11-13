@@ -1,0 +1,9 @@
+● Validation Error:
+
+  Test environment ./mongo-test-environment.js cannot be found. Make sure the testEnvironment configuration option points to an existing node module.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+
+
+--- FIM DOS TESTES AUTOMATIZADOS (Status: Falha) ---

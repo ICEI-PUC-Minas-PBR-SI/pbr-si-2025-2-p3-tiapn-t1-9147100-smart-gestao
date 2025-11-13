@@ -7,7 +7,7 @@
  *            versão limpa (sem códigos de cor) em um arquivo de log com timestamp.
  * =================================================================================
  */
-import { execSync } from 'child_process'; // Usar execSync para capturar a saída de forma síncrona
+import { spawn, execSync } from 'child_process'; // Usar spawn para streaming e execSync para comandos síncronos
 import fs from 'fs';
 import path from 'path';
 
@@ -48,53 +48,89 @@ function copyLogPathToClipboard(filePath) {
     }
 }
 
+/**
+ * Analisa o conteúdo do log para extrair e exibir um resumo dos resultados.
+ * @param {string} logContent - O conteúdo completo do arquivo de log.
+ */
+function summarizeResults(logContent) {
+    const failedSuites = [...logContent.matchAll(/FAIL\s+(Testes\/.*?\.test\.js)/g)].map(m => m[1]);
+    const passedSuites = [...logContent.matchAll(/PASS\s+(Testes\/.*?\.test\.js)/g)].map(m => m[1]);
+
+    console.log('\n\n==================== RESUMO DOS TESTES ====================');
+    if (failedSuites.length > 0) {
+        console.log('\n❌ SUÍTES COM FALHA:');
+        failedSuites.forEach(suite => console.log(`  - ${suite}`));
+    }
+
+    if (passedSuites.length > 0) {
+        console.log('\n✅ SUÍTES COM SUCESSO:');
+        passedSuites.forEach(suite => console.log(`  - ${suite}`));
+    }
+    console.log('\n=========================================================');
+
+}
+
 const logFilePath = createLogFilePath();
 
-// MOTIVO DA MUDANÇA: A orquestração com `concurrently` e `wait-on` foi movida
-// para o script `test` no `package.json`. Este script (`run-test-log.js`)
-// agora tem a responsabilidade única de EXECUTAR o Jest e gerenciar a saída do log.
-try {
-    // Comando para executar o Jest. As flags são importantes:
-    // --experimental-vm-modules: Habilita o suporte a ES Modules nos testes.
-    // --runInBand: Executa os testes sequencialmente, o que é ideal para testes de integração que dependem de estado.
-    const jestCommand = `node --experimental-vm-modules ./node_modules/jest/bin/jest.js --config ./Testes/jest.config.cjs --runInBand`;
+/**
+ * Executa os testes com Jest e gerencia o output.
+ * MOTIVO DA MUDANÇA: Substituído `execSync` por `spawn` para fornecer feedback em tempo real no console.
+ * `execSync` bloqueia o console até o fim, dando a impressão de que o processo travou.
+ * `spawn` permite que a saída do Jest seja exibida no console assim que é gerada.
+ */
+async function runTests() {
+    return new Promise((resolve, reject) => {
+        const jestCommand = 'node';
+        const jestArgs = [
+            '--experimental-vm-modules',
+            './node_modules/jest/bin/jest.js',
+            '--config',
+            './Testes/config/jest.config.cjs',
+            '--runInBand'
+        ];
 
-    // Executa o Jest e captura a saída completa (incluindo códigos ANSI para cores).
-    let rawOutput = execSync(jestCommand, { encoding: 'utf8', stdio: 'pipe' });
+        const child = spawn(jestCommand, jestArgs);
 
-    // Adiciona um marcador de fim de testes
-    const endMarker = "\n--- FIM DOS TESTES AUTOMATIZADOS ---\n";
-    rawOutput += endMarker; // Adiciona ao output bruto para console e arquivo
+        let fullOutput = '';
 
-    // Imprime a saída bruta (com cores) no console.
-    process.stdout.write(rawOutput);
+        // Captura a saída padrão (stdout) em tempo real
+        child.stdout.on('data', (data) => {
+            const chunk = data.toString();
+            process.stdout.write(chunk); // Exibe no console imediatamente
+            fullOutput += chunk; // Acumula para o arquivo de log
+        });
 
-    // Remove os códigos de formatação ANSI para o arquivo de log.
-    const cleanOutput = rawOutput.replace(/\x1b\[[0-9;]*m/g, '');
-    fs.writeFileSync(logFilePath, cleanOutput); // Salva o log limpo
+        // Captura a saída de erro (stderr) em tempo real
+        child.stderr.on('data', (data) => {
+            const chunk = data.toString();
+            process.stderr.write(chunk); // Exibe no console de erro imediatamente
+            fullOutput += chunk; // Acumula para o arquivo de log
+        });
 
-    // Copia o caminho do log para a área de transferência
-    copyLogPathToClipboard(logFilePath);
+        child.on('close', (code) => {
+            const endMarker = `\n--- FIM DOS TESTES AUTOMATIZADOS (Status: ${code === 0 ? 'Sucesso' : 'Falha'}) ---\n`;
+            process.stdout.write(endMarker);
+            fullOutput += endMarker;
 
-    console.log('\n[1] ✅ Testes concluídos.'); // Mensagem final de sucesso
+            // Remove códigos de cor para o arquivo de log
+            const cleanOutput = fullOutput.replace(/\x1b\[[0-9;]*m/g, '');
+            fs.writeFileSync(logFilePath, cleanOutput);
+            summarizeResults(cleanOutput); // Exibe o resumo dos resultados
+            copyLogPathToClipboard(logFilePath);
 
-} catch (error) {
-    // Se o Jest falhar, execSync lançará um erro. Capturamos a saída e o erro para o log.
-    let rawOutput = error.stdout ? error.stdout.toString() : '';
-    let rawError = error.stderr ? error.stderr.toString() : '';
-
-    const endMarker = "\n--- FIM DOS TESTES AUTOMATIZADOS (COM FALHAS) ---\n";
-    rawOutput += endMarker; // Adiciona ao output bruto para console e arquivo
-
-    process.stdout.write(rawOutput); // Imprime a saída no console
-    process.stderr.write(rawError); // Imprime o erro no console
-    
-    const cleanOutput = (rawOutput + rawError).replace(/\x1b\[[0-9;]*m/g, '');
-    fs.writeFileSync(logFilePath, cleanOutput); // Salva o log limpo
-
-    copyLogPathToClipboard(logFilePath); // Copia o caminho do log para a área de transferência
-
-    console.error('\n[1] ❌ Ocorreram erros durante a execução dos testes. Verifique o log para mais detalhes.'); // Mensagem final de erro
-
-    process.exit(1); // Garante que o comando de teste saia com um código de falha
+            if (code === 0) {
+                console.log('\n[1] ✅ Testes concluídos com sucesso.');
+                resolve();
+            } else {
+                console.error('\n[1] ❌ Ocorreram erros durante a execução dos testes. Verifique o log para mais detalhes.');
+                reject(new Error(`Testes falharam com código de saída ${code}`));
+            }
+        });
+    });
 }
+
+runTests().catch(() => {
+    // Garante que o processo do Node.js termine com um código de erro se a promise for rejeitada,
+    // o que é importante para integrações contínuas (CI/CD).
+    process.exit(1);
+});

@@ -49,6 +49,13 @@ export const createLog = async (arg1, arg2, arg3) => {
   } catch (error) {
     // Uma falha na gravação do log não deve quebrar a aplicação.
     // Apenas registramos o erro no console para análise posterior.
-    console.error("Falha crítica ao gravar log de auditoria:", error);
+    // Se o cliente do Mongo já tiver sido fechado durante o shutdown, isso é esperado
+    // e não deve poluir os logs com stacktraces.
+    const msg = String(error && (error.message || error));
+    if (msg.includes('client was closed') || (error && error.name === 'MongoClientClosedError')) {
+      console.warn('Aviso: gravação de log não ocorreu porque o cliente MongoDB foi fechado.');
+    } else {
+      console.error("Falha crítica ao gravar log de auditoria:", error);
+    }
   }
 };

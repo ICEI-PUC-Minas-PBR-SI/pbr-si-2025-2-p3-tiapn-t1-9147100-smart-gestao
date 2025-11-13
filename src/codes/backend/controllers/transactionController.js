@@ -8,6 +8,7 @@
 import mongoose from 'mongoose'; // Importar mongoose para usar ObjectId
 import Transaction from "../models/Transaction.js";
 import { createLog } from "../utils/logger.js";
+import { successResponse, errorResponse } from '../utils/responseHelper.js';
 
 /**
  * Lista as transações da empresa do usuário, com suporte a filtros.
@@ -30,10 +31,9 @@ export const getAllTransactions = async (req, res) => {
     if (req.query.type) filter.type = req.query.type;
 
     const items = await Transaction.find(filter).sort({ date: -1 });
-    return res.status(200).json(items);
+    return successResponse(res, { data: items });
   } catch (error) {
-    console.error("getAllTransactions:", error);
-    return res.status(500).json({ message: "Erro ao listar transações", error: error.message });
+    return errorResponse(res, { status: 500, message: "Erro ao listar transações", errors: error });
   }
 };
 
@@ -50,13 +50,12 @@ export const getTransactionById = async (req, res) => {
         const transaction = await Transaction.findOne({ _id: transactionId, companyId: companyId });
         
        if (!transaction) {
-            return res.status(404).json({ message: "Transaction não encontrada" });
+            return errorResponse(res, { status: 404, message: "Transação não encontrada" });
         }
 
-        return res.status(200).json(transaction);
+        return successResponse(res, { data: transaction });
     } catch (error) {
-        console.error("getTransactionById:", error);
-        return res.status(500).json({ message: "Erro ao buscar transaction", error: error.message });
+        return errorResponse(res, { status: 500, message: "Erro ao buscar transação", errors: error });
     }
 };
 /**
@@ -83,10 +82,13 @@ export const createTransaction = async (req, res) => {
       route: req.originalUrl,
     });
 
-    return res.status(201).json(tx);
+    return successResponse(res, { status: 201, data: tx });
   } catch (error) {
-    console.error("createTransaction:", error);
-    return res.status(500).json({ message: "Erro ao criar transaction", error: error.message });
+    // Identifica se o erro é de validação do Mongoose e retorna 400.
+    if (error.name === 'ValidationError') {
+      return errorResponse(res, { status: 400, message: "Dados inválidos para criar transação.", errors: error.errors });
+    }
+    return errorResponse(res, { status: 500, message: "Erro ao criar transação", errors: error });
   }
 };
 
@@ -105,7 +107,7 @@ export const updateTransaction = async (req, res) => {
       { $set: req.body },
       { new: true, runValidators: true }
     );
-    if (!updated) return res.status(404).json({ message: "Transaction não encontrada" });
+    if (!updated) return errorResponse(res, { status: 404, message: "Transação não encontrada" });
 
     await createLog({
       userId: req.user.userId,
@@ -115,10 +117,9 @@ export const updateTransaction = async (req, res) => {
       route: req.originalUrl,
     });
 
-    return res.status(200).json(updated);
+    return successResponse(res, { data: updated });
   } catch (error) {
-    console.error("updateTransaction:", error);
-    return res.status(500).json({ message: "Erro ao atualizar transaction", error: error.message });
+    return errorResponse(res, { status: 500, message: "Erro ao atualizar transação", errors: error });
   }
 };
 
@@ -131,7 +132,7 @@ export const deleteTransaction = async (req, res) => {
   try {
     const companyId = req.user.companyId;
     const removed = await Transaction.findOneAndDelete({ _id: req.params.id, companyId: companyId });
-    if (!removed) return res.status(404).json({ message: "Transaction não encontrada" });
+    if (!removed) return errorResponse(res, { status: 404, message: "Transação não encontrada" });
 
     await createLog({
       userId: req.user.userId,
@@ -141,9 +142,8 @@ export const deleteTransaction = async (req, res) => {
       route: req.originalUrl,
     });
 
-    return res.status(200).json({ message: "Transaction removida com sucesso" });
+    return successResponse(res, { message: "Transação removida com sucesso" });
   } catch (error) {
-    console.error("deleteTransaction:", error);
-    return res.status(500).json({ message: "Erro ao remover transaction", error: error.message });
+    return errorResponse(res, { status: 500, message: "Erro ao remover transação", errors: error });
   }
 };

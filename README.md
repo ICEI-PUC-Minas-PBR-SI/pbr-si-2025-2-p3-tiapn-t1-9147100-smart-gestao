@@ -116,7 +116,7 @@ Critérios de sucesso:
 - Respostas 2xx com payload esperado; em 401, redireciona para login; erros 4xx/5xx exibem mensagem clara.
 
 Notas:
-- Estes testes são para a equipe/admin em ambiente local. Usuário final não precisa executar servidores ou testes.
+- Estes testes são para a equipe de desenvolvimento em ambiente local. O usuário final não precisa executar servidores ou testes.
 
 ## Arquitetura e Prova de Conceito com React
 
@@ -154,56 +154,56 @@ Para demonstrar essa flexibilidade e a viabilidade de uma futura modernização,
 
 ## Histórico de versões
 * 0.3.11
-    * CHANGE: Reorganização e renumeração da suíte de testes automatizados para seguir uma sequência lógica. Atualização da documentação do projeto (planejamento e READMEs) para refletir o estado atual do desenvolvimento e a arquitetura de testes.
+    * **CHANGE**: Reorganização e renumeração da suíte de testes automatizados para seguir uma sequência lógica. Atualização da documentação do projeto (planejamento e READMEs) para refletir o estado atual do desenvolvimento e a arquitetura de testes.
 * 0.3.9
-    * CHANGE: Adição de testes automatizados para funcionalidades pendentes (Exportação de PDF e Cadastro de Clientes), seguindo a abordagem de Desenvolvimento Guiado por Testes (TDD). Organização da suíte de testes em arquivos modulares.
+    * **CHANGE**: Adição de testes automatizados para funcionalidades pendentes (Exportação de PDF e Cadastro de Clientes), seguindo a abordagem de Desenvolvimento Guiado por Testes (TDD). Organização da suíte de testes em arquivos modulares.
 * 0.3.8
-    * CHANGE: Finalização dos scripts de lógica do frontend (Transações, Metas, Exportação) e criação de um guia de integração detalhado para o desenvolvedor frontend, garantindo a correta vinculação entre HTML e JavaScript.
+    * **CHANGE**: Finalização dos scripts de lógica do frontend (Transações, Metas, Exportação) e criação de um guia de integração detalhado para o desenvolvedor frontend, garantindo a correta vinculação entre HTML e JavaScript.
 * 0.3.7
-    * CHANGE: Finalização e estabilização da prova de conceito em React. Correção do fluxo de login para garantir a interoperabilidade de sessão com o sistema legado sem a necessidade de login duplo. Documentação do processo de depuração e da solução final.
+    * **CHANGE**: Finalização e estabilização da prova de conceito em React. Correção do fluxo de login para garantir a interoperabilidade de sessão com o sistema legado sem a necessidade de login duplo. Documentação do processo de depuração e da solução final.
 * 0.3.6
-    * CHANGE: Criação de uma prova de conceito com React para a página de login, demonstrando a flexibilidade da API do backend. Adição de scripts (`start:full-demo`) para orquestrar a execução simultânea de todos os ambientes (backend, frontend legado e React).
+    * **CHANGE**: Criação de uma prova de conceito com React para a página de login, demonstrando a flexibilidade da API do backend. Adição de scripts (`start:full-demo`) para orquestrar a execução simultânea de todos os ambientes (backend, frontend legado e React).
 * 0.3.5
-    * CHANGE: Validação final de toda a estrutura de documentação e comentários do projeto. Ajustes de consistência e correção de informações nos arquivos README principais e documentos de planejamento.
+    * **CHANGE**: Validação final de toda a estrutura de documentação e comentários do projeto. Ajustes de consistência e correção de informações nos arquivos README principais e documentos de planejamento.
 * 0.3.4
-    * CHANGE: Refatoração completa dos comentários em todo o código do backend (controllers, models, routes, middlewares, utils, scripts) para melhorar a clareza e a manutenibilidade. Criação e aprimoramento da documentação técnica (`README.md`) em todas as pastas principais.
+    * **CHANGE**: Refatoração completa dos comentários em todo o código do backend (controllers, models, routes, middlewares, utils, scripts) para melhorar a clareza e a manutenibilidade. Criação e aprimoramento da documentação técnica (`README.md`) em todas as pastas principais.
 * 0.3.3
-    * CHANGE: Implementação de uma suíte de testes automatizados de integração para a API, cobrindo os módulos de Autenticação, Isolamento de Dados (Multi-Tenant), Transações (CRUD) e Metas (CRUD) para garantir a estabilidade e qualidade do backend.
+    * **CHANGE**: Implementação de uma suíte de testes automatizados de integração para a API, cobrindo os módulos de Autenticação, Isolamento de Dados (Multi-Tenant), Transações (CRUD) e Metas (CRUD) para garantir a estabilidade e qualidade do backend.
 * 0.3.2
-    * CHANGE: Implementação da funcionalidade de exclusão de usuário e todos os seus dados associados (empresa, transações, metas), em conformidade com as boas práticas de gestão de dados.
+    * **CHANGE**: Implementação da funcionalidade de exclusão de usuário e todos os seus dados associados (empresa, transações, metas), em conformidade com as boas práticas de gestão de dados.
 * 0.3.1
-    * CHANGE: Implementação do fluxo de recuperação de senha ("Esqueci minha senha"), incluindo novas rotas no backend e a criação das páginas de solicitação e redefinição no frontend.
+    * **CHANGE**: Implementação do fluxo de recuperação de senha ("Esqueci minha senha"), incluindo novas rotas no backend e a criação das páginas de solicitação e redefinição no frontend.
 * 0.3.0
-    * CHANGE: Implementação de segurança de sessão avançada com expiração de token por inatividade (30 min), renovação automática (refresh token) e proteção contra roubo de token (fingerprinting). Adição de `authGuard` para proteger rotas do frontend. Correção da inicialização do servidor de desenvolvimento.
+    * **CHANGE**: Implementação de segurança de sessão avançada com expiração de token por inatividade (30 min), renovação automática (refresh token) e proteção contra roubo de token (fingerprinting). Adição de `authGuard` para proteger rotas do frontend. Correção da inicialização do servidor de desenvolvimento.
 * 0.2.3
-    * CHANGE: Padronização do feedback de erro e carregamento no frontend, removendo `alerts` e adicionando indicadores visuais para melhorar a experiência do usuário. 
+    * **CHANGE**: Padronização do feedback de erro e carregamento no frontend, removendo `alerts` e adicionando indicadores visuais para melhorar a experiência do usuário. 
 * 0.2.2
-    * CHANGE: Refatoração do backend para incluir um middleware de escopo (`companyScopeMiddleware`), garantindo que os dados de uma empresa não sejam acessados por outra.
+    * **CHANGE**: Refatoração do backend para incluir um middleware de escopo (`companyScopeMiddleware`), garantindo que os dados de uma empresa não sejam acessados por outra.
 * 0.2.1
-    * CHANGE: Criação de modelos JSON para requisições da API e organização da documentação técnica para padronizar o desenvolvimento.
+    * **CHANGE**: Criação de modelos JSON para requisições da API e organização da documentação técnica para padronizar o desenvolvimento.
 * 0.2.0
-    * CHANGE: Implementação completa da integração frontend-backend. Sistema de autenticação JWT implementado. Reorganização da estrutura de arquivos para melhor manutenção. Documentação técnica detalhada adicionada.
+    * **CHANGE**: Implementação completa da integração frontend-backend. Sistema de autenticação JWT implementado. Reorganização da estrutura de arquivos para melhor manutenção. Documentação técnica detalhada adicionada.
 * 0.1.11
-    * CHANGE: Configuração do backend para utilizar variáveis de ambiente (`.env`), separando configurações sensíveis (como segredos de token e string de conexão do banco de dados) do código-fonte.
+    * **CHANGE**: Configuração do backend para utilizar variáveis de ambiente (`.env`), separando configurações sensíveis (como segredos de token e string de conexão do banco de dados) do código-fonte.
 * 0.1.9
-    * CHANGE: Desenvolvimento do backend em Node.js/Express. Implementação das APIs RESTful para transações e metas financeiras. Configuração do MongoDB e modelos de dados.
+    * **CHANGE**: Desenvolvimento do backend em Node.js/Express. Implementação das APIs RESTful para transações e metas financeiras. Configuração do MongoDB e modelos de dados.
 * 0.1.8
-    * CHANGE: Desenvolvimento do frontend com HTML5/CSS3/JS. Implementação das telas de cadastro, login, transações e relatórios. Adição de validações e feedback visual.
+    * **CHANGE**: Desenvolvimento do frontend com HTML5/CSS3/JS. Implementação das telas de cadastro, login, transações e relatórios. Adição de validações e feedback visual.
 * 0.1.7
-    * CHANGE: Atualização da documentação técnica. Criação dos diagramas de arquitetura e fluxos de dados. Definição dos endpoints da API.
+    * **CHANGE**: Atualização da documentação técnica. Criação dos diagramas de arquitetura e fluxos de dados. Definição dos endpoints da API.
 * 0.1.6
-    * CHANGE: Definição da arquitetura do sistema. Escolha das tecnologias e frameworks. Configuração inicial do ambiente de desenvolvimento.
+    * **CHANGE**: Definição da arquitetura do sistema. Escolha das tecnologias e frameworks. Configuração inicial do ambiente de desenvolvimento.
 * 0.1.5
-    * CHANGE: Finalização da modelagem de processos. Definição dos requisitos técnicos e regras de negócio.
+    * **CHANGE**: Finalização da modelagem de processos. Definição dos requisitos técnicos e regras de negócio.
 * 0.1.4
-    * CHANGE: Atualização das documentações. Códigos de estruturação do programa ajustados para simular as melhores práticas de programação. Reajuste na estrutura das pastas do projeto.
+    * **CHANGE**: Atualização das documentações. Códigos de estruturação do programa ajustados para simular as melhores práticas de programação. Reajuste na estrutura das pastas do projeto.
 * 0.1.3
-    * CHANGE: Atualização das documentações. Códigos de estruturação do programa iniciados. Reajuste na estrutura das pastas do projeto.
+    * **CHANGE**: Atualização das documentações. Códigos de estruturação do programa iniciados. Reajuste na estrutura das pastas do projeto.
 * 0.1.2
-    * CHANGE: Atualização das documentações. Código permaneceu inalterado. Reajuste na estrutura das pastas e localização de arquivos.
+    * **CHANGE**: Atualização das documentações. Código permaneceu inalterado. Reajuste na estrutura das pastas e localização de arquivos.
 * 0.1.1
-    * CHANGE: Atualização das documentações. Código permaneceu inalterado.
+    * **CHANGE**: Atualização das documentações. Código permaneceu inalterado.
 * 0.1.0
-    * CHANGE: Início da especificação do projeto com a definição de Personas, Histórias de Usuários e levantamento de Requisitos Funcionais e Não Funcionais.
+    * **CHANGE**: Início da especificação do projeto com a definição de Personas, Histórias de Usuários e levantamento de Requisitos Funcionais e Não Funcionais.
 * 0.0.1
-    * Trabalhando na modelagem do processo de negócio.
+    * **CHANGE**: Trabalhando na modelagem do processo de negócio.

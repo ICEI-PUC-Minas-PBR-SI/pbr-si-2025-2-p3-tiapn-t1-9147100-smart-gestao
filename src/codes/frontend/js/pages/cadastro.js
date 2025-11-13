@@ -8,9 +8,7 @@
 // A função `register` vem do nosso módulo de API, separando a lógica de comunicação.
 // As funções de validação vêm do módulo `utils/validators.js`.
 import { register } from '/js/api/auth.js';
-// Importa as funções de validação. Assumimos que `validators.js` existe e contém estas funções.
-// Se `validators.js` ainda não existe, ele precisará ser criado na pasta `js/utils`.
-import { validateEmail, validateRequired, validatePassword } from '/js/utils/validators.js';
+import { validateEmail, validateRequired, validatePassword, validateCNPJ } from '/js/utils/validators.js';
 
 // O evento 'DOMContentLoaded' garante que o script só será executado
 // após todo o HTML da página ter sido carregado e processado pelo navegador.
@@ -78,6 +76,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Validação de confirmação de senha.
     if (password !== confirmPassword) {
       showError('As senhas não coincidem.');
+      return;
+    }
+
+    // Validação do formato do CNPJ.
+    if (!validateCNPJ(cnpj)) {
+      showError('Por favor, insira um CNPJ válido (somente números).');
       return;
     }
 

@@ -89,7 +89,7 @@ export async function logout() {
     try {
       await apiRequest('/auth/logout', {
         method: 'POST',
-        body: JSON.stringify({ token: refreshToken }),
+        body: JSON.stringify({ refreshToken: refreshToken }),
       });
     } catch (error) {
       console.error('Falha ao invalidar a sessão no backend, mas prosseguindo com o logout local:', error);

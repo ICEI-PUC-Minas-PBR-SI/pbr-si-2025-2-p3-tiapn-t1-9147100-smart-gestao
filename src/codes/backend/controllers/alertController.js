@@ -53,14 +53,12 @@ export const getAlertById = async (req, res) => {
 export const createAlert = async (req, res) => {
   try {
     const companyId = req.user.companyId; // companyId já é ObjectId do authMiddleware
-    const { title, message, type, severity } = req.body;
+    const { message, type } = req.body; // Removidos title e severity para corresponder ao modelo Alert
 
     const newAlert = new Alert({
       companyId: companyId,
-      title,
       message,
       type, // type já é validado pelo schema
-      severity,
     });
 
     const saved = await newAlert.save();

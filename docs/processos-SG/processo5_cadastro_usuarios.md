@@ -2,6 +2,19 @@
 
 O processo de geração de relatórios permite que o usuário visualize e analise suas informações financeiras de forma organizada. Esta funcionalidade é crucial para o acompanhamento da saúde financeira do MEI, oferecendo diferentes perspectivas através de filtros, gráficos e tabelas detalhadas.
 
+---
+
+> **Ponto de Melhoria Crítico (Revisado por Heron):** Olá, equipe! Este documento está com o título "Cadastro de Usuários", mas todo o seu conteúdo (fluxo, wireframes e detalhamento) foi copiado do "Processo 2 – Gerar Relatórios". É necessário substituir todo o conteúdo pelo processo correto.
+>
+> **Guia para a Reescrita:**
+> 1.  **Remova todo o conteúdo atual** a partir de "Fluxo principal".
+> 2.  **Adicione o Fluxo Correto:** Descreva o fluxo para um administrador cadastrar um novo usuário dentro da sua própria empresa.
+> 3.  **Adicione o Diagrama BPMN:** Crie e insira um diagrama BPMN que modele o processo de cadastro de usuário por um administrador.
+> 4.  **Adicione os Wireframes:** Os wireframes já existem e estão corretos, podem ser mantidos.
+> 5.  **Detalhe as Atividades:** Crie a seção "Detalhamento das atividades" descrevendo os campos do formulário de cadastro de usuário (ex: Nome, E-mail, Cargo/Permissão) e as ações (ex: Clicar em "Salvar Usuário").
+
+---
+
 **Fluxo principal:**
 1. Usuário acessa a aba de Relatórios.
 2. Usuário seleciona filtros de período e tipo de relatório.

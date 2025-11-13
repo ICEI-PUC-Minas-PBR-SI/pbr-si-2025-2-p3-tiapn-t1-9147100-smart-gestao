@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
    */
   async function loadGoals() {
     try {
-      const response = await apiRequest('/goals');
+      const response = await apiRequest('/goals'); // Rota padronizada para 'goals'
       if (!response.ok) throw new Error('Falha ao carregar metas.');
 
       const goals = await response.json();
@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
     goalData.targetAmount = parseFloat(goalData.targetAmount);
 
     const method = editingGoalId ? 'PUT' : 'POST';
-    const endpoint = editingGoalId ? `/goals/${editingGoalId}` : '/goals';
+    const endpoint = editingGoalId ? `/goals/${editingGoalId}` : '/goals'; // Rota padronizada para 'goals'
 
     try {
       const response = await apiRequest(endpoint, { method, body: JSON.stringify(goalData) });
@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
    */
   async function handleEdit(goalId) {
     try {
-      const response = await apiRequest(`/goals/${goalId}`);
+      const response = await apiRequest(`/goals/${goalId}`); // Rota padronizada para 'goals'
       if (!response.ok) throw new Error('Meta não encontrada.');
       const goal = await response.json();
 
@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!confirm('Tem certeza de que deseja excluir esta meta?')) return;
 
     try {
-      const response = await apiRequest(`/goals/${goalId}`, { method: 'DELETE' });
+      const response = await apiRequest(`/goals/${goalId}`, { method: 'DELETE' }); // Rota padronizada para 'goals'
       if (!response.ok) throw new Error('Falha ao excluir meta.');
       loadGoals();
     } catch (error) {

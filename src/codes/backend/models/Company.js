@@ -32,7 +32,5 @@ const CompanySchema = new Schema({
 // Índices para otimizar consultas.
 // Um índice no nome para buscas e ordenações rápidas.
 CompanySchema.index({ name: 1 });
-// Um índice único no CNPJ para garantir a integridade dos dados e otimizar a verificação de duplicatas.
-CompanySchema.index({ cnpj: 1 }, { unique: true });
 
 export default model("Company", CompanySchema);

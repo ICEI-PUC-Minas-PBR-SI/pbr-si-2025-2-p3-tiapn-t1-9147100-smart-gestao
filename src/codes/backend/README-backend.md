@@ -29,6 +29,11 @@ backend/
 ├── routes/             # Definição dos endpoints (rotas) da API.
 ├── Scripts/            # Scripts de inicialização e manutenção.
 ├── Testes/             # Suíte de testes automatizados (Jest).
+│   ├── 1-auth/         # Testes de autenticação e senha.
+│   ├── 2-features/     # Testes de funcionalidades (CRUDs).
+│   ├── 3-security/     # Testes de segurança e isolamento de dados.
+│   ├── 4-reports/      # Testes de geração de relatórios.
+│   └── config/         # Arquivos de configuração do ambiente de teste.
 ├── utils/              # Funções utilitárias reutilizáveis (helpers).
 ├── .env                # Arquivo de variáveis de ambiente (local, ignorado pelo Git).
 ├── .env.example        # Arquivo de exemplo para as variáveis de ambiente.
@@ -126,8 +131,6 @@ A suíte de testes automatizados valida a integridade da API. O processo de exec
 Para instruções detalhadas sobre como configurar e executar a suíte de testes, consulte o guia oficial na pasta de testes:
 
 > **Consulte: Roteiro de Testes Automatizados**
-
-Este guia explica o fluxo de execução em dois terminais, que garante um ambiente de teste estável e previsível.
 
 ## 6. Validação e Conclusão da Função Backend
 

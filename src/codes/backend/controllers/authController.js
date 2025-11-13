@@ -87,7 +87,7 @@ export const loginUser = async (req, res) => {
     // 4. Geração do Refresh Token: um token de longa duração usado para obter um novo Access Token sem precisar de um novo login.
     const refreshTokenValue = jwt.sign(
      { userId: user._id },
-      process.env.REFRESH_TOKEN_SECRET, // Chave secreta diferente do .env
+      process.env.JWT_REFRESH_SECRET, // Chave secreta diferente do .env
       { expiresIn: '7d' } // Expira em 7 dias
     );
 
@@ -130,26 +130,94 @@ export const loginUser = async (req, res) => {
  */
 export const logoutUser = async (req, res) => {
   // O cliente envia o refresh token que possui, e o servidor o invalida.
-  const { refreshToken } = req.body;
+  const { refreshToken } = req.body; // Corrigido de 'token' para 'refreshToken' para alinhar com o frontend.
 
-  if (refreshToken) {
-    try {
-      const refreshTokenHash = crypto.createHash('sha256').update(refreshToken).digest('hex');
-      // Encontra o token e o marca como inativo.
-      await SessionToken.findOneAndUpdate(
-        { tokenHash: refreshTokenHash },
-        { active: false }
-      );
-    } catch (error) {
-      // A falha em invalidar o token não deve impedir o logout do lado do cliente.
-      console.error("Erro ao invalidar refresh token durante o logout:", error);
-    }
+  // MOTIVO DA MUDANÇA: Garante que o token foi fornecido. Se a rota for pública,
+  // esta validação é necessária para evitar processamento desnecessário.
+  if (!refreshToken) {
+    return res.status(400).json({ message: "Refresh token não fornecido." });
+  }
+ 
+  try {
+    const refreshTokenHash = crypto.createHash('sha256').update(refreshToken).digest('hex');
+    // Encontra o token e o marca como inativo.
+    await SessionToken.findOneAndUpdate({ tokenHash: refreshTokenHash }, { active: false });
+  } catch (error) {
+    // A falha em invalidar o token não deve impedir o logout do lado do cliente.
+    console.error("Erro ao invalidar refresh token durante o logout:", error);
   }
 
   res.status(200).json({ message: "Logout realizado com sucesso. A sessão foi invalidada no servidor." });
 };
 
 // =============================================================
+
+/**
+ * Inicia o processo de recuperação de senha.
+ * Gera um token de reset e o salva no documento do usuário.
+ * @param {object} req - O objeto de requisição do Express.
+ * @param {object} res - O objeto de resposta do Express.
+ */
+export const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: 'Usuário não encontrado.' });
+    }
+
+    // Gera um token seguro
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    const passwordResetToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+    const passwordResetExpires = Date.now() + 10 * 60 * 1000; // Expira em 10 minutos
+
+    user.passwordResetToken = passwordResetToken;
+    user.passwordResetExpires = passwordResetExpires;
+    await user.save();
+
+    // Em um app real, aqui você enviaria um e-mail para o usuário com um link contendo `resetToken`.
+    // Para este projeto, retornamos o token para facilitar os testes.
+    res.status(200).json({ message: 'Token de reset enviado com sucesso (simulado).', resetToken });
+
+  } catch (error) {
+    console.error('Erro no forgotPassword:', error);
+    res.status(500).json({ message: 'Erro interno no servidor.' });
+  }
+};
+
+/**
+ * Reseta a senha do usuário usando um token válido.
+ * @param {object} req - O objeto de requisição do Express.
+ * @param {object} res - O objeto de resposta do Express.
+ */
+export const resetPassword = async (req, res) => {
+  try {
+    const { token } = req.params;
+    const { password, confirmPassword } = req.body;
+
+    if (password !== confirmPassword) {
+      return res.status(400).json({ message: 'As senhas não coincidem.' });
+    }
+
+    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+    const user = await User.findOne({ passwordResetToken: hashedToken, passwordResetExpires: { $gt: Date.now() } });
+
+    if (!user) {
+      return res.status(400).json({ message: 'Token inválido ou expirado.' });
+    }
+
+    user.passwordHash = await bcrypt.hash(password, 10);
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+    await user.save();
+
+    res.status(200).json({ message: 'Senha alterada com sucesso.' });
+  } catch (error) {
+    console.error('Erro no resetPassword:', error);
+    res.status(500).json({ message: 'Erro interno no servidor.' });
+  }
+};
 
 /**
  * Gera um novo Access Token usando um Refresh Token válido.

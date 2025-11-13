@@ -30,3 +30,13 @@ export function validateEmail(email) {
 export function validatePassword(password) {
   return password.length >= 6; // Exemplo: mínimo de 6 caracteres.
 }
+
+/**
+ * Valida se uma string é um CNPJ válido (apenas 14 dígitos numéricos).
+ * @param {string} cnpj - O CNPJ a ser validado.
+ * @returns {boolean} - `true` se o CNPJ for válido, `false` caso contrário.
+ */
+export function validateCNPJ(cnpj) {
+    const re = /^\d{14}$/;
+    return re.test(String(cnpj));
+}

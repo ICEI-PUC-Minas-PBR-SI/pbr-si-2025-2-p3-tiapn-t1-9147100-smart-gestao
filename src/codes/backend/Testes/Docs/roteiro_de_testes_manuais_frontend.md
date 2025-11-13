@@ -118,6 +118,10 @@ Valida o ciclo completo de gerenciamento de transações.
 
 ## 5. Módulo de Relatórios
 
-- [ ] **Gerar Relatório:**
-    - **Ação:** Com algumas transações cadastradas, vá para a página de relatórios e gere um relatório para o período correspondente.
-    - **Resultado Esperado:** Os gráficos e a tabela de resumo devem exibir totais que correspondam aos dados das transações cadastradas.
+- [ ] **Gerar e Exportar Relatórios via Menu:**
+    - **Ação:** Com algumas transações cadastradas, vá para a página de relatórios.
+    - **Resultado Esperado (Visualização):** Os gráficos e a tabela de resumo devem exibir totais que correspondam aos dados das transações cadastradas.
+    - **Ação:** Clique no menu "Exportar Relatório" e selecione a opção "Relatório de Transações".
+    - **Resultado Esperado (Exportação de Transações):** Um arquivo PDF (`relatorio-transacoes.pdf`) deve ser baixado, contendo a lista de transações.
+    - **Ação:** No mesmo menu, selecione a opção "Lista de Clientes".
+    - **Resultado Esperado (Exportação de Clientes):** Um arquivo PDF (`relatorio-clientes.pdf`) deve ser baixado, contendo a lista de clientes cadastrados.

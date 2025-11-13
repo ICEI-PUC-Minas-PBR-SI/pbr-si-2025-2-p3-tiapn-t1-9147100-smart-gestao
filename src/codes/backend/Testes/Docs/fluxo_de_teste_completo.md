@@ -143,7 +143,8 @@ Este é o teste mais crítico. Ele garante que os dados de uma empresa não vaze
     *   Redireciona o usuário para a página `login.html`.
 
 *   **O que o Backend Faz:**
-    *   Opcionalmente, o frontend pode chamar uma rota `POST /api/auth/logout`. No modelo atual, o logout é principalmente uma ação do lado do cliente. Em sistemas mais complexos, o backend poderia invalidar o `refreshToken` aqui.
+    *   O backend possui um endpoint `POST /api/auth/logout` que, ao receber um `refreshToken`, o marca como inativo no banco de dados.
+    *   **Melhoria de Segurança:** Embora o frontend atual realize o logout apenas limpando o `localStorage`, a prática mais segura (já suportada pelo backend) é também chamar este endpoint. Isso invalida a sessão no servidor, impedindo que um `refreshToken` roubado seja usado para gerar novos tokens de acesso.
 
 *   **Resultado Esperado (Frontend):**
     *   A sessão do usuário é encerrada no navegador e ele é levado para a tela de login. Qualquer tentativa de voltar para uma página interna usando o botão "Voltar" do navegador deve ser barrada pelo `authGuard.js`.
