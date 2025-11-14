@@ -10,14 +10,12 @@ O processo de cadastro de empresa permite que novos usuários criem uma conta no
 5. Sistema cria a nova conta.
 6. Usuário é redirecionado para a página de login ou dashboard.
 
-## **Modelagem BPMN:** <img width="1602" height="381" alt="Processo3 drawio" src="https://github.com/user-attachments/assets/2674a917-7672-481f-97ac-62ae25047faa" />
+## **Modelagem BPMN:** <img width="1291" height="441" alt="Diagrama sem nome-Página-3 drawio" src="https://github.com/user-attachments/assets/90f5aa12-1357-4466-b16b-b227a852674a" />
 ## **Wireframe (esboço previo da tela)**
-
-
-<img width="1291" height="441" alt="Diagrama sem nome-Página-3 drawio" src="https://github.com/user-attachments/assets/90f5aa12-1357-4466-b16b-b227a852674a" />
-
+<img width="482" height="353" alt="Captura de tela 2025-11-07 185142" src="https://github.com/user-attachments/assets/05072124-2255-4811-9448-68ad580d3e6b" />
 
 ---
+
 
 > **Ponto de Melhoria (Revisado por Heron):** Olá, equipe! Para alinhar esta documentação com o formulário de cadastro real (`cadastro.html`) e a lógica do backend, peço ao responsável que ajuste a "Atividade 1 – Preencher Dados Cadastrais" abaixo.
 > 
