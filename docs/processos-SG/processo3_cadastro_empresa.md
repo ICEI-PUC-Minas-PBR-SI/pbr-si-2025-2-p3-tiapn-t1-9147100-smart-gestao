@@ -10,8 +10,9 @@ O processo de cadastro de empresa permite que novos usuários criem uma conta no
 5. Sistema cria a nova conta.
 6. Usuário é redirecionado para a página de login ou dashboard.
 
-## **Modelagem BPMN:** <img width="1291" height="441" alt="Diagrama sem nome-Página-3 drawio" src="https://github.com/user-attachments/assets/90f5aa12-1357-4466-b16b-b227a852674a" />
-## **Wireframe (esboço previo da tela)**
+## **Modelagem BPMN:** 
+## **Wireframe (esboço previo da tela)**<img width="1341" height="431" alt="Diagrama sem nome-Página-1 drawio" src="https://github.com/user-attachments/assets/4ea00356-19a1-4eb1-a7ba-8acd152d81f5" />
+
 <img width="482" height="353" alt="Captura de tela 2025-11-07 185142" src="https://github.com/user-attachments/assets/05072124-2255-4811-9448-68ad580d3e6b" />
 
 ---
