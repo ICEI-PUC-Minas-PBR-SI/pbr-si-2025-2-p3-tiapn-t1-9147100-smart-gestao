@@ -43,19 +43,7 @@ O processo de cadastro de empresa permite que novos usuários criem uma conta no
 5.  Sistema cria a nova conta.
 6.  Usuário é redirecionado para a página de login ou dashboard.
 
-### Modelagem BPMN
 
-**Nota:** O arquivo `Processo3 drawio` não foi fornecido. A imagem a seguir é um placeholder para o diagrama BPMN.
-
-<img width="1571" height="521" alt="Processo3 drawio" src="[URL_DO_DIAGRAMA_BPMN]" />
-
-### Wireframe (Esboço Prévio da Tela)
-
-**Nota:** O arquivo `Captura de tela 2025-11-07 185142` não foi fornecido. A imagem a seguir é um placeholder para o Wireframe.
-
-<img width="478" height="346" alt="Captura de tela 2025-11-07 185142" src="[URL_DO_WIREFRAME]" />
-
----
 
 ## 2. Detalhamento das Atividades
 
