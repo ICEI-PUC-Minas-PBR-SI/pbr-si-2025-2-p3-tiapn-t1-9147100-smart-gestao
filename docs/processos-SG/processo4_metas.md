@@ -37,100 +37,41 @@ Modelagem BPMN:
 
 <img width="1291" height="441" alt="Diagrama sem nome-Página-3 drawio" src="https://github.com/user-attachments/assets/5cb8df22-a084-4f95-a0d7-e869f1384494" />
 
-
----
-#### Atividade 1 – Inserir Dados do Novo Usuário (Administrador/RH)
-
-Esta atividade envolve o preenchimento das informações para a criação de um novo acesso.
-
-| Campo/Elemento | Tipo | Restrições |
-| :--- | :--- | :--- |
-| Nome Completo | Caixa de Texto | Obrigatório. |
-| E-mail | E-mail | Obrigatório. Formato de e-mail válido. |
-| Cargo | Seleção Única | Obrigatório. Opções: Administrador, Financeiro, Vendas, etc. |
-| Status | Seleção Única | Obrigatório. Opções: Ativo, Inativo. |
-| Senha Provisória | Senha | Opcional. Gerada automaticamente ou definida manualmente. |
-
-#### Comandos de Interação
-
-*   Inserir o nome completo do novo usuário.
-*   Inserir o endereço de e-mail (será o login).
-*   Selecionar o cargo/nível de acesso.
-*   Selecionar o status inicial (Ativo).
-*   Clicar em "Salvar Usuário".
-
----
-
-## 2. Processo 6: Login no Sistema (Estrutura Lógica)
-
-Este processo detalha o acesso do usuário ao sistema após o cadastro.
-
-### Fluxo Principal
-
-1.  Usuário acessa a página de login.
-2.  Usuário insere E-mail e Senha.
-3.  Usuário clica em "Entrar".
-4.  Sistema valida as credenciais.
-5.  Se válido, usuário é redirecionado para o Dashboard.
-6.  Se inválido, sistema exibe mensagem de erro.
-
 ### Detalhamento das Atividades
 
-#### Atividade 1 – Autenticação (Usuário)
+#### Atividade 1 – Definir Nova Meta Financeira (Usuário)
 
-Esta atividade envolve a inserção das credenciais para acesso.
+Esta atividade envolve o preenchimento dos dados para a criação de uma nova meta financeira.
 
 | Campo/Elemento | Tipo | Restrições |
 | :--- | :--- | :--- |
-| E-mail | E-mail | Obrigatório. Formato de e-mail válido. |
-| Senha | Senha | Obrigatório. |
-| Botão: Entrar | Botão | Habilitado após o preenchimento. |
-| Link: Esqueci a Senha | Link | Redireciona para recuperação de senha. |
+| Título da Meta | Caixa de Texto | Obrigatório. |
+| Tipo | Seleção Única | Obrigatório. Opções: Receita, Despesa, Economia. |
+| Valor Alvo | Número | Obrigatório. Valor monetário. |
+| Valor Atual | Número | Opcional. Valor monetário. |
+| Prazo | Data | Opcional. |
 
 #### Comandos de Interação
 
-*   Inserir o endereço de e-mail no campo "E-mail".
-*   Inserir a senha no campo "Senha".
-*   Clicar no botão "Entrar".
-*   (Opcional) Clicar no link "Esqueci a Senha".
+*   Inserir o título da meta no campo "Título da Meta".
+*   Selecionar o tipo de meta no campo "Tipo".
+*   Inserir o valor desejado no campo "Valor Alvo".
+*   Inserir o valor atual da meta no campo "Valor Atual" (se aplicável).
+*   Selecionar a data limite no campo "Prazo" (se aplicável).
 
 ---
 
-## 3. Comandos Git para o Projeto APN
+#### Atividade 2 – Salvar Meta (Usuário)
 
-Os comandos a seguir são sugeridos para inicializar o repositório Git e adicionar os arquivos do projeto (`APN.zip` descompactado) para controle de versão.
+Após preencher os dados, o usuário finaliza o processo de criação da meta.
 
-**Arquivos do Projeto:**
-- `APN/cadastro.html`
-- `APN/index.html`
-- `APN/login.html`
-- `APN/metas.html`
-- `APN/perfil.html`
-- `APN/relatorios.html`
-- `APN/style.css`
-- `APN/transacoes.html`
+| Campo/Elemento | Tipo | Restrições |
+| :--- | :--- | :--- |
+| Botão: Salvar Meta | Botão | Habilitado após o preenchimento dos campos obrigatórios. |
 
-```bash
-# 1. Inicializa um novo repositório Git no diretório raiz do projeto
-git init
+#### Comandos de Interação
 
-# 2. Adiciona todos os arquivos do projeto ao stage
-# (Assumindo que os arquivos estão no diretório 'APN/')
-git add APN/
+*   Clicar no botão "Salvar Meta".
 
-# OU, se você estiver no diretório raiz e quiser adicionar todos os arquivos
-# git add .
+---
 
-# 3. Confirma (commit) os arquivos adicionados com uma mensagem descritiva
-git commit -m "Commit inicial: Adição de todas as páginas HTML e folha de estilo CSS do projeto APN"
-
-# 4. (Opcional) Adiciona um repositório remoto (ex: GitHub)
-# Substitua <URL_DO_SEU_REPOSITORIO> pela URL real
-# git remote add origin <URL_DO_SEU_REPOSITORIO>
-
-# 5. (Opcional) Envia (push) o código para o repositório remoto
-# git push -u origin main
-Nota: Se você tiver o conteúdo específico para os Processos 5 e 6 em um arquivo de texto, por favor, me envie para que eu possa refinar esta documentação com base nos seus dados reais.
-Tarefa concluída
-Como foi este resultado?
-Sugestões de acompanhamento
