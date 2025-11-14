@@ -39,55 +39,49 @@ Modelagem BPMN:
 
 
 ---
+## 2. Detalhamento das Atividades
 
-## Atividade 1 – Preencher Dados Cadastrais (Usuário)
+### 2.1. Atividade 1 – Definir Nova Meta Financeira (Usuário)
 
-Esta atividade envolve o preenchimento das informações necessárias para a criação da conta.
+Esta atividade envolve o preenchimento dos dados para a criação de uma nova meta financeira. **(Tabela e Comandos reescritos conforme feedback)**
 
-| Campo/Elemento     | Tipo          | Restrições                                  |
-|:-------------------|:--------------|:--------------------------------------------|
-| Nome Completo      | Texto         | Obrigatório. Campo de texto.                |
-| E-mail             | E-mail        | Obrigatório. Formato de e-mail válido.      |
-| Senha              | Senha         | Obrigatório. Mínimo de 6 caracteres.        |
-| Confirmar Senha    | Senha         | Obrigatório. Deve ser idêntica à senha.     |
-| Tipo de Negócio    | Seleção Única | Obrigatório. Opções: MEI, Autônomo, Outro.  |
+#### Campos e Elementos (Corrigidos)
 
-**Comandos**
-- Inserir o nome completo no campo "Nome Completo".
-- Inserir o endereço de e-mail no campo "E-mail".
-- Inserir a senha no campo "Senha".
-- Inserir a senha novamente no campo "Confirmar Senha".
-- Selecionar o tipo de negócio no dropdown "Tipo de Negócio".
+| Campo/Elemento | Tipo | Restrições |
+| :--- | :--- | :--- |
+| Título da Meta | Caixa de Texto | Obrigatório. |
+| Tipo | Seleção Única | Obrigatório. Opções: Receita, Despesa, Economia. |
+| Valor Alvo | Número | Obrigatório. Valor monetário. |
+| Valor Atual | Número | Opcional. Valor monetário. |
+| Prazo | Data | Opcional. |
 
----
+#### Comandos de Interação (Corrigidos)
 
-## Atividade 2 – Criar Conta (Usuário)
-
-Após preencher os dados, o usuário finaliza o processo de criação da conta.
-
-| Campo/Elemento     | Tipo   | Restrições                                  |
-|:-------------------|:-------|:--------------------------------------------|
-| Botão: Criar Conta | Botão  | Habilitado após o preenchimento de todos os campos obrigatórios e validação. |
-
-**Comandos**
-- Clicar no botão "Criar Conta".
+*   Inserir o título da meta no campo "Título da Meta".
+*   Selecionar o tipo de meta no campo "Tipo".
+*   Inserir o valor desejado no campo "Valor Alvo".
+*   Inserir o valor atual da meta no campo "Valor Atual" (se aplicável).
+*   Selecionar a data limite no campo "Prazo" (se aplicável).
 
 ---
 
-## Atividade 3 – Navegar para Login (Opcional) (Usuário)
+### 2.2. Atividade 2 – Salvar Meta (Usuário)
 
-Caso o usuário já possua uma conta, ele pode optar por fazer login.
+Após preencher os dados, o usuário finaliza o processo de criação da meta.
 
-| Campo/Elemento     | Tipo   | Restrições                                  |
-|:-------------------|:-------|:--------------------------------------------|
-| Link: Fazer login  | Link   | Redireciona para a página de login.         |
+#### Campos e Elementos
 
-**Comandos**
-- Clicar no link "Fazer login".
+| Campo/Elemento | Tipo | Restrições |
+| :--- | :--- | :--- |
+| Botão: Salvar Meta | Botão | Habilitado após o preenchimento dos campos obrigatórios. |
+
+#### Comandos de Interação
+
+*   Clicar no botão "Salvar Meta".
 
 ---
 
-_Tipos de dados utilizados:_
+## 3. Tipos de Dados Utilizados
 
 *   **Área de texto** - campo texto de múltiplas linhas
 *   **Caixa de texto** - campo texto de uma linha
@@ -100,4 +94,43 @@ _Tipos de dados utilizados:_
 *   **Seleção múltipla** - campo com várias opções que podem ser selecionadas mutuamente (checkbox ou listbox)
 *   **Arquivo** - campo de upload de documento
 *   **Link** - campo que armazena uma URL
+*   **Tabela** - campo formado por uma matriz de valores
+
+---
+
+## 4. Comandos Git para o Projeto APN
+
+Os comandos a seguir são sugeridos para inicializar o repositório Git e adicionar os arquivos do projeto (`APN.zip` descompactado) para controle de versão.
+
+**Arquivos do Projeto:**
+- `APN/cadastro.html`
+- `APN/index.html`
+- `APN/login.html`
+- `APN/metas.html`
+- `APN/perfil.html`
+- `APN/relatorios.html`
+- `APN/style.css`
+- `APN/transacoes.html`
+
+```bash
+# 1. Inicializa um novo repositório Git no diretório raiz do projeto
+git init
+
+# 2. Adiciona todos os arquivos do projeto ao stage
+# (Assumindo que os arquivos estão no diretório 'APN/')
+git add APN/
+
+# OU, se você estiver no diretório raiz e quiser adicionar todos os arquivos
+# git add .
+
+# 3. Confirma (commit) os arquivos adicionados com uma mensagem descritiva
+git commit -m "Commit inicial: Adição de todas as páginas HTML e folha de estilo CSS do projeto APN"
+
+# 4. (Opcional) Adiciona um repositório remoto (ex: GitHub)
+# Substitua <URL_DO_SEU_REPOSITORIO> pela URL real
+# git remote add origin <URL_DO_SEU_REPOSITORIO>
+
+# 5. (Opcional) Envia (push) o código para o repositório remoto
+# git push -u origin main
+
 *   **Tabela** - campo formado por uma matriz de valores
