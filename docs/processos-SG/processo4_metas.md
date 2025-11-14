@@ -33,7 +33,10 @@ O processo de criação de metas permite que os usuários definam objetivos fina
 
 ---   
 
-Modelagem BPMN: <img width="1081" height="661" alt="metas (2)" src="https://github.com/user-attachments/assets/0b32a756-a7cf-428b-b1a3-83886ee2a48e" />
+Modelagem BPMN: 
+
+<img width="1291" height="441" alt="Diagrama sem nome-Página-3 drawio" src="https://github.com/user-attachments/assets/5cb8df22-a084-4f95-a0d7-e869f1384494" />
+
 
 ---
 
