@@ -1,0 +1,163 @@
+
+--- 🚀 [GLOBAL SETUP] Iniciando ambiente de teste ---
+⏳ Iniciando servidor Smart Gestão (startServer)...
+Conexão com o MongoDB estabelecida com sucesso.
+✅ [1/3] Conexão com o banco de dados estabelecida!
+Verificando permissões de sistema...
+Permissões de sistema já existem. Nenhuma ação necessária.
+✅ [2/3] Permissões do sistema validadas/inicializadas.
+✅ [3/3] Servidor rodando na porta 5000
+--- ✅ [GLOBAL SETUP] Ambiente pronto e servidor iniciado ---
+(node:27688) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+POST /api/clients 201 42.589 ms - 335
+[LOG] Ação: CREATE_CLIENT | Usuário: 6916813a90a0e142c759de87
+GET /api/clients 200 29.146 ms - 591
+PUT /api/clients/6916813c90a0e142c759de98 200 36.596 ms - 349
+[LOG] Ação: UPDATE_CLIENT | Usuário: 6916813a90a0e142c759de87
+DELETE /api/clients/6916813c90a0e142c759de98 200 31.924 ms - 70
+GET /api/clients/6916813c90a0e142c759de98 404 2.261 ms - 175
+[LOG] Ação: DELETE_CLIENT | Usuário: 6916813a90a0e142c759de87
+DELETE /api/clients/6916813c90a0e142c759de98 404 27.565 ms - 68
+PASS Testes/2-features/clients.test.js
+  7. Módulo de Clientes/Fornecedores
+    √ deve CRIAR um novo cliente com sucesso (99 ms)
+    √ deve LISTAR os clientes da empresa (34 ms)
+    √ deve ATUALIZAR um cliente existente (43 ms)
+    √ deve EXCLUIR um cliente existente (57 ms)
+
+[LOG] Ação: DELETE_CLIENT | Usuário: 6916813a90a0e142c759de87
+[LOG] Ação: CREATE_GOAL | Usuário: 6916813a90a0e142c759de87
+POST /api/goals 201 47.393 ms - 404
+GET /api/goals 200 27.294 ms - 406
+[LOG] Ação: UPDATE_GOAL | Usuário: 6916813a90a0e142c759de87
+PUT /api/goals/6916813c90a0e142c759deab 200 46.022 ms - 414
+[LOG] Ação: DELETE_GOAL | Usuário: 6916813a90a0e142c759de87
+DELETE /api/goals/6916813c90a0e142c759deab 200 45.446 ms - 67
+GET /api/goals/6916813c90a0e142c759deab 404 26.530 ms - 65
+DELETE /api/goals/6916813c90a0e142c759deab 404 25.936 ms - 65
+PASS Testes/2-features/goals.test.js
+  5. Módulo de Metas (CRUD)
+    √ deve CRIAR uma nova meta com sucesso (65 ms)
+    √ deve LISTAR as metas do usuário logado (31 ms)
+    √ deve ATUALIZAR uma meta existente (51 ms)
+    √ deve EXCLUIR uma meta existente (87 ms)
+
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6916813a90a0e142c759de87
+POST /api/transactions 201 46.797 ms - 468
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6916813a90a0e142c759de87
+POST /api/transactions 400 16.038 ms - 277
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6916813a90a0e142c759de87
+GET /api/transactions 200 27.475 ms - 855
+GET /api/transactions/6916813d90a0e142c759debe 200 26.331 ms - 452
+[LOG] Ação: UPDATE_TRANSACTION | Usuário: 6916813a90a0e142c759de87
+PUT /api/transactions/6916813d90a0e142c759debe 200 45.814 ms - 452
+[LOG] Ação: UPDATE_TRANSACTION | Usuário: 6916813a90a0e142c759de87
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 6916813a90a0e142c759de87
+DELETE /api/transactions/6916813d90a0e142c759debe 200 46.641 ms - 73
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 6916813a90a0e142c759de87
+GET /api/transactions/6916813d90a0e142c759debe 404 25.017 ms - 71
+DELETE /api/transactions/6916813d90a0e142c759debe 404 25.297 ms - 71
+PASS Testes/2-features/transactions.test.js
+  4. Módulo de Transações (CRUD)
+    √ deve CRIAR uma nova transação com sucesso (61 ms)
+    √ deve falhar ao tentar criar uma transação com dados inválidos (33 ms)
+    √ deve LISTAR as transações do usuário logado (31 ms)
+    √ deve OBTER uma transação específica pelo ID (30 ms)
+    √ deve ATUALIZAR uma transação existente (50 ms)
+    √ deve EXCLUIR uma transação existente (80 ms)
+
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 6916813a90a0e142c759de87
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6916813a90a0e142c759de87
+POST /api/transactions 201 45.918 ms - 446
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6916813a90a0e142c759de87
+POST /api/transactions/6916813d90a0e142c759dedf/upload 200 50.419 ms - 514
+[LOG] Ação: UPLOAD_ATTACHMENT | Usuário: 6916813a90a0e142c759de87
+DELETE /api/transactions/6916813d90a0e142c759dedf/upload 200 57.340 ms - 442
+[LOG] Ação: DELETE_ATTACHMENT | Usuário: 6916813a90a0e142c759de87
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 6916813a90a0e142c759de87
+DELETE /api/transactions/6916813d90a0e142c759dedf 200 45.536 ms - 73
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 6916813a90a0e142c759de87
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6916813a90a0e142c759de87
+POST /api/transactions 201 45.417 ms - 444
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6916813a90a0e142c759de87
+POST /api/transactions/6916813e90a0e142c759def6/upload 200 49.435 ms - 512
+[LOG] Ação: UPLOAD_ATTACHMENT | Usuário: 6916813a90a0e142c759de87
+DELETE /api/transactions/6916813e90a0e142c759def6/upload 200 43.134 ms - 440
+[LOG] Ação: DELETE_ATTACHMENT | Usuário: 6916813a90a0e142c759de87
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 6916813a90a0e142c759de87
+DELETE /api/transactions/6916813e90a0e142c759def6 200 45.372 ms - 73
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 6916813a90a0e142c759de87
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6916813a90a0e142c759de87
+POST /api/transactions 201 74.158 ms - 444
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6916813a90a0e142c759de87
+POST /api/transactions/6916813e90a0e142c759df0d/upload 200 44.583 ms - 512
+[LOG] Ação: UPLOAD_ATTACHMENT | Usuário: 6916813a90a0e142c759de87
+DELETE /api/transactions/6916813e90a0e142c759df0d/upload 200 42.952 ms - 440
+[LOG] Ação: DELETE_ATTACHMENT | Usuário: 6916813a90a0e142c759de87
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 6916813a90a0e142c759de87
+DELETE /api/transactions/6916813e90a0e142c759df0d 200 45.217 ms - 73
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 6916813a90a0e142c759de87
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6916813a90a0e142c759de87
+POST /api/transactions 201 45.169 ms - 445
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6916813a90a0e142c759de87
+POST /api/transactions/6916813e90a0e142c759df24/upload 200 84.592 ms - 514
+[LOG] Ação: UPLOAD_ATTACHMENT | Usuário: 6916813a90a0e142c759de87
+DELETE /api/transactions/6916813e90a0e142c759df24/upload 200 41.709 ms - 441
+[LOG] Ação: DELETE_ATTACHMENT | Usuário: 6916813a90a0e142c759de87
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 6916813a90a0e142c759de87
+DELETE /api/transactions/6916813e90a0e142c759df24 200 45.975 ms - 73
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 6916813a90a0e142c759de87
+POST /api/transactions/60d5f1f77c3d4a001f5e8e1z/upload 500 17.446 ms - 368
+FAIL Testes/2-features/uploads.test.js
+  Feature: Uploads
+    Upload de PDF
+      √ Deve permitir o upload de um anexo (PDF) para uma transação (62 ms)
+      √ Deve permitir a exclusão de um anexo (PDF) de uma transação (63 ms)
+    Upload de Imagem (PNG)
+      √ Deve permitir o upload de um anexo de imagem (.png) para uma transação (54 ms)
+      √ Deve permitir a exclusão de um anexo de imagem (.png) (47 ms)
+    Upload de Imagem (JPG)
+      √ Deve permitir o upload de um anexo de imagem (.jpg) para uma transação (51 ms)
+      √ Deve permitir a exclusão de um anexo de imagem (.jpg) (47 ms)
+    Upload de Imagem (JPEG)
+      √ Deve permitir o upload de um anexo de imagem (.jpeg) para uma transação (90 ms)
+      √ Deve permitir a exclusão de um anexo de imagem (.jpeg) (46 ms)
+    Cenários de Erro e Estruturais
+      × Deve retornar 404 ao tentar fazer upload para uma transação inexistente (61 ms)
+
+  ● Feature: Uploads › Cenários de Erro e Estruturais › Deve retornar 404 ao tentar fazer upload para uma transação inexistente
+
+    expect(received).rejects.toThrow(expected)
+
+    Expected substring: "Request failed with status code 404"
+    Received message:   "Request failed with status code 500"
+
+          180 |             form.append('attachment', fs.createReadStream(filePath));
+          181 |
+        > 182 |             await expect(
+              |             ^
+          183 |                 axios.post(
+          184 |                     `${apiUrl}/transactions/${invalidId}/upload`,
+          185 |                     form,
+
+      at settle (node_modules/axios/lib/core/settle.js:19:12)
+      at IncomingMessage.handleStreamEnd (node_modules/axios/lib/adapters/http.js:793:11)
+      at Axios.request (node_modules/axios/lib/core/Axios.js:45:41)
+      at Object.<anonymous> (Testes/2-features/uploads.test.js:182:13)
+      at Object.toThrow (node_modules/expect/build/index.js:2155:20)
+      at Object.toThrow (Testes/2-features/uploads.test.js:188:23)
+
+Test Suites: 1 failed, 3 passed, 4 total
+Tests:       1 failed, 22 passed, 23 total
+Snapshots:   0 total
+Time:        3.726 s
+Ran all test suites matching Testes/2-features/.
+
+--- 🧹 [GLOBAL TEARDOWN] Finalizando ambiente de teste ---
+[LOG] Ação: UPLOAD_ATTACHMENT | Usuário: 6916813a90a0e142c759de87
+   - [OK] Dados de teste temporários foram removidos.
+✅ Servidor e conexão com MongoDB encerrados (stopServer).
+--- ✅ [GLOBAL TEARDOWN] Ambiente finalizado com sucesso ---
+
+--- FIM DOS TESTES AUTOMATIZADOS (Status: Falha) ---

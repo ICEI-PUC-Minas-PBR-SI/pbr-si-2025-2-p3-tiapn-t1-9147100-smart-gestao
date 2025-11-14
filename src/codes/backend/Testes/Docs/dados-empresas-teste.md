@@ -1,14 +1,23 @@
 #  Credenciais das Empresas de Teste
 
-Este arquivo contém os dados das empresas de teste fixas para validação manual.
+Este arquivo contém os dados das empresas de teste fixas, criadas para facilitar a validação manual do frontend e a exploração da API.
+
+> **Importante:** Este arquivo é **gerado e atualizado automaticamente** pelo script `Scripts/create-test-companies.js`. Não o edite manualmente. Se precisar recriar ou garantir que os dados estejam atualizados, execute o seguinte comando na pasta `src/codes/backend`:
+> ```bash
+> npm run create-test-users
+> ```
+>
+> **Nota:** Os Access Tokens (JWT) têm uma vida útil curta. Se os testes manuais falharem com erro `401 Unauthorized`, execute o comando acima novamente para gerar tokens novos e atualizados.
+
+---
 
 ## Empresa Frontend
 
 - **E-mail:** `empresa-frontend@test.com`
 - **Senha:** `password123`
-- **ID da Empresa:** `6911223f97e04926779af32f`
-- **ID do Usuário:** `6911224097e04926779af331`
-- **Access Token:** `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTExMjI0MDk3ZTA0OTI2Nzc5YWYzMzEiLCJyb2xlIjoiNjhmMzExMmE2OWUzZjY1ZDI3NTA1ZDQ3IiwiY29tcGFueUlkIjoiNjkxMTIyM2Y5N2UwNDkyNjc3OWFmMzJmIiwiaWF0IjoxNzYyNzM3MDA4LCJleHAiOjE3NjI3Mzc5MDh9.Sth4czFfOF-0ekPN030dVNa-EXeWt5XFEvAQOfB7fDU`
+- **ID da Empresa:** `6915e1c2e2cc8170ff049919`
+- **ID do Usuário:** `6915e1c2e2cc8170ff04991b`
+- **Access Token:** `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTE1ZTFjMmUyY2M4MTcwZmYwNDk5MWIiLCJyb2xlIjoiNjkxNTQ4MzM3MjI2MzEwOTg3YTc0Nzk4IiwiY29tcGFueUlkIjoiNjkxNWUxYzJlMmNjODE3MGZmMDQ5OTE5IiwiaWF0IjoxNzYzMDQyMjA3LCJleHAiOjE3NjMwNDMxMDd9.phjVW3pgKVXUvTP7L-qHrjHKAIhOx7DrWkzGQVcbjlQ`
 
 ---
 
@@ -16,9 +25,9 @@ Este arquivo contém os dados das empresas de teste fixas para validação manua
 
 - **E-mail:** `empresa-backend@test.com`
 - **Senha:** `password123`
-- **ID da Empresa:** `6911224097e04926779af33d`
-- **ID do Usuário:** `6911224097e04926779af33f`
-- **Access Token:** `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTExMjI0MDk3ZTA0OTI2Nzc5YWYzM2YiLCJyb2xlIjoiNjhmMzExMmE2OWUzZjY1ZDI3NTA1ZDQ3IiwiY29tcGFueUlkIjoiNjkxMTIyNDA5N2UwNDkyNjc3OWFmMzNkIiwiaWF0IjoxNzYyNzM3MDA4LCJleHAiOjE3NjI3Mzc5MDh9.qDSjWI3GFTMZ7NZgvkITXkqNf5IdbaHOMz8vqF3CV8U`
+- **ID da Empresa:** `6915e1c3e2cc8170ff049927`
+- **ID do Usuário:** `6915e1c3e2cc8170ff049929`
+- **Access Token:** `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTE1ZTFjM2UyY2M4MTcwZmYwNDk5MjkiLCJyb2xlIjoiNjkxNTQ4MzM3MjI2MzEwOTg3YTc0Nzk4IiwiY29tcGFueUlkIjoiNjkxNWUxYzNlMmNjODE3MGZmMDQ5OTI3IiwiaWF0IjoxNzYzMDQyMjA3LCJleHAiOjE3NjMwNDMxMDd9.0bhDxD9g1oOvHCNSvXr5BzYNd8zGej-qBmxsscO_reU`
 
 ---
 
@@ -26,9 +35,10 @@ Este arquivo contém os dados das empresas de teste fixas para validação manua
 
 - **E-mail:** `empresa-react@test.com`
 - **Senha:** `password123`
-- **ID da Empresa:** `6911224097e04926779af34b`
-- **ID do Usuário:** `6911224097e04926779af34d`
-- **Access Token:** `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTExMjI0MDk3ZTA0OTI2Nzc5YWYzNGQiLCJyb2xlIjoiNjhmMzExMmE2OWUzZjY1ZDI3NTA1ZDQ3IiwiY29tcGFueUlkIjoiNjkxMTIyNDA5N2UwNDkyNjc3OWFmMzRiIiwiaWF0IjoxNzYyNzM3MDA4LCJleHAiOjE3NjI3Mzc5MDh9.E3zjXJTJPQQOFwKTva3e0WBV9-0_KbwQO_qGEqW21Jo`
+- **ID da Empresa:** `6915e1c3e2cc8170ff049935`
+- **ID do Usuário:** `6915e1c3e2cc8170ff049937`
+- **Access Token:** `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTE1ZTFjM2UyY2M4MTcwZmYwNDk5MzciLCJyb2xlIjoiNjkxNTQ4MzM3MjI2MzEwOTg3YTc0Nzk4IiwiY29tcGFueUlkIjoiNjkxNWUxYzNlMmNjODE3MGZmMDQ5OTM1IiwiaWF0IjoxNzYzMDQyMjA3LCJleHAiOjE3NjMwNDMxMDd9.zziAYTJVtZCnHbBzdTGjnRKlW5-ldp0_tOtJ1KQyN-E`
 
 ---
 
+---

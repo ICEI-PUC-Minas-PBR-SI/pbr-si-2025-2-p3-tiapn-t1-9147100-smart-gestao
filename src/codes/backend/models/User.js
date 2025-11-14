@@ -10,12 +10,12 @@ const { Schema } = mongoose;
 
 const UserSchema = new Schema(
   {
-    // Chave estrangeira que vincula o usuário à sua empresa.
-    // Este é o campo mais crítico para garantir o isolamento de dados (multi-tenant).
+    // Chave estrangeira que vincula o usuário à sua empresa. Essencial para a arquitetura multi-tenant.
     companyId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Company",
       required: true,
+      index: true, // Indexar este campo acelera a busca de todos os usuários de uma empresa.
     },
     // Nome completo do usuário.
     name: {
@@ -27,18 +27,17 @@ const UserSchema = new Schema(
     email: {
       type: String,
       required: true,
-      unique: true,
+      unique: true, // Garante que não existam dois usuários com o mesmo e-mail.
       lowercase: true,
       trim: true,
     },
-    // Armazena o hash da senha do usuário, nunca a senha em texto plano.
-    // O campo é selecionado apenas quando explicitamente solicitado por segurança.
+    // Armazena o hash da senha, nunca a senha em texto plano. `select: false` impede que este campo seja retornado em consultas por padrão.
     passwordHash: {
       type: String,
       required: true,
-      select: false, // Por padrão, não retorna este campo em consultas.
+      select: false,
     },
-    // Token temporário gerado para o fluxo de recuperação de senha.
+    // Hash do token temporário gerado para o fluxo de recuperação de senha.
     passwordResetToken: {
       type: String,
       select: false,
@@ -48,20 +47,20 @@ const UserSchema = new Schema(
       type: Date,
       select: false,
     },
-    // Chave estrangeira que define o nível de permissão do usuário (ex: ADMIN, USER).
+    // Chave estrangeira que define o nível de permissão do usuário (ex: ADMIN_COMPANY, USER_COMPANY).
     role: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Permission",
       required: true,
     },
-    // Flag para "soft delete". Se `false`, o usuário não pode logar.
+    // Flag para "soft delete". Se `false`, o usuário é considerado inativo e não pode logar.
     active: {
       type: Boolean,
       default: true,
     },
   },
   {
-    timestamps: true, // Cria campos createdAt e updatedAt automaticamente
+    timestamps: true, // Adiciona `createdAt` e `updatedAt` automaticamente.
   }
 );
 

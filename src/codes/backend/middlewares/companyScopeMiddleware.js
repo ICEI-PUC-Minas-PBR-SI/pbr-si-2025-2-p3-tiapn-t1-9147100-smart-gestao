@@ -1,36 +1,61 @@
 // =================================================================================
 // ARQUIVO: middlewares/companyScopeMiddleware.js
-// DESCRIÇÃO: Middleware auxiliar para reforçar a arquitetura multi-tenant.
-//            Sua função é extrair o `companyId` do usuário autenticado (injetado
-//            pelo `authMiddleware`) e anexá-lo diretamente ao objeto `req`,
-//            facilitando o acesso nos controladores.
-//            Embora os controladores possam acessar `req.user.companyId` diretamente,
-//            este middleware pode padronizar e simplificar a lógica de escopo.
+// DESCRIÇÃO: Middleware de escopo de empresa para garantir o isolamento de dados (multi-tenant).
+//            Este é um dos middlewares de segurança mais críticos do sistema.
 // =================================================================================
 
+import mongoose from 'mongoose';
+
+// Mapeia prefixos de rota para os nomes dos modelos Mongoose correspondentes.
+const getModelFromUrl = (url) => {
+  const modelMap = {
+    '/api/transactions': 'Transaction',
+    '/api/clients': 'Client',
+    '/api/goals': 'Goal',
+  };
+  const modelName = Object.keys(modelMap).find(key => url.startsWith(key));
+  return modelName ? mongoose.model(modelMap[modelName]) : null;
+};
+
 /**
- * Middleware que adiciona o escopo da empresa à requisição.
- * Pré-requisito: Este middleware deve ser executado DEPOIS do `authMiddleware`.
- * @param {object} req - O objeto de requisição do Express.
- * @param {object} res - O objeto de resposta do Express.
- * @param {function} next - A função de callback para passar o controle adiante.
+ * Garante que um usuário só possa acessar recursos que pertencem à sua própria empresa.
+ * Pré-requisito: Deve ser executado DEPOIS do `authMiddleware`.
+ *
+ * Funcionalidades:
+ * 1. Atua apenas em rotas que contêm um ID de recurso (ex: `/api/transactions/:id`).
+ * 2. Busca o documento no banco e valida se o `companyId` do documento corresponde ao `companyId` do usuário.
+ * 3. Se não corresponder, retorna um erro 404 para não vazar a informação de que o recurso existe.
  */
-export function companyScopeMiddleware(req, res, next) {
+export const companyScopeMiddleware = async (req, res, next) => {
   try {
-    // Garante que o `authMiddleware` foi executado e que o usuário possui uma empresa associada.
-    if (!req.user || !req.user.companyId) {
-      return res.status(403).json({ message: "Acesso negado: ID da empresa não identificado na sessão do usuário." });
+    // Otimização: Se a rota não tem um ID, não há nada a ser verificado aqui.
+    if (!req.params.id) {
+      return next();
     }
 
-    // Anexa o ID da empresa e um objeto de filtro padrão ao `req` para
-    // simplificar as consultas nos controladores.
-    req.companyId = req.user.companyId;
-    req.companyFilter = { companyId: req.companyId };
+    // Prevenção de Erro: Valida se o ID é um ObjectId válido antes de consultar o banco.
+    // Isso previne erros de "Cast to ObjectId failed" e torna a API mais robusta.
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(404).json({ message: "Recurso não encontrado (ID inválido)." });
+    }
 
-    // Passa para o próximo middleware ou controlador.
-    return next();
+    const model = getModelFromUrl(req.originalUrl);
+    if (!model) return next();
+
+    const doc = await model.findById(req.params.id).select('companyId').lean();
+
+    // Se o documento não existe, o controller será responsável por retornar o 404.
+    if (!doc) {
+      return next();
+    }
+
+    // Ponto Crítico da Segurança: Compara o ID da empresa do documento com o ID da empresa do usuário logado.
+    if (doc.companyId.toString() !== req.user.companyId.toString()) {
+      return res.status(404).json({ message: "Recurso não encontrado." }); // Oculta a existência do recurso.
+    }
+
+    next();
   } catch (error) {
-    console.error("Erro em companyScopeMiddleware:", error);
-    return res.status(500).json({ message: "Erro no middleware de escopo de empresa" });
+    res.status(500).json({ message: "Erro no middleware de escopo da empresa.", error: error.message });
   }
-}
+};

@@ -17,6 +17,7 @@ const router = express.Router();
 router.get("/", authMiddleware, roleMiddleware(["ROOT", "ADMIN_COMPANY"]), getAllLogs);
 
 // Rota para listar todos os logs de um usuário específico.
+// Acesso restrito para que apenas administradores possam ver logs de outros usuários.
 // GET /api/logs/user/:userId
 router.get("/user/:userId", authMiddleware, roleMiddleware(["ROOT", "ADMIN_COMPANY"]), getLogsByUser);
 

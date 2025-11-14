@@ -6,13 +6,13 @@ Este diretório (`src/codes/react`) contém uma implementação parcial do front
 
 O principal objetivo desta implementação não é substituir o frontend existente (baseado em HTML, CSS e JavaScript puro), mas sim servir como uma **prova de conceito** e demonstração técnica.
 
-O intuito é validar e demonstrar os seguintes pontos:
+O intuito é validar e demonstrar os seguintes pontos cruciais da arquitetura do projeto:
 
 1.  **Robustez do Backend**: Provar que a API RESTful é agnóstica à tecnologia do cliente, podendo ser consumida de forma idêntica tanto pelo frontend legado (HTML/JS) quanto por uma aplicação moderna em React.
 2.  **Capacidade de Migração Gradual**: Demonstrar um caminho viável para modernizar o sistema. O fluxo implementado (login em React que redireciona para o sistema legado) simula um cenário onde novas funcionalidades poderiam ser desenvolvidas em React, coexistindo com as páginas antigas durante a transição.
 3.  **Interoperabilidade de Sessão**: Provar que a autenticação é desacoplada da interface. O React gerencia o login, salva o token JWT no `localStorage` e, em seguida, o sistema legado utiliza esse mesmo token para autorizar o usuário, garantindo uma experiência contínua e sem interrupções.
 
-## 2. O que foi Implementado?
+## 2. Funcionalidade Implementada
 
 Apenas a **página de login** foi recriada como um componente React, sendo uma réplica visual e funcional da página `login.html` original.
 
@@ -28,11 +28,10 @@ O fluxo de funcionamento é o seguinte:
 
 ## 3. Como Executar esta Demonstração
 
-> **Nota:** Antes de executar pela primeira vez, certifique-se de que as dependências de **todos** os projetos (backend e react) foram instaladas com `npm install` em suas respectivas pastas.
-
 Para evitar conflitos de porta e simplificar a execução, foi criado um script que orquestra todos os servidores necessários (API, frontend legado e frontend React).
 
-1.  **Instale as dependências** em ambas as pastas (apenas na primeira vez):
+1.  **Instale as Dependências (Apenas na primeira vez):**
+    Antes de iniciar, garanta que as dependências de ambos os projetos (backend e react) estejam instaladas.
     ```bash
     # No diretório src/codes/backend
     npm install
@@ -41,8 +40,8 @@ Para evitar conflitos de porta e simplificar a execução, foi criado um script 
     npm install
     ```
 
-2.  **Execute o comando de demonstração completa**:
-    Abra um único terminal na pasta `src/codes/backend` e execute:
+2.  **Inicie o Ambiente Completo:**
+    Abra um único terminal na pasta `src/codes/backend` e execute o comando de demonstração:
     ```bash
     npm run start:full-demo
     ```
@@ -51,7 +50,7 @@ Para evitar conflitos de porta e simplificar a execução, foi criado um script 
     - O **Frontend Legado** na porta `3000`.
     - O **Frontend React** na porta `3001`.
 
-3.  **Acesse a demonstração**:
+3.  **Acesse a Demonstração:**
     Abra seu navegador e acesse **`http://localhost:3001`**.
 
 Ao fazer login na página em React, você será redirecionado para o sistema legado em `http://localhost:3000/pages/startPage.html`, com a sessão de usuário funcionando perfeitamente.
@@ -61,15 +60,15 @@ Ao fazer login na página em React, você será redirecionado para o sistema leg
 Durante a configuração e integração desta prova de conceito, diversos desafios técnicos foram encontrados e superados, reforçando a robustez da arquitetura final. Os principais foram:
 
 1.  **Erro de `react-scripts`**: O ambiente React não iniciava devido a uma dependência corrompida no `package-lock.json`. A solução envolveu a limpeza completa das dependências e a fixação da versão do `react-scripts` no `package.json`.
-2.  **Estrutura de Pastas**: A aplicação falhava ao compilar por não encontrar arquivos como `index.html` e os componentes `.js`. Isso foi resolvido ajustando a estrutura de pastas para o padrão esperado pelo `create-react-app` (com as pastas `public` e `src`).
+2.  **Estrutura de Pastas**: A aplicação falhava ao compilar por não encontrar arquivos como `index.html` e os componentes `.js`. Isso foi resolvido ajustando a estrutura de pastas para o padrão esperado pelo `create-react-app` (com as pastas `public` e `src` no nível correto).
 3.  **Importação de CSS Externo**: O React, por segurança, proíbe a importação de arquivos de fora do diretório `src`. A solução foi copiar o CSS do sistema legado para dentro do projeto React, tornando-o autocontido.
-4.  **Login Duplo**: O desafio final foi um redirecionamento para a tela de login legada após o login no React. A causa era que o React não salvava o objeto `user` no `localStorage`, que era um requisito do `authGuard.js` legado. A solução foi adicionar o salvamento deste objeto, garantindo uma transição de sessão perfeita.
+4.  **O "Login Duplo" (Redirecionamento Indesejado)**: O desafio final foi um redirecionamento para a tela de login legada *após* o login bem-sucedido no React. A causa raiz era que o `authGuard.js` do sistema legado não verificava apenas o `token`, mas também a existência do objeto `user` no `localStorage`. Como o React salvava apenas o token, o guardião considerava a sessão inválida. A solução foi fazer com que o React também salvasse o objeto `user`, garantindo uma transição de sessão perfeita e validando a interoperabilidade.
 
 Essas etapas de depuração foram cruciais para validar e solidificar a interoperabilidade entre as duas tecnologias de frontend.
 
 ---
 
-## 5. Roteiro para Migração Completa para React
+## 5. Roteiro Sugerido para Migração Completa para React
 
 A prova de conceito atual valida a interoperabilidade. Uma migração completa do sistema para React modernizaria a base de código, melhoraria a manutenibilidade e a experiência do desenvolvedor. Abaixo está um roteiro sugerido para essa migração, que pode ser executada de forma gradual.
 

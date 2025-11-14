@@ -1,10 +1,3 @@
-// =================================================================================
-// ARQUIVO: controllers/authController.js
-// DESCRIÇÃO: Contém os controladores responsáveis pela autenticação e gerenciamento
-//            de sessão dos usuários, incluindo registro, login, logout e exclusão
-//            de contas. Este é um ponto central da segurança da aplicação.
-// =================================================================================
-
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
@@ -14,27 +7,25 @@ import Company from '../models/Company.js';
 import Permission from '../models/Permission.js';
 import Transaction from '../models/Transaction.js';
 import { USER_COMPANY } from '../utils/constants.js';
+import { successResponse, errorResponse } from '../utils/responseHelper.js';
 
-// =============================================================
-// - Função: registerUser
-// =============================================================
 export const registerUser = async (req, res) => {
   const { name, email, password, companyName, cnpj } = req.body;
 
   try {
     // 1. Validação - Verifica se o e-mail ou CNPJ já existem para evitar duplicidade.
     if (await User.findOne({ email })) {
-      return res.status(409).json({ message: 'E-mail já cadastrado.' });
+      return errorResponse(res, { status: 409, message: "E-mail já cadastrado." });
     }
     if (await Company.findOne({ cnpj })) {
-      return res.status(409).json({ message: 'CNPJ já cadastrado.' });
+      return errorResponse(res, { status: 409, message: "CNPJ já cadastrado." });
     }
 
     // 2. Permissão - Busca a permissão padrão de usuário ('USER_COMPANY') no banco.
     // Isso garante que novos usuários tenham o nível de acesso correto.
     const userPermission = await Permission.findOne({ name: USER_COMPANY });
     if (!userPermission) {
-      return res.status(500).json({ message: 'Permissão de usuário padrão não encontrada.' });
+      return errorResponse(res, { status: 500, message: "Permissão de usuário padrão não encontrada." });
     }
 
     // 3. Criação da Empresa: Salva a nova empresa no banco de dados.
@@ -51,29 +42,26 @@ export const registerUser = async (req, res) => {
     const userResponse = newUser.toObject();
     delete userResponse.passwordHash;
 
-    res.status(201).json({ message: 'Usuário cadastrado com sucesso!', userId: userResponse._id });
+    return successResponse(res, { status: 201, message: "Usuário cadastrado com sucesso!", data: { userId: userResponse._id } });
 
   } catch (error) {
-    console.error('Erro no registerUser:', error);
-    return res.status(500).json({ message: 'Erro interno ao cadastrar usuário.' });
+    return errorResponse(res, { status: 500, message: "Erro interno ao cadastrar usuário.", errors: error });
   }
 };
 
-// =============================================================
-// - Função: loginUser
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
   try {
     // 1. Busca do Usuário - Procura o usuário pelo e-mail e inclui o campo 'passwordHash' na resposta.
     const user = await User.findOne({ email }).select("+passwordHash");
     if (!user) { // Se o usuário não for encontrado, retorna erro 401.
-      return res.status(401).json({ message: 'Credenciais inválidas.' });
+      return errorResponse(res, { status: 401, message: "Credenciais inválidas." });
     }
 
     // 2. Verificação da Senha - Compara a senha enviada com o hash armazenado no banco.
     const isMatch = await bcrypt.compare(password, user.passwordHash);
     if (!isMatch) {
-      return res.status(401).json({ message: 'Credenciais inválidas.' });
+      return errorResponse(res, { status: 401, message: "Credenciais inválidas." });
     }
 
     // --- Geração dos Tokens ---
@@ -107,26 +95,23 @@ export const loginUser = async (req, res) => {
     });
 
     // Retorna os tokens e informações básicas do usuário
-    return res.status(200).json({
+    return successResponse(res, { data: {
       token: accessToken,
-     refreshToken: refreshTokenValue,
-     user: { id: user._id, name: user.name, email: user.email, companyId: user.companyId } // Garante que companyId está na resposta
-    });
+      refreshToken: refreshTokenValue,
+      user: { id: user._id, name: user.name, email: user.email, companyId: user.companyId }
+    }});
   } catch (error) {
-    console.error('Erro no loginUser:', error);
-    return res.status(500).json({ message: 'Erro interno ao fazer login.' });
+    return errorResponse(res, { status: 500, message: "Erro interno ao fazer login.", errors: error });
   }
 };
 
-// =============================================================
-
 /**
- * Realiza o logout do usuário.
- * Esta função implementa um logout *stateful*. O cliente envia o `refreshToken`
- * que possui, e o servidor o localiza no banco de dados e o marca como inativo,
- * impedindo que ele seja usado para gerar novos tokens de acesso.
- * @param {object} req - O objeto de requisição do Express.
- * @param {object} res - O objeto de resposta do Express.
+ * @desc    Realizar o logout do usuário, invalidando o refresh token.
+ * @route   POST /api/auth/logout
+ * @access  Private
+ * @note    Esta função implementa um logout *stateful*. O cliente envia o `refreshToken`
+ *          que possui, e o servidor o localiza no banco de dados e o marca como inativo,
+ *          impedindo que ele seja usado para gerar novos tokens de acesso.
  */
 export const logoutUser = async (req, res) => {
   // O cliente envia o refresh token que possui, e o servidor o invalida.
@@ -135,7 +120,7 @@ export const logoutUser = async (req, res) => {
   // MOTIVO DA MUDANÇA: Garante que o token foi fornecido. Se a rota for pública,
   // esta validação é necessária para evitar processamento desnecessário.
   if (!refreshToken) {
-    return res.status(400).json({ message: "Refresh token não fornecido." });
+    return errorResponse(res, { status: 400, message: "Refresh token não fornecido." });
   }
  
   try {
@@ -147,24 +132,16 @@ export const logoutUser = async (req, res) => {
     console.error("Erro ao invalidar refresh token durante o logout:", error);
   }
 
-  res.status(200).json({ message: "Logout realizado com sucesso. A sessão foi invalidada no servidor." });
+  return successResponse(res, { message: "Logout realizado com sucesso. A sessão foi invalidada no servidor." });
 };
 
-// =============================================================
-
-/**
- * Inicia o processo de recuperação de senha.
- * Gera um token de reset e o salva no documento do usuário.
- * @param {object} req - O objeto de requisição do Express.
- * @param {object} res - O objeto de resposta do Express.
- */
 export const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(404).json({ message: 'Usuário não encontrado.' });
+      return errorResponse(res, { status: 404, message: "Usuário não encontrado." });
     }
 
     // Gera um token seguro
@@ -178,67 +155,45 @@ export const forgotPassword = async (req, res) => {
 
     // Em um app real, aqui você enviaria um e-mail para o usuário com um link contendo `resetToken`.
     // Para este projeto, retornamos o token para facilitar os testes.
-    res.status(200).json({ message: 'Token de reset enviado com sucesso (simulado).', resetToken });
+    return successResponse(res, { message: "Token de reset enviado com sucesso (simulado).", data: { resetToken } });
 
   } catch (error) {
-    console.error('Erro no forgotPassword:', error);
-    res.status(500).json({ message: 'Erro interno no servidor.' });
+    return errorResponse(res, { status: 500, message: "Erro interno no servidor.", errors: error });
   }
 };
 
-/**
- * Reseta a senha do usuário usando um token válido.
- * @param {object} req - O objeto de requisição do Express.
- * @param {object} res - O objeto de resposta do Express.
- */
 export const resetPassword = async (req, res) => {
   try {
     const { token } = req.params;
     const { password, confirmPassword } = req.body;
 
     if (password !== confirmPassword) {
-      return res.status(400).json({ message: 'As senhas não coincidem.' });
+      return errorResponse(res, { status: 400, message: "As senhas não coincidem." });
     }
 
     const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
     const user = await User.findOne({ passwordResetToken: hashedToken, passwordResetExpires: { $gt: Date.now() } });
 
     if (!user) {
-      return res.status(400).json({ message: 'Token inválido ou expirado.' });
+      return errorResponse(res, { status: 400, message: "Token inválido ou expirado." });
     }
 
     user.passwordHash = await bcrypt.hash(password, 10);
     user.passwordResetToken = undefined;
     user.passwordResetExpires = undefined;
     await user.save();
-
-    res.status(200).json({ message: 'Senha alterada com sucesso.' });
+    return successResponse(res, { message: "Senha alterada com sucesso." });
   } catch (error) {
-    console.error('Erro no resetPassword:', error);
-    res.status(500).json({ message: 'Erro interno no servidor.' });
+    return errorResponse(res, { status: 500, message: "Erro interno no servidor.", errors: error });
   }
 };
 
-/**
- * Gera um novo Access Token usando um Refresh Token válido.
- * (Implementação atual é um placeholder).
- * @param {object} req - O objeto de requisição do Express.
- * @param {object} res - O objeto de resposta do Express.
- */
 export const refreshToken = async (req, res) => {
   // A lógica real verificaria o refresh token (geralmente vindo de um cookie httpOnly),
   // e se válido, geraria um novo access token (e opcionalmente um novo refresh token).
-  res.status(200).json({ message: "Token atualizado (placeholder)." });
+  return successResponse(res, { message: "Token atualizado (placeholder)." });
 };
 
-// =============================================================
-
-/**
- * Exclui um usuário e todos os seus dados associados (empresa e transações).
- * Esta é uma operação destrutiva (hard delete) implementada para fins de teste e simplicidade.
- * @param {object} req - O objeto de requisição do Express.
- * @param {object} res - O objeto de resposta do Express.
- */
 export const deleteCurrentUser = async (req, res) => {
   try {
     const userId = req.params.id;
@@ -246,7 +201,7 @@ export const deleteCurrentUser = async (req, res) => {
 
     // Valida se o usuário a ser deletado realmente existe.
     if (!userToDelete) {
-      return res.status(404).json({ message: 'Usuário a ser deletado não encontrado.' });
+      return errorResponse(res, { status: 404, message: "Usuário a ser deletado não encontrado." });
     }
 
     // NOTA SOBRE BOAS PRÁTICAS E LGPD:
@@ -265,8 +220,8 @@ export const deleteCurrentUser = async (req, res) => {
     // Etapa 3: Exclui a empresa associada.
     await Company.findByIdAndDelete(companyId);
 
-    res.status(200).json({ message: 'Usuário e todos os dados associados foram excluídos com sucesso.' });
+    return successResponse(res, { message: "Usuário e todos os dados associados foram excluídos com sucesso." });
   } catch (error) {
-    res.status(500).json({ message: 'Erro no servidor ao tentar excluir o usuário.', error: error.message });
+    return errorResponse(res, { status: 500, message: "Erro no servidor ao tentar excluir o usuário.", errors: error });
   }
 };

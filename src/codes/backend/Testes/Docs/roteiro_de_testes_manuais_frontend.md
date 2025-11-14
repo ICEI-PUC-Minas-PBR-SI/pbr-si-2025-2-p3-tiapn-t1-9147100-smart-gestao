@@ -6,9 +6,18 @@ Este documento fornece um guia passo a passo para validar manualmente as funcion
 
 ### Empresas de Teste Pré-configuradas
 
-Para garantir um ambiente estável e previsível, utilize as empresas de teste fixas. Se elas ainda não existirem, execute o script `node Scripts/create-test-companies.js` (com o backend rodando) para criá-las.
+Para garantir um ambiente estável e previsível para os testes manuais, utilize as empresas de teste fixas.
 
-As credenciais completas (incluindo tokens) estão no arquivo `dados-empresas-teste.md`.
+> **Importante:** Os testes automatizados (`npm test`) agora não apagam mais as empresas de teste manuais. No entanto, se você precisar recriar ou garantir que elas existam, certifique-se de que o backend esteja rodando (`npm start`) e, em outro terminal, na pasta `src/codes/backend`, execute o comando:
+> ```bash
+> npm run create-test-users
+> ```
+
+A execução deste comando gera/atualiza o arquivo `dados-empresas-teste.md` dentro desta mesma pasta (`Testes/Docs/`). **Consulte este arquivo para obter os dados completos de cada empresa**, incluindo:
+- ID da Empresa (`companyId`)
+- ID do Usuário (`userId`)
+- Access Token
+- E outras informações de cadastro.
 
 - **Empresa Frontend:**
   - **E-mail:** `empresa-frontend@test.com`
@@ -61,16 +70,16 @@ Este é o teste mais crítico para o frontend. Valida que a interface de um usu�
 
 - [ ] **Cenário de Preparação (Empresa A):**
     1.  Faça login com a **Empresa Frontend**.
-    2.  Navegue até "Transações" e crie uma nova transação de receita: `Venda de Consultoria` | `R$ 500,00`.
-    3.  Navegue até "Metas" e crie uma nova meta: `Comprar notebook novo`.
+    2.  Navegue até "Transações" e crie uma transação de receita única e facilmente identificável, por exemplo: `Venda Consultoria Teste Manual`.
+    3.  Navegue até "Metas" e crie uma meta única, por exemplo: `Meta Teste Manual`.
     4.  Faça logout.
 
 - [ ] **Cenário de Validação (Empresa B):**
     1.  Faça login com a **Empresa Backend**.
     2.  Navegue até a página de "Transações".
-    3.  **Resultado Esperado:** A lista de transações deve estar **vazia** ou conter apenas transações da **Empresa Backend**. A transação `Venda de Consultoria` **NÃO** deve aparecer.
+    3.  **Resultado Esperado:** A lista de transações deve estar **vazia** ou conter apenas transações da **Empresa Backend**. A transação `Venda Consultoria Teste Manual` **NÃO** deve aparecer.
     4.  Navegue até a página de "Metas".
-    5.  **Resultado Esperado:** A lista de metas deve estar **vazia** ou conter apenas metas da **Empresa Backend**. A meta `Comprar notebook novo` **NÃO** deve aparecer.
+    5.  **Resultado Esperado:** A lista de metas deve estar **vazia** ou conter apenas metas da **Empresa Backend**. A meta `Meta Teste Manual` **NÃO** deve aparecer.
 
 ---
 
@@ -116,7 +125,19 @@ Valida o ciclo completo de gerenciamento de transações.
 
 ---
 
-## 5. Módulo de Relatórios
+## 5. Módulo de Uploads
+
+- [ ] **Anexar Arquivo a uma Transação:**
+    - **Ação:** Em uma transação existente, clique no ícone de anexo, selecione um arquivo (PDF ou imagem) e confirme.
+    - **Resultado Esperado:** A interface deve indicar que o anexo foi enviado com sucesso. Um ícone ou link para visualizar o anexo deve aparecer ao lado da transação.
+
+- [ ] **Remover Anexo:**
+    - **Ação:** Em uma transação que já possui um anexo, clique na opção para remover o anexo.
+    - **Resultado Esperado:** O anexo deve ser removido e a interface atualizada para refletir que não há mais um anexo associado.
+
+---
+
+## 6. Módulo de Relatórios
 
 - [ ] **Gerar e Exportar Relatórios via Menu:**
     - **Ação:** Com algumas transações cadastradas, vá para a página de relatórios.

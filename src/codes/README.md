@@ -7,36 +7,58 @@ Este diretório contém todos os arquivos-fonte necessários para o funcionament
 O Smart Gestão é uma aplicação web full-stack que utiliza:
 
 ### Arquitetura
-- **Backend (API RESTful)**: Construído com Node.js e Express, responsável por toda a lógica de negócio, autenticação e interação com o banco de dados.
+- **Backend (API RESTful)**: Construído com Node.js e Express, responsável por toda a lógica de negócio, autenticação, segurança (multi-tenant) e interação com o banco de dados.
 - **Frontend (Cliente Web)**: Interface de usuário construída com HTML, CSS e JavaScript puro, que consome os dados da API.
-- **Banco de Dados**: MongoDB (NoSQL) para persistência de dados, gerenciado via Mongoose.
+- **Banco de Dados**: MongoDB (NoSQL) para persistência de dados, gerenciado via Mongoose para garantir a estrutura e validação dos dados.
 
 ### Fluxo de Dados
 1. **Cliente (Browser)**
-   - O usuário interage com a interface (páginas HTML).
-   - O JavaScript do frontend captura as ações, valida os dados e realiza requisições HTTP (AJAX/Fetch) para a API do backend.
-   - A sessão do usuário (token JWT) é gerenciada de forma segura no `localStorage`.
+   - Executa JavaScript no frontend
+   - Gerencia estado local com LocalStorage
+   - Realiza requisições HTTP para a API
 
 2. **Servidor (Node.js)**
-   - Recebe as requisições na porta configurada (padrão: 5000).
-   - Middlewares interceptam a requisição para autenticar o usuário (via JWT), verificar permissões e registrar logs.
+   - Recebe requisições na porta 5000
+   - Autentica usando JWT
+   - Processa regras de negócio
    - Controllers processam a lógica de negócio e interagem com o MongoDB através dos Models.
 
 3. **Banco de Dados (MongoDB)**
-   - Armazena os dados da aplicação em coleções de documentos JSON.
-   - Garante a integridade e a estrutura dos dados através dos Schemas definidos no Mongoose.
+   - Armazena dados em collections
+   - Gerencia relacionamentos
+   - Executa queries otimizadas
 
 ## Estrutura do Projeto
 
 ```text
 src/
-├── codes/              # Diretório raiz do código-fonte.
-│   ├── backend/        # API REST em Node.js/Express. Responsável pela lógica de negócio.
+├── codes/
+│   ├── backend/        # API REST em Node.js/Express (Ponto de partida)
+│   │   ├── config/
+│   │   ├── controllers/
+│   │   ├── middlewares/
+│   │   ├── models/
+│   │   ├── routes/
+│   │   ├── Scripts/
+│   │   ├── services/
+│   │   ├── utils/
+│   │   ├── Testes/
+│   │   │   ├── 1-auth/
+│   │   │   ├── 2-features/
+│   │   │   ├── 3-security/
+│   │   │   ├── 4-reports/
+│   │   │   ├── config/
+│   │   │   ├── Docs/
+│   │   │   └── resultados/
+│   │   ├── server.js
 │   │   └── README-backend.md
-│   ├── frontend/       # Interface web principal em HTML, CSS e JavaScript puro.
-│   │   └── README-frontend.md
+│   ├── frontend/       # Interface web legada em HTML, CSS e JavaScript puro.
+│   │   ├── css/
+│   │   ├── js/
+│   │   └── pages/
 │   └── react/          # Prova de conceito da tela de login em React.
-└── assets/             # Recursos estáticos (imagens, fontes, etc.).
+│       └── README-react.md
+└── assets/            # Recursos estáticos compartilhados
 ```
 
 ## Componentes Principais

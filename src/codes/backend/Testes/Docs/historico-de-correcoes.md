@@ -56,17 +56,22 @@ Este documento serve como um registro cronológico e detalhado dos desafios, inv
 -   **Sintoma:** Erros como `401 Unauthorized` inconsistentes, especialmente no teste de logout (`auth.test.js`), e falhas em testes que dependiam de um estado limpo do banco de dados.
 -   **Causa:**
     1.  **Gerenciamento de Conexão Fragmentado:** Scripts de setup e teardown separados (`test-setup.js`, `test-teardown.js`) dificultavam o gerenciamento da conexão com o banco de dados, que às vezes era fechada prematuramente ou não era limpa corretamente.
-    2.  **Poluição de Dados:** Testes legados (`api.test.js`, `auth.legacy.test.js`, `isolamento-simples.test.js`, `isolamento.legacy.test.js`, `isolamento.test.js`) criavam dados no banco sem limpá-los adequadamente, causando conflitos e comportamentos imprevisíveis nos testes mais novos e robustos.
+    2.  **Poluição de Dados:** Testes legados e a abordagem inicial de `deleteMany({})` no `setup()` limpavam **todo** o banco de dados, destruindo os dados de teste manuais e causando conflitos.
 -   **Solução (Ambiente Personalizado do Jest):**
     1.  **`mongo-test-environment.js`**: Foi criado um ambiente de teste personalizado para o Jest. Esta classe passou a ser a **única responsável** por todo o ciclo de vida do banco de dados de teste:
-        -   **`setup()`**: Antes de **todos** os testes, conecta-se ao banco, **limpa todas as coleções** e popula com os dados essenciais (permissões, usuários de teste).
-        -   **`teardown()`**: Após **todos** os testes, desconecta-se do banco de forma segura.
+        -   **`setup()`**: Antes de **todos** os testes, conecta-se ao banco e popula com os dados essenciais para os testes automatizados (Empresa A, Empresa B).
+        -   **`teardown()`**: Após **todos** os testes, executa uma **limpeza seletiva**, removendo **apenas** os documentos que foram criados durante o `setup()`, mantendo os dados manuais intactos.
     2.  **Remoção de Redundância:** Com a nova abordagem, os scripts `test-setup.js` e `test-teardown.js` tornaram-se obsoletos e foram removidos. Os testes legados que causavam poluição também foram removidos, pois suas validações já eram cobertas pelos testes mais modernos e robustos.
 -   **Resultado:** O ciclo de vida do banco de dados foi centralizado e automatizado, garantindo um ambiente limpo e previsível para cada execução da suíte de testes.
 
 ---
 
 ### 5. Desafios de Organização e Nomenclatura de Arquivos
+
+-   **Data:** Etapa final de estabilização.
+-   **Sintoma:** Necessidade de garantir que a nova abordagem de "limpeza seletiva" realmente protegia os dados manuais.
+-   **Causa:** Confiança é boa, mas verificação é melhor. Era preciso um teste que provasse que o `npm test` não destruía o trabalho manual.
+-   **Solução:** Criação do teste "guardião" `Testes/3-security/persistence.test.js`. Este teste executa a suíte completa e, ao final, verifica se os usuários de teste manuais ainda existem no banco de dados, servindo como uma trava de segurança contra futuras regressões no processo de limpeza.
 
 -   **Data:** Durante a implementação de novas funcionalidades (ex: geração de PDFs).
 -   **Sintoma:** Erro `ERR_MODULE_NOT_FOUND` para `pdfService.js` ao iniciar o servidor.
@@ -79,6 +84,19 @@ Este documento serve como um registro cronológico e detalhado dos desafios, inv
 
 ---
 
-### 6. Conclusão
+### 6. Estabilização Final: A Jornada do Erro 500 no Teste de Upload
+
+-   **Data:** Etapa final de depuração.
+-   **Sintoma:** O teste `Deve retornar 404 ao tentar fazer upload para uma transação inexistente` falhava consistentemente, retornando `500 Internal Server Error` em vez do `404` esperado.
+-   **Causa Raiz (Investigação):** A análise dos logs revelou uma cadeia de problemas. Inicialmente, o erro era um `SyntaxError` que impedia o servidor de iniciar, pois as funções de upload não existiam. Após criá-las, o erro evoluiu para um `TypeError` devido a uma resposta de API inconsistente. Corrigido isso, o erro final se manifestou: o `500 Internal Server Error`. A causa raiz era que, ao receber um ID inválido (ex: `...e1z`), o controller `uploadAttachment` tentava executar `Transaction.findById()` com o ID malformado. Isso causava um `CastError` no Mongoose antes que a lógica de tratamento de erro pudesse ser executada, resultando no erro 500.
+-   **Solução Definitiva (Robustez nos Endpoints):**
+    1.  **Validação de `ObjectId`**: Foi adicionado um bloco de verificação `if (!mongoose.Types.ObjectId.isValid(req.params.id))` no início de **todas** as funções de controller que recebem um ID na URL (`updateTransaction`, `deleteTransaction`, `uploadAttachment`, `updateClient`, etc.).
+    2.  **Retorno Imediato**: Se o ID for inválido, o controller agora retorna imediatamente um erro `404 Not Found`, garantindo o comportamento correto e esperado pelos testes, sem depender de outros middlewares para tratar o erro.
+    3.  **Padronização Geral**: Como parte da solução, todos os controllers foram revisados para garantir o uso consistente do `responseHelper` e a nomenclatura correta dos modelos (`Goal` em vez de `Meta`), solidificando a qualidade e a consistência do código.
+-   **Resultado:** A suíte de testes de funcionalidades (`2-features`) passou a ser executada com 100% de sucesso, validando a robustez e a correção de todos os endpoints.
+
+---
+
+### 7. Conclusão
 
 Com todas essas mudanças e depurações, o ambiente de testes foi completamente estabilizado. A suíte completa agora executa de forma rápida, isolada e confiável com um único comando `npm test`, fornecendo feedback em tempo real e logs detalhados.

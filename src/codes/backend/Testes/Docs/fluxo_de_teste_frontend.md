@@ -115,7 +115,7 @@ Este documento detalha a lógica e o comportamento esperado dos scripts do front
 
 ---
 
-## Fluxo 7: Interoperabilidade com a Prova de Conceito (React)
+## Fluxo 6: Interoperabilidade com a Prova de Conceito (React)
 
 **Objetivo:** Validar que a sessão iniciada por uma aplicação externa (React) é reconhecida e mantida pelo sistema legado.
 

@@ -23,10 +23,10 @@ const router = express.Router();
 
 // Rota para listar todos os alertas da empresa do usuário autenticado.
 // GET /api/alerts
-router.get("/", authMiddleware, companyScopeMiddleware, getAllAlerts);
+router.get("/", authMiddleware, getAllAlerts);
 
 // Rota para obter um alerta específico por ID.
-// O `companyScopeMiddleware` garante que o usuário só possa acessar alertas de sua empresa.
+// O `companyScopeMiddleware` garante que o usuário só possa acessar alertas de sua própria empresa.
 // GET /api/alerts/:id
 router.get("/:id", authMiddleware, companyScopeMiddleware, getAlertById);
 
@@ -39,8 +39,8 @@ router.post("/", authMiddleware, companyScopeMiddleware, auditMiddleware("CREATE
 router.put("/:id", authMiddleware, companyScopeMiddleware, auditMiddleware("UPDATE_ALERT"), updateAlert);
 
 // Rota para marcar um alerta como lido.
-// PUT /api/alerts/:id/read
-router.put("/:id/read", authMiddleware, companyScopeMiddleware, auditMiddleware("READ_ALERT"), markAlertAsRead);
+// PATCH /api/alerts/:id/read
+router.patch("/:id/read", authMiddleware, companyScopeMiddleware, auditMiddleware("READ_ALERT"), markAlertAsRead);
 
 // Rota para excluir um alerta.
 // DELETE /api/alerts/:id

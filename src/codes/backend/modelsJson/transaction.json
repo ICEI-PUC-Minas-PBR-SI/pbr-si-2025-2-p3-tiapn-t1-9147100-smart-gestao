@@ -1,8 +1,8 @@
 {
-  "tipo": "DESPESA",
-  "descricao": "Compra de material de escritório",
-  "valor": 150.75,
-  "data_transacao": "2025-10-26T10:00:00.000Z",
-  "categoria": "Material de Escritório",
-  "status": "PAGO"
+  "description": "Compra de material de escritório",
+  "amount": 150.75,
+  "type": "expense",
+  "date": "2025-10-26T10:00:00.000Z",
+  "category": "Material de Escritório",
+  "status": "completed"
 }

@@ -1,44 +1,15 @@
-// =================================================================================
-// ARQUIVO: controllers/reportController.js
-// DESCRIÇÃO: Controladores responsáveis por orquestrar a geração de relatórios,
-//            principalmente em formato PDF. Eles buscam os dados necessários
-//            e invocam os serviços correspondentes para criar os arquivos.
-// =================================================================================
-
 import Transaction from '../models/Transaction.js';
-import Alert from '../models/Alert.js';
 import Company from '../models/Company.js';
-import Client from '../models/Client.js';
 import mongoose from 'mongoose';
 import { errorResponse } from '../utils/responseHelper.js';
 
-// @desc    Exportar um relatório de transações em PDF
-// @route   GET /api/reports/export/pdf
-// @access  Private
-export const exportTransactionsPDF = async (req, res) => {
-  try {
-    const companyId = new mongoose.Types.ObjectId(req.user.companyId);
-
-    // 1. Busca os dados necessários em paralelo
-    const transactions = await Transaction.find({ companyId }).sort({ date: -1 }).limit(100).lean();
-    const company = await Company.findById(companyId).lean();
-
-    // 2. Chama o serviço de PDF para gerar o relatório
-    // Importa dinamicamente o serviço de PDF no momento da requisição para permitir
-    // que testes que mockam `pdfService` substituam a implementação.
-    const { generateFinancialReportPDF } = await import('../services/pdfService.js');
-    generateFinancialReportPDF({ transactions, company }, res);
-  } catch (error) {
-    return errorResponse(res, 500, "Erro interno ao gerar relatório de transações.", error);
-  }
-};
-
-// @desc    Exportar um relatório de clientes em PDF
-// @route   GET /api/reports/export/clients-pdf
-// @access  Private
+/**
+ * @desc    Exportar um relatório de clientes em PDF.
+ */
 export const exportClientsPDF = async (req, res) => {
     try {
         const companyId = req.user.companyId;
+        const Client = mongoose.model('Client'); // Evita importação circular se Client usar algum serviço
         const company = await Company.findById(companyId);
         const clients = await Client.find({ companyId });
 
@@ -50,13 +21,10 @@ export const exportClientsPDF = async (req, res) => {
 
         generateClientsReportPDF({ clients, company }, res);
     } catch (error) {
-        return errorResponse(res, 500, 'Erro interno ao gerar relatório de clientes.', error);
+        return errorResponse(res, { status: 500, message: 'Erro interno ao gerar relatório de clientes.', errors: error });
     }
 };
 
-// @desc    Obter um resumo financeiro (total de receitas, despesas e balanço)
-// @route   GET /api/reports/summary
-// @access  Private
 export const getFinancialSummary = async (req, res) => {
   try {
     const companyId = new mongoose.Types.ObjectId(req.user.companyId);
@@ -79,13 +47,10 @@ export const getFinancialSummary = async (req, res) => {
       balance: revenue - expense,
     });
   } catch (error) {
-    return errorResponse(res, 500, 'Erro ao gerar resumo financeiro.', error);
+    return errorResponse(res, { status: 500, message: 'Erro ao gerar resumo financeiro.', errors: error });
   }
 };
 
-// @desc    Obter um relatório financeiro agrupado por mês
-// @route   GET /api/reports/monthly
-// @access  Private
 export const getMonthlyReport = async (req, res) => {
   try {
     const companyId = new mongoose.Types.ObjectId(req.user.companyId);
@@ -102,21 +67,16 @@ export const getMonthlyReport = async (req, res) => {
     ]);
     res.json(report);
   } catch (error) {
-    return errorResponse(res, 500, 'Erro ao gerar relatório mensal.', error);
+    return errorResponse(res, { status: 500, message: 'Erro ao gerar relatório mensal.', errors: error });
   }
 };
 
-// @desc    Obter um relatório de todos os alertas gerados para a empresa
-// @route   GET /api/reports/alerts
-// @access  Private
 export const getAlertsReport = async (req, res) => {
+  const Alert = mongoose.model('Alert');
   const alerts = await Alert.find({ companyId: req.user.companyId }).sort({ createdAt: -1 });
   res.json(alerts);
 };
 
-// @desc    Exportar uma fatura para uma transação específica
-// @route   GET /api/reports/export/invoice/:transactionId
-// @access  Private
 export const exportInvoicePDF = async (req, res) => {
     try {
         const { transactionId } = req.params;
@@ -124,15 +84,16 @@ export const exportInvoicePDF = async (req, res) => {
 
         const transaction = await Transaction.findOne({ _id: transactionId, companyId });
         if (!transaction) {
-            return errorResponse(res, 404, "Transação não encontrada.");
+            return errorResponse(res, { status: 404, message: "Transação não encontrada." });
         }
 
     const company = await Company.findById(companyId).lean();
+    const Client = mongoose.model('Client');
     const client = transaction.clientId ? await Client.findById(transaction.clientId).lean() : null;
 
     const { generateInvoicePDF } = await import('../services/pdfService.js');
     generateInvoicePDF({ transaction, company, client }, res);
     } catch (error) {
-        return errorResponse(res, 500, "Erro interno ao gerar fatura.", error);
+        return errorResponse(res, { status: 500, message: "Erro interno ao gerar fatura.", errors: error });
     }
 };

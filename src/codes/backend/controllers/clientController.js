@@ -7,10 +7,8 @@
 
 import Client from '../models/Client.js';
 import { successResponse, errorResponse } from '../utils/responseHelper.js';
+import mongoose from 'mongoose';
 
-// @desc    Criar um novo cliente
-// @route   POST /api/clients
-// @access  Private
 export const createClient = async (req, res) => {
   try {
     const payload = {
@@ -24,9 +22,6 @@ export const createClient = async (req, res) => {
   }
 };
 
-// @desc    Listar todos os clientes da empresa logada
-// @route   GET /api/clients
-// @access  Private
 export const getClients = async (req, res) => {
   try {
     const clients = await Client.find({ companyId: req.user.companyId });
@@ -36,31 +31,29 @@ export const getClients = async (req, res) => {
   }
 };
 
-// @desc    Atualizar um cliente
-// @route   PUT /api/clients/:id
-// @access  Private
 export const updateClient = async (req, res) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) return errorResponse(res, { status: 404, message: "Cliente não encontrado" });
+
     const updatedClient = await Client.findOneAndUpdate(
       { _id: req.params.id, companyId: req.user.companyId },
       { $set: req.body },
       { new: true, runValidators: true }
     );
-    if (!updatedClient) return errorResponse(res, { status: 404, message: 'Cliente não encontrado.' });
+    if (!updatedClient) return errorResponse(res, { status: 404, message: "Cliente não encontrado" });
     return successResponse(res, { data: updatedClient });
   } catch (error) {
     return errorResponse(res, { status: 400, message: 'Erro ao atualizar cliente.', errors: error });
   }
 };
 
-// @desc    Deletar um cliente
-// @route   DELETE /api/clients/:id
-// @access  Private
 export const deleteClient = async (req, res) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) return errorResponse(res, { status: 404, message: "Cliente não encontrado" });
+
     const client = await Client.findOneAndDelete({ _id: req.params.id, companyId: req.user.companyId });
     if (!client) {
-      return errorResponse(res, { status: 404, message: 'Cliente não encontrado.' });
+      return errorResponse(res, { status: 404, message: "Cliente não encontrado" });
     }
     return successResponse(res, { message: 'Cliente removido com sucesso.' });
   } catch (error) {

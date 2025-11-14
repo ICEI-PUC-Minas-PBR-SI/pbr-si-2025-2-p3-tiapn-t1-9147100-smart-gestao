@@ -10,25 +10,22 @@ const { Schema, model } = mongoose;
 
 const PermissionSchema = new Schema(
   {
-    // Nome único da permissão, usado internamente para verificações de autorização.
+    // Nome único da permissão, usado internamente para verificações de autorização (RBAC - Role-Based Access Control).
     name: {
       type: String,
       required: true,
       unique: true,   // Garante que não existam permissões com o mesmo nome.
       trim: true,
-      uppercase: true // Padroniza todos os nomes para maiúsculas para evitar inconsistências (ex: 'admin' vs 'ADMIN').
+      uppercase: true // Padroniza todos os nomes para maiúsculas para evitar inconsistências (ex: 'admin' vs 'ADMIN') nas checagens.
     },
-    // Descrição amigável explicando o que a permissão concede ao usuário.
+    // Descrição textual amigável explicando o que a permissão concede ao usuário.
     description: {
       type: String,
       required: true
     },
   },
   {
-    // Adiciona os campos `createdAt` e `updatedAt` automaticamente.
-    timestamps: true,
-    // Define explicitamente o nome da coleção no banco de dados.
-    collection: "Permissions"
+    timestamps: true, // Adiciona `createdAt` e `updatedAt` automaticamente.
   }
 );
 

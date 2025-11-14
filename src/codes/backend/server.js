@@ -35,6 +35,7 @@ import { connectDB } from "./config/db.js";
 
 // Importa o script de inicialização que garante que as permissões (roles)
 // essenciais do sistema (como ROOT, ADMIN_COMPANY) existam no banco de dados.
+import { errorHandler } from "./middlewares/errorMiddleware.js";
 import { initPermissions } from "./Scripts/initPermissions.js";
 
 // --- Importação de Todas as Rotas da API ---
@@ -108,6 +109,9 @@ app.use("/api/reports", reportRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/users", userRoutes);
 
+// Middleware de tratamento de erros global. Deve ser o último middleware a ser registrado.
+app.use(errorHandler);
+
 // ============================================================
 // --- 6. INICIALIZAÇÃO DO SERVIDOR (funções exportadas para testes) ---
 // ============================================================
@@ -127,14 +131,16 @@ let server;
 export async function startServer({ dbUri = process.env.MONGO_URI_TEST || process.env.MONGO_URI, port = PORT } = {}) {
   try {
     console.log('⏳ Iniciando servidor Smart Gestão (startServer)...');
+    
     await connectDB(dbUri);
+    console.log('✅ [1/3] Conexão com o banco de dados estabelecida!');
+
     await initPermissions();
+    console.log('✅ [2/3] Permissões do sistema validadas/inicializadas.');
 
     return new Promise((resolve, reject) => {
       server = app.listen(port, () => {
-        console.log(`✅ Conexão com o banco estabelecida!`);
-        console.log(`🚀 Servidor rodando na porta ${port}`);
-        console.log(`📡 Verifique em: http://localhost:${port}/api/health`);
+        console.log(`✅ [3/3] Servidor rodando na porta ${port}`);
         resolve(server);
       });
       server.on('error', (err) => reject(err));
@@ -178,3 +184,17 @@ if (process.env.NODE_ENV !== 'test') {
     }
   })();
 }
+
+// ============================================================
+// --- 7. GRACEFUL SHUTDOWN ---
+// ============================================================
+// Ouve por sinais de encerramento do processo (como Ctrl+C) para garantir
+// que o servidor e a conexão com o banco de dados sejam finalizados de forma limpa.
+async function gracefulShutdown(signal) {
+  console.log(`\n🚨 Recebido sinal ${signal}. Inciando graceful shutdown...`);
+  await stopServer();
+  console.log('✅ Processo finalizado com sucesso.');
+  process.exit(0);
+}
+process.on('SIGINT', gracefulShutdown);
+process.on('SIGTERM', gracefulShutdown);

@@ -191,7 +191,67 @@ Este fluxo permite que um usuário que esqueceu sua senha possa redefini-la de f
 
 ---
 
-## Fluxo 6: Login via Prova de Conceito (React)
+## Fluxo 7: Upload de Anexo para uma Transação
+
+Este fluxo valida como o sistema lida com o envio de arquivos (comprovantes, notas fiscais).
+
+#### **Etapa 1: Envio do Arquivo pelo Usuário**
+
+*   **Ação do Usuário (Frontend):**
+    *   Em uma transação existente, clica no botão "Anexar Comprovante".
+    *   Seleciona um arquivo (PDF ou imagem) do seu computador.
+
+*   **O que o Frontend Faz:**
+    *   Cria um objeto `FormData`.
+    *   Adiciona o arquivo selecionado ao `FormData`.
+    *   Envia uma requisição `POST` para `/api/transactions/:id/upload`, incluindo o `FormData` no corpo e o token de acesso no cabeçalho.
+
+*   **O que o Backend Faz (`transactionController.js` e `multer`):**
+    *   O middleware `multer` intercepta a requisição, processa o arquivo e o salva temporariamente.
+    *   O `transactionController` valida o tipo do arquivo (rejeitando tipos não permitidos).
+    *   Ele cria a estrutura de pastas segura (`uploads/[companyId]/[img|pdf]/...`).
+    *   Move o arquivo para o diretório final, renomeando-o com um timestamp para evitar conflitos.
+    *   Atualiza o documento da transação no banco de dados, salvando o caminho do arquivo no campo `attachment`.
+    *   Retorna uma resposta de sucesso com os dados da transação atualizada.
+
+*   **Resultado Esperado (Frontend):**
+    *   Recebe a confirmação de sucesso.
+    *   Atualiza a interface para mostrar um link ou um ícone indicando que a transação agora possui um anexo.
+
+---
+
+## Fluxo 5: Upload de Anexo para uma Transação
+
+Este fluxo valida como o sistema lida com o envio de arquivos (comprovantes, notas fiscais).
+
+#### **Etapa 1: Envio do Arquivo pelo Usuário**
+
+*   **Ação do Usuário (Frontend):**
+    *   Em uma transação existente, clica no ícone/botão "Anexar Comprovante".
+    *   Seleciona um arquivo (PDF ou imagem) do seu computador.
+
+*   **O que o Frontend Faz:**
+    *   Cria um objeto `FormData`.
+    *   Adiciona o arquivo selecionado ao `FormData`.
+    *   Envia uma requisição `POST` para `/api/transactions/:id/upload`, incluindo o `FormData` no corpo e o token de acesso no cabeçalho `Authorization`.
+
+*   **O que o Backend Faz (`uploadMiddleware.js` e `transactionController.js`):**
+    *   O `uploadMiddleware` (configurado com `multer`) intercepta a requisição.
+    *   Ele valida o tipo do arquivo (`fileFilter`), rejeitando tipos não permitidos.
+    *   Ele determina o diretório de destino seguro com base no `companyId` do usuário (`uploads/[companyId]/[img|pdf]/...`).
+    *   Salva o arquivo no diretório final, renomeando-o com um timestamp para evitar conflitos.
+    *   O `transactionController` recebe a requisição (já com `req.file` populado pelo middleware).
+    *   Ele valida se o ID da transação na URL é um `ObjectId` válido. Se não for, retorna `404 Not Found`.
+    *   Atualiza o documento da transação no banco de dados, salvando o caminho do arquivo no campo `attachment`.
+    *   Retorna uma resposta de sucesso com os dados da transação atualizada.
+
+*   **Resultado Esperado (Frontend):**
+    *   Recebe a confirmação de sucesso.
+    *   Atualiza a interface para mostrar um link ou ícone indicando que a transação agora possui um anexo.
+
+---
+
+## Fluxo 7: Login via Prova de Conceito (React)
 
 Este fluxo demonstra a capacidade do backend de servir a diferentes clientes e a interoperabilidade entre uma aplicação moderna (React) e o sistema legado.
 

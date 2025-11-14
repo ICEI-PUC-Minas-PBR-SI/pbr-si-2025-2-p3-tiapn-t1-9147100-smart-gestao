@@ -5,14 +5,22 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "concurrently \"npm:start:backend\" \"npm:start:frontend\"",
+    "start": "concurrently \"npm:start:backend\" \"npm:start:frontend\" \"npm:start:react-demo\" \"npm:summary\"",
     "start:backend": "node server.js",
-    "start:frontend": "http-server ../frontend -p 3000",
+    "start:frontend": "wait-on http://localhost:5000/api/health && http-server ../frontend -p 3000",
     "test:server": "node test-server.js",
     "dev": "nodemon server.js",
-  "test": "node -r dotenv/config Testes/run-test-log.js",
-    "start:react-demo": "npm start --prefix ../react",
-    "start:full-demo": "concurrently \"npm:start:backend\" \"npm:start:frontend\" \"npm:start:react-demo\""
+    "test": "node Testes/run-test-log.js",
+    "start:react-demo": "wait-on http://localhost:3000 && npm start --prefix ../react",
+    "start:full-demo": "concurrently \"npm:start:backend\" \"npm:start:frontend\" \"npm:start:react-demo\"",
+    "summary": "wait-on tcp:5000 tcp:3000 tcp:3001 && node Scripts/print-summary.js",
+    "create-test-users": "node Scripts/create-test-companies.js",
+    "test:auth": "node Testes/run-test-log.js Testes/1-auth/",
+    "test:features": "node Testes/run-test-log.js Testes/2-features/",
+    "test:security": "node Testes/run-test-log.js Testes/3-security/",
+    "test:reports": "node Testes/run-test-log.js Testes/4-reports/",
+    "test:uploads": "node Testes/run-test-log.js Testes/2-features/uploads.test.js",
+    "test:persistence": "node Testes/run-test-log.js Testes/3-security/persistence.test.js"
   },
   "dependencies": {
     "axios": "^1.7.2",
@@ -29,6 +37,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^10.1.0",
+    "cross-env": "^7.0.3",
     "concurrently": "^8.2.2",
     "http-server": "^14.1.1",
     "jest": "^30.2.0",

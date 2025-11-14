@@ -1,9 +1,3 @@
-// =================================================================================
-// ARQUIVO: routes/metaRoutes.js
-// DESCRIÇÃO: Define as rotas para as operações CRUD de Metas Financeiras.
-//            Todas as rotas são protegidas e com escopo por empresa.
-// =================================================================================
-
 import express from "express";
 import {
   createMeta,

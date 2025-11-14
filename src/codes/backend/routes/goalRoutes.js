@@ -14,22 +14,29 @@ import {
 } from "../controllers/goalController.js";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 import { companyScopeMiddleware } from "../middlewares/companyScopeMiddleware.js";
+import { auditMiddleware } from "../middlewares/auditMiddleware.js";
 
 const router = express.Router();
 
-// GET /api/goals - Lista todas as metas da empresa
-router.get("/", authMiddleware, companyScopeMiddleware, getGoals);
+// Rota para listar todas as metas financeiras da empresa do usuário.
+// GET /api/goals
+router.get("/", authMiddleware, getGoals);
 
-// GET /api/goals/:id - Obtém uma meta específica por ID
+// Rota para obter uma meta financeira específica por ID.
+// O `companyScopeMiddleware` garante que o usuário só possa acessar metas de sua própria empresa.
+// GET /api/goals/:id
 router.get("/:id", authMiddleware, companyScopeMiddleware, getGoalById);
 
-// POST /api/goals - Cria uma nova meta
-router.post("/", authMiddleware, companyScopeMiddleware, createGoal);
+// Rota para criar uma nova meta financeira.
+// POST /api/goals
+router.post("/", authMiddleware, auditMiddleware("CREATE_GOAL"), createGoal);
 
-// PUT /api/goals/:id - Atualiza uma meta existente
-router.put("/:id", authMiddleware, companyScopeMiddleware, updateGoal);
+// Rota para atualizar uma meta financeira existente.
+// PUT /api/goals/:id
+router.put("/:id", authMiddleware, companyScopeMiddleware, auditMiddleware("UPDATE_GOAL"), updateGoal);
 
-// DELETE /api/goals/:id - Exclui uma meta
-router.delete("/:id", authMiddleware, companyScopeMiddleware, deleteGoal);
+// Rota para excluir uma meta financeira.
+// DELETE /api/goals/:id
+router.delete("/:id", authMiddleware, companyScopeMiddleware, auditMiddleware("DELETE_GOAL"), deleteGoal);
 
 export default router;

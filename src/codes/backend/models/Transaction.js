@@ -42,7 +42,13 @@ const TransactionSchema = new Schema({
     default: "pending" 
   },
   // URL para um anexo (ex: comprovante, nota fiscal).
-  attachmentUrl: { type: String }
+  attachment: { type: String },
+  // --- Campos para Soft Delete (Quarentena) ---
+  // Flag que marca o documento como excluído, em vez de removê-lo fisicamente.
+  deleted: { type: Boolean, default: false, select: false },
+  // Data em que o documento foi marcado como excluído.
+  deletedAt: { type: Date, select: false }
+
 }, { timestamps: true });
 
 // Índice composto para otimizar consultas de listagem e relatórios,

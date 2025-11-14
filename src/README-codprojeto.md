@@ -31,35 +31,50 @@ O Smart Gestão é uma aplicação web full-stack que utiliza:
 
 ## Estrutura do Projeto
 
-```
+```text
 src/
 ├── codes/
-│   ├── backend/        # API REST em Node.js/Express
-│   │   └── README-backend.md  # Documentação específica do backend
-│   └── frontend/       # Interface web em HTML/CSS/JS
+│   ├── backend/        # API REST em Node.js/Express (Ponto de partida)
+│   │   ├── config/
+│   │   ├── controllers/
+│   │   ├── middlewares/
+│   │   ├── models/
+│   │   ├── routes/
+│   │   ├── Scripts/
+│   │   ├── services/
+│   │   ├── utils/
+│   │   ├── Testes/
+│   │   │   ├── 1-auth/
+│   │   │   ├── 2-features/
+│   │   │   ├── 3-security/
+│   │   │   ├── 4-reports/
+│   │   │   ├── config/
+│   │   │   ├── Docs/
+│   │   │   └── resultados/
+│   │   ├── server.js
+│   │   └── README-backend.md
+│   ├── frontend/       # Interface web legada em HTML/CSS/JS
 │   │   ├── css/
 │   │   ├── js/
-│   │   │   ├── docs/   # Documentação e guias de integração do frontend
-│   │   │   └── ...
 │   │   └── pages/
 │   └── react/          # Prova de conceito da tela de login em React
-│       └── README-frontend.md # Documentação específica do frontend (legado)
+│       └── README-react.md
 └── assets/            # Recursos estáticos compartilhados
 ```
 
 ## Componentes Principais
 
 ### Backend (API REST)
-- Node.js com Express
-- MongoDB para persistência
-- JWT para autenticação
-- Documentação detalhada em `codes/backend/README-backend.md`
+- **Tecnologias:** Node.js, Express, MongoDB com Mongoose.
+- **Funcionalidades:** Autenticação JWT, CRUDs completos, upload de arquivos, geração de relatórios, arquitetura multi-tenant.
+- **Testes:** Suíte de testes de integração robusta com Jest.
+- **Documentação Detalhada:** `codes/backend/README-backend.md`
 
 ### Frontend (Web Interface)
-- HTML5, CSS3, JavaScript
-- Arquitetura modular
-- Integração com API REST
-- Documentação detalhada em `codes/frontend/README-frontend.md`
+- **Tecnologias:** HTML5, CSS3, JavaScript (ES6).
+- **Funcionalidades:** Interface para login, cadastro, gerenciamento de transações, metas e visualização de relatórios.
+- **Segurança:** Proteção de rotas do lado do cliente (`authGuard.js`).
+- **Documentação Detalhada:** `codes/frontend/README-frontend.md`
 
 ## Como Iniciar o Projeto
 

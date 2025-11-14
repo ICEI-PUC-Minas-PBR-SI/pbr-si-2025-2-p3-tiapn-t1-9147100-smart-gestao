@@ -1,49 +1,48 @@
 // =================================================================================
 // ARQUIVO: scripts/initPermissions.js
-// DESCRIÇÃO: Contém um script de inicialização que garante que as permissões
-//            (roles) essenciais do sistema existam no banco de dados.
-//            Este script é executado na inicialização do servidor.
+// DESCRIÇÃO: Script de inicialização que garante que as permissões (roles) essenciais
+//            do sistema existam no banco de dados. Este script é **idempotente**,
+//            o que significa que pode ser executado várias vezes sem causar duplicatas.
 // =================================================================================
 
 import Permission from "../models/Permission.js";
+import { ROOT, ADMIN_COMPANY, USER_COMPANY } from "../utils/constants.js";
 
 /**
  * Garante que as permissões de acesso padrão existam no banco de dados.
- * Esta função é idempotente: ela primeiro verifica se alguma permissão já existe.
- * Se a coleção 'Permissions' estiver vazia, ela a popula com os papéis
- * essenciais para o funcionamento do sistema. Caso contrário, não faz nada.
+ * Esta função é idempotente: ela primeiro verifica se as permissões já existem;
+ * se não, ela as cria. Caso contrário, não faz nada.
  * É chamada durante a inicialização do servidor (`server.js`).
  */
 export const initPermissions = async () => {
   try {
     console.log("Verificando permissões de sistema...");
 
-    // Conta eficientemente o número de documentos na coleção de permissões.
-    const count = await Permission.countDocuments();
+    // Verificação de Idempotência: Checa se a permissão 'ROOT' já existe.
+    // Se existir, assume-se que o script já rodou e não é necessário fazer mais nada.
+    const rootPermissionExists = await Permission.findOne({ name: ROOT });
 
-    // Se já existir pelo menos uma permissão, assume-se que o banco já foi inicializado.
-    if (count > 0) {
+    if (rootPermissionExists) {
       console.log("Permissões de sistema já existem. Nenhuma ação necessária.");
       return;
     }
 
-    // Array contendo as permissões padrão que são a base do controle de acesso.
+    // Se as permissões não existem, o script as cria.
+    console.log("Permissões não encontradas. Criando permissões padrão...");
+
+    // Array com as permissões padrão que formam a base do controle de acesso (RBAC).
     const permissions = [
       {
-        name: "ROOT",
-        description: "Acesso total ao sistema (donos e administradores gerais do sistema).",
+        name: ROOT,
+        description: "Superusuário. Acesso irrestrito a todos os dados e configurações do sistema.",
       },
       {
-        name: "ADMIN_COMPANY",
-        description: "Administrador da empresa. Pode gerenciar usuários e dados da própria empresa.",
+        name: ADMIN_COMPANY,
+        description: "Administrador de uma empresa. Pode gerenciar usuários e todos os dados da sua própria empresa.",
       },
       {
-        name: "USER_COMPANY",
-        description: "Usuário padrão da empresa, com acesso aos dados da própria organização.",
-      },
-      {
-        name: "READ_ONLY",
-        description: "Usuário com acesso apenas de leitura. Não pode criar, editar ou excluir.",
+        name: USER_COMPANY,
+        description: "Usuário padrão. Pode criar e gerenciar seus próprios dados dentro da empresa.",
       },
     ];
 

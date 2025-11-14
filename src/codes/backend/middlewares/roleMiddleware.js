@@ -8,14 +8,10 @@
 
 /**
  * Cria um middleware que restringe o acesso a uma rota com base nas permissões do usuário.
- * @param {string[]} allowedRoles - Um array de strings contendo os nomes das permissões
- *                                  que são autorizadas a acessar a rota.
- *                                  Ex: ['ADMIN_COMPANY', 'ROOT']
+ * @param {string[]} allowedRoles - Um array com os nomes das permissões autorizadas (ex: ['ADMIN_COMPANY', 'ROOT']).
  * @returns {function} Um middleware Express pronto para ser usado em uma rota.
  */
 export function roleMiddleware(allowedRoles = []) {
-  // A função externa retorna a função de middleware real.
-  // Isso permite que `allowedRoles` seja "lembrado" graças ao conceito de closure.
   return (req, res, next) => {
     try {
       // Pré-requisito: O `authMiddleware` deve ter sido executado antes,

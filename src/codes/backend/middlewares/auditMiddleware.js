@@ -10,52 +10,52 @@
 import { createLog } from "../utils/logger.js";
 
 /**
- * Cria um middleware de auditoria que registra uma ação específica.
- * @param {string} actionName - Um nome curto e descritivo para a ação sendo auditada (ex: 'CREATE_TRANSACTION').
- *
+ * Cria um middleware de auditoria que registra uma ação específica após a finalização da requisição.
+ * @param {string} actionName - Um nome curto e descritivo para a ação sendo auditada (ex: 'CREATE_TRANSACTION'). Se omitido, um nome será gerado dinamicamente.
  * @returns {function} Um middleware Express.
  */
 export function auditMiddleware(actionName = "") {
   return (req, res, next) => {
-    // O evento 'finish' é emitido pelo Node.js quando a resposta foi completamente
-    // enviada ao cliente. Usar este evento desacopla a lógica de logging do
-    // fluxo principal da requisição, evitando atrasos na resposta.
+    // O evento 'finish' é emitido pelo Node.js quando a resposta foi completamente enviada ao cliente.
+    // Usar este evento desacopla a lógica de logging do fluxo principal da requisição,
+    // garantindo que a resposta ao usuário não seja atrasada pela gravação do log.
     res.on("finish", async () => {
       try {
+        // Sanitiza o corpo da requisição para remover dados sensíveis antes de logar.
+        const sanitizedBody = { ...req.body };
+        delete sanitizedBody.password;
+        delete sanitizedBody.passwordHash;
+        delete sanitizedBody.token;
+        delete sanitizedBody.refreshToken;
+
         // Monta o payload do log com informações detalhadas da requisição e do usuário.
         const logData = {
           userId: req.user?.userId || null,
           companyId: req.user?.companyId || null,
-          // Usa o nome da ação fornecido ou gera um nome dinâmico.
           action: actionName || `${req.method}_${req.originalUrl}`,
           description: `Ação finalizada com status: ${res.statusCode}`,
           route: req.originalUrl,
           ip: req.ip || req.headers["x-forwarded-for"] || null,
           userAgent: req.headers["user-agent"] || null,
-          // O campo 'details' armazena um contexto rico para depuração,
-          // incluindo o corpo da requisição, parâmetros e queries.
           details: {
             method: req.method,
             statusCode: res.statusCode,
-            // O corpo da requisição pode conter dados sensíveis.
-            // Em produção, considere filtrar campos como 'password'.
-            body: req.body ? JSON.stringify(req.body) : undefined,
+            body: Object.keys(sanitizedBody).length > 0 ? JSON.stringify(sanitizedBody) : undefined,
             params: req.params,
             query: req.query,
           },
         };
 
-        // Chama a função centralizada para salvar o log no banco de dados.
         await createLog(logData);
       } catch (err) {
-        // Se a gravação do log falhar, apenas registramos o erro no console.
-        // Isso é crucial para que uma falha no sistema de auditoria não quebre a aplicação.
+        // Uma falha na gravação do log não deve quebrar a aplicação.
+        // Apenas registramos o erro no console para análise posterior.
         console.error("Falha crítica ao gravar log de auditoria:", err);
       }
     });
 
-    // Chama `next()` imediatamente para não bloquear o processamento da requisição.
-    // A lógica de log será executada depois, quando o evento 'finish' ocorrer.
+    // Chama `next()` imediatamente para não bloquear o processamento da requisição,
+    // permitindo que o fluxo continue para o próximo middleware ou controller.
     next();
   };
 }

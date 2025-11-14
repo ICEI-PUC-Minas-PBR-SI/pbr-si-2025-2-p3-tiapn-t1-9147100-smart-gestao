@@ -1,8 +1,7 @@
 {
-  "nome": "Nome do Usuário",
+  "name": "Nome do Usuário",
   "email": "novo.usuario@empresa.com",
   "password": "SuaSenhaSegura123",
-  "empresa": {
-    "nome": "Nome da Empresa"
-  }
+  "companyName": "Nome da Empresa",
+  "cnpj": "11222333000144"
 }

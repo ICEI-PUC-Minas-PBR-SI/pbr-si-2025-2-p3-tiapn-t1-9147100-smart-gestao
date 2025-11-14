@@ -66,11 +66,11 @@ Este arquivo é o manifesto do projeto Node.js. Ele define:
 -   **`dependencies`**: Pacotes necessários para a aplicação rodar em produção (Express, Mongoose, etc.).
 -   **`devDependencies`**: Pacotes usados apenas durante o desenvolvimento e teste (Nodemon, Jest, etc.).
 -   **`scripts`**: Comandos de atalho para executar tarefas comuns:
-    -   `npm start`: Inicia o backend e o frontend simultaneamente para uso normal.
-    -   `npm run dev`: Inicia o backend em modo de desenvolvimento com `nodemon`, que reinicia o servidor automaticamente a cada alteração no código.
-    -   `npm test`: Executa a suíte completa de testes automatizados.
-    -   `npm run start:full-demo`: Inicia todos os servidores (backend, frontend legado e a prova de conceito em React) para a demonstração completa da arquitetura.
-    -   `npm run start:full-demo`: Inicia todos os servidores (backend, frontend legado e a prova de conceito em React) para a demonstração completa da arquitetura de interoperabilidade.
+    -   `"start"`: Inicia o ambiente de demonstração completo (backend, frontend legado e React). Este é o comando principal para executar o sistema.
+    -   `"start:backend"`: Inicia **apenas** o servidor do backend.
+    -   `"start:frontend"`: Inicia um servidor estático simples para o frontend legado na porta 3000.
+    -   `"test"`: Executa a suíte completa de testes automatizados com Jest.
+    -   `"create-test-users"`: Cria um conjunto de empresas de teste fixas para uso em validações manuais, salvando as credenciais em um arquivo de documentação.
 
 ### `.gitignore`
 
@@ -115,9 +115,9 @@ Siga os passos abaixo para executar o backend localmente.
 4.  **Inicie o Servidor**:
     -   Para desenvolvimento (com reinício automático):
         ```bash
-        npm run dev
+        npm run start:backend
         ```
-    -   Para iniciar o backend e o frontend juntos (simulando produção):
+    -   Para iniciar o ambiente de demonstração completo (recomendado):
         ```bash
         npm start
         ```
@@ -128,7 +128,7 @@ O servidor backend estará disponível em `http://localhost:5000`. Você pode ve
 
 A suíte de testes automatizados valida a integridade da API. O processo de execução foi simplificado para garantir estabilidade e focar na validação do backend.
 
-Para instruções detalhadas sobre como configurar e executar a suíte de testes, consulte o guia oficial na pasta de testes:
+Para instruções detalhadas sobre como configurar e executar a suíte de testes, que agora utiliza um sistema de limpeza seletiva para proteger os dados de desenvolvimento, consulte o guia oficial na pasta de testes:
 
 > **Consulte: Roteiro de Testes Automatizados**
 

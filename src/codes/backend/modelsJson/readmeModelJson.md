@@ -27,7 +27,7 @@ Cada arquivo `.json` nesta pasta representa o corpo (body) de uma requisição p
 - **`authRegister.json`**: Usado na rota `POST /api/auth/register`.
 - **`transaction.json`**: Usado nas rotas `POST /api/transactions` e `PUT /api/transactions/:id`.
 - **`client.json`**: Usado nas rotas `POST /api/clients` e `PUT /api/clients/:id`.
-- **`meta.json`**: Usado nas rotas `POST /api/metas` e `PUT /api/metas/:id`.
+- **`goal.json`**: Usado nas rotas `POST /api/goals` e `PUT /api/goals/:id`.
 
 ### Exemplo de uso com `curl`
 

@@ -1,11 +1,18 @@
 /**
- * @file Serviço de geração de PDFs.
- * @description Centraliza a lógica de criação de diferentes tipos de relatórios em PDF.
+ * =================================================================================
+ * ARQUIVO: services/pdfService.js
+ * DESCRIÇÃO: Serviço responsável por centralizar toda a lógica de criação de
+ *            documentos em formato PDF, como relatórios e faturas.
+ *            Este serviço é chamado pelos controladores (`reportController`) e utiliza
+ *            a biblioteca `pdfkit` para gerar os documentos.
+ * =================================================================================
  */
 
 import PDFDocument from 'pdfkit';
 import fs from 'fs';
 import path from 'path';
+
+// --- Funções Auxiliares Internas ---
 
 /**
  * Adiciona um cabeçalho padrão a um documento PDF.
@@ -28,10 +35,10 @@ function addHeader(doc, company, title) {
 }
 
 /**
- * Desenha o cabeçalho de uma tabela de forma genérica.
+ * Desenha o cabeçalho de uma tabela de forma genérica e retorna a posição Y para a próxima linha.
  * @param {PDFDocument} doc - A instância do documento PDFKit.
  * @param {number} y - A posição Y inicial para desenhar.
- * @param {Array<object>} headers - Um array de objetos de cabeçalho. Ex: [{ text: 'Nome', x: 50, options: {} }]
+ * @param {Array<object>} headers - Um array de objetos de cabeçalho. Ex: `[{ text: 'Nome', x: 50, options: {} }]`
  */
 function drawTableHeader(doc, y, headers) {
   doc.fontSize(10).font('Helvetica-Bold');
@@ -47,7 +54,7 @@ function drawTableHeader(doc, y, headers) {
 /**
  * Desenha uma linha da tabela de forma genérica.
  * @param {PDFDocument} doc - A instância do documento PDFKit.
- * @param {number} y - A posição Y para desenhar a linha.
+ * @param {number} y - A posição Y inicial para desenhar a linha.
  * @param {Array<object>} cells - Um array de objetos de célula. Ex: [{ text: 'Valor', x: 50, options: {} }]
  */
 function drawTableRow(doc, y, cells) {
@@ -58,7 +65,7 @@ function drawTableRow(doc, y, cells) {
 }
 
 /**
- * Adiciona um rodapé padrão com paginação.
+ * Adiciona um rodapé padrão com número de página a todas as páginas do documento.
  * @param {PDFDocument} doc - A instância do documento PDFKit.
  */
 function addFooter(doc) {
@@ -71,6 +78,42 @@ function addFooter(doc) {
 }
 
 /**
+ * Configura a resposta HTTP para streaming de PDF e opcionalmente salva o arquivo em disco durante os testes.
+ * @param {object} res - O objeto de resposta do Express.
+ * @param {PDFDocument} doc - A instância do documento PDFKit.
+ * @param {string} filename - O nome do arquivo para o download.
+ * @param {string} testSubfolder - O nome da subpasta para salvar o PDF em ambiente de teste.
+ */
+function setupPdfResponse(res, doc, filename, testSubfolder) {
+  // Configura os cabeçalhos da resposta para indicar que um arquivo PDF está sendo enviado.
+  res.setHeader('Content-Type', 'application/pdf');
+  res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
+  doc.pipe(res); // Envia o conteúdo do PDF diretamente para a resposta HTTP.
+
+  // Se estivermos em ambiente de teste, também salva uma cópia do PDF em disco
+  // para permitir a inspeção manual e a depuração.
+  try {
+    if (process.env.NODE_ENV === 'test') {
+      const outDir = path.join(process.cwd(), 'Testes', 'PDFs', testSubfolder);
+      fs.mkdirSync(outDir, { recursive: true });
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+      const testFilename = `${filename.replace('.pdf', '')}-${timestamp}.pdf`;
+      const outPath = path.join(outDir, testFilename);
+      const fileStream = fs.createWriteStream(outPath);
+      doc.pipe(fileStream);
+      fileStream.on('finish', () => {
+        console.log(`[PDF SAVED FOR TEST] ${outPath}`);
+      });
+    }
+  } catch (e) {
+    // Uma falha ao salvar o arquivo de teste não deve quebrar a geração do relatório.
+    console.warn('Aviso: não foi possível salvar o PDF no disco durante os testes.', e.message);
+  }
+}
+
+// --- Funções de Serviço Exportadas ---
+
+/**
  * Gera um PDF de relatório financeiro.
  * @param {object} data - Os dados para o relatório.
  * @param {Array} data.transactions - A lista de transações.
@@ -78,44 +121,16 @@ function addFooter(doc) {
  * @param {object} res - O objeto de resposta do Express.
  */
 export function generateFinancialReportPDF(data, res) {
-  // If tests installed a mock, prefer process.__pdfServiceMock (visible to server process).
-  const gmock = (process && process.__pdfServiceMock) || globalThis.__pdfServiceMock;
-  if (gmock && typeof gmock.generateFinancialReportPDF === 'function') {
-    return gmock.generateFinancialReportPDF(data, res);
-  }
-
   const { transactions, company } = data;
   const doc = new PDFDocument({ margin: 50, bufferPages: true });
 
-  res.setHeader('Content-Type', 'application/pdf');
-  res.setHeader('Content-Disposition', 'attachment; filename=relatorio-financeiro.pdf');
-  doc.pipe(res);
-
-  // During tests, also save the generated PDF to disk for manual inspection.
-  try {
-    if (process.env.NODE_ENV === 'test') {
-      const outDir = path.join(process.cwd(), 'Testes', 'PDFs');
-      if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
-      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-      const filename = `relatorio-transacoes-${timestamp}.pdf`;
-      const outPath = path.join(outDir, filename);
-      const fileStream = fs.createWriteStream(outPath);
-      doc.pipe(fileStream);
-      fileStream.on('finish', () => {
-        console.log(`[PDF SAVED] ${outPath}`);
-      });
-    }
-  } catch (e) {
-    // Non-fatal: log and continue streaming to response
-    console.warn('Aviso: não foi possível salvar PDF no disco durante testes.', e.message);
-  }
+  setupPdfResponse(res, doc, 'relatorio-financeiro.pdf', 'transactions');
 
   addHeader(doc, company, 'Relatório de Transações');
 
   if (transactions.length === 0) {
     doc.fontSize(12).text('Nenhuma transação encontrada para o período selecionado.');
   } else {
-    // Tabela de transações
     let y = doc.y;
     const rowHeight = 20;
     const pageBottom = doc.page.height - 70; // Margem inferior para o rodapé
@@ -130,7 +145,7 @@ export function generateFinancialReportPDF(data, res) {
     y = drawTableHeader(doc, y, headers);
 
     transactions.forEach(tx => {
-      // Se a próxima linha não couber na página, adiciona uma nova página e redesenha o cabeçalho.
+      // Lógica de paginação: se a próxima linha não couber, cria uma nova página.
       if (y + rowHeight > pageBottom) {
         doc.addPage();
         addHeader(doc, company, 'Relatório de Transações (Continuação)');
@@ -162,34 +177,10 @@ export function generateFinancialReportPDF(data, res) {
  * @param {object} res - O objeto de resposta do Express.
  */
 export function generateClientsReportPDF(data, res) {
-  const gmock = (process && process.__pdfServiceMock) || globalThis.__pdfServiceMock;
-  if (gmock && typeof gmock.generateClientsReportPDF === 'function') {
-    return gmock.generateClientsReportPDF(data, res);
-  }
-
   const { clients, company } = data;
     const doc = new PDFDocument({ margin: 50, bufferPages: true });
 
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', 'attachment; filename=relatorio-clientes.pdf');
-    doc.pipe(res);
-
-    try {
-      if (process.env.NODE_ENV === 'test') {
-        const outDir = path.join(process.cwd(), 'Testes', 'PDFs');
-        if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
-        const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-        const filename = `relatorio-clientes-${timestamp}.pdf`;
-        const outPath = path.join(outDir, filename);
-        const fileStream = fs.createWriteStream(outPath);
-        doc.pipe(fileStream);
-        fileStream.on('finish', () => {
-          console.log(`[PDF SAVED] ${outPath}`);
-        });
-      }
-    } catch (e) {
-      console.warn('Aviso: não foi possível salvar PDF no disco durante testes.', e.message);
-    }
+    setupPdfResponse(res, doc, 'relatorio-clientes.pdf', 'clients');
 
     addHeader(doc, company, 'Relatório de Clientes');
 
@@ -240,45 +231,26 @@ export function generateClientsReportPDF(data, res) {
  * @param {object} res - O objeto de resposta do Express.
  */
 export function generateInvoicePDF(data, res) {
-  const gmock = (process && process.__pdfServiceMock) || globalThis.__pdfServiceMock;
-  if (gmock && typeof gmock.generateInvoicePDF === 'function') {
-    return gmock.generateInvoicePDF(data, res);
-  }
-
   const { transaction, company, client } = data;
     const doc = new PDFDocument({ margin: 50 });
 
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', `attachment; filename=fatura-${transaction._id}.pdf`);
-    doc.pipe(res);
+    setupPdfResponse(res, doc, `fatura-${transaction._id}.pdf`, 'invoices');
 
-    try {
-      if (process.env.NODE_ENV === 'test') {
-        const outDir = path.join(process.cwd(), 'Testes', 'PDFs');
-        if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
-        const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-        const filename = `fatura-${transaction._id}-${timestamp}.pdf`;
-        const outPath = path.join(outDir, filename);
-        const fileStream = fs.createWriteStream(outPath);
-        doc.pipe(fileStream);
-        fileStream.on('finish', () => {
-          console.log(`[PDF SAVED] ${outPath}`);
-        });
-      }
-    } catch (e) {
-      console.warn('Aviso: não foi possível salvar PDF no disco durante testes.', e.message);
-    }
-
-    // Corpo da Fatura (simplificado)
+    // --- Corpo da Fatura (simplificado) ---
     addHeader(doc, company, 'Fatura');
     doc.fontSize(12).text(`Fatura Nº: ${transaction._id}`);
     doc.text(`Data de Vencimento: ${new Date(transaction.date).toLocaleDateString('pt-BR')}`);
     doc.moveDown();
+
+    // Dados do cliente (se existirem)
     if (client) {
         doc.fontSize(12).text('Cliente:');
         doc.text(client.name);
-        doc.text(client.document || '');
+        if (client.document) doc.text(`Documento: ${client.document}`);
+    } else {
+        doc.fontSize(12).text('Cliente: Não informado');
     }
+
     doc.moveDown(2);
     doc.fontSize(14).text('Item');
     doc.text(`${transaction.description} - ${transaction.amount.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`);

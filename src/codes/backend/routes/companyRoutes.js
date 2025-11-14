@@ -27,11 +27,12 @@ router.post("/", authMiddleware, roleMiddleware(["ROOT"]), auditMiddleware("CREA
 router.get("/", authMiddleware, roleMiddleware(["ROOT"]), getCompanies);
 
 // Rota para buscar uma empresa específica por ID.
+// Acesso permitido a qualquer usuário autenticado para buscar sua própria empresa, por exemplo.
 // GET /api/companies/:id
 router.get("/:id", authMiddleware, getCompanyById);
 
 // Rota para atualizar os dados de uma empresa.
-// Permite que um 'ADMIN_COMPANY' atualize sua própria empresa ou que um 'ROOT' atualize qualquer uma.
+// Permite que um 'ADMIN_COMPANY' atualize sua própria empresa ou que um 'ROOT' atualize qualquer empresa.
 // PUT /api/companies/:id
 router.put("/:id", authMiddleware, roleMiddleware(["ROOT", "ADMIN_COMPANY"]), auditMiddleware("UPDATE_COMPANY"), updateCompany);
 

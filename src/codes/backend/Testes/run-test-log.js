@@ -1,10 +1,13 @@
 /**
  * =================================================================================
  * ARQUIVO: Testes/run-test-log.js
- * DESCRIÇÃO: Script executor para a suíte de testes automatizados.
- *            Ele orquestra a execução do Jest, captura toda a saída (incluindo
- *            cores) para exibição no console e, simultaneamente, salva uma
- *            versão limpa (sem códigos de cor) em um arquivo de log com timestamp.
+ *
+ * DESCRIÇÃO:
+ *            Este script é o ponto de entrada para a execução da suíte de testes
+ *            completa (`npm test`). Sua principal responsabilidade é invocar o Jest
+ *            com as configurações corretas e, simultaneamente, capturar toda a
+ *            saída do console para um arquivo de log timestamped, facilitando a
+ *            análise e o registro histórico dos resultados.
  * =================================================================================
  */
 import { spawn, execSync } from 'child_process'; // Usar spawn para streaming e execSync para comandos síncronos
@@ -48,6 +51,7 @@ function copyLogPathToClipboard(filePath) {
     }
 }
 
+
 /**
  * Analisa o conteúdo do log para extrair e exibir um resumo dos resultados.
  * @param {string} logContent - O conteúdo completo do arquivo de log.
@@ -79,17 +83,27 @@ const logFilePath = createLogFilePath();
  * `spawn` permite que a saída do Jest seja exibida no console assim que é gerada.
  */
 async function runTests() {
+    // Pega o caminho do teste a ser executado a partir dos argumentos da linha de comando.
+    // Se nenhum caminho for fornecido, o Jest rodará todos os testes.
+    const testPath = process.argv[2] || '';
+
     return new Promise((resolve, reject) => {
-        const jestCommand = 'node';
+        // MOTIVO DA MUDANÇA: `spawn` no Windows não resolve `cross-env` automaticamente.
+        // Usamos `npx` (ou `npx.cmd` no Windows) para garantir que o executável seja encontrado
+        // dentro de `node_modules/.bin`. A opção `{ shell: true }` é a forma mais robusta de
+        // garantir que o comando seja executado corretamente em qualquer plataforma (Windows, Linux, macOS).
+        const jestCommand = 'npx';
         const jestArgs = [
-            '--experimental-vm-modules',
-            './node_modules/jest/bin/jest.js',
+            'cross-env', 
+            'NODE_OPTIONS=--experimental-vm-modules',
+            'jest',
             '--config',
-            './Testes/config/jest.config.cjs',
+            'Testes/config/jest.config.cjs',
             '--runInBand'
         ];
 
-        const child = spawn(jestCommand, jestArgs);
+        if (testPath) jestArgs.push(testPath);
+        const child = spawn(jestCommand, jestArgs, { stdio: 'pipe', shell: true });
 
         let fullOutput = '';
 

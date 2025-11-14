@@ -1,3 +1,19 @@
+// =================================================================================
+// ARQUIVO: Testes/3-security/multi-tenant.test.js
+//
+// DESCRIÇÃO:
+//            Este é um dos testes mais críticos do sistema. Ele valida a
+//            arquitetura multi-tenant, garantindo que os dados de uma empresa
+//            sejam completamente isolados dos dados de outra.
+//
+// O QUE ELE VALIDA:
+//            1. Criação de Dados Isolados: Confirma que é possível criar transações
+//               para múltiplas empresas de forma independente.
+//            2. Bloqueio de Acesso Direto: Prova que um usuário não consegue
+//               acessar um recurso específico de outra empresa, recebendo um erro 404.
+//            3. Filtragem em Listagens: Garante que, ao listar recursos, um usuário
+//               veja *apenas* os seus, e não os de outras empresas.
+// =================================================================================
 import axios from 'axios';
 import fs from 'fs';
 import path from 'path';
@@ -6,11 +22,11 @@ const SETUP_FILE = path.join('Testes', 'test-setup.json');
 const NUMBER_OF_COMPANIES = 3; // Reduzido para 3 para logs mais curtos
 const PAYMENT_METHODS = ['credit_card', 'debit_card', 'pix', 'cash', 'other'];
 
-describe('3. Teste de Isolamento de Dados em Larga Escala (Multi-Tenant)', () => {
+describe('3. Teste de Isolamento de Dados (Multi-Tenant)', () => {
     let companies = [];
     let API_URL;
 
-    // Etapa 1: Cadastrar e logar 5 empresas diferentes antes de todos os testes
+    // Etapa 1: Cadastra e loga em múltiplas empresas para simular um ambiente real.
     beforeAll(async () => {
         // Garante que a leitura do arquivo de setup seja assíncrona
         const fileContent = await fs.promises.readFile(SETUP_FILE, 'utf8');
@@ -38,10 +54,10 @@ describe('3. Teste de Isolamento de Dados em Larga Escala (Multi-Tenant)', () =>
             });
 
             companies.push({
-                userId: loginResponse.data.user.id, // Corrigido: Captura o userId da resposta do login
-                token: loginResponse.data.token,
+                userId: loginResponse.data.data.user.id,
+                token: loginResponse.data.data.token,
                 companyName: companyData.companyName, // Adicionado para logs mais claros
-                id: loginResponse.data.user.companyId,
+                id: loginResponse.data.data.user.companyId,
                 transactions: []
             });
 
@@ -50,7 +66,7 @@ describe('3. Teste de Isolamento de Dados em Larga Escala (Multi-Tenant)', () =>
         console.log('--- Configuração multi-tenant concluída ---');
     }, 30000); // Aumenta o timeout do beforeAll para permitir o cadastro de várias empresas
 
-    // Etapa 2: Criar uma transação para cada empresa
+    // Etapa 2: Cria uma transação para cada empresa, para termos dados para testar.
     test('deve criar uma transação para cada empresa', async () => {
         console.log('\n--- Criando transações individuais para cada empresa ---');
 
@@ -77,11 +93,11 @@ describe('3. Teste de Isolamento de Dados em Larga Escala (Multi-Tenant)', () =>
         }
     }, 20000);
 
-    // Etapa 3: Validar o isolamento de dados
+    // Etapa 3: O teste principal. Valida que uma empresa não pode acessar dados de outra.
     test('deve impedir que uma empresa acesse a transação de outra', async () => {
         console.log('\n--- Validando isolamento de dados entre todas as empresas ---');
 
-        // Para cada empresa...
+        // Para cada empresa dona de uma transação...
         for (let i = 0; i < companies.length; i++) {
             const ownerCompany = companies[i]; // A dona da transação
             const transactionId = ownerCompany.transactions[0]._id;
@@ -127,7 +143,7 @@ describe('3. Teste de Isolamento de Dados em Larga Escala (Multi-Tenant)', () =>
         }
     }, 20000);
 
-    // Etapa 4: Limpar os dados criados
+    // Etapa 4: Limpa todos os usuários e empresas criados durante este teste.
     afterAll(async () => {
         console.log('\n--- Limpando dados de teste (Teardown) ---');
         for (const company of companies) {

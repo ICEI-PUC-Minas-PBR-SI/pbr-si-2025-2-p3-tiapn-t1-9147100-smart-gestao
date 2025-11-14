@@ -19,11 +19,11 @@ const router = express.Router();
 
 // Rota para listar todos os clientes e fornecedores da empresa do usuário autenticado.
 // GET /api/clients
-router.get("/", authMiddleware, companyScopeMiddleware, getClients);
+router.get("/", authMiddleware, getClients);
 
 // Rota para cadastrar um novo cliente ou fornecedor.
 // POST /api/clients
-router.post("/", authMiddleware, companyScopeMiddleware, auditMiddleware("CREATE_CLIENT"), createClient);
+router.post("/", authMiddleware, auditMiddleware("CREATE_CLIENT"), createClient);
 
 // Rota para atualizar um cliente ou fornecedor existente por ID.
 // PUT /api/clients/:id

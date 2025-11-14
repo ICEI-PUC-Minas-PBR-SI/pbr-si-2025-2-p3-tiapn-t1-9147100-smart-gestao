@@ -25,6 +25,7 @@ src/
 │   │   ├── authController.js
 │   │   ├── clientController.js
 │   │   ├── companyController.js
+│   │   ├── goalController.js
 │   │   ├── logController.js
 │   │   ├── permissionController.js
 │   │   ├── reportController.js
@@ -34,7 +35,9 @@ src/
 │   │   ├── auditMiddleware.js
 │   │   ├── authMiddleware.js
 │   │   ├── companyScopeMiddleware.js
-│   │   └── roleMiddleware.js
+│   │   ├── errorMiddleware.js
+│   │   ├── roleMiddleware.js
+│   │   └── uploadMiddleware.js
 │   ├── models/
 │   │   ├── Alert.js
 │   │   ├── Client.js
@@ -51,25 +54,28 @@ src/
 │   │   ├── clientRoutes.js
 │   │   ├── companyRoutes.js
 │   │   ├── goalRoutes.js
-│   │   ├── logRoutes.js
 │   │   ├── permissionRoutes.js
+│   │   ├── logRoutes.js
 │   │   ├── reportRoutes.js
 │   │   ├── transactionRoutes.js
 │   │   └── userRoutes.js
 │   ├── Scripts/
-│   │   └── initPermissions.js
+│   │   ├── create-test-companies.js
+│   │   ├── initPermissions.js
+│   │   └── print-summary.js
+│   ├── services/
+│   │   └── pdfService.js
 │   ├── utils/
 │   │   ├── logger.js
 │   │   └── responseHelper.js
-│   ├── services/
-│   │   └── pdfService.js
 │   └── Testes/
 │       ├── 1-auth/
 │       ├── 2-features/
 │       ├── 3-security/
 │       ├── 4-reports/
 │       ├── config/
-│       └── Docs/
+│       ├── Docs/
+│       └── resultados/
 │   ├── server.js
 │   └── package.json
 │
@@ -81,33 +87,29 @@ src/
 
 ```json
 
-// Importa módulos essenciais
 import express from "express";
 import dotenv from "dotenv";
-import cors from "cors";
-import morgan from "morgan";
-
-// Importa conexão com banco e rotas
 import { connectDB } from "./config/db.js";
-import authRoutes from "./routes/authRoutes.js";
-import clientRoutes from "./routes/clientRoutes.js";
-import companyRoutes from "./routes/companyRoutes.js";
-import transactionRoutes from "./routes/transactionRoutes.js";
-import goalRoutes from "./routes/goalRoutes.js";
-import alertRoutes from "./routes/alertRoutes.js";
-import userRoutes from "./routes/userRoutes.js";
+// ... (outras importações)
 
-// Inicializa o Express
 dotenv.config();
 const app = express();
 
-// Configurações globais
+// Middlewares globais
 app.use(express.json());
 app.use(cors());
 app.use(morgan("dev"));
 
-// Conexão com o MongoDB
-connectDB();
+// Registro de todas as rotas da API
+app.use("/api/auth", authRoutes);
+// ... (outras rotas)
+
+// Função de inicialização
+export async function startServer() {
+  await connectDB();
+  await initPermissions();
+  app.listen(PORT, () => console.log(`🚀 Servidor rodando...`));
+}
 
 // Definição das rotas principais
 app.use("/api/auth", authRoutes);
@@ -117,10 +119,6 @@ app.use("/api/transactions", transactionRoutes);
 app.use("/api/goals", goalRoutes);
 app.use("/api/alerts", alertRoutes);
 app.use("/api/users", userRoutes);
-
-// Inicialização do servidor
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Servidor rodando na porta ${PORT}`));
 
 ```
 ## 🧱 Configuração do Banco de Dados (db.js)
@@ -152,7 +150,7 @@ Garante que apenas usuários logados acessem rotas protegidas.
 
 ### 🏢 companyScopeMiddleware.js
 
-Filtra automaticamente todas as requisições pelo empresaId do usuário autenticado, garantindo isolamento de dados.
+Verifica se um recurso acessado via ID (ex: `/api/clients/:id`) pertence à empresa do usuário autenticado. Se não pertencer, retorna 404 para não vazar a existência do recurso, garantindo o isolamento de dados (multi-tenant).
 
 ### 🧾 auditMiddleware.js
 
@@ -167,18 +165,7 @@ Todos os modelos incluem o campo empresaId para isolar dados entre empresas e ga
 
 ### 🔔 Alert.js
 
-Armazena alertas financeiros automáticos.
-Relaciona-se com Meta.
-
-### 👥 Client.js
-
-Registra clientes e fornecedores.
-Campos principais: empresaId, tipo, nome_razao, cpf_cnpj, email, categoria.
-
-### 🏢 Company.js
-
-Define as empresas registradas no sistema.
-Campos: nome, cnpj, email_contato, plano, ativo.
+Armazena alertas financeiros automáticos, como metas atingidas ou orçamentos excedidos.
 
 ### 📜 Logs.js
 
@@ -187,13 +174,20 @@ Campos: empresaId, usuarioId, action, route, ip.
  
 ### 📈 Goal.js
 
-Define metas financeiras por categoria e período.
-Relaciona-se com Alert.
+Define metas financeiras (ex: limite de gastos, objetivo de receita) por período.
 
 ### 🛡️ Permission.js
 
-Define papéis e níveis de acesso.
-Usado pelo roleMiddleware e initPermissions.js.
+Define papéis e níveis de acesso. Usado pelo `roleMiddleware` e `initPermissions.js`.
+
+### 👥 Client.js
+
+Registra clientes e fornecedores.
+Campos principais: empresaId, tipo, nome_razao, cpf_cnpj, email, categoria.
+
+### 🏢 Company.js
+
+Define as empresas registradas no sistema. Campos: nome, cnpj, email_contato, plano, ativo.
 
 ### 🔑 SessionToken.js
 
@@ -225,320 +219,41 @@ Campos: empresaId, uuid, nome, email, senha_hash, role.
 | Alertas      | `/api/alerts`       | `authMiddleware`                     | `alertController.js`       |
 | Usuários     | `/api/users`        | `authMiddleware` + `roleMiddleware`  | `userController.js`        |
 
-## 🧩 Scripts e Utilitários
+---
 
-- utils/bcryptHelper.js
+## 7. 🧩 Scripts e Utilitários
 
-- utils/logger.js
-
-> Gerencia logs do sistema.
-
-- utils/responseHelper.js
-
-> Padroniza as respostas de sucesso e erro da API.
-
-## 🔒 Segurança e Acesso
-
-Senhas sempre armazenadas com bcrypt.
-
-Tokens JWT possuem tempo de expiração definido no .env.
-
-Toda requisição autenticada é vinculada ao empresaId do usuário.
-
-O middleware de escopo impede acesso a dados de outras empresas.
-
-Logs armazenam todas as ações de escrita com data, usuário e IP.
-
-## 🌐 Configuração do MongoDB (Cloud)
-
-- Crie uma conta em MongoDB Atlas (
-    > https://www.mongodb.com/atlas/database)
-
-- Crie um novo cluster gratuito.
-
-- Copie o link de conexão (URI) e adicione ao .env: 
-    > MONGO_URI=mongodb+srv://<user>:<password>@cluster.mongodb.net/smartgestao
-
-Ajuste as variáveis de ambiente no .env.example: 
-    > PORT=5000
-    > JWT_SECRET=chaveSeguraAqui
-    > TOKEN_EXPIRATION=1d
-
-## 🧾 Logs e Auditoria
-
-- Cada requisição com impacto em dados (POST, PUT, DELETE) gera um registro no MongoDB com:
-
-> empresaId
-
-> usuarioId
-
-> rota
-
-> ação
-
-> IP
-
-> statusCode
-
-> data
-
-- Esses logs são armazenados na coleção Logs e servem como base para relatórios de auditoria.
+-   **`Scripts/initPermissions.js`**: Garante que as permissões de sistema (`ROOT`, `ADMIN_COMPANY`, etc.) existam no banco de dados. É executado automaticamente na inicialização do servidor.
+-   **`Scripts/create-test-companies.js`**: Cria um conjunto de empresas de teste fixas para uso em validações manuais. É executado manualmente via `npm run create-test-users`.
+-   **`Scripts/print-summary.js`**: Exibe um resumo formatado com os links de acesso de todos os serviços após a inicialização.
 
 ---
 
-## 📊 Relatórios e Dashboard
+## 8. 🔒 Segurança e Acesso
 
-- O reportController centraliza geração de relatórios financeiros:
+-   **Autenticação**: Senhas são sempre armazenadas com hash `bcrypt`. O acesso é controlado por tokens JWT com tempo de expiração.
+-   **Isolamento de Dados**: O `companyScopeMiddleware` garante que um usuário de uma empresa não possa, sob nenhuma hipótese, acessar dados de outra.
+-   **Encerramento Seguro**: A lógica de `gracefulShutdown` em `server.js` garante que as conexões sejam encerradas de forma limpa, mesmo com `Ctrl+C`.
+-   **Testes Seguros**: O ambiente de teste (`mongo-test-environment.js`) foi configurado para realizar uma **limpeza seletiva**, removendo apenas os dados que ele mesmo criou, garantindo que os dados de desenvolvimento manual permaneçam intactos.
 
-> Resumo de receitas/despesas por categoria;
+---
 
-> Lucro líquido mensal;
+## 9. 📊 Relatórios e Dashboard
 
-> Acompanhamento de metas;
+-   O `reportController` centraliza a geração de relatórios financeiros, como resumo de transações e lista de clientes.
+-   Todos os relatórios são filtrados pelo `companyId` do usuário autenticado.
+-   A geração de arquivos PDF é gerenciada pelo `pdfService`, mantendo a lógica desacoplada.
 
-> Alertas financeiros.
+---
 
-- Todos os relatórios são filtrados por empresaId e usuário autenticado.
+## 10. 🧪 Testes Automatizados
 
-## Banco de dados
+O projeto possui uma suíte de testes de integração robusta, gerenciada pelo Jest.
 
+-   **Execução**: `npm test` na pasta do backend.
+-   **Ambiente**: Utiliza um ambiente personalizado (`mongo-test-environment.js`) que orquestra todo o ciclo de vida: inicia o servidor, cria dados de teste temporários, executa os testes e limpa apenas os dados criados.
+-   **Cobertura**: Os testes validam os principais módulos, incluindo autenticação, isolamento de dados (multi-tenant), CRUDs de funcionalidades e geração de relatórios.
 
-``` text
-
-🧭 Backend Documentation — Smart Gestão
-
-📘 Documentação técnica completa do backend do sistema Smart Gestão
-Versão acadêmica — arquitetura modular, conexão em nuvem e boas práticas de desenvolvimento.
-Banco de dados principal: MongoDB Atlas
-
-📁 Estrutura de Diretórios
-src/
-├── backend/
-│   ├── config/
-│   │   └── db.js
-│   ├── controllers/
-│   │   ├── alertController.js
-│   │   ├── authController.js
-│   │   ├── clientController.js
-│   │   ├── companyController.js
-│   │   ├── goalController.js
-│   │   ├── logController.js
-│   │   ├── reportController.js
-│   │   ├── transactionController.js
-│   │   └── userController.js
-│   ├── middlewares/
-│   │   ├── auditMiddleware.js
-│   │   ├── authMiddleware.js
-│   │   ├── companyScopeMiddleware.js
-│   │   └── roleMiddleware.js
-│   ├── models/
-│   │   ├── Alert.js
-│   │   ├── Client.js
-│   │   ├── Goal.js
-│   │   ├── Logs.js
-│   │   ├── Permission.js
-│   │   ├── SessionToken.js
-│   │   ├── Transaction.js
-│   │   └── User.js
-│   ├── routes/
-│   │   ├── alertRoutes.js
-│   │   ├── authRoutes.js
-│   │   ├── clientRoutes.js
-│   │   ├── companyRoutes.js
-│   │   ├── goalRoutes.js
-│   │   ├── permissionRoutes.js
-│   │   ├── reportRoutes.js
-│   │   ├── transactionRoutes.js
-│   │   └── userRoutes.js
-│   ├── Scripts/
-│   │   └── initPermissions.js
-│   ├── utils/
-│   │   ├── logger.js
-│   ├── services/
-│   │   └── pdfService.js
-│   └── Testes/
-│       ├── 1-auth/
-│       ├── 2-features/
-│       ├── 3-security/
-│       ├── 4-reports/
-│       ├── config/
-│       └── Docs/
-│   ├── server.js
-│   └── package.json
-│
-└── .env
-
-⚙️ 1. Configuração de Ambiente
-📄 Arquivo .env
-# 🌐 Configurações de servidor
-PORT=5000
-
-# 🔐 Configurações de segurança
-JWT_SECRET=chaveSeguraAqui
-TOKEN_EXPIRATION=1d
-
-# 🧩 Configuração de banco de dados (MongoDB Atlas)
-MONGO_URI=mongodb+srv://adminSmart:PUC@SmartG&stao@smartgestaodb.qgvbre5.mongodb.net/
-
-
-⚠️ Importante: nunca publique este arquivo no GitHub.
-O .env contém credenciais sensíveis e deve ser protegido via .gitignore.
-
-📄 Arquivo .gitignore
-# Ignorar dependências e arquivos sensíveis
-node_modules/
-.env
-.DS_Store
-package-lock.json
-.vscode/
-
-🧱 2. Configuração do Banco de Dados
-🔗 Conexão (config/db.js)
-
-Responsável por estabelecer conexão entre o backend e o MongoDB Atlas.
-
-Utiliza dotenv para ler a variável MONGO_URI.
-
-Em caso de falha, encerra o processo (process.exit(1)).
-
-Exibe no console o status da conexão.
-
-await mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
-
-📊 Status no console:
-
-✅ Conexão com MongoDB estabelecida com sucesso!
-🌍 Servidor do banco: cluster0-shard.mongodb.net
-
-🧠 3. Modelagem de Dados
-
-MongoDB é um banco de dados NoSQL orientado a documentos,
-e utiliza coleções e documentos JSON em vez de tabelas e registros.
-
-🧩 Entidades Principais
-Entidade	Descrição	Relacionamentos
-User	Usuário autenticado do sistema	pertence a uma Company
-Company	Empresa cadastrada no sistema	possui muitos Users e Transactions
-Client	Cliente ou fornecedor vinculado a uma empresa	pertence a uma Company
-Transaction	Registro de receita ou despesa	pertence a um Client e a uma Company
-Goal	Metas financeiras	pertence a uma Company
-Alert	Alertas de desempenho financeiro	pertence a uma Meta
-Permission	Perfis e papéis de acesso (admin, read-only, etc.)	referência em User
-Logs	Auditoria de ações do usuário	pertence a um User e Company
-SessionToken	Armazena tokens ativos e sessões de login	pertence a um User
-💡 Representação Textual do DER
-Company (1) ───< (N) User  
-Company (1) ───< (N) Client  
-Company (1) ───< (N) Transaction  
-MetaFinanceira (1) ───< (N) Alert  
-User (1) ───< (N) Logs
-
-🧩 4. Fluxo de Autenticação e Acesso
-
-Login (/api/auth/login)
-
-Usuário informa email e senha.
-
-O sistema gera JWT (JSON Web Token).
-
-O token é armazenado em SessionToken.
-
-Validação de Sessão
-
-Cada rota privada usa authMiddleware.
-
-O middleware valida o token antes de permitir acesso.
-
-Controle de Permissões
-
-As permissões são inicializadas por initPermissions.js.
-
-Cada usuário possui um nível de acesso (Root, Admin, User, ReadOnly).
-
-Auditoria e Logs
-
-Toda ação de escrita (POST, PUT, DELETE) passa por auditMiddleware.
-
-As informações são registradas em Logs.js:
-
-usuário
-
-empresa
-
-ação
-
-IP
-
-data e hora
-
-🧮 5. Relatórios e Dashboards
-
-O reportController.js centraliza os relatórios financeiros por empresa:
-
-Resumo de receitas e despesas
-
-Lucro líquido mensal
-
-Metas atingidas
-
-Alertas gerados
-
-Logs de auditoria (opcional)
-
-Todos os relatórios são filtrados automaticamente por empresaId e usuário autenticado.
-
-🧾 6. Logs e Auditoria
-
-Cada modificação importante (como criar, alterar ou excluir dados) gera um log automático no MongoDB.
-
-Exemplo de documento na coleção Logs:
-
-{
-  "empresaId": "ObjectId('6720e2c2...')",
-  "usuarioId": "ObjectId('6720e2c2...')",
-  "rota": "/api/transactions/create",
-  "acao": "CREATE_TRANSACTION",
-  "statusCode": 201,
-  "ip": "192.168.1.10",
-  "data": "2025-10-10T13:35:00Z"
-}
-
-🔐 7. Segurança
-
-Mesmo sendo um projeto acadêmico, já há boas práticas aplicadas:
-
-Senhas armazenadas com bcrypt (hash seguro)
-
-Tokens JWT assinados com JWT_SECRET
-
-Filtros por companyId para evitar acesso indevido
-
-Estrutura modular pronta para receber helmet, rate-limit e mongo-sanitize futuramente
-
-💬 Observação: a segurança ainda pode ser aprimorada com essas bibliotecas se o projeto evoluir para uso real.
-
-📊 8. Testes de Conexão
-
-Após iniciar o servidor:
-
-npm run dev
-
-
-Verifique no navegador:
-
-http://localhost:5000/api/health
-
-
-Resposta esperada:
-
-{
-  "status": "ok",
-  "message": "Servidor Smart Gestão ativo!",
-  "timestamp": "2025-10-10T17:30:00.000Z"
-}
+Para mais detalhes, consulte o `roteiro de testes automatizados.md`.
 
 ```

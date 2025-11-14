@@ -1,60 +1,54 @@
-// =================================================================================
-// ARQUIVO: controllers/alertController.js
-// DESCRIÇÃO: Controladores para o gerenciamento de alertas (Alerts).
-//            As funções aqui implementam as operações CRUD (Create, Read, Update,
-//            Delete) para alertas, garantindo que todas as ações sejam restritas
-//            ao escopo da empresa do usuário autenticado (multi-tenant).
-// =================================================================================
-
 import Alert from "../models/Alert.js";
 import { createLog } from "../utils/logger.js";
+import { successResponse, errorResponse } from '../utils/responseHelper.js';
 
 /**
- * Lista todos os alertas pertencentes à empresa do usuário autenticado.
- * @param {object} req - O objeto de requisição do Express, contendo `req.user` do middleware de autenticação.
- * @param {object} res - O objeto de resposta do Express.
+ * @desc    Listar todos os alertas da empresa do usuário autenticado.
+ * @route   GET /api/alerts
+ * @access  Private
  */
 export const getAllAlerts = async (req, res) => {
   try {
+    // O ID da empresa é extraído do token JWT, garantindo que a consulta seja sempre no escopo correto.
     const companyId = req.user.companyId; // companyId já é ObjectId do authMiddleware
-    const alerts = await Alert.find({ companyId: companyId }).sort({ createdAt: -1 });
-    return res.status(200).json(alerts);
+    const items = await Alert.find({ companyId: companyId }).sort({ createdAt: -1 });
+    return successResponse(res, { data: items });
   } catch (error) {
-    console.error("Erro ao listar alertas:", error);
-    return res.status(500).json({ message: "Erro interno ao listar alertas." });
+    return errorResponse(res, { status: 500, message: "Erro ao listar alertas.", errors: error });
   }
 };
 
 /**
- * Busca um alerta específico por ID, garantindo que ele pertença à empresa do usuário.
- * @param {object} req - O objeto de requisição do Express.
- * @param {object} res - O objeto de resposta do Express.
+ * @desc    Obter um alerta específico por ID.
+ * @route   GET /api/alerts/:id
+ * @access  Private
  */
 export const getAlertById = async (req, res) => {
   try {
     const { id } = req.params;
     const companyId = req.user.companyId; // companyId já é ObjectId do authMiddleware
 
+    // A consulta inclui o companyId para garantir que um usuário não possa acessar um alerta de outra empresa.
     const alert = await Alert.findOne({ _id: id, companyId: companyId });
-    if (!alert) return res.status(404).json({ message: "Alerta não encontrado." });
+    if (!alert) return errorResponse(res, { status: 404, message: "Alerta não encontrado." });
 
-    return res.status(200).json(alert);
+    return successResponse(res, { data: alert });
   } catch (error) {
-    console.error("Erro ao obter alerta:", error);
-    return res.status(500).json({ message: "Erro interno ao obter alerta." });
+    return errorResponse(res, { status: 500, message: "Erro ao obter alerta.", errors: error });
   }
 };
 
 /**
- * Cria um novo alerta, associando-o automaticamente à empresa do usuário.
- * @param {object} req - O objeto de requisição do Express.
- * @param {object} res - O objeto de resposta do Express.
+ * @desc    Criar um novo alerta.
+ * @route   POST /api/alerts
+ * @access  Private (geralmente para administradores ou processos automáticos)
  */
 export const createAlert = async (req, res) => {
   try {
     const companyId = req.user.companyId; // companyId já é ObjectId do authMiddleware
     const { message, type } = req.body; // Removidos title e severity para corresponder ao modelo Alert
 
+    // Cria uma nova instância do modelo Alert com os dados da requisição e o companyId do usuário.
     const newAlert = new Alert({
       companyId: companyId,
       message,
@@ -62,20 +56,19 @@ export const createAlert = async (req, res) => {
     });
 
     const saved = await newAlert.save();
-    // Registra a ação de criação em um log de auditoria.
+    // A criação do log de auditoria agora é delegada ao auditMiddleware na rota.
     await createLog(req.user, req, "CREATE_ALERT", 201);
 
-    return res.status(201).json(saved);
+    return successResponse(res, { status: 201, data: saved });
   } catch (error) {
-    console.error("Erro ao criar alerta:", error);
-    return res.status(500).json({ message: "Erro interno ao criar alerta." });
+    return errorResponse(res, { status: 500, message: "Erro ao criar alerta.", errors: error });
   }
 };
 
 /**
- * Atualiza um alerta existente, verificado pelo ID e pela empresa do usuário.
- * @param {object} req - O objeto de requisição do Express.
- * @param {object} res - O objeto de resposta do Express.
+ * @desc    Atualizar um alerta existente.
+ * @route   PUT /api/alerts/:id
+ * @access  Private
  */
 export const updateAlert = async (req, res) => {
   try {
@@ -83,69 +76,71 @@ export const updateAlert = async (req, res) => {
     const companyId = req.user.companyId; // companyId já é ObjectId do authMiddleware
     const update = req.body;
 
+    // Encontra e atualiza o alerta, garantindo que o _id e o companyId correspondam.
     const updated = await Alert.findOneAndUpdate(
       { _id: id, companyId },
       { $set: update },
       { new: true }
     );
 
-    if (!updated) return res.status(404).json({ message: "Alerta não encontrado." });
+    if (!updated) return errorResponse(res, { status: 404, message: "Alerta não encontrado." });
 
-    // Registra a ação de atualização no log de auditoria.
+    // A criação do log de auditoria agora é delegada ao auditMiddleware na rota.
     await createLog(req.user, req, "UPDATE_ALERT", 200);
-    return res.status(200).json(updated);
+    return successResponse(res, { data: updated });
   } catch (error) {
-    console.error("Erro ao atualizar alerta:", error);
-    return res.status(500).json({ message: "Erro interno ao atualizar alerta." });
+    return errorResponse(res, { status: 500, message: "Erro ao atualizar alerta.", errors: error });
   }
 };
 
 /**
- * Marca um alerta específico como lido.
- * @param {object} req - O objeto de requisição do Express.
- * @param {object} res - O objeto de resposta do Express.
+ * @desc    Marcar um alerta como lido.
+ * @route   PATCH /api/alerts/:id/read
+ * @access  Private
  */
 export const markAlertAsRead = async (req, res) => {
   try {
     const { id } = req.params;
     const companyId = req.user.companyId; // companyId já é ObjectId do authMiddleware
+
+    // Ação específica para alterar apenas o status 'read' para true.
     const updated = await Alert.findOneAndUpdate(
       { _id: id, companyId: companyId },
       { $set: { read: true } },
       { new: true }
     );
 
-    if (!updated) return res.status(404).json({ message: "Alerta não encontrado." });
+    if (!updated) return errorResponse(res, { status: 404, message: "Alerta não encontrado" });
 
-    // Registra a ação de leitura no log de auditoria.
+    // A criação do log de auditoria agora é delegada ao auditMiddleware na rota.
     await createLog(req.user, req, "READ_ALERT", 200);
-    return res.status(200).json(updated);
+    return successResponse(res, { data: updated });
   } catch (error) {
-    console.error("Erro ao marcar alerta como lido:", error);
-    return res.status(500).json({ message: "Erro interno ao marcar alerta como lido." });
+    return errorResponse(res, { status: 500, message: "Erro ao marcar alerta como lido.", errors: error });
   }
 };
 
 /**
- * Exclui um alerta, garantindo que pertença à empresa do usuário.
- * @param {object} req - O objeto de requisição do Express.
- * @param {object} res - O objeto de resposta do Express.
+ * @desc    Excluir um alerta.
+ * @route   DELETE /api/alerts/:id
+ * @access  Private
  */
 export const deleteAlert = async (req, res) => {
   try {
     const { id } = req.params;
     const companyId = req.user.companyId; // companyId já é ObjectId do authMiddleware
+
+    // Encontra e exclui o alerta, garantindo que o _id e o companyId correspondam.
     const alert = await Alert.findOneAndDelete({ _id: id, companyId: companyId });
 
     if (!alert) {
-      return res.status(404).json({ message: "Alerta não encontrado." });
+      return errorResponse(res, { status: 404, message: "Alerta não encontrado" });
     }
 
-    // Registra a ação de exclusão no log de auditoria.
+    // A criação do log de auditoria agora é delegada ao auditMiddleware na rota.
     await createLog(req.user, req, "DELETE_ALERT", 200);
-    return res.status(200).json({ message: "Alerta removido com sucesso." });
+    return successResponse(res, { message: "Alerta removido com sucesso." });
   } catch (error) {
-    console.error("Erro ao deletar alerta:", error);
-    return res.status(500).json({ message: "Erro interno ao deletar alerta." });
+    return errorResponse(res, { status: 500, message: "Erro ao deletar alerta.", errors: error });
   }
 };

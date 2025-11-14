@@ -1,12 +1,7 @@
-// =================================================================================
-// ARQUIVO: controllers/transactionController.js
-// DESCRIÇÃO: Controladores para as operações CRUD da entidade 'Transaction'.
-//            Este é um dos principais controladores do sistema, responsável por
-//            gerenciar todas as receitas e despesas.
-// =================================================================================
-
 import mongoose from 'mongoose'; // Importar mongoose para usar ObjectId
 import Transaction from "../models/Transaction.js";
+import fs from 'fs';
+import path from 'path';
 import { createLog } from "../utils/logger.js";
 import { successResponse, errorResponse } from '../utils/responseHelper.js';
 
@@ -37,17 +32,13 @@ export const getAllTransactions = async (req, res) => {
   }
 };
 
-/**
- * Busca uma transação específica pelo seu ID.
- * @param {object} req - O objeto de requisição do Express.
- * @param {object} res - O objeto de resposta do Express.
- */
 export const getTransactionById = async (req, res) => {
     try {
-        const transactionId = new mongoose.Types.ObjectId(req.params.id);
+        if (!mongoose.Types.ObjectId.isValid(req.params.id)) return errorResponse(res, { status: 404, message: "Transação não encontrada" });
+
         const companyId = req.user.companyId; // companyId já é ObjectId do authMiddleware
 
-        const transaction = await Transaction.findOne({ _id: transactionId, companyId: companyId });
+        const transaction = await Transaction.findOne({ _id: req.params.id, companyId: companyId });
         
        if (!transaction) {
             return errorResponse(res, { status: 404, message: "Transação não encontrada" });
@@ -58,13 +49,6 @@ export const getTransactionById = async (req, res) => {
         return errorResponse(res, { status: 500, message: "Erro ao buscar transação", errors: error });
     }
 };
-/**
- * Cria uma nova transação (receita ou despesa).
- * Garante que `companyId` e `userId` sejam extraídos do token de autenticação,
- * ignorando quaisquer valores que possam vir no corpo da requisição por segurança.
- * @param {object} req - O objeto de requisição do Express.
- * @param {object} res - O objeto de resposta do Express.
- */
 export const createTransaction = async (req, res) => {
   try {
     const companyId = req.user.companyId;
@@ -92,15 +76,10 @@ export const createTransaction = async (req, res) => {
   }
 };
 
-/**
- * Atualiza uma transação existente.
- * A opção `runValidators: true` força o Mongoose a re-validar os dados
- * com base no Schema durante a atualização.
- * @param {object} req - O objeto de requisição do Express.
- * @param {object} res - O objeto de resposta do Express.
- */
 export const updateTransaction = async (req, res) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) return errorResponse(res, { status: 404, message: "Transação não encontrada" });
+
     const companyId = req.user.companyId;
     const updated = await Transaction.findOneAndUpdate(
       { _id: req.params.id, companyId: companyId }, // Garante que só pode editar da própria empresa
@@ -123,13 +102,10 @@ export const updateTransaction = async (req, res) => {
   }
 };
 
-/**
- * Exclui uma transação existente.
- * @param {object} req - O objeto de requisição do Express.
- * @param {object} res - O objeto de resposta do Express.
- */
 export const deleteTransaction = async (req, res) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) return errorResponse(res, { status: 404, message: "Transação não encontrada" });
+
     const companyId = req.user.companyId;
     const removed = await Transaction.findOneAndDelete({ _id: req.params.id, companyId: companyId });
     if (!removed) return errorResponse(res, { status: 404, message: "Transação não encontrada" });
@@ -145,5 +121,82 @@ export const deleteTransaction = async (req, res) => {
     return successResponse(res, { message: "Transação removida com sucesso" });
   } catch (error) {
     return errorResponse(res, { status: 500, message: "Erro ao remover transação", errors: error });
+  }
+};
+
+/**
+ * @desc    Upload an attachment for a specific transaction
+ * @route   POST /api/transactions/:id/upload
+ * @access  Private
+ */
+export const uploadAttachment = async (req, res) => {
+  try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) return errorResponse(res, { status: 404, message: "Transação não encontrada" });
+
+    // O middleware 'upload' já processou o arquivo e o adicionou a req.file
+    if (!req.file) {
+      return errorResponse(res, { status: 400, message: 'Nenhum arquivo foi enviado.' });
+    }
+
+    const transaction = await Transaction.findById(req.params.id);
+
+    if (!transaction) {
+      return errorResponse(res, { status: 404, message: 'Transação não encontrada.' });
+    }
+
+    // Se já houver um anexo, remove o arquivo antigo antes de adicionar o novo.
+    if (transaction.attachment) {
+      const oldPath = path.resolve(process.cwd(), transaction.attachment);
+      if (fs.existsSync(oldPath)) {
+        fs.unlinkSync(oldPath);
+      }
+    }
+
+    // Salva o caminho do novo arquivo no banco de dados.
+    // O caminho é relativo à raiz do projeto.
+    transaction.attachment = req.file.path.replace(/\\/g, "/"); // Normaliza para barras forward
+    await transaction.save();
+
+    return successResponse(res, { message: 'Anexo enviado com sucesso.', data: transaction });
+
+  } catch (error) {
+    return errorResponse(res, { status: 500, message: 'Erro no servidor ao enviar anexo.', errors: error });
+  }
+};
+
+/**
+ * @desc    Delete the attachment from a specific transaction
+ * @route   DELETE /api/transactions/:id/upload
+ * @access  Private
+ */
+export const deleteAttachment = async (req, res) => {
+  try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) return errorResponse(res, { status: 404, message: "Transação não encontrada" });
+
+    const transaction = await Transaction.findById(req.params.id);
+
+    if (!transaction) {
+      return errorResponse(res, { status: 404, message: 'Transação não encontrada.' });
+    }
+
+    if (!transaction.attachment) {
+      return errorResponse(res, { status: 404, message: 'A transação não possui um anexo para ser removido.' });
+    }
+
+    const filePath = path.resolve(process.cwd(), transaction.attachment);
+
+    // Remove o arquivo físico do disco.
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+    }
+
+    // Remove a referência do anexo no banco de dados.
+    transaction.attachment = null;
+    await transaction.save();
+
+    return successResponse(res, { message: 'Anexo removido com sucesso.', data: transaction });
+
+  } catch (error) {
+    return errorResponse(res, { status: 500, message: 'Erro no servidor ao remover anexo.', errors: error });
   }
 };

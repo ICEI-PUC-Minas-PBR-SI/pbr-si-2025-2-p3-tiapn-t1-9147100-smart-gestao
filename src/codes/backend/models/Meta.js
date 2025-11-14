@@ -1,10 +1,3 @@
-// =================================================================================
-// ARQUIVO: models/Meta.js
-// DESCRIÇÃO: Define o Schema para a coleção 'Metas' no MongoDB.
-//            Este modelo representa as metas financeiras que uma empresa
-//            estabelece, como limites de gastos ou objetivos de receita.
-// =================================================================================
-
 import mongoose from "mongoose";
 const { Schema, model } = mongoose;
 

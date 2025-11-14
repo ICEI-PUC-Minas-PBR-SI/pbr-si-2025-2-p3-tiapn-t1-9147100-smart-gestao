@@ -14,7 +14,7 @@ A estrutura de testes está centralizada na pasta `src/codes/backend/Testes/` e 
 
 - **Jest**: Plataforma de testes em JavaScript. É o orquestrador que executa os testes e verifica os resultados.
 - **Axios**: Biblioteca para fazer requisições HTTP. É usada para simular um cliente (como o frontend) se comunicando com a API.
-- **`concurrently` e `wait-on`**: Ferramentas que orquestram a inicialização do servidor e a execução dos testes, garantindo que um só comece quando o outro estiver pronto.
+- **`concurrently` e `wait-on`**: Ferramentas que **orquestravam** a inicialização do servidor e a execução dos testes. **Foram substituídas por uma abordagem mais robusta e integrada ao Jest**, onde o próprio ambiente de teste gerencia o ciclo de vida do servidor.
 
 ### Arquivos Principais:
 
@@ -45,11 +45,12 @@ O processo de teste foi totalmente automatizado e simplificado. Para executar a 
     ```
 
 **O que este comando faz?**
-1.  Inicia o servidor da API (`npm:start:backend`).
-2.  Aguarda o servidor ficar pronto na porta 5000 (`wait-on tcp:5000`).
-3.  Executa o Jest, que por sua vez utiliza o `mongo-test-environment.js` para limpar o banco de dados e criar dados de teste.
-4.  Roda todas as suítes de teste contra o servidor.
-5.  Encerra todos os processos de forma limpa ao final.
+1.  Executa o Jest, que por sua vez utiliza o ambiente de teste personalizado `mongo-test-environment.js`.
+2.  Este ambiente orquestra todo o ciclo de vida do teste de forma automatizada:
+    a. Inicia o servidor da API em-processo, garantindo que ele esteja pronto antes dos testes começarem.
+    b. Limpa o banco de dados de teste e cria um conjunto de dados temporários (como a Empresa A e a Empresa B) para uso nos testes.
+3.  Roda todas as suítes de teste (`*.test.js`) contra o servidor.
+4.  Ao final de tudo, **remove apenas os dados que foram criados durante os testes**, mantendo os dados de desenvolvimento manual intactos, e encerra o servidor e a conexão com o banco de forma limpa.
 
 O resultado é exibido no console e, simultaneamente, um arquivo de log detalhado (`log_AAAA-MM-DD_HH-mm-ss.txt`) é salvo na pasta `Testes/resultados/`.
 
@@ -57,7 +58,7 @@ O resultado é exibido no console e, simultaneamente, um arquivo de log detalhad
 
 #### Módulo de Isolamento de Dados (Multi-Tenant)
 - **Status:** ✅ **Validado**
-- **Arquivo de Teste:** `Testes/3-security/6-multi-tenant.test.js`
+- **Arquivo de Teste:** `Testes/3-security/multi-tenant.test.js`
 - **Descrição:** Este é um dos testes mais críticos do sistema. Ele cria múltiplas empresas e valida rigorosamente que os dados de uma empresa não podem ser acessados, modificados ou listados por outra.
 - **O que ele valida?**
     - **Criação de Dados Isolados**: Confirma que é possível criar transações para a `Empresa A` e para a `Empresa B` de forma independente.
@@ -66,7 +67,7 @@ O resultado é exibido no console e, simultaneamente, um arquivo de log detalhad
 
 #### Módulo de Transações (CRUD)
 - **Status:** ✅ **Validado**
-- **Arquivo de Teste:** `Testes/2-features/3-transactions.test.js`
+- **Arquivo de Teste:** `Testes/2-features/transactions.test.js`
 - **Descrição:** Valida o ciclo de vida completo (Criar, Ler, Atualizar, Excluir) de uma transação, garantindo que as operações básicas do dia a dia do usuário estão funcionando.
 - **O que ele valida?**
     - **Criação (`POST /api/transactions`)**: Confirma que uma nova transação é criada com os dados corretos.
@@ -78,7 +79,7 @@ O resultado é exibido no console e, simultaneamente, um arquivo de log detalhad
 
 #### Módulo de Metas (CRUD)
 - **Status:** ✅ **Validado**
-- **Arquivo de Teste:** `Testes/2-features/5-goals.test.js`
+- **Arquivo de Teste:** `Testes/2-features/goals.test.js`
 - **Descrição:** Valida o ciclo de vida completo (Criar, Ler, Atualizar, Excluir) de uma meta financeira.
 - **O que ele valida?**
     - **Criação (`POST /api/goals`)**: Confirma que uma nova meta é criada corretamente.
@@ -88,7 +89,7 @@ O resultado é exibido no console e, simultaneamente, um arquivo de log detalhad
 
 #### Módulo de Autenticação e Sessão
 - **Status:** ✅ **Validado**
-- **Arquivos de Teste:** `Testes/1-auth/1-session.test.js`, `Testes/1-auth/2-password.test.js`
+- **Arquivos de Teste:** `Testes/1-auth/session.test.js`, `Testes/1-auth/password.test.js`
 - **Descrição:** Valida a lógica de persistência e invalidação de sessões (Refresh Tokens) e o fluxo de recuperação de senha.
 - **O que ele valida?**
     - **Persistência de Sessão**: Confirma que um `SessionToken` é criado no banco de dados após o login, essencial para o mecanismo de "refresh token".
@@ -97,29 +98,47 @@ O resultado é exibido no console e, simultaneamente, um arquivo de log detalhad
 
 #### Módulo de Relatórios
 - **Status:** ✅ **Validado**
-- **Arquivo de Teste:** `Testes/4-reports/7-reports.test.js`
+- **Arquivo de Teste:** `Testes/4-reports/reports.test.js`
 - **Descrição:** Valida a capacidade do sistema de exportar dados.
 - **O que ele valida?**
-    - **Exportação de PDF (`GET /api/reports/export/pdf`)**: Confirma que o endpoint responde com o `Content-Type` correto (`application/pdf`) e que o corpo da resposta é um PDF válido, sem de fato salvar o arquivo em disco durante o teste.
+    - **Exportação de PDF**: Confirma que os endpoints de exportação (ex: `/api/reports/export/transactions-pdf`) respondem com o `Content-Type` correto (`application/pdf`) e que o corpo da resposta é um PDF válido, sem de fato salvar o arquivo em disco durante o teste.
 
 #### Módulo de Clientes/Fornecedores
 - **Status:** ✅ **Validado**
-- **Arquivo de Teste:** `Testes/2-features/4-clients.test.js`
+- **Arquivo de Teste:** `Testes/2-features/clients.test.js`
 - **Descrição:** Valida o ciclo de vida de clientes e fornecedores.
 - **O que ele valida?**
     - **Criação (`POST /api/clients`)**: Testa a criação de um novo registro de cliente.
     - **Listagem (`GET /api/clients`)**: Confirma que o cliente criado pode ser listado corretamente, validando o CRUD básico para esta funcionalidade.
+
+#### Módulo de Upload de Anexos
+- **Status:** ✅ **Validado**
+- **Arquivo de Teste:** `Testes/2-features/uploads.test.js`
+- **Descrição:** Valida a funcionalidade de upload de anexos para transações.
+- **O que ele valida?**
+    - **Upload de PDF e Imagens**: Confirma que a API aceita arquivos `.pdf`, `.png` e `.jpg`.
+    - **Estrutura de Pastas**: Garante que os arquivos são salvos na estrutura de diretórios correta (`uploads/[companyId]/[img|pdf]/...`).
+    - **Exclusão de Anexo**: Verifica se o anexo é removido do banco de dados e se o arquivo físico é deletado do servidor.
+
+#### Módulo de Segurança de Dados (Persistência)
+- **Status:** ✅ **Validado**
+- **Arquivo de Teste:** `Testes/3-security/persistence.test.js`
+- **Descrição:** Este teste "guardião" valida que a execução da suíte completa de testes (`npm test`) **não apaga** os dados criados manualmente para desenvolvimento (como as empresas "Frontend", "Backend" e "React").
+- **O que ele valida?**
+    - **Criação de Dados Manuais**: Garante que as empresas de teste manuais existam.
+    - **Execução dos Testes**: Roda a suíte de testes completa.
+    - **Verificação de Persistência**: Confirma que, após a limpeza seletiva dos testes, os dados manuais ainda estão no banco de dados.
 ---
 
 ## 5. Scripts de Apoio aos Testes
 
-O ambiente de testes automatizados agora é autossuficiente e não requer scripts de apoio para sua execução. No entanto, para fins de teste manual ou exploração da API, o seguinte script pode ser útil.
+O ambiente de testes automatizados agora é autossuficiente. No entanto, para fins de teste manual ou exploração da API, o seguinte script é essencial.
 
 ### Criação de Empresas de Teste Fixo
 
 - **Arquivo:** `Scripts/create-test-companies.js`
 - **Objetivo:** Criar um conjunto de três empresas de teste com dados previsíveis (`Empresa Frontend`, `Empresa Backend`, `Empresa React`) para serem usadas em validações manuais do frontend e exploração da API.
-- **Importante:** O ambiente de testes automatizados (`npm test`) **limpará** qualquer dado criado por este script. Use-o apenas em um ambiente de desenvolvimento (`npm run dev`).
+- **Importante:** Graças à implementação da limpeza seletiva, o ambiente de testes automatizados (`npm test`) **NÃO apaga mais** os dados criados por este script. Você pode rodar os testes com segurança.
 - **Como Usar:**
   1. Certifique-se de que o servidor do backend esteja rodando (`npm run start:backend`).
   2. Em outro terminal, na pasta `src/codes/backend`, execute:
