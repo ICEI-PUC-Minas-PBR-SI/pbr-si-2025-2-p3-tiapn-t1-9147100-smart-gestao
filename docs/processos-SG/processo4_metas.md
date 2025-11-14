@@ -37,131 +37,55 @@ Modelagem BPMN:
 
 <img width="1291" height="441" alt="Diagrama sem nome-Página-3 drawio" src="https://github.com/user-attachments/assets/5cb8df22-a084-4f95-a0d7-e869f1384494" />
 
-### Detalhamento das Atividades
+## 2. Campos e Comandos para Criação de Metas (Processo 4)
 
-### Detalhamento das Atividades
+A criação de uma nova meta é realizada através de um formulário. O processo exige o preenchimento de campos específicos e a execução de comandos de interação para salvar a meta no sistema.
 
-#### Atividade 1 – Definir Nova Meta Financeira (Usuário)
+### 2.1. Campos e Elementos do Formulário
 
-Esta atividade envolve o preenchimento dos dados para a criação de uma nova meta financeira.
+| Campo/Elemento | Tipo | Restrições | Descrição |
+| :--- | :--- | :--- | :--- |
+| **Título da Meta** | Caixa de Texto | Obrigatório | Nome descritivo da meta (Ex: Economizar para novo equipamento). |
+| **Categoria** | Seleção Única | Obrigatório | Classificação da meta (Ex: Equipamento, Investimento, Fundo de Emergência, Outro). |
+| **Valor Alvo (R$)** | Número | Obrigatório | O valor total que se deseja alcançar. |
+| **Valor Atual (R$)** | Número | Opcional | O valor já acumulado para a meta. |
+| **Prazo** | Data | Opcional | Data limite para a conclusão da meta. |
+| **Descrição** | Área de Texto | Opcional | Detalhes adicionais sobre a meta. |
+| **Botão: Criar Meta** | Botão | Habilitado após preenchimento dos campos obrigatórios. | Finaliza e registra a nova meta no sistema. |
+| **Botão: Cancelar** | Botão | - | Limpa o formulário e cancela a criação. |
 
-| Campo/Elemento | Tipo | Restrições |
-| :--- | :--- | :--- |
-| Título da Meta | Caixa de Texto | Obrigatório. |
-| Categoria | Seleção Única | Obrigatório. (Ex: Equipamento, Fundo de Emergência) |
-| Valor Alvo (R$) | Número | Obrigatório. Valor monetário. |
-| Valor Atual (R$) | Número | Opcional. Valor monetário. |
-| Prazo | Data | Opcional. Formato dd/mm/aaaa. |
-| Descrição | Área de Texto | Opcional. |
+### 2.2. Comandos de Interação
 
-#### Comandos de Interação
+Os comandos de interação representam as ações que o usuário executa para preencher o formulário e submeter a meta:
 
-*   Inserir o título da meta no campo "Título da Meta".
-*   Selecionar a categoria no campo "Categoria".
-*   Inserir o valor desejado no campo "Valor Alvo (R$)".
-*   Inserir o valor atual da meta no campo "Valor Atual (R$)" (se aplicável).
-*   Selecionar a data limite no campo "Prazo".
-*   Inserir a descrição no campo "Descrição (Opcional)".
+*   **Inserir o título da meta** no campo "Título da Meta".
+*   **Selecionar a categoria** no campo "Categoria".
+*   **Inserir o valor desejado** no campo "Valor Alvo (R$)".
+*   **Inserir o valor atual** da meta no campo "Valor Atual (R$)" (se aplicável).
+*   **Selecionar a data limite** no campo "Prazo".
+*   **Inserir a descrição** no campo "Descrição (Opcional)".
+*   **Clicar no botão "Criar Meta"** para salvar.
+*   **Clicar no botão "Cancelar"** para limpar o formulário.
 
----
+## 3. Comandos para Gestão e Visualização de Metas (Processo 5)
 
-#### Atividade 2 – Salvar Meta (Usuário)
+Após a criação, as metas são listadas e podem ser gerenciadas. O processo de gestão envolve a filtragem da lista e ações específicas em cada item.
 
-Após preencher os dados, o usuário finaliza o processo de criação da meta.
+### 3.1. Comandos de Filtragem e Visualização
 
-| Campo/Elemento | Tipo | Restrições |
-| :--- | :--- | :--- |
-| Botão: Criar Meta | Botão | Habilitado após o preenchimento dos campos obrigatórios. |
-| Botão: Cancelar | Botão | Cancela a criação da meta. |
+| Campo/Elemento | Tipo | Descrição | Comando de Interação |
+| :--- | :--- | :--- | :--- |
+| **Botão: Todas** | Botão | Filtra para exibir todas as metas, independentemente do status. | Clicar no botão "Todas". |
+| **Botão: Em Andamento** | Botão | Filtra para exibir metas ativas e não concluídas. | Clicar no botão "Em Andamento". |
+| **Botão: Concluídas** | Botão | Filtra para exibir metas que já atingiram o valor alvo. | Clicar no botão "Concluídas". |
+| **Cartão de Meta** | Elemento de Lista | Exibe Título, Status, Progresso (Valor Atual/Alvo), Prazo/Conclusão e Categoria. | Visualização passiva. |
 
-#### Comandos de Interação
+### 3.2. Comandos de Interação por Meta
 
-*   Clicar no botão "Criar Meta".
-*   Clicar no botão "Cancelar".
+Cada meta listada possui botões de ação que permitem a interação direta do usuário:
 
----
-
-## 2. Processo 5: Gestão e Visualização de Metas (Baseado na Imagem)
-
-Este processo detalha a interação do usuário com a tela de listagem de metas.
-
-### Fluxo Principal
-
-1.  O usuário acessa a página "Minhas Metas".
-2.  O sistema exibe a lista de metas.
-3.  O usuário filtra a lista por status.
-4.  O usuário interage com uma meta específica (Editar, Detalhes, Reativar).
-
-### Detalhamento das Atividades
-
-#### Atividade 1 – Filtrar e Visualizar Metas (Usuário)
-
-Esta atividade envolve a navegação e filtragem da lista de metas.
-
-| Campo/Elemento | Tipo | Restrições |
-| :--- | :--- | :--- |
-| Botão: Todas | Botão | Filtra para exibir todas as metas. |
-| Botão: Em Andamento | Botão | Filtra para exibir metas ativas. |
-| Botão: Concluídas | Botão | Filtra para exibir metas finalizadas. |
-| Cartão de Meta | Tabela/Elemento | Exibe Título, Status, Prazo/Conclusão e Categoria. |
-
-#### Comandos de Interação
-
-*   Clicar no botão "Todas" para ver todas as metas.
-*   Clicar no botão "Em Andamento" para ver as metas ativas.
-*   Clicar no botão "Concluídas" para ver as metas finalizadas.
-
----
-
-#### Atividade 2 – Interagir com Metas (Usuário)
-
-Esta atividade envolve as ações disponíveis para cada meta listada.
-
-| Campo/Elemento | Tipo | Restrições |
-| :--- | :--- | :--- |
-| Botão: Editar | Botão | Disponível para metas "Em Andamento". Abre o formulário de edição (Processo 4). |
-| Botão: Detalhes | Botão | Disponível para todas as metas. Abre a tela de detalhes da meta. |
-| Botão: Reativar | Botão | Disponível para metas "Concluídas". Altera o status para "Em Andamento". |
-
-#### Comandos de Interação
-
-*   Clicar no botão "Editar" para modificar uma meta em andamento.
-*   Clicar no botão "Detalhes" para ver informações completas da meta.
-*   Clicar no botão "Reativar" para reabrir uma meta concluída.
-
----
-
-## 3. Comandos Git para o Projeto APN
-
-Os comandos a seguir são sugeridos para inicializar o repositório Git e adicionar os arquivos do projeto (`APN.zip` descompactado) para controle de versão.
-
-**Arquivos do Projeto:**
-- `APN/cadastro.html`
-- `APN/index.html`
-- `APN/login.html`
-- `APN/metas.html`
-- `APN/perfil.html`
-- `APN/relatorios.html`
-- `APN/style.css`
-- `APN/transacoes.html`
-
-```bash
-# 1. Inicializa um novo repositório Git no diretório raiz do projeto
-git init
-
-# 2. Adiciona todos os arquivos do projeto ao stage
-# (Assumindo que os arquivos estão no diretório 'APN/')
-git add APN/
-
-# OU, se você estiver no diretório raiz e quiser adicionar todos os arquivos
-# git add .
-
-# 3. Confirma (commit) os arquivos adicionados com uma mensagem descritiva
-git commit -m "Commit inicial: Adição de todas as páginas HTML e folha de estilo CSS do projeto APN"
-
-# 4. (Opcional) Adiciona um repositório remoto (ex: GitHub)
-# Substitua <URL_DO_SEU_REPOSITORIO> pela URL real
-# git remote add origin <URL_DO_SEU_REPOSITORIO>
-
-# 5. (Opcional) Envia (push) o código para o repositório remoto
-# git push -u origin main
+| Campo/Elemento | Tipo | Restrições | Comando de Interação |
+| :--- | :--- | :--- | :--- |
+| **Botão: Editar** | Botão | Disponível para metas "Em Andamento". | Clicar no botão "Editar" para modificar a meta. |
+| **Botão: Detalhes** | Botão | Disponível para todas as metas. | Clicar no botão "Detalhes" para ver informações completas. |
+| **Botão: Reativar** | Botão | Disponível para metas "Concluídas". | Clicar no botão "Reativar" para alterar o status para "Em Andamento". |
