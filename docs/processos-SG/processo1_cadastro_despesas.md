@@ -20,7 +20,8 @@ O processo de cadastro de despesas permite ao usuário registrar e gerenciar sua
 
 ## **Wireframe (esboço previo da tela)**
 
-<img width="478" height="346" alt="wiredespesa" src="https://github.com/user-attachments/assets/48f6ffee-03b3-421c-98c5-bb8f172a334f" />
+![Wireframe da Tela](../images/wiredespesa.png)
+
  
 #### Detalhamento das atividades
 
