@@ -16,7 +16,7 @@ O processo de cadastro de despesas permite ao usuário registrar e gerenciar sua
 
 ## **Modelagem BPMN:**
 
-![Diagrama BPMN](../images/DiagramaDespesa.png)
+![Diagrama BPMN](../images/DiagrmaDespesa.png)
 
 ## **Wireframe (esboço previo da tela)**
 
