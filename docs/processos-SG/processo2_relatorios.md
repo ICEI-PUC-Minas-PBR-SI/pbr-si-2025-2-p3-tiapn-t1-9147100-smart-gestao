@@ -12,7 +12,7 @@ O processo de geração de relatórios permite que o usuário visualize e analis
 
 ## **Modelo BPMN:**
 
-<img width="1221" height="541" alt="relatoriodiagrama drawio" src="https://github.com/user-attachments/assets/ab000018-f1c9-46cd-b66e-c123509a1186" />
+![Diagrama BPMN](../images/DiagramaRelatorio.png)
 
 ## **Wireframe (esboço previo da tela)**
 
