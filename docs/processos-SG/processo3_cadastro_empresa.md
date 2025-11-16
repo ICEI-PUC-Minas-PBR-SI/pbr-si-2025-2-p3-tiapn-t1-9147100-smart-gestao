@@ -15,7 +15,9 @@ O processo de cadastro de empresa permite que novos usuários criem uma conta no
 
 ## **Wireframe (esboço previo da tela)**
 
-<img width="482" height="353" alt="Captura de tela 2025-11-07 185142" src="https://github.com/user-attachments/assets/05072124-2255-4811-9448-68ad580d3e6b" />
+![Wireframe da Tela](../images/cadastro.png)
+![Wireframe da Tela](../images/login.png)
+
 
 ---
 
