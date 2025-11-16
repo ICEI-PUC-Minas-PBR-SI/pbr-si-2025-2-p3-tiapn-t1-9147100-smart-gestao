@@ -60,10 +60,10 @@ Essa proposta está diretamente alinhada às estratégias de organização, efic
 
 <a href="[https://www.figma.com/proto/bDCgHckIi4FXwnIgAgItPm/Smart-Gestao?node-id=927-71&t=zSmkdUWemt54Sckg-0&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=927%3A71&show-proto-sidebar=1" target="_blank">Prototipo - Smart Gestão</a>
 
-[PROCESSO 1 - Controle de Despesas de MEIS](./docs/processos-SG/processo1_cadastro_despesas.md)
+[PROCESSO 1 - Controle de Despesas de MEIS](./processos-SG/processo1_cadastro_despesas.md)
 
-[PROCESSO 2 - Relatórios financeiros](./docs/processos-SG/processo2_relatorios.md)  
+[PROCESSO 2 - Relatórios financeiros](./processos-SG/processo2_relatorios.md)  
 
-[PROCESSO 3 - Cadastro da Empresa](./docs/processos-SG/processo3_cadastro_empresa.md)
+[PROCESSO 3 - Cadastro da Empresa](./processos-SG/processo3_cadastro_empresa.md)
 
-[PROCESSO 4 - Cadastro de Metas financeiras](./docs/processos-SG/processo4_metas.md)
+[PROCESSO 4 - Cadastro de Metas financeiras](./processos-SG/processo4_metas.md)
