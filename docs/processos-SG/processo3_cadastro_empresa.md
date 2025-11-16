@@ -18,16 +18,6 @@ O processo de cadastro de empresa permite que novos usuários criem uma conta no
 ![Wireframe da Tela](../images/cadastro.png)
 ![Wireframe da Tela](../images/login.png)
 
-
----
-
-
-> **Ponto de Melhoria (Revisado por Heron):** Olá, equipe! Para alinhar esta documentação com o formulário de cadastro real (`cadastro.html`) e a lógica do backend, peço ao responsável que ajuste a "Atividade 1 – Preencher Dados Cadastrais" abaixo.
-> 
-> **Guia para o ajuste:**
-> 1.  **Ajustar a Tabela de Campos:** Na tabela, remova a linha referente ao `Tipo de Negócio` e adicione duas novas linhas: uma para `Nome da Empresa` (Texto, Obrigatório) e outra para `CNPJ` (Texto, Obrigatório).
-> 2.  **Ajustar a Lista de Comandos:** Na lista de comandos, remova o item sobre "Selecionar o tipo de negócio" e adicione os comandos para "Inserir o nome da empresa" e "Inserir o CNPJ".
-
 --- 
 
 # Documentação do Processo: Cadastro de Empresa (Corrigido)
