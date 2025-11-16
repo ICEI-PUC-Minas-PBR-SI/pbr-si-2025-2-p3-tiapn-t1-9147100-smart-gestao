@@ -20,25 +20,6 @@ O processo de cadastro de empresa permite que novos usuários criem uma conta no
 
 --- 
 
-# Documentação do Processo: Cadastro de Empresa (Corrigido)
-
-Este documento detalha o processo de **Cadastro de Empresa**, incluindo o fluxo principal, o detalhamento das atividades, campos, comandos de interação e os comandos Git sugeridos para a gestão do código-fonte.
-
-## 1. Processo 3: Cadastro de Empresa
-
-O processo de cadastro de empresa permite que novos usuários criem uma conta no sistema, fornecendo suas informações básicas e detalhes sobre o tipo de negócio. Esta etapa é fundamental para que o usuário possa começar a utilizar as funcionalidades de controle de despesas.
-
-### Fluxo Principal
-
-1.  Usuário acessa a página de criação de conta.
-2.  Usuário preenche os dados cadastrais.
-3.  Usuário clica em "Criar Conta".
-4.  Sistema valida os dados fornecidos.
-5.  Sistema cria a nova conta.
-6.  Usuário é redirecionado para a página de login ou dashboard.
-
-
-
 ## 2. Detalhamento das Atividades
 
 ### 2.1. Atividade 1 – Preencher Dados Cadastrais (Usuário)
