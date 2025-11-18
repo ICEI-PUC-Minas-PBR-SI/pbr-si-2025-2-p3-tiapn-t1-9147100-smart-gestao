@@ -10,82 +10,107 @@ O processo de cadastro de empresa permite que novos usuários criem uma conta no
 5. Sistema cria a nova conta.
 6. Usuário é redirecionado para a página de login ou dashboard.
 
-## **Modelagem BPMN:** <img width="1602" height="381" alt="Processo3 drawio" src="https://github.com/user-attachments/assets/2674a917-7672-481f-97ac-62ae25047faa" />
+## **Modelagem BPMN:**
+![Diagrama BPMN](../images/DiagramaEmpresa.png)
+
 ## **Wireframe (esboço previo da tela)**
 
-
-<img width="482" height="353" alt="Captura de tela 2025-11-07 185142" src="https://github.com/user-attachments/assets/409ab0ae-a9d7-445e-bce3-842ea0978105" />
-
----
-
-> **Ponto de Melhoria (Revisado por Heron):** Olá, equipe! Para alinhar esta documentação com o formulário de cadastro real (`cadastro.html`) e a lógica do backend, peço ao responsável que ajuste a "Atividade 1 – Preencher Dados Cadastrais" abaixo.
-> 
-> **Guia para o ajuste:**
-> 1.  **Ajustar a Tabela de Campos:** Na tabela, remova a linha referente ao `Tipo de Negócio` e adicione duas novas linhas: uma para `Nome da Empresa` (Texto, Obrigatório) e outra para `CNPJ` (Texto, Obrigatório).
-> 2.  **Ajustar a Lista de Comandos:** Na lista de comandos, remova o item sobre "Selecionar o tipo de negócio" e adicione os comandos para "Inserir o nome da empresa" e "Inserir o CNPJ".
+![Wireframe da Tela](../images/cadastro.png)
+![Wireframe da Tela](../images/login.png)
 
 --- 
 
-#### Detalhamento das atividades
+## 2. Detalhamento das Atividades
 
-## Atividade 1 – Preencher Dados Cadastrais (Usuário)
+### 2.1. Atividade 1 – Preencher Dados Cadastrais (Usuário)
 
-Esta atividade envolve o preenchimento das informações necessárias para a criação da conta.
+Esta atividade envolve o preenchimento das informações necessárias para a criação da conta. **(Tabela e Comandos ajustados conforme feedback do gestor de RH)**
 
-| Campo/Elemento     | Tipo          | Restrições                                  |
-|:-------------------|:--------------|:--------------------------------------------|
-| Nome Completo      | Texto         | Obrigatório. Campo de texto.                |
-| E-mail             | E-mail        | Obrigatório. Formato de e-mail válido.      |
-| Senha              | Senha         | Obrigatório. Mínimo de 6 caracteres.        |
-| Confirmar Senha    | Senha         | Obrigatório. Deve ser idêntica à senha.     |
-| Tipo de Negócio    | Seleção Única | Obrigatório. Opções: MEI, Autônomo, Outro.  |
+#### Campos e Elementos (Ajustados)
 
-**Comandos**
-- Inserir o nome completo no campo "Nome Completo".
-- Inserir o endereço de e-mail no campo "E-mail".
-- Inserir a senha no campo "Senha".
-- Inserir a senha novamente no campo "Confirmar Senha".
-- Selecionar o tipo de negócio no dropdown "Tipo de Negócio".
+| Campo/Elemento | Tipo | Restrições |
+| :--- | :--- | :--- |
+| Nome Completo | Texto | Obrigatório. Campo de texto. |
+| E-mail | E-mail | Obrigatório. Formato de e-mail válido. |
+| Senha | Senha | Obrigatório. Mínimo de 6 caracteres. |
+| Confirmar Senha | Senha | Obrigatório. Deve ser idêntica à senha. |
+| **Nome da Empresa** | **Texto** | **Obrigatório.** |
+| **CNPJ** | **Texto** | **Obrigatório.** |
+
+#### Comandos de Interação (Ajustados)
+
+*   Inserir o nome completo no campo "Nome Completo".
+*   Inserir o endereço de e-mail no campo "E-mail".
+*   Inserir a senha no campo "Senha".
+*   Inserir a senha novamente no campo "Confirmar Senha".
+*   **Inserir o nome da empresa no campo "Nome da Empresa".**
+*   **Inserir o CNPJ no campo "CNPJ".**
 
 ---
 
-## Atividade 2 – Criar Conta (Usuário)
+### 2.2. Atividade 2 – Criar Conta (Usuário)
 
 Após preencher os dados, o usuário finaliza o processo de criação da conta.
 
-| Campo/Elemento     | Tipo   | Restrições                                  |
-|:-------------------|:-------|:--------------------------------------------|
-| Botão: Criar Conta | Botão  | Habilitado após o preenchimento de todos os campos obrigatórios e validação. |
+#### Campos e Elementos
 
-**Comandos**
-- Clicar no botão "Criar Conta".
+| Campo/Elemento | Tipo | Restrições |
+| :--- | :--- | :--- |
+| Botão: Criar Conta | Botão | Habilitado após o preenchimento de todos os campos obrigatórios e validação. |
+
+#### Comandos de Interação
+
+*   Clicar no botão "Criar Conta".
 
 ---
 
-## Atividade 3 – Navegar para Login (Opcional) (Usuário)
+### 2.3. Atividade 3 – Navegar para Login (Opcional) (Usuário)
 
 Caso o usuário já possua uma conta, ele pode optar por fazer login.
 
-| Campo/Elemento     | Tipo   | Restrições                                  |
-|:-------------------|:-------|:--------------------------------------------|
-| Link: Fazer login  | Link   | Redireciona para a página de login.         |
+#### Campos e Elementos
 
-**Comandos**
-- Clicar no link "Fazer login".
+| Campo/Elemento | Tipo | Restrições |
+| :--- | :--- | :--- |
+| Link: Fazer login | Link | Redireciona para a página de login. |
+
+#### Comandos de Interação
+
+*   Clicar no link "Fazer login".
 
 ---
 
-_Tipos de dados utilizados:_
+## 3. Comandos Git para o Projeto APN
 
-*   **Área de texto** - campo texto de múltiplas linhas
-*   **Caixa de texto** - campo texto de uma linha
-*   **Número** - campo numérico
-*   **Data** - campo do tipo data (dd-mm-aaaa)
-*   **Hora** - campo do tipo hora (hh:mm:ss)
-*   **Data e Hora** - campo do tipo data e hora (dd-mm-aaaa, hh:mm:ss)
-*   **Imagem** - campo contendo uma imagem
-*   **Seleção única** - campo com várias opções de valores que são mutuamente exclusivas (radio button ou combobox)
-*   **Seleção múltipla** - campo com várias opções que podem ser selecionadas mutuamente (checkbox ou listbox)
-*   **Arquivo** - campo de upload de documento
-*   **Link** - campo que armazena uma URL
-*   **Tabela** - campo formado por uma matriz de valores
+Os comandos a seguir são sugeridos para inicializar o repositório Git e adicionar os arquivos do projeto (`APN.zip` descompactado) para controle de versão.
+
+**Arquivos do Projeto:**
+- `APN/cadastro.html`
+- `APN/index.html`
+- `APN/login.html`
+- `APN/metas.html`
+- `APN/perfil.html`
+- `APN/relatorios.html`
+- `APN/style.css`
+- `APN/transacoes.html`
+
+```bash
+# 1. Inicializa um novo repositório Git no diretório raiz do projeto
+git init
+
+# 2. Adiciona todos os arquivos do projeto ao stage
+# (Assumindo que os arquivos estão no diretório 'APN/')
+git add APN/
+
+# OU, se você estiver no diretório raiz e quiser adicionar todos os arquivos
+# git add .
+
+# 3. Confirma (commit) os arquivos adicionados com uma mensagem descritiva
+git commit -m "Commit inicial: Adição de todas as páginas HTML e folha de estilo CSS do projeto APN"
+
+# 4. (Opcional) Adiciona um repositório remoto (ex: GitHub)
+# Substitua <URL_DO_SEU_REPOSITORIO> pela URL real
+# git remote add origin <URL_DO_SEU_REPOSITORIO>
+
+# 5. (Opcional) Envia (push) o código para o repositório remoto
+# git push -u origin main

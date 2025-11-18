@@ -117,7 +117,8 @@ O **Diagrama Entidade-Relacionamento (DER)** representa as principais entidades 
 
 #### Diagrama Entidade-Relacionamento (DER)
 
-<img width="857" height="491" alt="Captura de tela 2025-10-31 175358" src="https://github.com/user-attachments/assets/9709087b-bd99-4ebe-a3b9-67d1275b21bf" />
+![Wireframe da Tela](images/der.jpg)
+
  
 ---
 

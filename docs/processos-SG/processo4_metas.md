@@ -9,92 +9,60 @@ O processo de criação de metas permite que os usuários definam objetivos fina
 4. O sistema valida e registra a nova meta.
 5. O usuário é redirecionado para a tela de listagem de metas.
 
----
-
-> **Ponto de Melhoria Crítico (Revisado por Heron):** Olá, equipe! Ao validar os processos, notei que toda a seção "Detalhamento das atividades" abaixo está incorreta, pois descreve o processo de **cadastro de usuário** em vez do processo de **criação de metas**. Peço ao responsável que realize a correção completa, conforme o guia detalhado abaixo.
-> 
-> **Guia para a Reescrita:**
-> 
-> 1.  **Remova o Conteúdo Incorreto:** Apague todo o conteúdo a partir do título `## Atividade 1 – Preencher Dados Cadastrais (Usuário)` até o final do arquivo, **mas preserve a seção `_Tipos de dados utilizados:_`**, que já está correta e deve ser mantida.
-> 
-> 2.  **Crie a Nova Seção de Atividades:** No lugar do conteúdo removido, adicione a seguinte estrutura para descrever o processo correto de criação de metas, alinhado ao diagrama BPMN acima e ao modelo `Goal.js` do backend.
-> 
->     *   **Crie um título principal:** `### Detalhamento das atividades`
-> 
->     *   **Crie a Atividade 1:** `#### Atividade 1 – Definir Nova Meta Financeira (Usuário)`
->         *   Adicione a descrição: `Esta atividade envolve o preenchimento dos dados para a criação de uma nova meta financeira.`
->         *   Crie uma tabela de "Campos e Elementos" com os seguintes campos: `Título da Meta` (Caixa de Texto, Obrigatório), `Tipo` (Seleção Única, Obrigatório, com opções como: Receita, Despesa, Economia), `Valor Alvo` (Número, Obrigatório, Valor monetário), `Valor Atual` (Número, Opcional, Valor monetário), `Prazo` (Data, Opcional).
->         *   Adicione uma seção de "Comandos" descrevendo como o usuário preenche cada um desses campos. Exemplo: `- Inserir o título da meta no campo "Título da Meta".`
-> 
->     *   **Crie a Atividade 2:** `#### Atividade 2 – Salvar Meta (Usuário)`
->         *   Adicione a descrição: `Após preencher os dados, o usuário finaliza o processo de criação da meta.`
->         *   Crie uma tabela para o botão "Salvar Meta", indicando que ele é habilitado após o preenchimento dos campos obrigatórios.
->         *   Adicione o comando correspondente: `- Clicar no botão "Salvar Meta".`
-
 ---   
 
-Modelagem BPMN: <img width="1081" height="661" alt="metas (2)" src="https://github.com/user-attachments/assets/0b32a756-a7cf-428b-b1a3-83886ee2a48e" />
+Modelagem BPMN: 
+![Diagrama BPMN](../images/DiagramaMeta.png)
 
----
+## 2. Campos e Comandos para Criação de Metas (Processo 4)
 
-## Atividade 1 – Preencher Dados Cadastrais (Usuário)
+A criação de uma nova meta é realizada através de um formulário. O processo exige o preenchimento de campos específicos e a execução de comandos de interação para salvar a meta no sistema.
 
-Esta atividade envolve o preenchimento das informações necessárias para a criação da conta.
+### 2.1. Campos e Elementos do Formulário
 
-| Campo/Elemento     | Tipo          | Restrições                                  |
-|:-------------------|:--------------|:--------------------------------------------|
-| Nome Completo      | Texto         | Obrigatório. Campo de texto.                |
-| E-mail             | E-mail        | Obrigatório. Formato de e-mail válido.      |
-| Senha              | Senha         | Obrigatório. Mínimo de 6 caracteres.        |
-| Confirmar Senha    | Senha         | Obrigatório. Deve ser idêntica à senha.     |
-| Tipo de Negócio    | Seleção Única | Obrigatório. Opções: MEI, Autônomo, Outro.  |
+| Campo/Elemento | Tipo | Restrições | Descrição |
+| :--- | :--- | :--- | :--- |
+| **Título da Meta** | Caixa de Texto | Obrigatório | Nome descritivo da meta (Ex: Economizar para novo equipamento). |
+| **Categoria** | Seleção Única | Obrigatório | Classificação da meta (Ex: Equipamento, Investimento, Fundo de Emergência, Outro). |
+| **Valor Alvo (R$)** | Número | Obrigatório | O valor total que se deseja alcançar. |
+| **Valor Atual (R$)** | Número | Opcional | O valor já acumulado para a meta. |
+| **Prazo** | Data | Opcional | Data limite para a conclusão da meta. |
+| **Descrição** | Área de Texto | Opcional | Detalhes adicionais sobre a meta. |
+| **Botão: Criar Meta** | Botão | Habilitado após preenchimento dos campos obrigatórios. | Finaliza e registra a nova meta no sistema. |
+| **Botão: Cancelar** | Botão | - | Limpa o formulário e cancela a criação. |
 
-**Comandos**
-- Inserir o nome completo no campo "Nome Completo".
-- Inserir o endereço de e-mail no campo "E-mail".
-- Inserir a senha no campo "Senha".
-- Inserir a senha novamente no campo "Confirmar Senha".
-- Selecionar o tipo de negócio no dropdown "Tipo de Negócio".
+### 2.2. Comandos de Interação
 
----
+Os comandos de interação representam as ações que o usuário executa para preencher o formulário e submeter a meta:
 
-## Atividade 2 – Criar Conta (Usuário)
+*   **Inserir o título da meta** no campo "Título da Meta".
+*   **Selecionar a categoria** no campo "Categoria".
+*   **Inserir o valor desejado** no campo "Valor Alvo (R$)".
+*   **Inserir o valor atual** da meta no campo "Valor Atual (R$)" (se aplicável).
+*   **Selecionar a data limite** no campo "Prazo".
+*   **Inserir a descrição** no campo "Descrição (Opcional)".
+*   **Clicar no botão "Criar Meta"** para salvar.
+*   **Clicar no botão "Cancelar"** para limpar o formulário.
 
-Após preencher os dados, o usuário finaliza o processo de criação da conta.
+## 3. Comandos para Gestão e Visualização de Metas (Processo 5)
 
-| Campo/Elemento     | Tipo   | Restrições                                  |
-|:-------------------|:-------|:--------------------------------------------|
-| Botão: Criar Conta | Botão  | Habilitado após o preenchimento de todos os campos obrigatórios e validação. |
+Após a criação, as metas são listadas e podem ser gerenciadas. O processo de gestão envolve a filtragem da lista e ações específicas em cada item.
 
-**Comandos**
-- Clicar no botão "Criar Conta".
+### 3.1. Comandos de Filtragem e Visualização
 
----
+| Campo/Elemento | Tipo | Descrição | Comando de Interação |
+| :--- | :--- | :--- | :--- |
+| **Botão: Todas** | Botão | Filtra para exibir todas as metas, independentemente do status. | Clicar no botão "Todas". |
+| **Botão: Em Andamento** | Botão | Filtra para exibir metas ativas e não concluídas. | Clicar no botão "Em Andamento". |
+| **Botão: Concluídas** | Botão | Filtra para exibir metas que já atingiram o valor alvo. | Clicar no botão "Concluídas". |
+| **Cartão de Meta** | Elemento de Lista | Exibe Título, Status, Progresso (Valor Atual/Alvo), Prazo/Conclusão e Categoria. | Visualização passiva. |
 
-## Atividade 3 – Navegar para Login (Opcional) (Usuário)
+### 3.2. Comandos de Interação por Meta
 
-Caso o usuário já possua uma conta, ele pode optar por fazer login.
+Cada meta listada possui botões de ação que permitem a interação direta do usuário:
 
-| Campo/Elemento     | Tipo   | Restrições                                  |
-|:-------------------|:-------|:--------------------------------------------|
-| Link: Fazer login  | Link   | Redireciona para a página de login.         |
-
-**Comandos**
-- Clicar no link "Fazer login".
-
----
-
-_Tipos de dados utilizados:_
-
-*   **Área de texto** - campo texto de múltiplas linhas
-*   **Caixa de texto** - campo texto de uma linha
-*   **Número** - campo numérico
-*   **Data** - campo do tipo data (dd-mm-aaaa)
-*   **Hora** - campo do tipo hora (hh:mm:ss)
-*   **Data e Hora** - campo do tipo data e hora (dd-mm-aaaa, hh:mm:ss)
-*   **Imagem** - campo contendo uma imagem
-*   **Seleção única** - campo com várias opções de valores que são mutuamente exclusivas (radio button ou combobox)
-*   **Seleção múltipla** - campo com várias opções que podem ser selecionadas mutuamente (checkbox ou listbox)
-*   **Arquivo** - campo de upload de documento
-*   **Link** - campo que armazena uma URL
-*   **Tabela** - campo formado por uma matriz de valores
+| Campo/Elemento | Tipo | Restrições | Comando de Interação |
+| :--- | :--- | :--- | :--- |
+| **Botão: Editar** | Botão | Disponível para metas "Em Andamento". | Clicar no botão "Editar" para modificar a meta. |
+| **Botão: Detalhes** | Botão | Disponível para todas as metas. | Clicar no botão "Detalhes" para ver informações completas. |
+| **Botão: Reativar** | Botão | Disponível para metas "Concluídas". | Clicar no botão "Reativar" para alterar o status para "Em Andamento". |
