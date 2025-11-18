@@ -1,32 +1,31 @@
 # Código-fonte do Projeto Smart Gestão
 
-Este diretório contém todos os arquivos-fonte necessários para o funcionamento do sistema Smart Gestão, uma aplicação web para gestão financeira de microempreendedores e pequenas empresas.
+Este diretório contém todos os arquivos-fonte necessários para o funcionamento do sistema Smart Gestão, uma aplicação web para gestão financeira de microempreendedores e profissionais autônomos.
 
 ## Visão Geral do Sistema
 
 O Smart Gestão é uma aplicação web full-stack que utiliza:
 
 ### Arquitetura
-- **Backend (API RESTful)**: Construído com Node.js e Express, responsável por toda a lógica de negócio, autenticação, segurança (multi-tenant) e interação com o banco de dados.
-- **Frontend (Cliente Web)**: Interface de usuário construída com HTML, CSS e JavaScript puro, que consome os dados da API.
-- **Banco de Dados**: MongoDB (NoSQL) para persistência de dados, gerenciado via Mongoose para garantir a estrutura e validação dos dados.
+-   **Backend (API RESTful)**: Construído com Node.js e Express, responsável por toda a lógica de negócio, autenticação, segurança (multi-tenant) e interação com o banco de dados.
+-   **Frontend (Cliente Web)**: Interface de usuário construída com HTML, CSS e JavaScript puro, que consome os dados da API.
+-   **Banco de Dados**: MongoDB (NoSQL) para persistência de dados, gerenciado via Mongoose para garantir a estrutura e validação dos dados.
 
 ### Fluxo de Dados
 1. **Cliente (Browser)**
-   - Executa JavaScript no frontend
-   - Gerencia estado local com LocalStorage
-   - Realiza requisições HTTP para a API
+    - Executa JavaScript no frontend.
+    - Gerencia o estado da sessão do usuário com `localStorage`.
+    - Realiza requisições HTTP para a API.
 
 2. **Servidor (Node.js)**
-   - Recebe requisições na porta 5000
-   - Autentica usando JWT
-   - Processa regras de negócio
-   - Controllers processam a lógica de negócio e interagem com o MongoDB através dos Models.
+    - Recebe requisições (por padrão, na porta 5000).
+    - Autentica as requisições usando JSON Web Tokens (JWT).
+    - Processa as regras de negócio nos `controllers`.
+    - Interage com o MongoDB através dos `models` (Mongoose).
 
 3. **Banco de Dados (MongoDB)**
-   - Armazena dados em collections
-   - Gerencia relacionamentos
-   - Executa queries otimizadas
+    - Armazena os dados da aplicação em coleções (collections).
+    - Utiliza índices para otimizar a performance das consultas.
 
 ## Estrutura do Projeto
 
@@ -64,15 +63,16 @@ src/
 ## Componentes Principais
 
 ### Backend (API REST)
-- Node.js com Express
-- MongoDB para persistência
-- JWT para autenticação
-- Documentação detalhada em `codes/backend/README-backend.md`
+-   **Tecnologias:** Node.js, Express, MongoDB com Mongoose.
+-   **Funcionalidades:** Autenticação JWT, CRUDs completos, upload de arquivos, geração de relatórios em PDF, arquitetura multi-tenant.
+-   **Testes:** Suíte de testes de integração robusta com Jest, garantindo a qualidade e a estabilidade da API.
+-   **Documentação Detalhada:** `codes/backend/README-backend.md`
 
 ### Frontend (Web Interface)
-- **Tecnologias**: HTML5, CSS3, JavaScript (ES6 Modules).
-- **Responsabilidades**: Renderização da interface, interatividade do usuário, validação de formulários no cliente e comunicação com a API do backend.
-- Documentação detalhada em `codes/frontend/README-frontend.md`
+-   **Tecnologias**: HTML5, CSS3, JavaScript (ES6 Modules).
+-   **Responsabilidades**: Renderização da interface, interatividade do usuário, validação de formulários no cliente e comunicação com a API do backend.
+-   **Segurança:** Proteção de rotas do lado do cliente (`authGuard.js`) para impedir o acesso a páginas internas sem autenticação.
+-   **Documentação Detalhada:** `codes/frontend/README-frontend.md`
 
 ## Como Iniciar o Projeto
 
@@ -80,11 +80,11 @@ src/
    ```bash
    cd codes/backend
    npm install
-   npm start
+   npm start # Este comando inicia o backend, o frontend legado e a demo em React.
    ```
-   O backend estará disponível em http://localhost:5000
+   O backend estará disponível em `http://localhost:5000`.
 
-2. O frontend iniciará automaticamente em http://localhost:3000
+2. O frontend legado iniciará automaticamente em `http://localhost:3000`.
 
 ## Documentação Detalhada
 

@@ -31,4 +31,4 @@ const SessionTokenSchema = new Schema({
 SessionTokenSchema.index({ userId: 1, active: 1 });
 SessionTokenSchema.index({ tokenHash: 1 }, { unique: true });
 
-export default model("SessionToken", SessionTokenSchema);
+export default mongoose.models.SessionToken || model("SessionToken", SessionTokenSchema);

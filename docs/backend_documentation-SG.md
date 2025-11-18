@@ -2,14 +2,14 @@
 
 ## 📘 Visão Geral do Projeto
 
-O **Smart Gestão** é um sistema web voltado para **microempreendedores e pequenas empresas**, oferecendo ferramentas de **gestão financeira** com foco em controle de receitas, despesas, relatórios, metas e alertas.  
+O **Smart Gestão** é um sistema web voltado para **microempreendedores e profissionais autônomos**, oferecendo ferramentas de **gestão financeira** com foco em controle de receitas, despesas, relatórios, metas e alertas.
 
 A aplicação segue uma **arquitetura modular** com **Node.js**, **Express** e **MongoDB**, permitindo:
-- Escalabilidade horizontal;  
-- Separação clara de responsabilidades (MVC + Middlewares);  
-- Suporte multiempresa;  
-- Controle de acesso baseado em papéis (roles);  
-- Auditoria e logs detalhados de operações.
+-   **Escalabilidade**: A arquitetura permite o crescimento futuro do sistema.
+-   **Separação de Responsabilidades**: A estrutura segue o padrão MVC (Model-View-Controller) enriquecido com uma camada de Serviços e Middlewares, tornando o código mais organizado e fácil de manter.
+-   **Segurança Multi-Tenant**: Garante que os dados de uma empresa sejam completamente isolados dos de outra.
+-   **Controle de Acesso Baseado em Papéis (RBAC)**: Define diferentes níveis de permissão para os usuários (ex: administrador, usuário padrão).
+-   **Auditoria**: Registra ações importantes realizadas no sistema para fins de segurança e rastreabilidade.
 
 ---
 
@@ -223,7 +223,7 @@ Campos: empresaId, uuid, nome, email, senha_hash, role.
 
 ## 7. 🧩 Scripts e Utilitários
 
--   **`Scripts/initPermissions.js`**: Garante que as permissões de sistema (`ROOT`, `ADMIN_COMPANY`, etc.) existam no banco de dados. É executado automaticamente na inicialização do servidor.
+-   **`Scripts/initPermissions.js`**: Garante que as permissões de sistema (`ROOT`, `ADMIN_COMPANY`, etc.) existam no banco de dados. É executado automaticamente na inicialização do servidor para garantir a consistência do ambiente.
 -   **`Scripts/create-test-companies.js`**: Cria um conjunto de empresas de teste fixas para uso em validações manuais. É executado manualmente via `npm run create-test-users`.
 -   **`Scripts/print-summary.js`**: Exibe um resumo formatado com os links de acesso de todos os serviços após a inicialização.
 
@@ -231,10 +231,10 @@ Campos: empresaId, uuid, nome, email, senha_hash, role.
 
 ## 8. 🔒 Segurança e Acesso
 
--   **Autenticação**: Senhas são sempre armazenadas com hash `bcrypt`. O acesso é controlado por tokens JWT com tempo de expiração.
--   **Isolamento de Dados**: O `companyScopeMiddleware` garante que um usuário de uma empresa não possa, sob nenhuma hipótese, acessar dados de outra.
--   **Encerramento Seguro**: A lógica de `gracefulShutdown` em `server.js` garante que as conexões sejam encerradas de forma limpa, mesmo com `Ctrl+C`.
--   **Testes Seguros**: O ambiente de teste (`mongo-test-environment.js`) foi configurado para realizar uma **limpeza seletiva**, removendo apenas os dados que ele mesmo criou, garantindo que os dados de desenvolvimento manual permaneçam intactos.
+-   **Autenticação**: Senhas são sempre armazenadas com hash `bcrypt`. O acesso é controlado por tokens JWT com tempo de expiração curto (access token) e um mecanismo de renovação (refresh token).
+-   **Isolamento de Dados (Multi-Tenant)**: O `companyScopeMiddleware` é um pilar da segurança, garantindo que um usuário de uma empresa não possa, sob nenhuma hipótese, acessar dados de outra.
+-   **Encerramento Seguro**: A lógica de `gracefulShutdown` em `server.js` garante que as conexões com o banco de dados e o próprio servidor sejam encerradas de forma limpa, evitando corrupção de dados.
+-   **Testes Seguros**: O ambiente de teste (`globalSetup.cjs` e `globalTeardown.cjs`) foi configurado para realizar uma **limpeza seletiva**, removendo apenas os dados que ele mesmo criou, garantindo que os dados de desenvolvimento manual permaneçam intactos.
 
 ---
 
@@ -248,10 +248,10 @@ Campos: empresaId, uuid, nome, email, senha_hash, role.
 
 ## 10. 🧪 Testes Automatizados
 
-O projeto possui uma suíte de testes de integração robusta, gerenciada pelo Jest.
+O projeto possui uma suíte de testes de integração robusta, gerenciada pelo **Jest**.
 
 -   **Execução**: `npm test` na pasta do backend.
--   **Ambiente**: Utiliza um ambiente personalizado (`mongo-test-environment.js`) que orquestra todo o ciclo de vida: inicia o servidor, cria dados de teste temporários, executa os testes e limpa apenas os dados criados.
+-   **Ambiente**: Utiliza scripts globais (`globalSetup` e `globalTeardown`) que orquestram todo o ciclo de vida: iniciam o servidor, criam dados de teste temporários, executam os testes e limpam apenas os dados criados.
 -   **Cobertura**: Os testes validam os principais módulos, incluindo autenticação, isolamento de dados (multi-tenant), CRUDs de funcionalidades e geração de relatórios.
 
 Para mais detalhes, consulte o `roteiro de testes automatizados.md`.

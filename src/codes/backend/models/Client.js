@@ -32,5 +32,5 @@ const clientSchema = new mongoose.Schema({
 // não possa ser cadastrado duas vezes para a mesma empresa, mantendo a integridade dos dados.
 clientSchema.index({ companyId: 1, name: 1, type: 1 }, { unique: true });
 
-const Client = mongoose.model('Client', clientSchema);
+const Client = mongoose.models.Client || mongoose.model('Client', clientSchema);
 export default Client;

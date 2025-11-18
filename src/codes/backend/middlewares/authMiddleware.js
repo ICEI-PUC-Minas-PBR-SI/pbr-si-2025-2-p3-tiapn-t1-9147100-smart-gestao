@@ -1,10 +1,10 @@
 // =================================================================================
 // ARQUIVO: middlewares/authMiddleware.js
-// DESCRIÇÃO: Middleware central de autenticação. Sua função é proteger rotas
-//            verificando a validade de um JSON Web Token (JWT) enviado no
-//            cabeçalho da requisição. Se o token for válido, ele decodifica
-//            as informações e anexa os dados do usuário ao objeto `req`
-//            para uso nos próximos middlewares e controladores.
+// DESCRIÇÃO: Middleware central de autenticação. Sua função é proteger rotas,
+//            verificando a validade de um JSON Web Token (JWT) enviado no cabeçalho
+//            da requisição. Se o token for válido, ele decodifica as informações
+//            e anexa os dados do usuário ao objeto `req` para uso nos próximos
+//            middlewares e controladores.
 // =================================================================================
 
 import jwt from "jsonwebtoken";
@@ -12,7 +12,7 @@ import User from "../models/User.js";
 
 /**
  * Middleware para verificar a autenticação do usuário via JWT.
- * Este é o "guardião" das rotas protegidas da API.
+ * Este é o "guardião" de todas as rotas protegidas da API.
  */
 export async function authMiddleware(req, res, next) {
   try {

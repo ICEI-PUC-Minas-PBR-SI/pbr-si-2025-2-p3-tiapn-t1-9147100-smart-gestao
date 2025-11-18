@@ -1,3 +1,17 @@
+/**
+ * =================================================================================
+ * ARQUIVO: controllers/authController.js
+ * DESCRIÇÃO: Controladores para as funcionalidades de autenticação, como registro,
+ *            login, logout e recuperação de senha.
+ * =================================================================================
+ */
+/**
+ * =================================================================================
+ * ARQUIVO: controllers/authController.js
+ * DESCRIÇÃO: Controladores para as funcionalidades de autenticação, como registro,
+ *            login, logout e recuperação de senha.
+ * =================================================================================
+ */
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
@@ -9,6 +23,11 @@ import Transaction from '../models/Transaction.js';
 import { USER_COMPANY } from '../utils/constants.js';
 import { successResponse, errorResponse } from '../utils/responseHelper.js';
 
+/**
+ * @desc    Registra uma nova empresa e seu primeiro usuário (administrador).
+ * @route   POST /api/auth/register
+ * @access  Public
+ */
 export const registerUser = async (req, res) => {
   const { name, email, password, companyName, cnpj } = req.body;
 
@@ -41,14 +60,19 @@ export const registerUser = async (req, res) => {
     // Adicionado para retornar o ID do usuário, necessário para os testes
     const userResponse = newUser.toObject();
     delete userResponse.passwordHash;
-
-    return successResponse(res, { status: 201, message: "Usuário cadastrado com sucesso!", data: { userId: userResponse._id } });
+    // Retorna uma resposta padronizada com o `responseHelper`.
+    return successResponse(res, { status: 201, data: { user: userResponse } });
 
   } catch (error) {
     return errorResponse(res, { status: 500, message: "Erro interno ao cadastrar usuário.", errors: error });
   }
 };
 
+/**
+ * @desc    Autentica um usuário e retorna tokens de acesso e de atualização.
+ * @route   POST /api/auth/login
+ * @access  Public
+ */
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -94,17 +118,24 @@ export const loginUser = async (req, res) => {
       device: req.headers['user-agent'],
     });
 
-    // Retorna os tokens e informações básicas do usuário
+    // Padroniza a resposta usando o `responseHelper` para consistência em toda a API.
     return successResponse(res, { data: {
-      token: accessToken,
-      refreshToken: refreshTokenValue,
-      user: { id: user._id, name: user.name, email: user.email, companyId: user.companyId }
-    }});
+        token: accessToken,
+        refreshToken: refreshTokenValue,
+        user: { id: user._id, name: user.name, email: user.email, companyId: user.companyId }
+      }
+    });
   } catch (error) {
     return errorResponse(res, { status: 500, message: "Erro interno ao fazer login.", errors: error });
   }
 };
 
+/**
+ * @desc    Realiza o logout do usuário, invalidando o refresh token no servidor.
+ * @route   POST /api/auth/logout
+ * @access  Public (mas requer um `refreshToken` válido no corpo)
+ * @note    Esta função implementa um logout *stateful*.
+ */
 /**
  * @desc    Realizar o logout do usuário, invalidando o refresh token.
  * @route   POST /api/auth/logout
@@ -135,6 +166,11 @@ export const logoutUser = async (req, res) => {
   return successResponse(res, { message: "Logout realizado com sucesso. A sessão foi invalidada no servidor." });
 };
 
+/**
+ * @desc    Inicia o processo de recuperação de senha, gerando um token de reset.
+ * @route   POST /api/auth/forgot-password
+ * @access  Public
+ */
 export const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
@@ -155,13 +191,19 @@ export const forgotPassword = async (req, res) => {
 
     // Em um app real, aqui você enviaria um e-mail para o usuário com um link contendo `resetToken`.
     // Para este projeto, retornamos o token para facilitar os testes.
-    return successResponse(res, { message: "Token de reset enviado com sucesso (simulado).", data: { resetToken } });
+    // A resposta é padronizada com o `responseHelper`.
+    return successResponse(res, { message: 'Token de reset enviado com sucesso (simulado).', data: { resetToken } });
 
   } catch (error) {
     return errorResponse(res, { status: 500, message: "Erro interno no servidor.", errors: error });
   }
 };
 
+/**
+ * @desc    Redefine a senha do usuário utilizando um token de reset válido.
+ * @route   POST /api/auth/reset-password/:token
+ * @access  Public
+ */
 export const resetPassword = async (req, res) => {
   try {
     const { token } = req.params;
@@ -188,12 +230,22 @@ export const resetPassword = async (req, res) => {
   }
 };
 
+/**
+ * @desc    (Placeholder) Renova um token de acesso expirado usando um refresh token.
+ * @route   POST /api/auth/refresh-token
+ * @access  Public
+ */
 export const refreshToken = async (req, res) => {
   // A lógica real verificaria o refresh token (geralmente vindo de um cookie httpOnly),
   // e se válido, geraria um novo access token (e opcionalmente um novo refresh token).
   return successResponse(res, { message: "Token atualizado (placeholder)." });
 };
 
+/**
+ * @desc    Exclui um usuário e todos os seus dados associados (incluindo a empresa).
+ * @route   DELETE /api/auth/users/:id
+ * @access  Private (usado principalmente para limpeza em testes)
+ */
 export const deleteCurrentUser = async (req, res) => {
   try {
     const userId = req.params.id;

@@ -1,7 +1,11 @@
 /**
- * @file Testes para a funcionalidade de "Esqueci Minha Senha".
- * @description Valida o ciclo completo de solicitação de reset,
- *              validação de token e atualização de senha.
+ * =================================================================================
+ * ARQUIVO: Testes/1-auth/password.test.js
+ *
+ * DESCRIÇÃO: Suíte de testes para a funcionalidade de "Esqueci Minha Senha".
+ *            Valida o ciclo completo de solicitação de reset, validação de token
+ *            e atualização de senha, garantindo que o usuário consiga recuperar o acesso.
+ * =================================================================================
  */
 import axios from 'axios';
 import fs from 'fs';
@@ -21,6 +25,10 @@ describe('9. Módulo de Recuperação de Senha', () => {
     API_URL = setupData.apiUrl;
   });
 
+  /**
+   * @test Cenário de falha ao solicitar reset de senha.
+   * @description Verifica se a API retorna um erro 404 ao tentar recuperar a senha de um e-mail que não existe no sistema.
+   */
   test('deve falhar ao solicitar reset para um e-mail inexistente', async () => {
     console.log('\n--- Teste: Solicitar reset para e-mail inválido ---');
     try {
@@ -35,6 +43,10 @@ describe('9. Módulo de Recuperação de Senha', () => {
     }
   });
 
+  /**
+   * @test Cenário de sucesso para a solicitação de reset de senha.
+   * @description Verifica se a API gera e retorna um token de reset quando um e-mail válido é fornecido.
+   */
   test('deve gerar e salvar um token de reset para um e-mail válido', async () => {
     console.log('\n--- Teste: Gerar token de reset com sucesso ---');
     const response = await axios.post(`${API_URL}/auth/forgot-password`, {
@@ -45,17 +57,22 @@ describe('9. Módulo de Recuperação de Senha', () => {
     expect(response.data.message).toContain('Token de reset enviado');
 
     // Valida que a resposta contém o token de reset (para fins de teste), sem acessar o banco.
-    expect(response.data).toHaveProperty('resetToken');
+    expect(response.data.data).toHaveProperty('resetToken');
     console.log('✅ Token de reset gerado e salvo no banco de dados.');
   });
 
+  /**
+   * @test Cenário de ponta a ponta para a redefinição de senha.
+   * @description Valida todo o fluxo: solicitar o token, usar o token para definir uma nova senha,
+   *              verificar se o token foi invalidado e, finalmente, fazer login com a nova senha.
+   */
   test('deve resetar a senha com um token válido e permitir login com a nova senha', async () => {
     console.log('\n--- Teste: Resetar senha com token válido ---');
     // 1. Solicitar o token
     const forgotResponse = await axios.post(`${API_URL}/auth/forgot-password`, {
       email: userA.email,
     });
-    const { resetToken } = forgotResponse.data; // O token é retornado para fins de teste
+    const { resetToken } = forgotResponse.data.data; // O token é retornado para fins de teste
     expect(resetToken).toBeDefined();
 
     // 2. Resetar a senha com o token
@@ -80,7 +97,7 @@ describe('9. Módulo de Recuperação de Senha', () => {
     });
 
     expect(loginResponse.status).toBe(200);
-    expect(loginResponse.data).toHaveProperty('token');
+    expect(loginResponse.data.data).toHaveProperty('token');
     console.log('✅ Login com a nova senha realizado com sucesso.');
   });
 });

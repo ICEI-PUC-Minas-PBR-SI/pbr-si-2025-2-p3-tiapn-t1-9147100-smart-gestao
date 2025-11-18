@@ -1,6 +1,6 @@
 # 📄 Guia de Integração Frontend-Backend (Exemplos Práticos)
 
-Este documento é um guia técnico que detalha como o frontend (construído com HTML, CSS e JavaScript puro) se comunica com a API do backend para criar uma aplicação funcional.
+Este documento é um guia técnico que detalha como o frontend (construído com HTML, CSS e JavaScript puro) se comunica com a API RESTful do backend para criar uma aplicação funcional.
 
 ## 1. Arquitetura de Comunicação
 
@@ -11,7 +11,7 @@ A comunicação é baseada em uma arquitetura cliente-servidor desacoplada:
 
 Toda a comunicação acontece através de requisições HTTP (usando a `Fetch API` do JavaScript) para os endpoints do backend (ex: `http://localhost:5000/api/transactions`).
 
-## 2. Fluxo de Autenticação e Sessão
+## 2. Fluxo de Autenticação e Gerenciamento de Sessão
 
 A segurança e o acesso aos dados são controlados por JSON Web Tokens (JWT).
 
@@ -19,7 +19,7 @@ A segurança e o acesso aos dados são controlados por JSON Web Tokens (JWT).
 
 1.  **Ação:** O usuário preenche o e-mail e a senha em `login.html` e clica em "Entrar".
 2.  **Frontend (`login.js`):** Envia uma requisição `POST` para `/api/auth/login` com as credenciais.
-3.  **Backend:** Valida as credenciais. Se corretas, gera um `token` (curta duração) e um `refreshToken` (longa duração) e os retorna.
+3.  **Backend:** Valida as credenciais. Se corretas, gera um `token` (access token, de curta duração) e um `refreshToken` (longa duração) e os retorna.
 4.  **Frontend:** Recebe os tokens e os salva no `localStorage` do navegador. O `localStorage` é um armazenamento persistente que mantém os dados mesmo após fechar o navegador.
     ```javascript
     // Exemplo de código em /js/pages/login.js
@@ -31,7 +31,7 @@ A segurança e o acesso aos dados são controlados por JSON Web Tokens (JWT).
 
 ### b. Acesso a Dados Protegidos
 
-Uma vez logado, toda requisição para buscar ou modificar dados precisa ser autenticada.
+Uma vez logado, toda requisição para buscar ou modificar dados em rotas protegidas precisa ser autenticada.
 **Contexto:** `transacoes.html` e `js/pages/transactions.js`.
 
 1.  **Frontend (`transactions.js`):** Pega o token salvo: `const token = localStorage.getItem('token');`
@@ -52,7 +52,7 @@ Uma vez logado, toda requisição para buscar ou modificar dados precisa ser aut
 ### c. Logout
 
 1.  **Ação:** O usuário clica em "Sair".
-2.  **Frontend (Logout Simples):** O método mais básico é apenas limpar o `localStorage`.
+2.  **Frontend (Logout Simples):** O método principal é limpar o `localStorage` para remover os dados da sessão do navegador.
     ```javascript
     // Exemplo de código em um script de logout
     localStorage.removeItem('token');
@@ -60,7 +60,7 @@ Uma vez logado, toda requisição para buscar ou modificar dados precisa ser aut
     localStorage.removeItem('user');
     window.location.href = 'login.html';
     ```
-3.  **Frontend (Logout Seguro - Recomendado):** Para maior segurança, o frontend deve também notificar o backend para invalidar a sessão.
+3.  **Frontend (Logout Seguro - Stateful):** Para maior segurança, o frontend também notifica o backend para invalidar a sessão no servidor.
     ```javascript
     // Pega o refreshToken antes de limpar o localStorage
     const refreshToken = localStorage.getItem('refreshToken');
@@ -78,6 +78,26 @@ Uma vez logado, toda requisição para buscar ou modificar dados precisa ser aut
     // Redireciona para o login
     window.location.href = 'login.html';
     ```
+
+### d. Renovação Automática de Sessão (Refresh Token)
+
+**Objetivo:** Manter o usuário logado de forma transparente, mesmo após a expiração do token de acesso, melhorando a experiência do usuário sem comprometer a segurança.
+
+*   **Scripts Principais:** Um interceptador de requisições (em uma implementação mais avançada com `axios`) ou uma função wrapper para `fetch`.
+*   **Como Funciona:**
+    1.  **Token Expirado:** O frontend faz uma requisição normal para a API (ex: `GET /api/transactions`) usando um `token` de acesso que já expirou.
+    2.  **Resposta do Backend:** O backend detecta que o token está expirado e retorna um erro `401 Unauthorized`.
+    3.  **Ação do Frontend (O Interceptador):**
+        a.  O script do frontend intercepta essa resposta `401`.
+        b.  Ele pega o `refreshToken` que está salvo no `localStorage`.
+        c.  Faz uma requisição `POST` para o endpoint `/api/auth/refresh-token` enviando o `refreshToken`.
+    4.  **Resposta do Backend (Refresh):** Se o `refreshToken` for válido, o backend gera um **novo** `token` de acesso e o retorna.
+    5.  **Ação Final do Frontend:**
+        a.  O script salva o novo `token` no `localStorage`, substituindo o antigo.
+        b.  Ele **refaz automaticamente a requisição original** (`GET /api/transactions`), desta vez com o novo token.
+        c.  A página carrega os dados normalmente, e o usuário nem percebe que a sessão foi renovada.
+
+*   **Validação:** Este é um fluxo mais complexo de testar manualmente, mas pode ser observado nas Ferramentas de Desenvolvedor (aba "Network"), onde se veria uma falha 401 seguida por uma chamada para `/refresh-token` e, então, o sucesso da requisição original.
 
 ## 3. Guia de Integração por Funcionalidade
 

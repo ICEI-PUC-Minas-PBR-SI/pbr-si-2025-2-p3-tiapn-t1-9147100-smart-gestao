@@ -1,0 +1,98 @@
+
+--- 🚀 [GLOBAL SETUP] Iniciando ambiente de teste ---
+Verificando permissões de sistema...
+Permissões não encontradas. Criando permissões padrão...
+Permissões padrão criadas com sucesso!
+┌─────────┬─────────────────┬──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ (index) │ Nome            │ Descrição                                                                                        │
+├─────────┼─────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ 0       │ 'ROOT'          │ 'Superusuário. Acesso irrestrito a todos os dados e configurações do sistema.'                   │
+│ 1       │ 'ADMIN_COMPANY' │ 'Administrador de uma empresa. Pode gerenciar usuários e todos os dados da sua própria empresa.' │
+│ 2       │ 'USER_COMPANY'  │ 'Usuário padrão. Pode criar e gerenciar seus próprios dados dentro da empresa.'                  │
+└─────────┴─────────────────┴──────────────────────────────────────────────────────────────────────────────────────────────────┘
+⏳ Iniciando servidor Smart Gestão (startServer)...
+Conexão com o MongoDB estabelecida com sucesso.
+✅ [1/1] Conexão com o banco de dados estabelecida!
+✅ Servidor rodando na porta 5000
+--- ✅ [GLOBAL SETUP] Ambiente pronto e servidor iniciado ---
+(node:27304) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+[0mGET /api/reports/export/transactions-pdf [32m200[0m 110.715 ms - -[0m
+[PDF SAVED FOR TEST] F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\Testes\PDFs\transactions\relatorio-financeiro-2025-11-14T22-46-35-567Z.pdf
+[0mGET /api/reports/export/clients-pdf [32m200[0m 51.955 ms - -[0m
+[PDF SAVED FOR TEST] F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\Testes\PDFs\clients\relatorio-clientes-2025-11-14T22-46-35-686Z.pdf
+[0mGET /api/reports/export/invoice/6917b14a6ac7530a04637463 [32m200[0m 60.930 ms - -[0m
+FAIL Testes/4-reports/reports.test.js
+  8. Módulo de Relatórios
+    × deve chamar o serviço de PDF com os dados corretos para o RELATÓRIO DE TRANSAÇÕES (157 ms)
+    × deve chamar o serviço de PDF com os dados corretos para o RELATÓRIO DE CLIENTES (62 ms)
+    × deve chamar o serviço de PDF com os dados corretos para a FATURA (68 ms)
+
+  ● 8. Módulo de Relatórios › deve chamar o serviço de PDF com os dados corretos para o RELATÓRIO DE TRANSAÇÕES
+
+    expect(received).toHaveBeenCalled()
+
+    Matcher error: received value must be a mock or spy function
+
+    Received has type:  function
+    Received has value: [Function generateFinancialReportPDF]
+
+    [0m [90m 60 |[39m     [90m// 2. Verificação Principal: Garante que a função `generateFinancialReportPDF` do nosso serviço foi chamada.[39m
+     [90m 61 |[39m     [90m//    Isso prova que o controller executou a lógica correta.[39m
+    [31m[1m>[22m[39m[90m 62 |[39m     expect(generateFinancialReportPDF)[33m.[39mtoHaveBeenCalled()[33m;[39m
+     [90m    |[39m                                        [31m[1m^[22m[39m
+     [90m 63 |[39m
+     [90m 64 |[39m     [90m// 3. Validação dos Dados: Captura os argumentos com os quais a função foi chamada para inspecioná-los.[39m
+     [90m 65 |[39m     [36mconst[39m capturedData [33m=[39m generateFinancialReportPDF[33m.[39mmock[33m.[39mcalls[[35m0[39m][[35m0[39m][33m;[39m[0m
+
+      at Object.<anonymous> (Testes/4-reports/reports.test.js:62:40)
+
+  ● 8. Módulo de Relatórios › deve chamar o serviço de PDF com os dados corretos para o RELATÓRIO DE CLIENTES
+
+    expect(received).toHaveBeenCalled()
+
+    Matcher error: received value must be a mock or spy function
+
+    Received has type:  function
+    Received has value: [Function generateClientsReportPDF]
+
+    [0m [90m 78 |[39m
+     [90m 79 |[39m     [90m// 2. Verificação Principal: Garante que a função correta do serviço de PDF foi acionada.[39m
+    [31m[1m>[22m[39m[90m 80 |[39m     expect(generateClientsReportPDF)[33m.[39mtoHaveBeenCalled()[33m;[39m
+     [90m    |[39m                                      [31m[1m^[22m[39m
+     [90m 81 |[39m
+     [90m 82 |[39m     [90m// 3. Validação dos Dados: Verifica se os dados passados para a geração do PDF estão corretos.[39m
+     [90m 83 |[39m     [36mconst[39m capturedData [33m=[39m generateClientsReportPDF[33m.[39mmock[33m.[39mcalls[[35m0[39m][[35m0[39m][33m;[39m[0m
+
+      at Object.<anonymous> (Testes/4-reports/reports.test.js:80:38)
+
+  ● 8. Módulo de Relatórios › deve chamar o serviço de PDF com os dados corretos para a FATURA
+
+    expect(received).toHaveBeenCalled()
+
+    Matcher error: received value must be a mock or spy function
+
+    Received has type:  function
+    Received has value: [Function generateInvoicePDF]
+
+    [0m [90m 94 |[39m
+     [90m 95 |[39m     [90m// 2. Verificação Principal: Garante que a função de geração de fatura foi chamada.[39m
+    [31m[1m>[22m[39m[90m 96 |[39m     expect(generateInvoicePDF)[33m.[39mtoHaveBeenCalled()[33m;[39m
+     [90m    |[39m                                [31m[1m^[22m[39m
+     [90m 97 |[39m
+     [90m 98 |[39m     [90m// 3. Validação dos Dados: Verifica se o controller passou os dados corretos da empresa e da transação específica.[39m
+     [90m 99 |[39m     [36mconst[39m capturedData [33m=[39m generateInvoicePDF[33m.[39mmock[33m.[39mcalls[[35m0[39m][[35m0[39m][33m;[39m[0m
+
+      at Object.<anonymous> (Testes/4-reports/reports.test.js:96:32)
+
+Test Suites: 1 failed, 1 total
+Tests:       3 failed, 3 total
+Snapshots:   0 total
+Time:        1.172 s
+Ran all test suites matching Testes/4-reports.
+
+--- 🧹 [GLOBAL TEARDOWN] Finalizando ambiente de teste ---
+[PDF SAVED FOR TEST] F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\Testes\PDFs\invoices\fatura-6917b14a6ac7530a04637463-2025-11-14T22-46-35-759Z.pdf
+   - [OK] Dados de teste temporários foram removidos.
+✅ Servidor e conexão com MongoDB encerrados (stopServer).
+--- ✅ [GLOBAL TEARDOWN] Ambiente finalizado com sucesso ---

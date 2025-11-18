@@ -30,4 +30,4 @@ const AlertSchema = new Schema({
 // Índice composto para otimizar a busca de alertas não lidos de uma empresa.
 AlertSchema.index({ companyId: 1, read: 1, createdAt: -1 });
 
-export default model("Alert", AlertSchema);
+export default mongoose.models.Alert || model("Alert", AlertSchema);

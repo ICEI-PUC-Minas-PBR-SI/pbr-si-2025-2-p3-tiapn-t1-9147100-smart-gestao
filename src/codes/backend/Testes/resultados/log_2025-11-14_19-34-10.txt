@@ -1,0 +1,45 @@
+
+--- 🚀 [GLOBAL SETUP] Iniciando ambiente de teste ---
+Verificando permissões de sistema...
+Permissões não encontradas. Criando permissões padrão...
+Permissões padrão criadas com sucesso!
+┌─────────┬─────────────────┬──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ (index) │ Nome            │ Descrição                                                                                        │
+├─────────┼─────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ 0       │ 'ROOT'          │ 'Superusuário. Acesso irrestrito a todos os dados e configurações do sistema.'                   │
+│ 1       │ 'ADMIN_COMPANY' │ 'Administrador de uma empresa. Pode gerenciar usuários e todos os dados da sua própria empresa.' │
+│ 2       │ 'USER_COMPANY'  │ 'Usuário padrão. Pode criar e gerenciar seus próprios dados dentro da empresa.'                  │
+└─────────┴─────────────────┴──────────────────────────────────────────────────────────────────────────────────────────────────┘
+⏳ Iniciando servidor Smart Gestão (startServer)...
+Conexão com o MongoDB estabelecida com sucesso.
+✅ [1/1] Conexão com o banco de dados estabelecida!
+✅ Servidor rodando na porta 5000
+--- ✅ [GLOBAL SETUP] Ambiente pronto e servidor iniciado ---
+FAIL Testes/4-reports/reports.test.js
+  ● Test suite failed to run
+
+    ReferenceError: require is not defined
+
+    [0m [90m 27 |[39m [90m// que qualquer `import` subsequente deste módulo no código da aplicação[39m
+     [90m 28 |[39m [90m// (como no `reportController`) receberá a versão mockada.[39m
+    [31m[1m>[22m[39m[90m 29 |[39m jest[33m.[39mmock([32m'../../services/pdfService.js'[39m)[33m;[39m
+     [90m    |[39m                                           [31m[1m^[22m[39m
+     [90m 30 |[39m
+     [90m 31 |[39m [36mconst[39m [33mSETUP_FILE[39m [33m=[39m path[33m.[39mjoin([32m'Testes'[39m[33m,[39m [32m'test-setup.json'[39m)[33m;[39m
+     [90m 32 |[39m[0m
+
+      at require (Testes/4-reports/reports.test.js:29:43)
+      at _getJestObj (Testes/4-reports/reports.test.js:29:1)
+
+Test Suites: 1 failed, 1 total
+Tests:       0 total
+Snapshots:   0 total
+Time:        0.739 s
+Ran all test suites matching Testes/4-reports.
+
+--- 🧹 [GLOBAL TEARDOWN] Finalizando ambiente de teste ---
+(node:23224) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+   - [OK] Dados de teste temporários foram removidos.
+✅ Servidor e conexão com MongoDB encerrados (stopServer).
+--- ✅ [GLOBAL TEARDOWN] Ambiente finalizado com sucesso ---

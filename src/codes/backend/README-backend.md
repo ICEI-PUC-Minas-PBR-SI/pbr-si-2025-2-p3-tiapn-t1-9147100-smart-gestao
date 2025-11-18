@@ -129,8 +129,7 @@ O servidor backend estará disponível em `http://localhost:5000`. Você pode ve
 A suíte de testes automatizados valida a integridade da API. O processo de execução foi simplificado para garantir estabilidade e focar na validação do backend.
 
 Para instruções detalhadas sobre como configurar e executar a suíte de testes, que agora utiliza um sistema de limpeza seletiva para proteger os dados de desenvolvimento, consulte o guia oficial na pasta de testes:
-
-> **Consulte: Roteiro de Testes Automatizados**
+> **Consulte: [Roteiro de Testes Automatizados](Testes/Docs/roteiro%20de%20testes%20automatizados.md)**
 
 ## 6. Validação e Conclusão da Função Backend
 
@@ -142,3 +141,73 @@ O backend demonstrou ser:
 - **Flexível**: Capaz de servir diferentes clientes, como o frontend legado (HTML/JS) e a prova de conceito em React, provando a eficácia da arquitetura de API desacoplada.
 
 As funcionalidades pendentes (Exportação de PDF, Cadastro de Clientes/Fornecedores e Alertas Automáticos) foram documentadas e podem ser desenvolvidas sobre a base sólida estabelecida.
+
+---
+
+## 7. Melhorias Futuras e Considerações de Produção
+
+Como um projeto acadêmico, certas simplificações foram feitas para focar no núcleo da funcionalidade dentro do prazo estabelecido. Para uma versão de produção, as seguintes melhorias seriam recomendadas:
+
+### 7.1. Segurança Avançada
+
+-   **Gerenciamento de Refresh Token**: A abordagem atual de enviar o `refreshToken` no corpo da resposta e armazená-lo no `localStorage` do frontend é funcional, mas vulnerável a ataques de Cross-Site Scripting (XSS). A prática recomendada em produção é enviar o `refreshToken` em um **cookie `HttpOnly` e `Secure`**. Isso impede que scripts maliciosos no navegador tenham acesso a ele.
+-   **Proteção CSRF (Cross-Site Request Forgery)**: Para aplicações web tradicionais que dependem de cookies para sessão, seria crucial implementar tokens anti-CSRF para garantir que as requisições venham de fontes confiáveis.
+-   **Rate Limiting e Prevenção de Brute-Force**: Implementar um middleware de "rate limiting" em endpoints sensíveis (como `/login` e `/forgot-password`) para bloquear IPs que façam muitas tentativas em um curto período, prevenindo ataques de força bruta.
+
+### 7.2. Escalabilidade e Performance
+
+-   **Cache**: Implementar uma camada de cache com uma ferramenta como **Redis**. Dados que não mudam com frequência (como o perfil do usuário ou permissões) poderiam ser cacheados para reduzir a carga no banco de dados e diminuir a latência das requisições.
+-   **Otimização de Índices no Banco de Dados**: À medida que o volume de dados cresce, seria necessário analisar as consultas mais lentas (`slow queries`) e criar índices compostos mais complexos no MongoDB para otimizar a performance.
+
+### 7.3. Exclusão Lógica (Soft Deletes)
+
+-   **O Problema da Exclusão Física**: Atualmente, a maioria das operações de exclusão (`DELETE`) remove os dados permanentemente do banco de dados (`findOneAndDelete`). Em um ambiente de produção, isso é arriscado e pode violar regulamentações como a LGPD, que exigem a retenção de dados por um certo período.
+-   **A Solução "Soft Delete"**: A melhor prática seria implementar a exclusão lógica. Em vez de apagar o registro, um campo como `deleted: true` e `deletedAt: new Date()` seria adicionado. Todas as consultas (`find`, `findOne`, etc.) seriam então modificadas para incluir a condição `{ deleted: { $ne: true } }`, garantindo que os dados "excluídos" não apareçam para o usuário, mas permaneçam no banco para fins de auditoria ou recuperação.
+
+### 7.4. Testes e CI/CD
+
+-   **Testes Unitários**: A suíte de testes atual é focada em integração. Para uma maior granularidade, seria importante adicionar testes unitários para validar a lógica de funções específicas em `services` e `utils` de forma isolada, sem depender de um banco de dados ou servidor.
+-   **Pipeline de CI/CD (Integração e Entrega Contínua)**: Configurar um pipeline automatizado (usando ferramentas como GitHub Actions, Jenkins ou GitLab CI) que, a cada `push` para o repositório:
+    1.  Execute a suíte de testes completa (`npm test`).
+    2.  Verifique a qualidade do código (linting).
+    3.  Se tudo passar, construa uma imagem Docker da aplicação.
+    4.  Faça o deploy automático para um ambiente de homologação ou produção.
+
+### 7.5. Sistema de Alertas e Tarefas em Background
+
+-   **Filas de Mensagens**: A implementação atual de alertas é síncrona. Para um sistema mais robusto, o envio de notificações (e-mail, push) deveria ser gerenciado por uma fila de mensagens (como RabbitMQ ou SQS). O controlador apenas publicaria uma mensagem na fila, e um "worker" separado e independente seria responsável por processar a fila e enviar as notificações, tornando a API mais rápida e resiliente a falhas no serviço de envio.
+
+---
+
+## 7. Melhorias Futuras e Considerações de Produção
+
+Como um projeto acadêmico, certas simplificações foram feitas para focar no núcleo da funcionalidade dentro do prazo estabelecido. Para uma versão de produção, as seguintes melhorias seriam recomendadas:
+
+### 7.1. Segurança Avançada
+
+-   **Gerenciamento de Refresh Token**: A abordagem atual de enviar o `refreshToken` no corpo da resposta e armazená-lo no `localStorage` do frontend é funcional, mas vulnerável a ataques de Cross-Site Scripting (XSS). A prática recomendada em produção é enviar o `refreshToken` em um **cookie `HttpOnly` e `Secure`**. Isso impede que scripts maliciosos no navegador tenham acesso a ele.
+-   **Proteção CSRF (Cross-Site Request Forgery)**: Para aplicações web tradicionais que dependem de cookies para sessão, seria crucial implementar tokens anti-CSRF para garantir que as requisições venham de fontes confiáveis.
+-   **Rate Limiting e Prevenção de Brute-Force**: Implementar um middleware de "rate limiting" em endpoints sensíveis (como `/login` e `/forgot-password`) para bloquear IPs que façam muitas tentativas em um curto período, prevenindo ataques de força bruta.
+
+### 7.2. Escalabilidade e Performance
+
+-   **Cache**: Implementar uma camada de cache com uma ferramenta como **Redis**. Dados que não mudam com frequência (como o perfil do usuário ou permissões) poderiam ser cacheados para reduzir a carga no banco de dados e diminuir a latência das requisições.
+-   **Otimização de Índices no Banco de Dados**: À medida que o volume de dados cresce, seria necessário analisar as consultas mais lentas (`slow queries`) e criar índices compostos mais complexos no MongoDB para otimizar a performance.
+
+### 7.3. Exclusão Lógica (Soft Deletes)
+
+-   **O Problema da Exclusão Física**: Atualmente, a maioria das operações de exclusão (`DELETE`) remove os dados permanentemente do banco de dados (`findOneAndDelete`). Em um ambiente de produção, isso é arriscado e pode violar regulamentações como a LGPD, que exigem a retenção de dados por um certo período.
+-   **A Solução "Soft Delete"**: A melhor prática seria implementar a exclusão lógica. Em vez de apagar o registro, um campo como `deleted: true` e `deletedAt: new Date()` seria adicionado. Todas as consultas (`find`, `findOne`, etc.) seriam então modificadas para incluir a condição `{ deleted: { $ne: true } }`, garantindo que os dados "excluídos" não apareçam para o usuário, mas permaneçam no banco para fins de auditoria ou recuperação.
+
+### 7.4. Testes e CI/CD
+
+-   **Testes Unitários**: A suíte de testes atual é focada em integração. Para uma maior granularidade, seria importante adicionar testes unitários para validar a lógica de funções específicas em `services` e `utils` de forma isolada, sem depender de um banco de dados ou servidor.
+-   **Pipeline de CI/CD (Integração e Entrega Contínua)**: Configurar um pipeline automatizado (usando ferramentas como GitHub Actions, Jenkins ou GitLab CI) que, a cada `push` para o repositório:
+    1.  Execute a suíte de testes completa (`npm test`).
+    2.  Verifique a qualidade do código (linting).
+    3.  Se tudo passar, construa uma imagem Docker da aplicação.
+    4.  Faça o deploy automático para um ambiente de homologação ou produção.
+
+### 7.5. Sistema de Alertas e Tarefas em Background
+
+-   **Filas de Mensagens**: A implementação atual de alertas é síncrona. Para um sistema mais robusto, o envio de notificações (e-mail, push) deveria ser gerenciado por uma fila de mensagens (como RabbitMQ ou SQS). O controlador apenas publicaria uma mensagem na fila, e um "worker" separado e independente seria responsável por processar a fila e enviar as notificações, tornando a API mais rápida e resiliente a falhas no serviço de envio.

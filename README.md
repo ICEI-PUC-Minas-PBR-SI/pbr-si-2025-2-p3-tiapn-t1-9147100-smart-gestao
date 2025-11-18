@@ -1,12 +1,12 @@
 # Smart Gestão
 
-`SISTEMAS DE INFORMAÇÃO`
+`CURSO: SISTEMAS DE INFORMAÇÃO`
 
 `TRABALHO INTERDISCIPLINAR : APLICAÇÕES PARA PROCESSO DE NEGÓCIOS`
 
 `02.2025`
 
-Nosso projeto tem como objetivo desenvolver um sistema de controle de despesas para microempreendedores individuais (MEIs) e profissionais autônomos, visando solucionar a falta de organização financeira, uma dificuldade comum desse público. Muitos ainda utilizam métodos informais, como cadernos ou planilhas simples, dificultando o acompanhamento do fluxo de caixa e a tomada de decisões estratégicas. O sistema propõe oferecer uma ferramenta prática, acessível e intuitiva, capaz de registrar e categorizar transações, gerar relatórios, definir metas e emitir alertas, contribuindo para uma gestão financeira mais eficiente.
+O projeto **Smart Gestão** tem como objetivo desenvolver um sistema de controle de despesas para microempreendedores individuais (MEIs) e profissionais autônomos, visando solucionar a falta de organização financeira, uma dificuldade comum desse público. Muitos ainda utilizam métodos informais, como cadernos ou planilhas simples, dificultando o acompanhamento do fluxo de caixa e a tomada de decisões estratégicas. O sistema propõe oferecer uma ferramenta prática, acessível e intuitiva, capaz de registrar e categorizar transações, gerar relatórios, definir metas e emitir alertas, contribuindo para uma gestão financeira mais eficiente.
 
 Além de atender a uma necessidade concreta dos pequenos negócios, o projeto promove a educação financeira ao incentivar o uso contínuo de recursos tecnológicos. A solução prioriza simplicidade e usabilidade, sem abrir mão de funcionalidades essenciais como segurança das informações e compatibilidade com múltiplas plataformas, ajudando os usuários a reduzir gastos desnecessários, melhorar o planejamento estratégico e alcançar maior sustentabilidade em seus empreendimentos.
 
@@ -71,7 +71,7 @@ Para iniciar todo o ambiente de desenvolvimento, o ponto de partida é sempre a 
     ```
 2.  Execute o comando para a demonstração completa:
     ```bash
-    npm start
+    npm start # Este comando inicia o backend, o frontend legado e a demo em React.
     ```
     Este comando é o ponto de entrada principal e iniciará todos os serviços necessários para a demonstração completa (Backend, Frontend Legado e a Prova de Conceito em React) nas suas respectivas portas.
 
@@ -113,7 +113,7 @@ Para garantir a qualidade e a estabilidade do backend, o projeto conta com uma s
     ```bash
     npm test
     ```
-Este comando irá conectar-se ao seu banco de dados configurado, criar dados de teste temporários, executar todos os testes de validação da API e, ao final, **remover apenas os dados que ele criou**, garantindo que seus dados de desenvolvimento permaneçam intocados. Para mais detalhes, consulte o Roteiro de Testes Automatizados.
+Este comando irá conectar-se ao seu banco de dados configurado, criar dados de teste temporários, executar todos os testes de validação da API e, ao final, **remover apenas os dados que ele criou**, garantindo que seus dados de desenvolvimento permaneçam intocados. Para mais detalhes, consulte o [Roteiro de Testes Automatizados](src/codes/backend/Testes/Docs/roteiro%20de%20testes%20automatizados.md).
 
 ## Guia Rápido da API (Para Integração)
 
@@ -180,7 +180,7 @@ Esta seção serve como um guia de referência para consumir os principais endpo
 
 ## Arquitetura e Prova de Conceito com React
 
-O projeto foi desenvolvido com uma arquitetura desacoplada, onde o **backend (API RESTful)** é totalmente independente do **frontend**. Embora a implementação principal do frontend utilize HTML, CSS e JavaScript puro, a robustez da API permite que ela seja consumida por qualquer tipo de cliente.
+O projeto foi desenvolvido com uma arquitetura desacoplada, onde o **backend (API RESTful)** é totalmente independente do **frontend**. Embora a implementação principal do frontend utilize HTML, CSS e JavaScript puro, a robustez da API permite que ela seja consumida por qualquer tipo de cliente, como uma aplicação mobile ou um desktop.
 
 Para demonstrar essa flexibilidade e a viabilidade de uma futura modernização, foi criada uma **prova de conceito** com a implementação da página de login utilizando **React**.
 

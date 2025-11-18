@@ -1,27 +1,22 @@
 # Roteiro de Testes Automatizados - Smart Gestão API
 
-## 1. Introdução
+## 1. Visão Geral
 
 Este documento detalha o processo de execução dos testes automatizados para a API (backend) do projeto Smart Gestão. O objetivo destes testes é garantir a qualidade, estabilidade e o correto funcionamento das regras de negócio a cada nova alteração no código, de forma totalmente automatizada.
 
-Os testes são do tipo "integração", o que significa que eles validam o fluxo completo de uma requisição, desde a chamada da rota até a resposta final, interagindo com o banco de dados.
+Os testes são do tipo **integração**, o que significa que eles validam o fluxo completo de uma requisição, desde a chamada da rota até a resposta final, interagindo com o banco de dados.
+
+> **Analogia:** Imagine testar um carro. Em vez de testar apenas o motor ou os freios isoladamente (o que seriam "testes unitários"), nós dirigimos o carro na rua para ver se tudo funciona em conjunto. É exatamente isso que nossos testes de integração fazem com a API.
 
 ## 2. Arquivos e Ferramentas Utilizadas
 
-> **Nota Importante:** A suíte de testes passou por uma refatoração completa para garantir estabilidade e eliminar redundâncias. Testes legados (como `api.test.js`, `auth.legacy.test.js`) foram removidos, pois suas validações foram incorporadas de forma mais robusta e segura nos testes atuais, que agora são executados em um ambiente limpo e isolado a cada execução.
+> **Nota Histórica:** A suíte de testes passou por uma refatoração completa para garantir estabilidade. Testes legados (como `api.test.js`) foram removidos, pois suas validações foram incorporadas de forma mais robusta nos testes atuais, que agora são executados em um ambiente limpo e isolado a cada execução.
 
 A estrutura de testes está centralizada na pasta `src/codes/backend/Testes/` e utiliza as seguintes ferramentas:
 
 - **Jest**: Plataforma de testes em JavaScript. É o orquestrador que executa os testes e verifica os resultados.
 - **Axios**: Biblioteca para fazer requisições HTTP. É usada para simular um cliente (como o frontend) se comunicando com a API.
 - **`concurrently` e `wait-on`**: Ferramentas que **orquestravam** a inicialização do servidor e a execução dos testes. **Foram substituídas por uma abordagem mais robusta e integrada ao Jest**, onde o próprio ambiente de teste gerencia o ciclo de vida do servidor.
-
-### Arquivos Principais:
-
-- **`package.json`**: Contém os scripts para executar os testes.
-- **`Testes/config/jest.config.cjs`**: Arquivo de configuração do Jest.
-- **`Testes/config/mongo-test-environment.js`**: Ambiente de teste personalizado que gerencia o ciclo de vida do banco de dados, limpando e populando os dados antes de cada execução.
-- **`Testes/resultados/`**: Pasta onde os logs de cada execução de teste são salvos.
 
 ## 3. Configuração do Ambiente
 
@@ -45,25 +40,23 @@ O processo de teste foi totalmente automatizado e simplificado. Para executar a 
     ```
 
 **O que este comando faz?**
-1.  Executa o Jest, que por sua vez utiliza o ambiente de teste personalizado `mongo-test-environment.js`.
-2.  Este ambiente orquestra todo o ciclo de vida do teste de forma automatizada:
-    a. Inicia o servidor da API em-processo, garantindo que ele esteja pronto antes dos testes começarem.
-    b. Limpa o banco de dados de teste e cria um conjunto de dados temporários (como a Empresa A e a Empresa B) para uso nos testes.
-3.  Roda todas as suítes de teste (`*.test.js`) contra o servidor.
-4.  Ao final de tudo, **remove apenas os dados que foram criados durante os testes**, mantendo os dados de desenvolvimento manual intactos, e encerra o servidor e a conexão com o banco de forma limpa.
+1.  **Prepara o Ambiente (`globalSetup.js`):** Antes de qualquer teste, um script especial conecta ao banco de dados, limpa dados de testes anteriores, cria empresas e usuários temporários (Empresa A, Empresa B) e inicia o servidor da API.
+2.  **Executa os Testes:** O Jest roda todas as suítes de teste (`*.test.js`) em sequência contra o servidor que está no ar.
+3.  **Limpa o Ambiente (`globalTeardown.js`):** Ao final de tudo, outro script remove **apenas** os dados temporários que foram criados para os testes, garantindo que os dados de desenvolvimento manual permaneçam intactos. Em seguida, encerra o servidor e a conexão com o banco de forma limpa.
 
-O resultado é exibido no console e, simultaneamente, um arquivo de log detalhado (`log_AAAA-MM-DD_HH-mm-ss.txt`) é salvo na pasta `Testes/resultados/`.
+O resultado é exibido no console e, simultaneamente, um arquivo de log detalhado (`log_AAAA-MM-DD_HH-mm-ss.txt`) é salvo na pasta `Testes/resultados/`, com o caminho copiado para a área de transferência.
 
 ### Cenários de Teste Implementados
 
 #### Módulo de Isolamento de Dados (Multi-Tenant)
 - **Status:** ✅ **Validado**
 - **Arquivo de Teste:** `Testes/3-security/multi-tenant.test.js`
-- **Descrição:** Este é um dos testes mais críticos do sistema. Ele cria múltiplas empresas e valida rigorosamente que os dados de uma empresa não podem ser acessados, modificados ou listados por outra.
+- **Descrição:** Este é um dos testes mais críticos do sistema. Ele cria múltiplas empresas e valida rigorosamente que os dados de uma empresa não podem ser acessados por outra.
 - **O que ele valida?**
     - **Criação de Dados Isolados**: Confirma que é possível criar transações para a `Empresa A` e para a `Empresa B` de forma independente.
     - **Bloqueio de Acesso Direto**: Prova que o `Usuário A` não consegue acessar uma transação específica do `Usuário B` (e vice-versa), recebendo um erro `404 Not Found`, como se o dado não existisse.
     - **Filtragem em Listagens**: Garante que, ao listar todas as transações, o `Usuário A` veja *apenas* as suas, e não as da `Empresa B`.
+- **Por que é importante?** Garante a privacidade e a segurança dos dados de cada cliente, como se cada um tivesse seu próprio cofre.
 
 #### Módulo de Transações (CRUD)
 - **Status:** ✅ **Validado**
@@ -76,6 +69,7 @@ O resultado é exibido no console e, simultaneamente, um arquivo de log detalhad
     - **Atualização (`PUT /api/transactions/:id`)**: Testa a modificação de uma transação existente e verifica se os dados foram alterados.
     - **Exclusão (`DELETE /api/transactions/:id`)**: Valida a remoção de uma transação e confirma que ela não é mais encontrada.
     - **Validação de Dados**: Assegura que a API retorna um erro `400 Bad Request` ao tentar criar uma transação com dados inválidos (ex: sem valor).
+- **Por que é importante?** Confirma que as operações mais básicas do dia a dia do usuário (adicionar, ver, editar e apagar uma despesa) funcionam sem falhas.
 
 #### Módulo de Metas (CRUD)
 - **Status:** ✅ **Validado**
@@ -86,6 +80,7 @@ O resultado é exibido no console e, simultaneamente, um arquivo de log detalhad
     - **Listagem (`GET /api/goals`)**: Verifica se a meta recém-criada aparece na lista de metas do usuário.
     - **Atualização (`PUT /api/goals/:id`)**: Testa a modificação de uma meta existente.
     - **Exclusão (`DELETE /api/goals/:id`)**: Valida a remoção de uma meta.
+- **Por que é importante?** Garante que a funcionalidade de planejamento financeiro, essencial para o usuário, está operando corretamente.
 
 #### Módulo de Autenticação e Sessão
 - **Status:** ✅ **Validado**
@@ -95,13 +90,15 @@ O resultado é exibido no console e, simultaneamente, um arquivo de log detalhad
     - **Persistência de Sessão**: Confirma que um `SessionToken` é criado no banco de dados após o login, essencial para o mecanismo de "refresh token".
     - **Invalidação de Sessão**: Garante que o `SessionToken` é invalidado (marcado como inativo) no banco de dados após o logout, impedindo que o token seja reutilizado.
     - **Recuperação de Senha**: Valida todo o fluxo de "esqueci minha senha", desde a geração do token de reset até a redefinição da senha e o login bem-sucedido com a nova credencial.
+- **Por que é importante?** Assegura que o sistema de login é seguro, que o logout funciona como esperado e que um usuário que esqueceu sua senha consegue recuperar o acesso à sua conta.
 
 #### Módulo de Relatórios
 - **Status:** ✅ **Validado**
 - **Arquivo de Teste:** `Testes/4-reports/reports.test.js`
-- **Descrição:** Valida a capacidade do sistema de exportar dados.
+- **Descrição:** Valida a capacidade do sistema de gerar relatórios em PDF.
 - **O que ele valida?**
-    - **Exportação de PDF**: Confirma que os endpoints de exportação (ex: `/api/reports/export/transactions-pdf`) respondem com o `Content-Type` correto (`application/pdf`) e que o corpo da resposta é um PDF válido, sem de fato salvar o arquivo em disco durante o teste.
+    - **Geração de PDF de Ponta a Ponta**: Confirma que os endpoints de exportação (ex: `/api/reports/export/transactions-pdf`) geram um PDF real. O teste valida que a resposta da API é bem-sucedida (`200 OK`) e que o tipo de conteúdo é `application/pdf`. Durante a execução, uma cópia do PDF é salva em `Testes/PDFs/` para verificação manual.
+- **Por que é importante?** Garante que uma das funcionalidades mais importantes para o usuário final — a capacidade de extrair e visualizar seus dados — está funcionando corretamente.
 
 #### Módulo de Clientes/Fornecedores
 - **Status:** ✅ **Validado**
@@ -110,6 +107,7 @@ O resultado é exibido no console e, simultaneamente, um arquivo de log detalhad
 - **O que ele valida?**
     - **Criação (`POST /api/clients`)**: Testa a criação de um novo registro de cliente.
     - **Listagem (`GET /api/clients`)**: Confirma que o cliente criado pode ser listado corretamente, validando o CRUD básico para esta funcionalidade.
+- **Por que é importante?** Valida que o usuário pode gerenciar sua carteira de clientes e fornecedores, uma função de suporte essencial para o controle financeiro.
 
 #### Módulo de Upload de Anexos
 - **Status:** ✅ **Validado**
@@ -119,15 +117,17 @@ O resultado é exibido no console e, simultaneamente, um arquivo de log detalhad
     - **Upload de PDF e Imagens**: Confirma que a API aceita arquivos `.pdf`, `.png` e `.jpg`.
     - **Estrutura de Pastas**: Garante que os arquivos são salvos na estrutura de diretórios correta (`uploads/[companyId]/[img|pdf]/...`).
     - **Exclusão de Anexo**: Verifica se o anexo é removido do banco de dados e se o arquivo físico é deletado do servidor.
+- **Por que é importante?** Garante que o usuário pode anexar comprovantes e notas fiscais às suas transações, uma funcionalidade crucial para a organização e conformidade fiscal.
 
 #### Módulo de Segurança de Dados (Persistência)
 - **Status:** ✅ **Validado**
 - **Arquivo de Teste:** `Testes/3-security/persistence.test.js`
-- **Descrição:** Este teste "guardião" valida que a execução da suíte completa de testes (`npm test`) **não apaga** os dados criados manualmente para desenvolvimento (como as empresas "Frontend", "Backend" e "React").
+- **Descrição:** Este teste "guardião" valida que a execução da suíte completa de testes (`npm test`) **não apaga** os dados criados manualmente para o desenvolvimento do frontend.
 - **O que ele valida?**
     - **Criação de Dados Manuais**: Garante que as empresas de teste manuais existam.
     - **Execução dos Testes**: Roda a suíte de testes completa.
     - **Verificação de Persistência**: Confirma que, após a limpeza seletiva dos testes, os dados manuais ainda estão no banco de dados.
+- **Por que é importante?** Protege o ambiente de desenvolvimento, garantindo que os testes automatizados não destruam o trabalho manual dos desenvolvedores do frontend.
 ---
 
 ## 5. Scripts de Apoio aos Testes

@@ -33,4 +33,4 @@ const LogSchema = new Schema(
 // Índice composto para otimizar a consulta de logs por empresa, ordenados por data.
 LogSchema.index({ companyId: 1, createdAt: -1 });
 
-export default model("Log", LogSchema);
+export default mongoose.models.Log || model("Log", LogSchema);

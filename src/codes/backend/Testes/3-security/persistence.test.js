@@ -22,9 +22,6 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 describe('Security: Persistência de Dados Manuais', () => {
-    // Aumenta o timeout padrão do Jest, pois este teste executa outros processos.
-    jest.setTimeout(60000); // 60 segundos
-
     it('deve garantir que os usuários de teste manuais permaneçam no banco após a execução de `npm test`', async () => {
         const manualTestEmails = [
             'empresa-frontend@test.com',
@@ -44,10 +41,18 @@ describe('Security: Persistência de Dados Manuais', () => {
         await runCommand('npm run create-test-users');
 
         // 2. Executa a suíte de testes completa.
-        await runCommand('npm test');
+        await runCommand('npm run test:no-clean');
 
-        // 3. Verifica se os usuários manuais ainda existem no banco.
-        const foundUsers = await User.find({ email: { $in: manualTestEmails } });
-        expect(foundUsers.length).toBe(manualTestEmails.length);
+        // 3. Conecta-se ao banco de dados NOVAMENTE, pois o processo de teste anterior fechou a conexão.
+        await mongoose.connect(process.env.MONGO_URI);
+
+        try {
+            // 4. Verifica se os usuários manuais ainda existem no banco.
+            const foundUsers = await User.find({ email: { $in: manualTestEmails } });
+            expect(foundUsers.length).toBe(manualTestEmails.length);
+        } finally {
+            // 5. Garante que a conexão seja fechada, mesmo que o teste falhe.
+            await mongoose.disconnect();
+        }
     });
 });

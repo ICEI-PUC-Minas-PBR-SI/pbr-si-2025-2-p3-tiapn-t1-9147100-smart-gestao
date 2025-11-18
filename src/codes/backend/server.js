@@ -133,14 +133,11 @@ export async function startServer({ dbUri = process.env.MONGO_URI_TEST || proces
     console.log('⏳ Iniciando servidor Smart Gestão (startServer)...');
     
     await connectDB(dbUri);
-    console.log('✅ [1/3] Conexão com o banco de dados estabelecida!');
-
-    await initPermissions();
-    console.log('✅ [2/3] Permissões do sistema validadas/inicializadas.');
+    console.log('✅ [1/1] Conexão com o banco de dados estabelecida!');
 
     return new Promise((resolve, reject) => {
       server = app.listen(port, () => {
-        console.log(`✅ [3/3] Servidor rodando na porta ${port}`);
+        console.log(`✅ Servidor rodando na porta ${port}`);
         resolve(server);
       });
       server.on('error', (err) => reject(err));
@@ -178,6 +175,8 @@ if (process.env.NODE_ENV !== 'test') {
   (async () => {
     try {
       await startServer();
+      // Em modo de produção/desenvolvimento, inicializamos as permissões após o servidor subir.
+      await initPermissions();
     } catch (err) {
       console.error('Erro ao iniciar o servidor automaticamente:', err.message);
       process.exit(1);

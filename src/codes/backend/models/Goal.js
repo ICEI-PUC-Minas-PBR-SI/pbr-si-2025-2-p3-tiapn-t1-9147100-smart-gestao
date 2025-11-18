@@ -34,4 +34,4 @@ const GoalSchema = new Schema(
 // Índice composto para otimizar a busca de metas por empresa e prazo.
 GoalSchema.index({ companyId: 1, deadline: 1 });
 
-export default model("Goal", GoalSchema);
+export default mongoose.models.Goal || model("Goal", GoalSchema);

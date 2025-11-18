@@ -23,7 +23,7 @@ export const createLog = async (arg1, arg2, arg3) => {
   try {
     let payload = {};
 
-    // Detecta a Forma 1: o primeiro argumento é um objeto de requisição do Express.
+    // Forma 1: Detecta se o primeiro argumento é um objeto de requisição do Express.
     if (arg1 && arg1.headers && typeof arg2 === "string") {
       const req = arg1;
       payload = {
@@ -36,7 +36,7 @@ export const createLog = async (arg1, arg2, arg3) => {
         userAgent: req.headers["user-agent"] || null,
       };
     }
-    // Detecta a Forma 2: o primeiro argumento é um objeto de dados.
+    // Forma 2: Detecta se o primeiro argumento é um objeto de dados direto.
     else if (arg1 && typeof arg1 === "object") {
       payload = { ...arg1 };
     }
@@ -44,13 +44,13 @@ export const createLog = async (arg1, arg2, arg3) => {
     // Cria e salva o documento de log no banco de dados.
     await Logs.create(payload);
 
-    // Loga uma versão resumida no console para depuração em tempo real.
+    // Loga uma versão resumida no console para depuração em tempo real durante o desenvolvimento/teste.
     console.log(`[LOG] Ação: ${payload.action} | Usuário: ${payload.userId || "N/A"}`);
   } catch (error) {
     // Uma falha na gravação do log não deve quebrar a aplicação.
     // Apenas registramos o erro no console para análise posterior.
-    // Se o cliente do Mongo já tiver sido fechado durante o shutdown, isso é esperado
-    // e não deve poluir os logs com stacktraces.
+    // Se o cliente do Mongo já tiver sido fechado durante o shutdown, isso é um
+    // comportamento esperado e não deve poluir os logs com stacktraces.
     const msg = String(error && (error.message || error));
     if (msg.includes('client was closed') || (error && error.name === 'MongoClientClosedError')) {
       console.warn('Aviso: gravação de log não ocorreu porque o cliente MongoDB foi fechado.');

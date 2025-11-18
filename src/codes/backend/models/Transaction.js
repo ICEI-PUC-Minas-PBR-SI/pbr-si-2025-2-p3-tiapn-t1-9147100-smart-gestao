@@ -1,7 +1,7 @@
 // =================================================================================
 // ARQUIVO: models/Transaction.js
 // DESCRIÇÃO: Define o Schema para a coleção 'Transactions' no MongoDB.
-//            Este é um dos modelos mais importantes, representando cada
+//            Este é um dos modelos mais importantes do sistema, representando cada
 //            movimentação financeira (receita ou despesa) de uma empresa.
 // =================================================================================
 
@@ -55,4 +55,4 @@ const TransactionSchema = new Schema({
 // que frequentemente filtram por empresa e ordenam por data.
 TransactionSchema.index({ companyId: 1, date: -1 });
 
-export default model("Transaction", TransactionSchema);
+export default mongoose.models.Transaction || model("Transaction", TransactionSchema);

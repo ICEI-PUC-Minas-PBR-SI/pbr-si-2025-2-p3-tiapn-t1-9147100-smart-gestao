@@ -6,30 +6,11 @@
 // =================================================================================
 
 import express from "express";
-import {
-  getFinancialSummary,
-  getMonthlyReport,
-  getAlertsReport,
-  exportClientsPDF,
-  exportInvoicePDF,
-} from "../controllers/reportController.js";
+import { exportClientsPDF, exportInvoicePDF } from "../controllers/reportController.js";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
-import { companyScopeMiddleware } from "../middlewares/companyScopeMiddleware.js";
 import { exportTransactionsPDF } from "../controllers/reportController.js";
 
 const router = express.Router();
-
-// Rota para obter um resumo financeiro geral (total de receitas, despesas e lucro).
-// GET /api/reports/summary
-router.get("/summary", authMiddleware, getFinancialSummary);
-
-// Rota para obter um relatório financeiro agrupado por mês.
-// GET /api/reports/monthly-report
-router.get("/monthly-report", authMiddleware, getMonthlyReport);
-
-// Rota para obter um relatório de todos os alertas gerados para a empresa.
-// GET /api/reports/alerts
-router.get("/alerts", authMiddleware, getAlertsReport);
 
 // Rota para exportar um relatório de transações em formato PDF.
 // GET /api/reports/export/transactions-pdf
@@ -37,10 +18,10 @@ router.get("/export/transactions-pdf", authMiddleware, exportTransactionsPDF);
 
 // Rota para exportar um relatório de clientes em formato PDF.
 // GET /api/reports/export/clients-pdf
-router.get("/export/clients-pdf", authMiddleware, companyScopeMiddleware, exportClientsPDF);
+router.get("/export/clients-pdf", authMiddleware, exportClientsPDF);
 
 // Rota para exportar uma fatura de uma transação específica em PDF.
-// GET /api/reports/export/invoice/:transactionId
-router.get("/export/invoice/:transactionId", authMiddleware, companyScopeMiddleware, exportInvoicePDF);
+// GET /api/reports/export/invoice/:id
+router.get("/export/invoice/:id", authMiddleware, exportInvoicePDF);
 
 export default router;

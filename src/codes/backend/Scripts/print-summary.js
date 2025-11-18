@@ -9,7 +9,7 @@
  * =================================================================================
  */
 
-// Usando template literals para uma formatação mais limpa e legível.
+// Usando template literals para uma formatação mais limpa e legível no console.
 const summary = `
 =================================================
     ✅ SISTEMA DISPONÍVEL PARA ACESSO:

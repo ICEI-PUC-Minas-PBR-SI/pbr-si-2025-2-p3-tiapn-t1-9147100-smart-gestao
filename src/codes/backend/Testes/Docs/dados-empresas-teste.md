@@ -6,7 +6,7 @@ Este arquivo contém os dados das empresas de teste fixas, criadas para facilita
 > ```bash
 > npm run create-test-users
 > ```
->
+
 > **Nota:** Os Access Tokens (JWT) têm uma vida útil curta. Se os testes manuais falharem com erro `401 Unauthorized`, execute o comando acima novamente para gerar tokens novos e atualizados.
 
 ---
@@ -15,9 +15,9 @@ Este arquivo contém os dados das empresas de teste fixas, criadas para facilita
 
 - **E-mail:** `empresa-frontend@test.com`
 - **Senha:** `password123`
-- **ID da Empresa:** `6915e1c2e2cc8170ff049919`
-- **ID do Usuário:** `6915e1c2e2cc8170ff04991b`
-- **Access Token:** `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTE1ZTFjMmUyY2M4MTcwZmYwNDk5MWIiLCJyb2xlIjoiNjkxNTQ4MzM3MjI2MzEwOTg3YTc0Nzk4IiwiY29tcGFueUlkIjoiNjkxNWUxYzJlMmNjODE3MGZmMDQ5OTE5IiwiaWF0IjoxNzYzMDQyMjA3LCJleHAiOjE3NjMwNDMxMDd9.phjVW3pgKVXUvTP7L-qHrjHKAIhOx7DrWkzGQVcbjlQ`
+- **ID da Empresa:** `6917b308328610fb0d62bd27`
+- **ID do Usuário:** `6917b308328610fb0d62bd29`
+- **Access Token:** `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTE3YjMwODMyODYxMGZiMGQ2MmJkMjkiLCJyb2xlIjoiNjkxN2IzMDIzMjg2MTBmYjBkNjJiYmRhIiwiY29tcGFueUlkIjoiNjkxN2IzMDgzMjg2MTBmYjBkNjJiZDI3IiwiaWF0IjoxNzYzMTYwODQxLCJleHAiOjE3NjMxNjE3NDF9.Rncp0yzJ_EIilJXXeTBuIhgO-yHlsfArTX6yWXXkL2M`
 
 ---
 
@@ -25,9 +25,9 @@ Este arquivo contém os dados das empresas de teste fixas, criadas para facilita
 
 - **E-mail:** `empresa-backend@test.com`
 - **Senha:** `password123`
-- **ID da Empresa:** `6915e1c3e2cc8170ff049927`
-- **ID do Usuário:** `6915e1c3e2cc8170ff049929`
-- **Access Token:** `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTE1ZTFjM2UyY2M4MTcwZmYwNDk5MjkiLCJyb2xlIjoiNjkxNTQ4MzM3MjI2MzEwOTg3YTc0Nzk4IiwiY29tcGFueUlkIjoiNjkxNWUxYzNlMmNjODE3MGZmMDQ5OTI3IiwiaWF0IjoxNzYzMDQyMjA3LCJleHAiOjE3NjMwNDMxMDd9.0bhDxD9g1oOvHCNSvXr5BzYNd8zGej-qBmxsscO_reU`
+- **ID da Empresa:** `6917b309328610fb0d62bd35`
+- **ID do Usuário:** `6917b309328610fb0d62bd37`
+- **Access Token:** `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTE3YjMwOTMyODYxMGZiMGQ2MmJkMzciLCJyb2xlIjoiNjkxN2IzMDIzMjg2MTBmYjBkNjJiYmRhIiwiY29tcGFueUlkIjoiNjkxN2IzMDkzMjg2MTBmYjBkNjJiZDM1IiwiaWF0IjoxNzYzMTYwODQxLCJleHAiOjE3NjMxNjE3NDF9.crHoEg0Oi18CmGTywa5dg2FdLTg4mXnQ5ymiLZ4v6dU`
 
 ---
 
@@ -35,10 +35,9 @@ Este arquivo contém os dados das empresas de teste fixas, criadas para facilita
 
 - **E-mail:** `empresa-react@test.com`
 - **Senha:** `password123`
-- **ID da Empresa:** `6915e1c3e2cc8170ff049935`
-- **ID do Usuário:** `6915e1c3e2cc8170ff049937`
-- **Access Token:** `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTE1ZTFjM2UyY2M4MTcwZmYwNDk5MzciLCJyb2xlIjoiNjkxNTQ4MzM3MjI2MzEwOTg3YTc0Nzk4IiwiY29tcGFueUlkIjoiNjkxNWUxYzNlMmNjODE3MGZmMDQ5OTM1IiwiaWF0IjoxNzYzMDQyMjA3LCJleHAiOjE3NjMwNDMxMDd9.zziAYTJVtZCnHbBzdTGjnRKlW5-ldp0_tOtJ1KQyN-E`
+- **ID da Empresa:** `6917b309328610fb0d62bd43`
+- **ID do Usuário:** `6917b309328610fb0d62bd45`
+- **Access Token:** `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTE3YjMwOTMyODYxMGZiMGQ2MmJkNDUiLCJyb2xlIjoiNjkxN2IzMDIzMjg2MTBmYjBkNjJiYmRhIiwiY29tcGFueUlkIjoiNjkxN2IzMDkzMjg2MTBmYjBkNjJiZDQzIiwiaWF0IjoxNzYzMTYwODQxLCJleHAiOjE3NjMxNjE3NDF9.FzgtwpaP__04wIZpH2ANYJnla-Ej3rBwzW-azq8EhB8`
 
 ---
 
----

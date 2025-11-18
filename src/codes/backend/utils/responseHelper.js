@@ -24,7 +24,7 @@ export function successResponse(res, { status = 200, message = "Operação reali
  * @param {object} [options] - Opções para a resposta.
  * @param {number} [options.status=400] - O código de status HTTP.
  * @param {string} [options.message="Ocorreram erros na requisição."] - A mensagem de erro principal.
- * @param {Array|object} [options.errors=null] - Um array ou objeto com detalhes específicos do erro.
+ * @param {Array|object} [options.errors=null] - Um array ou objeto com detalhes específicos do erro (ex: erros de validação do Mongoose).
  */
 export function errorResponse(res, { status = 400, message = "Ocorreram erros na requisição.", errors = null } = {}) {
   return res.status(status).json({ success: false, message, errors });

@@ -35,4 +35,4 @@ const CompanySchema = new Schema({
 // Um índice no nome para buscas e ordenações rápidas.
 CompanySchema.index({ name: 1 });
 
-export default model("Company", CompanySchema);
+export default mongoose.models.Company || model("Company", CompanySchema);

@@ -8,6 +8,8 @@
  * =================================================================================
  */
 
+// Níveis de Permissão (Roles)
+
 // Permissão de usuário padrão, atribuída a novos usuários de uma empresa.
 export const USER_COMPANY = 'USER_COMPANY';
 // Permissão de administrador da empresa, com privilégios de gerenciamento.

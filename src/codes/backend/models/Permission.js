@@ -10,6 +10,15 @@ const { Schema, model } = mongoose;
 
 const PermissionSchema = new Schema(
   {
+    // Campo adicional para compatibilidade com índices antigos que usavam 'nome'
+    nome: {
+      type: String,
+      trim: true,
+      uppercase: true,
+      // Não obrigatório no modelo novo, mas será preenchido pelo seeding para
+      // evitar conflitos com índices históricos no banco.
+      required: false,
+    },
     // Nome único da permissão, usado internamente para verificações de autorização (RBAC - Role-Based Access Control).
     name: {
       type: String,
@@ -29,4 +38,4 @@ const PermissionSchema = new Schema(
   }
 );
 
-export default model("Permission", PermissionSchema);
+export default mongoose.models.Permission || model("Permission", PermissionSchema);
