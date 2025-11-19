@@ -8,15 +8,6 @@
  * =================================================================================
  */
 
-/**
- * =================================================================================
- * ARQUIVO: services/pdfService.js
- * DESCRIÇÃO: Serviço responsável por centralizar toda a lógica de criação de
- *            documentos em formato PDF, como relatórios e faturas.
- *            Este serviço é chamado pelos controladores (`reportController`) e utiliza
- *            a biblioteca `pdfkit` para gerar os documentos.
- * =================================================================================
- */
 import PDFDocument from 'pdfkit';
 import fs from 'fs';
 import path from 'path';
@@ -295,4 +286,4 @@ export function generateInvoicePDF(data, res) {
 
     addFooter(doc);
     doc.end();
-}l
+}

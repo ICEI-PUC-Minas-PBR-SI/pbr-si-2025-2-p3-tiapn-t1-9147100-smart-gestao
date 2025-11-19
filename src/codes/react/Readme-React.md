@@ -17,7 +17,7 @@ O intuito é validar e demonstrar os seguintes pontos cruciais da arquitetura do
 Apenas a **página de login** foi recriada como um componente React, servindo como uma réplica visual e funcional da página `login.html` original.
 
 O fluxo de funcionamento é o seguinte:
-1.  O usuário acessa a aplicação React (que exibe a tela de login).
+1.  O usuário acessa a aplicação React (`http://localhost:3001`), que exibe a tela de login.
 2.  Ele insere suas credenciais (e-mail e senha).
 3.  O componente React envia uma requisição `POST` para o endpoint `/api/auth/login` do backend.
 4.  Em caso de sucesso:
@@ -64,7 +64,7 @@ Durante a configuração e integração desta prova de conceito, diversos desafi
     -   **Solução:** Limpeza completa das dependências (`rm -rf node_modules package-lock.json`) e fixação da versão do `react-scripts` no `package.json` para garantir a estabilidade.
 2.  **Estrutura de Pastas Incorreta**:
     -   **Sintoma:** A aplicação falhava ao compilar por não encontrar arquivos como `index.html` e os componentes `.js`.
-    -   **Solução:** A estrutura de pastas foi ajustada para o padrão esperado pelo `create-react-app`, com as pastas `public` e `src` no nível correto do projeto React.
+    -   **Solução:** A estrutura de pastas foi ajustada para o padrão esperado pelo `create-react-app`, com as pastas `public` e `src` no nível correto do projeto.
 3.  **Importação de CSS Externo**:
     -   **Sintoma:** O React, por segurança, proíbe a importação de arquivos de fora do diretório `src` (`ModuleScopePlugin`).
     -   **Solução:** O arquivo CSS do sistema legado foi copiado para dentro da pasta `src` do projeto React, tornando-o autocontido e resolvendo o problema de escopo.

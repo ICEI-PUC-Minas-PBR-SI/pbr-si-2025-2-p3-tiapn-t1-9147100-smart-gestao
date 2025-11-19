@@ -29,15 +29,22 @@ const LoginPage = () => {
         throw new Error(data.message || 'Falha no login. Verifique suas credenciais.');
       }
 
-      // Salva os dados no localStorage para o frontend legado usar
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('refreshToken', data.refreshToken);
-      // É crucial salvar o objeto 'user', pois o `authGuard.js` do sistema legado
-      // verifica tanto o token quanto a existência deste objeto para validar a sessão.
-      localStorage.setItem('user', JSON.stringify(data.user)); 
+      // --- CORREÇÃO APLICADA ---
+      // A API retorna um objeto 'data' que contém os dados da sessão.
+      const { token, refreshToken, user } = data.data;
+
+      // 1. Salva o token de acesso para autenticar as requisições.
+      localStorage.setItem('token', token);
+
+      // 2. Salva o refresh token para permitir a renovação automática da sessão.
+      localStorage.setItem('refreshToken', refreshToken);
+
+      // 3. (PONTO CRÍTICO) Salva o objeto do usuário como uma string JSON.
+      // O sistema legado espera encontrar este objeto para validar a sessão.
+      localStorage.setItem('user', JSON.stringify(user));
 
       // Redireciona para a página inicial do frontend legado
-      // URL absoluta, pois o sistema legado estará em outra porta (3000)
+      // A URL é absoluta, pois o sistema legado roda em uma porta diferente (3000).
       window.location.href = 'http://localhost:3000/pages/startPage.html';
 
     } catch (err) {
