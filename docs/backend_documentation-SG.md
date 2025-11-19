@@ -65,6 +65,7 @@ src/
 │   │   └── print-summary.js
 │   ├── services/
 │   │   └── pdfService.js
+│   │   └── alertTriggerService.js
 │   ├── utils/
 │   │   ├── logger.js
 │   │   └── responseHelper.js
@@ -165,7 +166,7 @@ Todos os modelos incluem o campo empresaId para isolar dados entre empresas e ga
 
 ### 🔔 Alert.js
 
-Armazena alertas financeiros automáticos, como metas atingidas ou orçamentos excedidos.
+Armazena alertas financeiros, como metas de despesas atingidas. A criação é gerenciada automaticamente pelo `alertTriggerService.js` quando uma nova transação é registrada.
 
 ### 📜 Logs.js
 

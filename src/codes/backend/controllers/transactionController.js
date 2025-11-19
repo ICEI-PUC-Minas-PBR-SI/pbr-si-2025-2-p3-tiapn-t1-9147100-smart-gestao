@@ -1,8 +1,18 @@
-import mongoose from 'mongoose'; // Importar mongoose para usar ObjectId
-import Transaction from "../models/Transaction.js";
+/**
+ * =================================================================================
+ * ARQUIVO: controllers/transactionController.js
+ * DESCRIÇÃO: Controladores para as operações CRUD relacionadas a Transações
+ *            Financeiras. Gerencia a criação, listagem, atualização e exclusão
+ *            de transações, além de orquestrar a verificação de alertas de metas.
+ * =================================================================================
+ */
+
+import mongoose from 'mongoose';
+import Transaction from '../models/Transaction.js';
 import fs from 'fs';
 import path from 'path';
-import { createLog } from "../utils/logger.js";
+import { createLog } from '../utils/logger.js';
+import { checkGoalOnTransactionCreate } from '../services/alertTriggerService.js';
 import { successResponse, errorResponse } from '../utils/responseHelper.js';
 
 /**
@@ -32,6 +42,11 @@ export const getAllTransactions = async (req, res) => {
   }
 };
 
+/**
+ * @desc    Obter uma transação específica por ID.
+ * @route   GET /api/transactions/:id
+ * @access  Private
+ */
 export const getTransactionById = async (req, res) => {
     try {
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) return errorResponse(res, { status: 404, message: "Transação não encontrada" });
@@ -49,6 +64,12 @@ export const getTransactionById = async (req, res) => {
         return errorResponse(res, { status: 500, message: "Erro ao buscar transação", errors: error });
     }
 };
+
+/**
+ * @desc    Criar uma nova transação financeira.
+ * @route   POST /api/transactions
+ * @access  Private
+ */
 export const createTransaction = async (req, res) => {
   try {
     const companyId = req.user.companyId;
@@ -66,6 +87,11 @@ export const createTransaction = async (req, res) => {
       route: req.originalUrl,
     });
 
+    // Dispara a verificação de metas, aguardando a conclusão para garantir a consistência dos dados no teste.
+    // Em um ambiente de produção real, isso poderia ser feito sem 'await' para não bloquear a resposta.
+    // Mantemos o 'await' aqui para que o teste automatizado funcione de forma síncrona e previsível.
+    await checkGoalOnTransactionCreate(tx); 
+
     return successResponse(res, { status: 201, data: tx });
   } catch (error) {
     // Identifica se o erro é de validação do Mongoose e retorna 400.
@@ -76,6 +102,11 @@ export const createTransaction = async (req, res) => {
   }
 };
 
+/**
+ * @desc    Atualizar uma transação financeira existente.
+ * @route   PUT /api/transactions/:id
+ * @access  Private
+ */
 export const updateTransaction = async (req, res) => {
   try {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) return errorResponse(res, { status: 404, message: "Transação não encontrada" });
@@ -96,12 +127,23 @@ export const updateTransaction = async (req, res) => {
       route: req.originalUrl,
     });
 
+    // Dispara a verificação de metas em segundo plano, sem bloquear a resposta.
+    // A lógica de verificação de metas na atualização pode ser mais complexa (ex: remover alerta se o valor diminuir).
+    // A implementação atual foca em criar o alerta se a meta for ultrapassada.
+    // Não usamos 'await' aqui para não atrasar a resposta ao usuário.
+    checkGoalOnTransactionCreate(updated);
+
     return successResponse(res, { data: updated });
   } catch (error) {
     return errorResponse(res, { status: 500, message: "Erro ao atualizar transação", errors: error });
   }
 };
 
+/**
+ * @desc    Excluir uma transação financeira.
+ * @route   DELETE /api/transactions/:id
+ * @access  Private
+ */
 export const deleteTransaction = async (req, res) => {
   try {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) return errorResponse(res, { status: 404, message: "Transação não encontrada" });

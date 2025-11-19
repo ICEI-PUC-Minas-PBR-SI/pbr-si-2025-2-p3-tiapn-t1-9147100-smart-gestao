@@ -43,6 +43,7 @@ describe('Feature: Uploads', () => {
                 `${apiUrl}/transactions`,
                 {
                     description: 'Transação para Teste de Upload de PDF',
+                    userId: companyA.userId,
                     amount: 500,
                     type: 'revenue',
                     date: new Date(),
@@ -117,6 +118,7 @@ describe('Feature: Uploads', () => {
                 `${apiUrl}/transactions`,
                 {
                     description: `Transação para Teste de Upload de ${name}`,
+                    userId: companyA.userId,
                     amount: 250,
                     type: 'expense',
                     date: new Date(),

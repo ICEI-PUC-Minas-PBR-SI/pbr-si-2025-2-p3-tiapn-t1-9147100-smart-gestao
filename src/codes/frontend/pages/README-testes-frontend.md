@@ -107,6 +107,24 @@ Antes de iniciar, certifique-se de que:
 
 ---
 
+## 7. Módulo de Alertas (Validação da Nova Funcionalidade)
+
+- [ ] **Cenário de Preparação:**
+    1. Faça login.
+    2. Navegue até "Metas" e crie uma meta de **despesa** para a categoria "Alimentação" com valor de `R$ 100,00`.
+    3. Verifique se não há nenhum alerta visível (o ícone de sino não deve ter um número).
+
+- [ ] **Disparar o Alerta:**
+    1. Navegue até "Transações" e crie uma despesa na categoria "Alimentação" de `R$ 80,00`.
+    2. Volte para a página inicial ou atualize a página. O ícone de sino ainda não deve ter alertas.
+    3. Crie uma segunda despesa na categoria "Alimentação" de `R$ 30,00` (totalizando R$ 110,00).
+
+- [ ] **Validação do Alerta:**
+    - **Ação:** Atualize a página.
+    - **Resultado Esperado:** O ícone de sino no cabeçalho agora deve exibir um badge com o número "1". Ao clicar no sino, um dropdown deve aparecer com a mensagem "Sua meta de gastos para a categoria 'Alimentação' foi atingida!".
+
+---
+
 ## 6. Módulo de Relatórios
 
 - [ ] **Exportar Relatório de Transações:**

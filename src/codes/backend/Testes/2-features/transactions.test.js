@@ -14,12 +14,14 @@ const SETUP_FILE = path.join('Testes', 'test-setup.json'); // Caminho relativo p
 describe('4. Módulo de Transações (CRUD)', () => {
     let userToken;
     let API_URL;
+    let userId;
     let createdTransactionId;
 
     beforeAll(async () => {
         // Carrega os dados de setup, como a URL da API e o token de autenticação da Empresa A.
         // Lê os dados de setup de forma síncrona. O ambiente de teste garante que este arquivo já existe.
         const setupData = JSON.parse(fs.readFileSync(SETUP_FILE, 'utf8'));
+        userId = setupData.companyA.userId;
         userToken = setupData.companyA.token;
         API_URL = setupData.apiUrl;
     });
@@ -41,6 +43,7 @@ describe('4. Módulo de Transações (CRUD)', () => {
     test('deve CRIAR uma nova transação com sucesso', async () => { // MODIFICADO: Usa dados mais realistas e aleatórios
         const transactionData = { // MODIFICADO: Usa dados mais realistas e aleatórios
             description: `Venda de Produto Teste #${Date.now()}`,
+            userId,
             amount: parseFloat((Math.random() * 1000 + 1).toFixed(2)), // Valor aleatório entre 1 e 1001
             type: 'revenue',
             date: new Date().toISOString(),
@@ -70,6 +73,7 @@ describe('4. Módulo de Transações (CRUD)', () => {
     test('deve falhar ao tentar criar uma transação com dados inválidos', async () => {
         const invalidTransactionData = {
             description: 'Transação Inválida',
+            userId,
             type: 'expense',
             // 'amount' está faltando
         };

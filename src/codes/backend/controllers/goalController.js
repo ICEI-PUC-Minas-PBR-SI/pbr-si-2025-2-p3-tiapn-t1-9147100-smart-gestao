@@ -64,7 +64,7 @@ export const getGoalById = async (req, res) => {
 export const createGoal = async (req, res) => {
   try {
     const companyId = req.user.companyId;
-    const userId = req.user.userId;
+    const userId = req.user.userId; // CORREÇÃO: Usar 'userId' em vez de 'id'
     // Combina os dados do corpo da requisição com os IDs de empresa e usuário, garantindo a associação correta.
     const payload = { ...req.body, companyId, userId };
 
@@ -75,7 +75,7 @@ export const createGoal = async (req, res) => {
     await createLog({
       userId,
       companyId,
-      action: "CREATE_META",
+      action: "CREATE_GOAL",
       description: `Meta "${goal.title}" criada com sucesso.`,
       route: req.originalUrl,
     });
@@ -107,7 +107,7 @@ export const updateGoal = async (req, res) => {
     await createLog({
       userId: req.user.userId,
       companyId,
-      action: "UPDATE_META",
+      action: "UPDATE_GOAL",
       description: `Meta "${goal.title}" atualizada.`,
       route: req.originalUrl,
     });
@@ -140,7 +140,7 @@ export const deleteGoal = async (req, res) => {
     await createLog({
       userId: req.user.userId,
       companyId,
-      action: "DELETE_META",
+      action: "DELETE_GOAL",
       description: `Meta "${deletedGoal.title}" removida.`,
       route: req.originalUrl,
     });

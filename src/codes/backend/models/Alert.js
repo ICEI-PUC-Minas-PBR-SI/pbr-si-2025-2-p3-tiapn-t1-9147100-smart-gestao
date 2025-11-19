@@ -13,7 +13,7 @@ const AlertSchema = new Schema({
   // Chave estrangeira que vincula o alerta à empresa correta, essencial para a arquitetura multi-tenant.
   companyId: { type: Schema.Types.ObjectId, ref: "Company", required: true, index: true },
   // Chave estrangeira opcional que vincula o alerta à meta que o originou.
-  metaId: { type: Schema.Types.ObjectId, ref: "Goal" },
+  goalId: { type: Schema.Types.ObjectId, ref: "Goal" },
   // Chave estrangeira opcional para direcionar o alerta a um usuário específico.
   userId: { type: Schema.Types.ObjectId, ref: "User", index: true },
   // Tipo do alerta, usado para categorização e para definir a estilização no frontend.

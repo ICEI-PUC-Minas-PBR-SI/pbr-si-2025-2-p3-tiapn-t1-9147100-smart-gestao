@@ -242,6 +242,60 @@ Este é um fluxo de duas etapas.
 
 ---
 
+### h. Exibição de Alertas
+**Contexto:** Em um script global (`layout.js` ou `main.js`) que é carregado em todas as páginas após o login.
+
+O backend agora gera alertas automaticamente quando metas de despesa são atingidas. O frontend precisa buscar e exibir esses alertas para o usuário.
+
+-   **Listar todos os alertas não lidos:** `GET /api/alerts?read=false`
+-   **Marcar um alerta como lido:** `PATCH /api/alerts/:id/read`
+
+-   **Exemplo de implementação no Frontend:**
+    A melhor prática é ter um ícone de "sino" no cabeçalho. Ao carregar a página, o frontend busca os alertas e atualiza o ícone.
+
+    ```html
+    <!-- Adicionar no cabeçalho (header.html ou similar) -->
+    <div class="notification-icon">
+        <i class="fas fa-bell"></i>
+        <span class="notification-badge" style="display: none;"></span>
+        <div class="notification-dropdown" style="display: none;">
+            <!-- Alertas serão inseridos aqui dinamicamente -->
+        </div>
+    </div>
+    ```
+
+    ```javascript
+    // Em um script global (ex: js/layout.js)
+    document.addEventListener('DOMContentLoaded', async () => {
+        const token = localStorage.getItem('token');
+        if (!token) return;
+
+        const response = await fetch('/api/alerts?read=false', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const result = await response.json();
+        const alerts = result.data;
+
+        const badge = document.querySelector('.notification-badge');
+        const dropdown = document.querySelector('.notification-dropdown');
+
+        if (alerts.length > 0) {
+            badge.textContent = alerts.length;
+            badge.style.display = 'block';
+
+            dropdown.innerHTML = ''; // Limpa alertas antigos
+            alerts.forEach(alert => {
+                const alertElement = document.createElement('a');
+                alertElement.href = '#'; // Ou link para a página de metas
+                alertElement.textContent = alert.message;
+                dropdown.appendChild(alertElement);
+            });
+        }
+    });
+    ```
+
+---
+
 ### g. Notificações Push
 **Contexto:** `perfil.html` (em uma seção de configurações).
 

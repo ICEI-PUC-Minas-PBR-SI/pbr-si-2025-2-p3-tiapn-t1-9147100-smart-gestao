@@ -78,8 +78,10 @@ app.use(express.json({ limit: "10mb" }));
 // (enviados como `application/x-www-form-urlencoded`).
 app.use(express.urlencoded({ extended: true }));
 
-// Middleware para logar as requisições HTTP no console em modo de desenvolvimento.
-app.use(morgan("dev"));
+// Configura o logger de requisições HTTP (morgan).
+// Em ambiente de teste (`test`), usa um formato 'tiny' (sem cores) para manter os logs limpos.
+// Em qualquer outro ambiente, usa o formato 'dev' (colorido) para facilitar a depuração.
+app.use(morgan(process.env.NODE_ENV === 'test' ? 'tiny' : 'dev'));
 
 // ============================================================
 // --- 4. ROTA DE VERIFICAÇÃO DE SAÚDE (Health Check) ---

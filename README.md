@@ -214,6 +214,9 @@ Para demonstrar essa flexibilidade e a viabilidade de uma futura modernização,
 
 ## Histórico de versões
 * 0.3.14
+    * **FEATURE**: Implementação da funcionalidade de geração automática de alertas quando uma meta de despesa é atingida. Adição de testes de integração para validar o novo fluxo.
+    * **CHANGE**: Estabilização final da suíte de testes, incluindo a correção da formatação dos logs de teste para remover códigos de cores, melhorando a legibilidade.
+* 0.3.13
     * **CHANGE**: Correção final da suíte de testes. Adição de validação de `ObjectId` em todos os controllers para tratamento robusto de IDs inválidos, resolvendo a falha no teste de upload e garantindo que todos os 23 testes de funcionalidades passem com sucesso.
 * 0.3.13
     * **CHANGE**: Padronização completa da nomenclatura do módulo de "Metas". O `metaController.js`, `metaRoutes.js` e o modelo `Meta.js` foram renomeados para `goalController.js`, `goalRoutes.js` e `Goal.js`, respectivamente. Todas as referências e importações foram ajustadas, e os endpoints padronizados com o `responseHelper`, eliminando inconsistências e melhorando a clareza da arquitetura.

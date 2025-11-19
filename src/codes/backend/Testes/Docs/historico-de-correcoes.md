@@ -125,6 +125,25 @@ Este documento serve como um registro cronológico e detalhado dos desafios, inv
 
 ---
 
+### 9. A Saga da Implementação de Alertas de Metas (RF-006)
+
+-   **Data:** Sessão final de desenvolvimento do backend.
+-   **Sintoma:** O teste recém-criado para a funcionalidade de alertas (`alerts.test.js`) falhava persistentemente. O teste esperava que um alerta fosse criado ao ultrapassar uma meta de despesa, mas a lista de alertas sempre retornava vazia.
+-   **Causa Raiz (Investigação em Múltiplas Etapas):** A depuração revelou uma cascata de erros sutis e inconsistências que, somados, impediam o funcionamento da lógica.
+    1.  **Inconsistência de Nomenclatura de Modelos:** A causa principal era que o `transactionController.js` estava importando um modelo obsoleto (`Meta.js`) em vez do modelo correto e atualizado (`Goal.js`). O modelo `Meta.js` não possuía o campo `startDate`, essencial para a consulta que localizava a meta ativa, fazendo com que a busca sempre falhasse.
+    2.  **Inconsistência de Campos nos Testes:** Os dados de teste (`payloads`) para criar metas e transações usavam nomes de campos (`value`, `targetValue`) que não correspondiam aos definidos nos Schemas do Mongoose (`amount`, `targetAmount`).
+    3.  **Falha na Obtenção do `userId`:** Em uma das etapas, o `goalController.js` tentava obter o ID do usuário de `req.user.id` em vez de `req.user.userId`, o que fazia a criação da meta falhar silenciosamente.
+    4.  **Estrutura de Resposta da API:** O teste tentava acessar `response.data` para obter a lista de alertas, quando o padrão da API encapsula a lista em `response.data.data`.
+    5.  **Lógica de Verificação:** A lógica inicial para encontrar a meta correspondente no `transactionController.js` estava incorreta, comparando o `deadline` da meta com o início do mês da transação, em vez de verificar se a data da transação estava dentro do período de validade da meta.
+-   **Solução Definitiva (Consolidação e Padronização):**
+    1.  **Padronização do Modelo:** O `transactionController.js` foi corrigido para importar e usar exclusivamente o modelo `Goal.js`.
+    2.  **Refatoração para Serviço Dedicado:** A lógica de verificação foi movida do controlador para um serviço dedicado (`alertTriggerService.js`), tornando o código mais limpo e modular.
+    3.  **Implementação de Lógica Robusta:** O novo serviço implementou uma lógica "anti-race condition", calculando o total de despesas *antes* da transação atual e disparando o alerta apenas se o limite for cruzado exatamente naquele momento.
+    4.  **Correção dos Testes:** O arquivo `alerts.test.js` foi corrigido para usar os nomes de campos corretos (`amount`, `targetAmount`), extrair o `userId` dos dados de setup e validar a resposta da API na estrutura correta (`response.data.data`).
+-   **Resultado:** Após a aplicação de todas as correções e a refatoração para um serviço dedicado, o teste `alerts.test.js` passou com sucesso, validando a implementação completa e robusta da funcionalidade de alertas automáticos.
+
+---
+
 ### 8. Conclusão
 
 Com todas essas mudanças e depurações, o ambiente de testes foi completamente estabilizado. A suíte completa agora executa de forma rápida, isolada e confiável com um único comando `npm test`, fornecendo feedback em tempo real e logs detalhados.

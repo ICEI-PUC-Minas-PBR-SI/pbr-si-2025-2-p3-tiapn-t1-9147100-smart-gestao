@@ -45,18 +45,19 @@ export const getAlertById = async (req, res) => {
  */
 export const createAlert = async (req, res) => {
   try {
-    const companyId = req.user.companyId; // companyId já é ObjectId do authMiddleware
-    const { message, type } = req.body; // Removidos title e severity para corresponder ao modelo Alert
+    const companyId = req.user.companyId;
+    // Ajustado para aceitar os campos necessários para alertas de metas
+    const { message, type, goalId, status } = req.body;
 
-    // Cria uma nova instância do modelo Alert com os dados da requisição e o companyId do usuário.
     const newAlert = new Alert({
-      companyId: companyId,
+      companyId,
       message,
-      type, // type já é validado pelo schema
+      type,
+      goalId, // Campo para associar o alerta a uma meta
+      status: status || 'active', // Default para 'active'
     });
 
     const saved = await newAlert.save();
-    // A criação do log de auditoria agora é delegada ao auditMiddleware na rota.
     await createLog(req.user, req, "CREATE_ALERT", 201);
 
     return successResponse(res, { status: 201, data: saved });

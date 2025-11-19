@@ -251,6 +251,43 @@ Este fluxo valida como o sistema lida com o envio de arquivos (comprovantes, not
 
 ---
 
+## Fluxo 8: Geração Automática de Alerta de Meta
+
+Este fluxo valida a lógica de negócio que gera um alerta quando uma meta de despesa é atingida.
+
+#### **Etapa 1: Criação da Meta de Despesa**
+
+*   **Ação do Usuário (Frontend):**
+    *   Faz login.
+    *   Navega até a página de "Metas".
+    *   Cria uma nova meta do tipo "Despesa" para a categoria "Alimentação" com um valor de `R$ 500,00` para o mês atual.
+
+*   **O que o Backend Faz (`goalController.js`):**
+    *   Recebe a requisição `POST /api/goals`.
+    *   Cria e salva um novo documento `Goal` no banco de dados com os dados fornecidos.
+
+#### **Etapa 2: Registro de Despesas**
+
+*   **Ação do Usuário (Frontend):**
+    *   Navega até a página de "Transações".
+    *   Cria uma primeira despesa na categoria "Alimentação" com valor de `R$ 450,00`.
+    *   Cria uma segunda despesa na mesma categoria com valor de `R$ 60,00`.
+
+*   **O que o Backend Faz (`transactionController.js` e `alertTriggerService.js`):**
+    *   **Na primeira transação (R$ 450):**
+        *   O `transactionController` cria a transação e chama o `alertTriggerService`.
+        *   O serviço calcula que o total de despesas (R$ 450) ainda está abaixo da meta (R$ 500). Nenhuma ação é tomada.
+    *   **Na segunda transação (R$ 60):**
+        *   O `transactionController` cria a transação e chama o `alertTriggerService`.
+        *   O serviço calcula que o total anterior era R$ 450 e o novo total é R$ 510.
+        *   Como `novoTotal >= meta` e `totalAnterior < meta`, a condição para gerar o alerta é satisfeita.
+        *   O serviço cria um novo documento na coleção `Alerts` com a mensagem "Sua meta de gastos para a categoria 'Alimentação' foi atingida!".
+
+*   **Resultado Esperado (Frontend):**
+    *   Na próxima vez que o frontend buscar os alertas (ex: ao carregar a página ou através de um polling), ele receberá o novo alerta da API e poderá exibi-lo para o usuário, por exemplo, em um ícone de sino no cabeçalho.
+
+---
+
 ## Fluxo 7: Login via Prova de Conceito (React)
 
 Este fluxo demonstra a capacidade do backend de servir a diferentes clientes e a interoperabilidade entre uma aplicação moderna (React) e o sistema legado.
