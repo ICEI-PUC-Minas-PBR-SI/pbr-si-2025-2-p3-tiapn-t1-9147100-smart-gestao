@@ -191,36 +191,7 @@ Este fluxo permite que um usuário que esqueceu sua senha possa redefini-la de f
 
 ---
 
-## Fluxo 7: Upload de Anexo para uma Transação
-
-Este fluxo valida como o sistema lida com o envio de arquivos (comprovantes, notas fiscais).
-
-#### **Etapa 1: Envio do Arquivo pelo Usuário**
-
-*   **Ação do Usuário (Frontend):**
-    *   Em uma transação existente, clica no botão "Anexar Comprovante".
-    *   Seleciona um arquivo (PDF ou imagem) do seu computador.
-
-*   **O que o Frontend Faz:**
-    *   Cria um objeto `FormData`.
-    *   Adiciona o arquivo selecionado ao `FormData`.
-    *   Envia uma requisição `POST` para `/api/transactions/:id/upload`, incluindo o `FormData` no corpo e o token de acesso no cabeçalho.
-
-*   **O que o Backend Faz (`transactionController.js` e `multer`):**
-    *   O middleware `multer` intercepta a requisição, processa o arquivo e o salva temporariamente.
-    *   O `transactionController` valida o tipo do arquivo (rejeitando tipos não permitidos).
-    *   Ele cria a estrutura de pastas segura (`uploads/[companyId]/[img|pdf]/...`).
-    *   Move o arquivo para o diretório final, renomeando-o com um timestamp para evitar conflitos.
-    *   Atualiza o documento da transação no banco de dados, salvando o caminho do arquivo no campo `attachment`.
-    *   Retorna uma resposta de sucesso com os dados da transação atualizada.
-
-*   **Resultado Esperado (Frontend):**
-    *   Recebe a confirmação de sucesso.
-    *   Atualiza a interface para mostrar um link ou um ícone indicando que a transação agora possui um anexo.
-
----
-
-## Fluxo 5: Upload de Anexo para uma Transação
+## Fluxo 4: Upload de Anexo para uma Transação
 
 Este fluxo valida como o sistema lida com o envio de arquivos (comprovantes, notas fiscais).
 
@@ -251,7 +222,7 @@ Este fluxo valida como o sistema lida com o envio de arquivos (comprovantes, not
 
 ---
 
-## Fluxo 8: Geração Automática de Alerta de Meta
+## Fluxo 5: Geração Automática de Alerta de Meta
 
 Este fluxo valida a lógica de negócio que gera um alerta quando uma meta de despesa é atingida.
 
@@ -288,7 +259,67 @@ Este fluxo valida a lógica de negócio que gera um alerta quando uma meta de de
 
 ---
 
-## Fluxo 7: Login via Prova de Conceito (React)
+## Fluxo 6: Logout
+
+*   **Ação do Usuário (Frontend):**
+    *   Clica no botão "Sair".
+
+*   **O que o Frontend Faz:**
+    *   Chama a função de logout.
+    *   **Ação Principal:** Remove o `token`, `refreshToken` e `user` do `localStorage`.
+    *   **Ação de Segurança (Stateful):** Envia uma requisição `POST` para `/api/auth/logout` com o `refreshToken` para invalidar a sessão no servidor.
+    *   Redireciona o usuário para a página `login.html`.
+
+*   **O que o Backend Faz:**
+    *   Recebe a requisição de logout.
+    *   Busca o `SessionToken` correspondente ao `refreshToken` no banco de dados e o marca como inativo.
+
+*   **Resultado Esperado (Frontend):**
+    *   A sessão do usuário é encerrada no navegador e no servidor. Qualquer tentativa de usar o `refreshToken` antigo para gerar um novo `accessToken` falhará.
+
+---
+
+## Fluxo 7: Recuperação de Senha
+
+Este fluxo permite que um usuário que esqueceu sua senha possa redefini-la de forma segura.
+
+#### **Etapa 1: Solicitação de Redefinição**
+
+*   **Ação do Usuário (Frontend):**
+    *   Na página de login, clica em "Esqueci minha senha".
+    *   Na página `forgot-password.html`, insere o e-mail cadastrado e clica em "Enviar".
+
+*   **O que o Frontend Faz (`forgot-password.js`):**
+    *   Envia uma requisição `POST` para `/api/auth/forgot-password` com o e-mail do usuário.
+
+*   **O que o Backend Faz (`authController.js`):**
+    *   Busca o usuário pelo e-mail. Se não existir, retorna um erro que (idealmente) não informa se o e-mail é válido ou não, por segurança.
+    *   Gera um token de redefinição de senha único e com tempo de expiração curto.
+    *   Salva o token (ou seu hash) no documento do usuário no banco de dados.
+    *   **(Simulação)** Em um ambiente real, enviaria um e-mail para o usuário com um link contendo este token. No nosso ambiente de teste, o token pode ser retornado na resposta para simular o clique no link.
+
+#### **Etapa 2: Redefinição da Nova Senha**
+
+*   **Ação do Usuário (Frontend):**
+    *   Acessa a página `reset-password.html` com o token de redefinição na URL.
+    *   Digita a nova senha e a confirmação.
+
+*   **O que o Frontend Faz (`reset-password.js`):**
+    *   Extrai o token da URL.
+    *   Envia uma requisição `POST` para `/api/auth/reset-password/:token` com a nova senha.
+
+*   **O que o Backend Faz (`authController.js`):**
+    *   Valida o token (se existe, não expirou e corresponde ao usuário).
+    *   Criptografa a nova senha e a atualiza no banco de dados.
+    *   Invalida o token de redefinição para que não possa ser usado novamente.
+    *   Retorna uma mensagem de sucesso.
+
+*   **Resultado Esperado (Frontend):**
+    *   Exibe uma mensagem "Senha redefinida com sucesso!" e redireciona para a página de login, onde o usuário agora pode entrar com a nova senha.
+
+---
+
+## Fluxo 8: Login via Prova de Conceito (React)
 
 Este fluxo demonstra a capacidade do backend de servir a diferentes clientes e a interoperabilidade entre uma aplicação moderna (React) e o sistema legado.
 

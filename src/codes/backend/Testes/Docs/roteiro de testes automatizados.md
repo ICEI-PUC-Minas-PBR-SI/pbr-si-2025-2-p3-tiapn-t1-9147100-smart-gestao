@@ -41,22 +41,23 @@ O processo de teste foi totalmente automatizado e simplificado. Para executar a 
 
 **O que este comando faz?**
 1.  **Prepara o Ambiente (`globalSetup.js`):** Antes de qualquer teste, um script especial conecta ao banco de dados, limpa dados de testes anteriores, cria empresas e usuários temporários (Empresa A, Empresa B) e inicia o servidor da API.
+    -   **Resiliência de Porta:** Se a porta padrão (5000) estiver em uso, o script tentará automaticamente iniciar o servidor em uma porta alternativa (ex: 5001), garantindo que os testes possam rodar sem conflitos.
 2.  **Executa os Testes:** O Jest roda todas as suítes de teste (`*.test.js`) em sequência contra o servidor que está no ar.
-3.  **Limpa o Ambiente (`globalTeardown.js`):** Ao final de tudo, outro script remove **apenas** os dados temporários que foram criados para os testes, garantindo que os dados de desenvolvimento manual permaneçam intactos. Em seguida, encerra o servidor e a conexão com o banco de forma limpa.
+3.  **Limpa o Ambiente (`globalTeardown.js`):** Ao final de tudo, outro script executa uma **limpeza seletiva**, removendo **apenas** os dados temporários que foram criados para os testes. Isso garante que os dados de desenvolvimento manual (criados com `npm run create-test-users`) permaneçam intactos. Em seguida, encerra o servidor e a conexão com o banco de forma limpa, prevenindo "open handles".
 
 O resultado é exibido no console e, simultaneamente, um arquivo de log detalhado (`log_AAAA-MM-DD_HH-mm-ss.txt`) é salvo na pasta `Testes/resultados/`, com o caminho copiado para a área de transferência.
 
 ### Cenários de Teste Implementados
 
-#### Módulo de Isolamento de Dados (Multi-Tenant)
+#### Módulo de Autenticação e Sessão
 - **Status:** ✅ **Validado**
-- **Arquivo de Teste:** `Testes/3-security/multi-tenant.test.js`
-- **Descrição:** Este é um dos testes mais críticos do sistema. Ele cria múltiplas empresas e valida rigorosamente que os dados de uma empresa não podem ser acessados por outra.
+- **Arquivos de Teste:** `Testes/1-auth/auth.test.js`, `Testes/1-auth/password.test.js`
+- **Descrição:** Valida a lógica de persistência e invalidação de sessões (Refresh Tokens) e o fluxo de recuperação de senha.
 - **O que ele valida?**
-    - **Criação de Dados Isolados**: Confirma que é possível criar transações para a `Empresa A` e para a `Empresa B` de forma independente.
-    - **Bloqueio de Acesso Direto**: Prova que o `Usuário A` não consegue acessar uma transação específica do `Usuário B` (e vice-versa), recebendo um erro `404 Not Found`, como se o dado não existisse.
-    - **Filtragem em Listagens**: Garante que, ao listar todas as transações, o `Usuário A` veja *apenas* as suas, e não as da `Empresa B`.
-- **Por que é importante?** Garante a privacidade e a segurança dos dados de cada cliente, como se cada um tivesse seu próprio cofre.
+    - **Persistência de Sessão**: Confirma que um `SessionToken` é criado no banco de dados após o login, essencial para o mecanismo de "refresh token".
+    - **Invalidação de Sessão**: Garante que o `SessionToken` é invalidado (marcado como inativo) no banco de dados após o logout, impedindo que o token seja reutilizado.
+    - **Recuperação de Senha**: Valida todo o fluxo de "esqueci minha senha", desde a geração do token de reset até a redefinição da senha e o login bem-sucedido com a nova credencial.
+- **Por que é importante?** Assegura que o sistema de login é seguro, que o logout funciona como esperado e que um usuário que esqueceu sua senha consegue recuperar o acesso à sua conta.
 
 #### Módulo de Transações (CRUD)
 - **Status:** ✅ **Validado**
@@ -82,24 +83,6 @@ O resultado é exibido no console e, simultaneamente, um arquivo de log detalhad
     - **Exclusão (`DELETE /api/goals/:id`)**: Valida a remoção de uma meta.
 - **Por que é importante?** Garante que a funcionalidade de planejamento financeiro, essencial para o usuário, está operando corretamente.
 
-#### Módulo de Autenticação e Sessão
-- **Status:** ✅ **Validado**
-- **Arquivos de Teste:** `Testes/1-auth/session.test.js`, `Testes/1-auth/password.test.js`
-- **Descrição:** Valida a lógica de persistência e invalidação de sessões (Refresh Tokens) e o fluxo de recuperação de senha.
-- **O que ele valida?**
-    - **Persistência de Sessão**: Confirma que um `SessionToken` é criado no banco de dados após o login, essencial para o mecanismo de "refresh token".
-    - **Invalidação de Sessão**: Garante que o `SessionToken` é invalidado (marcado como inativo) no banco de dados após o logout, impedindo que o token seja reutilizado.
-    - **Recuperação de Senha**: Valida todo o fluxo de "esqueci minha senha", desde a geração do token de reset até a redefinição da senha e o login bem-sucedido com a nova credencial.
-- **Por que é importante?** Assegura que o sistema de login é seguro, que o logout funciona como esperado e que um usuário que esqueceu sua senha consegue recuperar o acesso à sua conta.
-
-#### Módulo de Relatórios
-- **Status:** ✅ **Validado**
-- **Arquivo de Teste:** `Testes/4-reports/reports.test.js`
-- **Descrição:** Valida a capacidade do sistema de gerar relatórios em PDF.
-- **O que ele valida?**
-    - **Geração de PDF de Ponta a Ponta**: Confirma que os endpoints de exportação (ex: `/api/reports/export/transactions-pdf`) geram um PDF real. O teste valida que a resposta da API é bem-sucedida (`200 OK`) e que o tipo de conteúdo é `application/pdf`. Durante a execução, uma cópia do PDF é salva em `Testes/PDFs/` para verificação manual.
-- **Por que é importante?** Garante que uma das funcionalidades mais importantes para o usuário final — a capacidade de extrair e visualizar seus dados — está funcionando corretamente.
-
 #### Módulo de Clientes/Fornecedores
 - **Status:** ✅ **Validado**
 - **Arquivo de Teste:** `Testes/2-features/clients.test.js`
@@ -120,13 +103,42 @@ O resultado é exibido no console e, simultaneamente, um arquivo de log detalhad
 - **Por que é importante?** Garante que o usuário pode anexar comprovantes e notas fiscais às suas transações, uma funcionalidade crucial para a organização e conformidade fiscal.
 
 #### Módulo de Segurança de Dados (Persistência)
+- **Status:** ✅ **
+- **Descrição:** Este teste "guardião" valida que a execução da suíte completa de testes (`npm test`) **não apaga** os dados criados manualmente para o desenvolvimento do frontend.
+- **O que ele valida?**
+    - **Execução Fina**
+    - **Execução Final:** É o último teste a ser executado na suíte, garantindo que ele rode após todas as outras operações, incluindo a limpeza de dados temporários.
+    - **Verificação de Persistêncial:: Ele se conecta ao banco de dados e verifica se os usuários das empresas manuais (ex: `empresa-frontend@test.com`) ainda existem, provando que a limpeza seletiva do `globalTeardown` funcionou corretamente.** É o último teste a ser executado na suíte, garantindo que ele rode após todas as outras operações, incluindo a limpeza de dados temporários.
+    - **Verificação de Persistência**: Ele se conecta ao banco de dados e verifica se os usuários das empresas manuais (ex: `empresa-frontend@test.com`) ainda existem, provando que a limpeza seletiva do `globalTeardown` funcionou corretamente.
+- **Por que é importante?** Protege o ambiente de desenvolvimento, garantindo que os testes automatizados não destruam o trabalho manual dos desenvolvedores do frontend.
+
+#### Módulo de Alertas de Metas
+- **Status:** ✅ **Validado**
+- **Arquivo de Teste:** `Testes/2-features/alerts.test.js`
+- **Descrição:** Valida a funcionalidade de geração automática de alertas ao atingir uma meta de despesa.
+- **O que ele valida?**
+    - **Criação da Meta:** Cria uma meta de despesa para uma categoria específica.
+    - **Registro de Transações:** Simula o registro de transações que, progressivamente, ultrapassam o valor da meta.
+    - **Geração do Alerta:** Confirma que um alerta é criado no banco de dados no momento exato em que a meta é ultrapassada, e que alertas duplicados não são gerados.
+- **Por que é importante?** Garante que a lógica de negócio para notificar os usuários sobre seus gastos está funcionando como esperado.
+
+#### Módulo de Segurança de Dados (Multi-Tenant)
+- **Status:** ✅ **Validado**
+- **Arquivo de Teste:** `Testes/3-security/multi-tenant.test.js`
+- **Descrição:** Este é um dos testes mais críticos do sistema. Ele cria múltiplas empresas e valida rigorosamente que os dados de uma empresa não podem ser acessados por outra.
+- **O que ele valida?**
+    - **Criação de Dados Isolados**: Confirma que é possível criar transações para a `Empresa A` e para a `Empresa B` de forma independente.
+    - **Bloqueio de Acesso Direto**: Prova que o `Usuário A` não consegue acessar uma transação específica do `Usuário B` (e vice-versa), recebendo um erro `404 Not Found`, como se o dado não existisse.
+    - **Filtragem em Listagens**: Garante que, ao listar todas as transações, o `Usuário A` veja *apenas* as suas, e não as da `Empresa B`.
+- **Por que é importante?** Garante a privacidade e a segurança dos dados de cada cliente, como se cada um tivesse seu próprio cofre.
+
+#### Módulo de Segurança de Dados (Persistência)
 - **Status:** ✅ **Validado**
 - **Arquivo de Teste:** `Testes/3-security/persistence.test.js`
 - **Descrição:** Este teste "guardião" valida que a execução da suíte completa de testes (`npm test`) **não apaga** os dados criados manualmente para o desenvolvimento do frontend.
 - **O que ele valida?**
-    - **Criação de Dados Manuais**: Garante que as empresas de teste manuais existam.
-    - **Execução dos Testes**: Roda a suíte de testes completa.
-    - **Verificação de Persistência**: Confirma que, após a limpeza seletiva dos testes, os dados manuais ainda estão no banco de dados.
+    - **Execução Final:** É o último teste a ser executado na suíte, garantindo que ele rode após todas as outras operações, incluindo a limpeza de dados temporários.
+    - **Verificação de Persistência**: Ele se conecta ao banco de dados e verifica se os usuários das empresas manuais (ex: `empresa-frontend@test.com`) ainda existem, provando que a limpeza seletiva do `globalTeardown` funcionou corretamente.
 - **Por que é importante?** Protege o ambiente de desenvolvimento, garantindo que os testes automatizados não destruam o trabalho manual dos desenvolvedores do frontend.
 ---
 

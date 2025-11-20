@@ -1,10 +1,10 @@
 # 🚀 Backend - Smart Gestão API
 
-Este documento é o guia técnico completo para o backend da aplicação Smart Gestão. Ele detalha a arquitetura, a estrutura de pastas, os arquivos principais e as instruções para configuração, execução e teste do servidor.
+Este documento é o guia técnico completo para o backend da aplicação Smart Gestão. Ele detalha a arquitetura, a estrutura de pastas, os arquivos principais e as instruções para configuração, execução e teste do servidor da API.
 
 ## 1. Arquitetura e Tecnologias
 
-O backend é uma API RESTful construída sobre a stack **Node.js**, utilizando as seguintes tecnologias principais:
+O backend é uma API RESTful construída sobre a stack **Node.js**, utilizando as seguintes tecnologias e padrões:
 
 -   **Node.js**: Ambiente de execução para JavaScript no servidor.
 -   **Express.js**: Framework web minimalista para a criação da API, gerenciamento de rotas e middlewares.
@@ -12,6 +12,7 @@ O backend é uma API RESTful construída sobre a stack **Node.js**, utilizando a
 -   **Mongoose**: Biblioteca de modelagem de dados (ODM) para o MongoDB, que facilita a definição de schemas, validações e interações com o banco.
 -   **JSON Web Tokens (JWT)**: Padrão utilizado para a autenticação segura e stateless dos usuários.
 
+O projeto segue uma arquitetura em camadas (MVC adaptado), com uma clara separação entre `Controllers` (orquestração), `Services` (lógica de negócio) e `Models` (acesso a dados), garantindo alta coesão e baixo acoplamento.
 ## 2. Estrutura de Pastas
 
 O projeto é organizado de forma modular para separar as responsabilidades e facilitar a manutenção.
@@ -25,6 +26,7 @@ backend/
 ├── middlewares/        # Funções que interceptam requisições (autenticação, autorização, logs).
 ├── models/             # Definição dos Schemas do Mongoose (a estrutura dos dados).
 ├── modelsJson/         # Exemplos de payloads de requisição (o que o cliente envia).
+│   ├── services/           # Lógica de negócio desacoplada (ex: geração de PDF, disparo de alertas).
 ├── node_modules/       # Dependências do projeto (ignorado pelo Git).
 ├── routes/             # Definição dos endpoints (rotas) da API.
 ├── Scripts/            # Scripts de inicialização e manutenção.
@@ -126,10 +128,10 @@ O servidor backend estará disponível em `http://localhost:5000`. Você pode ve
 
 ## 5. Executando os Testes
 
-A suíte de testes automatizados valida a integridade da API. O processo de execução foi simplificado para garantir estabilidade e focar na validação do backend.
+A suíte de testes automatizados valida a integridade da API. O processo de execução foi completamente refatorado para garantir estabilidade, isolamento e segurança dos dados.
 
 Para instruções detalhadas sobre como configurar e executar a suíte de testes, que agora utiliza um sistema de limpeza seletiva para proteger os dados de desenvolvimento, consulte o guia oficial na pasta de testes:
-> **Consulte: [Roteiro de Testes Automatizados](Testes/Docs/roteiro%20de%20testes%20automatizados.md)**
+> **Consulte: Roteiro de Testes Automatizados**
 
 ## 6. Validação e Conclusão da Função Backend
 
@@ -144,50 +146,60 @@ A funcionalidade de **Alertas Automáticos** para metas de despesas foi implemen
 
 ---
 
-## 7. Melhorias Futuras e Considerações de Produção (O que faríamos a seguir)
+## 7. Melhorias Futuras e Considerações de Produção
 
-Como um projeto acadêmico, certas simplificações foram feitas para focar no núcleo da funcionalidade dentro do prazo estabelecido. Para uma versão de produção, as seguintes melhorias seriam recomendadas:
+Como um projeto acadêmico com prazo definido, certas simplificações foram feitas para focar no núcleo da funcionalidade. Esta seção detalha as implementações atuais e como elas evoluiriam em um ambiente de produção para garantir maior segurança, escalabilidade e manutenibilidade.
 
 ### 7.1. Segurança Avançada
 
 #### **Gerenciamento de Sessão (Refresh Token)**
--   **Implementação Atual (Básica):** O `refreshToken` é enviado no corpo da resposta de login e armazenado no `localStorage` do navegador. Embora funcional, esta abordagem é vulnerável a ataques de Cross-Site Scripting (XSS), onde um script malicioso poderia roubar o token.
--   **Implementação Robusta (Produção):** A prática recomendada seria enviar o `refreshToken` em um **cookie `HttpOnly` e `Secure`**.
+-   **Implementação Atual (Funcional):** O `refreshToken` é enviado no corpo da resposta de login e armazenado no `localStorage` do navegador. Embora funcional para o escopo do projeto, esta abordagem é vulnerável a ataques de Cross-Site Scripting (XSS), onde um script malicioso poderia roubar o token.
+-   **Implementação Robusta (Nível de Produção):** A prática recomendada seria enviar o `refreshToken` em um **cookie `HttpOnly` e `Secure`**.
     -   **`HttpOnly`**: Impede que o cookie seja acessado por JavaScript no navegador, mitigando o risco de XSS.
     -   **`Secure`**: Garante que o cookie só seja enviado em requisições HTTPS.
     -   **`SameSite=Strict`**: Protege contra ataques de Cross-Site Request Forgery (CSRF).
 
 #### **Prevenção de Ataques de Força Bruta**
--   **Implementação Atual (Básica):** Não há um mecanismo para limitar o número de tentativas de login.
--   **Implementação Robusta (Produção):** Implementar um middleware de **Rate Limiting** em endpoints sensíveis como `/login` e `/forgot-password`. Ferramentas como `express-rate-limit` poderiam ser usadas para bloquear um endereço de IP após um certo número de tentativas falhas em um curto período.
+-   **Implementação Atual (Simplificada):** Não há um mecanismo para limitar o número de tentativas de login.
+-   **Implementação Robusta (Nível de Produção):** Implementar um middleware de **Rate Limiting** em endpoints sensíveis como `/api/auth/login` e `/api/auth/forgot-password`. Ferramentas como `express-rate-limit` poderiam ser usadas para bloquear um endereço de IP após um certo número de tentativas falhas em um curto período.
+
+#### **Validação e Sanitização de Entradas**
+-   **Implementação Atual (Funcional):** A validação de dados é feita principalmente pela camada do Mongoose (`Schema`). Isso é eficaz para garantir a integridade dos dados no banco, mas ocorre tardiamente no ciclo da requisição.
+-   **Implementação Robusta (Nível de Produção):** Utilizar uma biblioteca de validação de schema, como **`Joi`** ou **`express-validator`**, em um middleware no início da rota. Isso permite:
+    -   **Fail Fast:** Rejeitar requisições malformadas imediatamente, antes de tocar na lógica de negócio, economizando recursos do servidor.
+    -   **Segurança:** Proteger contra ataques de injeção de NoSQL, sanitizando as entradas.
+    -   **Mensagens de Erro Claras:** Retornar erros de validação detalhados e padronizados para o cliente.
 
 ### 7.2. Escalabilidade e Performance
 
 #### **Cache de Dados**
--   **Implementação Atual (Básica):** Todas as requisições de leitura (como buscar o perfil do usuário ou a lista de clientes) consultam o banco de dados diretamente.
--   **Implementação Robusta (Produção):** Implementar uma camada de cache com uma ferramenta como **Redis**. Dados que não mudam com frequência (como permissões, perfil do usuário, ou até mesmo relatórios mensais já gerados) poderiam ser armazenados em cache. Isso reduziria drasticamente a carga no banco de dados e diminuiria a latência das requisições, melhorando a performance geral.
+-   **Implementação Atual (Simplificada):** Todas as requisições de leitura consultam o banco de dados diretamente.
+-   **Implementação Robusta (Nível de Produção):** Implementar uma camada de cache com uma ferramenta como **Redis**. Dados que não mudam com frequência (como permissões, perfil do usuário, ou relatórios mensais) poderiam ser armazenados em cache. Isso reduziria drasticamente a carga no banco de dados e diminuiria a latência das requisições.
+
+#### **Clusterização e Balanceamento de Carga**
+-   **Implementação Atual (Simplificada):** O servidor roda em um único processo Node.js, utilizando apenas um núcleo da CPU.
+-   **Implementação Robusta (Nível de Produção):** Utilizar o módulo `cluster` nativo do Node.js ou uma ferramenta como o **`PM2`** para criar um "cluster" de processos, permitindo que a aplicação utilize todos os núcleos da CPU. Em uma infraestrutura maior, múltiplos servidores seriam colocados atrás de um **Load Balancer** (como Nginx) para distribuir o tráfego.
 
 ### 7.3. Exclusão Lógica (Soft Deletes)
 
 #### **Gerenciamento de Dados Excluídos**
--   **Implementação Atual (Básica):** A maioria das operações de exclusão (`DELETE`) remove os dados permanentemente do banco de dados usando `findOneAndDelete`. Esta é uma **exclusão física (hard delete)**.
--   **Implementação Robusta (Produção):** A melhor prática seria implementar a **exclusão lógica (soft delete)**.
+-   **Implementação Atual (Simplificada):** As operações de exclusão (`DELETE`) removem os dados permanentemente do banco de dados (`findOneAndDelete`). Esta é uma **exclusão física (hard delete)**.
+-   **Implementação Robusta (Nível de Produção):** A melhor prática seria implementar a **exclusão lógica (soft delete)**.
     -   **Como Funciona:** Em vez de apagar o registro, um campo como `deleted: true` e `deletedAt: new Date()` seria adicionado ao documento.
     -   **Vantagens:**
         1.  **Recuperação de Dados:** Permite restaurar dados "excluídos" acidentalmente.
         2.  **Auditoria e Conformidade:** Mantém um histórico completo dos dados, o que é crucial para auditorias e para estar em conformidade com regulamentações como a LGPD, que exigem a retenção de dados por um certo período.
-        3.  **Integridade Referencial:** Evita problemas de "referências quebradas" em bancos de dados relacionais e ajuda a manter a consistência em NoSQL.
     -   **Implementação:** Todas as consultas de leitura (`find`, `findOne`) seriam modificadas para incluir a condição `{ deleted: { $ne: true } }`, garantindo que os dados "excluídos" não apareçam para o usuário.
 
 ### 7.4. Testes e CI/CD
 
 #### **Estratégia de Testes**
--   **Implementação Atual (Básica):** A suíte de testes é focada em **testes de integração**, que validam o fluxo completo da API, desde a requisição até a resposta do banco de dados. Isso é excelente para garantir que os módulos funcionem bem juntos.
--   **Implementação Robusta (Produção):** Adicionar **testes unitários** para validar a lógica de funções específicas em `services` e `utils` de forma isolada, sem depender de um banco de dados ou servidor (usando "mocks"). Isso torna os testes mais rápidos, granulares e fáceis de depurar.
+-   **Implementação Atual (Funcional):** A suíte de testes é focada em **testes de integração**, que validam o fluxo completo da API. Isso é excelente para garantir que os módulos funcionem bem juntos.
+-   **Implementação Robusta (Nível de Produção):** Adicionar **testes unitários** para validar a lógica de funções específicas em `services` e `utils` de forma isolada, sem depender de um banco de dados ou servidor (usando "mocks"). Isso torna os testes mais rápidos, granulares e fáceis de depurar. Adicionar também **testes de ponta a ponta (E2E)** com ferramentas como Cypress ou Playwright para simular a jornada completa do usuário no navegador.
 
 #### **Automação de Deploy (CI/CD)**
--   **Implementação Atual (Básica):** O processo de teste e deploy é manual.
--   **Implementação Robusta (Produção):** Configurar um pipeline de **Integração e Entrega Contínua (CI/CD)** usando ferramentas como GitHub Actions. A cada `push` para o repositório, o pipeline poderia:
+-   **Implementação Atual (Simplificada):** O processo de teste e deploy é manual.
+-   **Implementação Robusta (Nível de Produção):** Configurar um pipeline de **Integração e Entrega Contínua (CI/CD)** usando ferramentas como GitHub Actions. A cada `push` para o repositório, o pipeline poderia:
     1.  Executar a suíte de testes completa (`npm test`).
     2.  Verificar a qualidade do código com um "linter".
     3.  Se tudo passar, construir uma imagem Docker da aplicação.
@@ -196,7 +208,7 @@ Como um projeto acadêmico, certas simplificações foram feitas para focar no n
 ### 7.5. Sistema de Alertas e Tarefas em Background
 
 #### **Processamento Assíncrono**
--   **Implementação Atual (Básica):** A geração de alertas é síncrona. O `transactionController` chama e espera (`await`) a conclusão do `alertTriggerService`. Para tarefas mais pesadas (como enviar um e-mail ou uma notificação push), isso aumentaria o tempo de resposta da API.
--   **Implementação Robusta (Produção):** Utilizar **filas de mensagens** (como RabbitMQ ou AWS SQS).
+-   **Implementação Atual (Funcional):** A geração de alertas é síncrona. O `transactionController` chama e espera (`await`) a conclusão do `alertTriggerService`. Para tarefas mais pesadas (como enviar um e-mail ou uma notificação push), isso aumentaria o tempo de resposta da API.
+-   **Implementação Robusta (Nível de Produção):** Utilizar **filas de mensagens** (como RabbitMQ ou AWS SQS).
     -   **Como Funciona:** Em vez de executar a tarefa imediatamente, o `transactionController` apenas publicaria uma mensagem na fila (ex: `"meta_verificar", { transactionId: "..." }`). Um processo "worker" separado e independente ouviria essa fila, processaria a tarefa (verificar a meta, enviar e-mail, etc.) e marcaria como concluída.
-    -   **Vantagens:** Torna a API muito mais rápida e resiliente. Se o serviço de envio de e-mails estiver fora do ar, por exemplo, a API não falha; a mensagem simplesmente permanece na fila para ser reprocessada mais tarde.
+    -   **Vantagens:** Torna a API muito mais rápida e resiliente. Se o serviço de envio de e-mails estiver fora do ar, por exemplo, a API não falha; a mensagem simplesmente permanece na fila para ser reprocessada mais tarde. Além disso, tarefas agendadas (`cron jobs`) poderiam ser usadas para manutenção, como limpar tokens de sessão expirados ou gerar relatórios noturnos.

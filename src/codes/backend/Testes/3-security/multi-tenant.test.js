@@ -29,13 +29,14 @@ describe('3. Teste de Isolamento de Dados (Multi-Tenant)', () => {
     // Etapa 1: Cadastra e loga em múltiplas empresas para simular um ambiente real.
     beforeAll(async () => {
         // Garante que a leitura do arquivo de setup seja assíncrona
-        const fileContent = await fs.promises.readFile(SETUP_FILE, 'utf8');
-        API_URL = JSON.parse(fileContent).apiUrl;
+        // CORREÇÃO: Lê o arquivo de setup de forma síncrona para garantir que API_URL esteja disponível.
+        const setupData = JSON.parse(fs.readFileSync(SETUP_FILE, 'utf8'));
+        API_URL = setupData.apiUrl;
 
         console.log(`\n--- Configurando ${NUMBER_OF_COMPANIES} empresas para o teste multi-tenant ---`); // Reduzido para 3
 
         for (let i = 1; i <= NUMBER_OF_COMPANIES; i++) {
-            const uniqueId = Date.now() + i;
+            const uniqueId = `${Date.now()}${i}`;
             const companyData = {
                 name: `Usuário Empresa ${i}`,
                 email: `empresa_${uniqueId}@test.com`,
@@ -74,6 +75,7 @@ describe('3. Teste de Isolamento de Dados (Multi-Tenant)', () => {
             const company = companies[i];
             const transactionData = {
                 description: `Transação da Empresa ${i + 1}`,
+                userId: company.userId,
                 amount: 100 * (i + 1),
                 type: 'revenue',
                 status: 'completed', // Campo obrigatório adicionado

@@ -13,11 +13,20 @@ import path from 'path';
 import FormData from 'form-data';
 import { fileURLToPath } from 'url';
 
+// CORREÇÃO: __dirname não existe em ES Modules. Esta é a forma moderna de obter o caminho do diretório.
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// Carrega os dados de setup (usuários, empresas, tokens)
-const setupData = JSON.parse(fs.readFileSync(path.join(__dirname, '../test-setup.json')));
-const { apiUrl, companyA } = setupData;
+const SETUP_FILE = path.join('Testes', 'test-setup.json');
+
+let apiUrl;
+let companyA;
+
+describe('Feature: Uploads', () => {
+    beforeAll(() => {
+        const setupData = JSON.parse(fs.readFileSync(SETUP_FILE, 'utf8'));
+        apiUrl = setupData.apiUrl;
+        companyA = setupData.companyA;
+    });
 
 /**
  * Helper function to ensure a test file exists before trying to use it.
@@ -32,8 +41,6 @@ const ensureTestFileExists = (fileName) => {
     if (!fs.existsSync(filePath)) fs.writeFileSync(filePath, `fake data for ${fileName}`);
     return filePath;
 };
-describe('Feature: Uploads', () => {
-
     describe('Upload de PDF', () => {
         let transactionId;
         let attachmentPath;

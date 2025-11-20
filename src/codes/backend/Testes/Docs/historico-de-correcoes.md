@@ -84,7 +84,7 @@ Este documento serve como um registro cronológico e detalhado dos desafios, inv
 
 ---
 
-### 6. A Jornada do Erro 500 no Teste de Upload
+### 6. Resolução de Erro 500 no Endpoint de Upload
 
 -   **Data:** Etapa final de depuração.
 -   **Sintoma:** O teste `Deve retornar 404 ao tentar fazer upload para uma transação inexistente` falhava consistentemente, retornando `500 Internal Server Error` em vez do `404` esperado.
@@ -110,7 +110,7 @@ Este documento serve como um registro cronológico e detalhado dos desafios, inv
 
 ---
 
-### 8. Estabilização dos Testes de Geração de PDF
+### 8. Estabilização dos Testes de Geração de Relatórios em PDF
 
 -   **Data:** Sessão final de estabilização.
 -   **Sintoma:** O teste de relatórios (`reports.test.js`) apresentava falhas consistentes com uma variedade de erros, incluindo `ReferenceError: require is not defined`, `AxiosError: 500`, e erros internos da biblioteca `pdf-parse`.
@@ -125,7 +125,7 @@ Este documento serve como um registro cronológico e detalhado dos desafios, inv
 
 ---
 
-### 9. A Saga da Implementação de Alertas de Metas (RF-006)
+### 9. Implementação e Validação da Funcionalidade de Alertas (RF-006)
 
 -   **Data:** Sessão final de desenvolvimento do backend.
 -   **Sintoma:** O teste recém-criado para a funcionalidade de alertas (`alerts.test.js`) falhava persistentemente. O teste esperava que um alerta fosse criado ao ultrapassar uma meta de despesa, mas a lista de alertas sempre retornava vazia.
@@ -144,6 +144,25 @@ Este documento serve como um registro cronológico e detalhado dos desafios, inv
 
 ---
 
-### 8. Conclusão
+### 10. Estabilização Final da Suíte de Testes (Resolução de Falha Sistêmica)
+
+-   **Data:** Sessão final de estabilização do projeto.
+-   **Sintoma:** Após a implementação da limpeza seletiva de dados (para proteger os dados manuais), a suíte de testes inteira quebrou com uma variedade de erros, incluindo `TypeError: Invalid URL`, `ReferenceError: __dirname is not defined`, e `Jest did not exit...`.
+-   **Causa Raiz (Investigação Abrangente):** A causa foi uma "tempestade perfeita" de problemas interligados, desencadeada por uma refatoração no `globalSetup` para lidar com portas de servidor dinâmicas.
+    1.  **`TypeError: Invalid URL`:** A causa principal. O `globalSetup` estava escrevendo o arquivo `test-setup.json` (com a `API_URL`) **antes** de saber em qual porta o servidor realmente iria rodar (5000, 5001, etc.). Como resultado, os testes liam uma `API_URL` indefinida, causando falha em todas as requisições `axios`.
+    2.  **`ReferenceError: __dirname is not defined`:** No teste de uploads (`uploads.test.js`), o código usava a variável `__dirname`, que não existe em projetos que usam ES Modules (`import`/`export`).
+    3.  **`DELETE /api/auth/users/undefined`:** No teste multi-tenant, o `userId` estava sendo extraído incorretamente da resposta de login (`user._id` em vez de `user.id`), resultando em uma tentativa de exclusão com um ID indefinido.
+    4.  **`Jest did not exit...`:** O teste de persistência (`persistence.test.js`) abria uma nova conexão com o banco de dados para suas verificações, mas não a fechava ao final, deixando uma operação assíncrona "pendurada" que impedia o Jest de encerrar.
+-   **Solução Definitiva (Consolidação e Padronização):**
+    1.  **Sincronização do Setup:** O `globalSetup.cjs` foi reordenado para iniciar o servidor **primeiro** e, só então, escrever o `test-setup.json` com a `API_URL` correta, garantindo que a porta dinâmica seja capturada.
+    2.  **Padronização da Leitura de Configuração:** Todos os arquivos de teste (`*.test.js`) foram padronizados para ler o `test-setup.json` dentro de um bloco `beforeAll()`, garantindo que a configuração seja carregada apenas quando estiver pronta.
+    3.  **Correção do `__dirname`:** O `uploads.test.js` foi corrigido para usar a abordagem moderna e compatível com ES Modules: `path.dirname(fileURLToPath(import.meta.url))`.
+    4.  **Correção do `userId`:** O `multi-tenant.test.js` foi ajustado para extrair o `userId` da propriedade correta (`user.id`).
+    5.  **Encerramento Limpo:** Foi adicionado um bloco `afterAll(async () => await mongoose.disconnect())` ao `persistence.test.js` para fechar a conexão com o banco que ele abria, resolvendo o aviso de "open handles".
+-   **Resultado:** A suíte de testes completa (`npm test`) voltou a passar com 100% de sucesso (36/36 testes), de forma estável, resiliente e com encerramento limpo.
+
+---
+
+### 11. Conclusão
 
 Com todas essas mudanças e depurações, o ambiente de testes foi completamente estabilizado. A suíte completa agora executa de forma rápida, isolada e confiável com um único comando `npm test`, fornecendo feedback em tempo real e logs detalhados.

@@ -137,13 +137,25 @@ export async function startServer({ dbUri = process.env.MONGO_URI_TEST || proces
     await connectDB(dbUri);
     console.log('✅ [1/1] Conexão com o banco de dados estabelecida!');
 
-    return new Promise((resolve, reject) => {
-      server = app.listen(port, () => {
-        console.log(`✅ Servidor rodando na porta ${port}`);
-        resolve(server);
+    // Lógica aprimorada para tentar portas alternativas se a padrão estiver em uso.
+    const startListening = (currentPort) => {
+      return new Promise((resolve, reject) => {
+        server = app.listen(currentPort, () => {
+          console.log(`✅ Servidor rodando na porta ${currentPort}`);
+          // Atualiza a variável de ambiente PORT para que o resto da aplicação saiba qual porta está em uso.
+          process.env.PORT = currentPort;
+          resolve(server);
+        }).on('error', (err) => {
+          if (err.code === 'EADDRINUSE') {
+            console.warn(`⚠️  Aviso: Porta ${currentPort} está em uso. Tentando porta ${currentPort + 1}...`);
+            resolve(startListening(currentPort + 1)); // Tenta a próxima porta recursivamente.
+          } else {
+            reject(err);
+          }
+        });
       });
-      server.on('error', (err) => reject(err));
-    });
+    };
+    return startListening(port);
   } catch (err) {
     console.error('Erro ao iniciar o servidor (startServer):', err.message);
     throw err;

@@ -109,7 +109,7 @@ Valida o ciclo completo de gerenciamento de transações.
 
 ---
 
-## 4. Módulo de Metas
+## 4. Módulo de Metas (CRUD)
 
 - [ ] **Criar Meta:**
     - **Ação:** Crie uma nova meta com título "Economizar para férias".

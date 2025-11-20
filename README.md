@@ -164,6 +164,12 @@ Esta seção serve como um guia de referência para consumir os principais endpo
 
 ---
 
+#### Alertas
+- **Listar:** `GET /api/alerts`
+  - Query Params: `?read=false` para buscar apenas alertas não lidos.
+
+---
+
 #### Funcionalidades Avançadas
 
 - **Exportar Relatório PDF:** `GET /api/reports/export/transactions-pdf`
@@ -213,9 +219,13 @@ Para demonstrar essa flexibilidade e a viabilidade de uma futura modernização,
 <li><a href="presentation/README.md"> Apresentação da solução</a></li>
 
 ## Histórico de versões
+* 1.0.0
+    * **RELEASE**: Versão de marco do projeto. O backend é considerado **feature-complete**, com todas as funcionalidades essenciais implementadas, validadas e estabilizadas. A API está pronta para a integração final e completa do frontend.
+    * **CHANGE**: Consolidação final de toda a documentação técnica do projeto (backend, testes e guias de integração) para refletir o estado estável da aplicação.
 * 0.3.14
-    * **FEATURE**: Implementação da funcionalidade de geração automática de alertas quando uma meta de despesa é atingida. Adição de testes de integração para validar o novo fluxo.
-    * **CHANGE**: Estabilização final da suíte de testes, incluindo a correção da formatação dos logs de teste para remover códigos de cores, melhorando a legibilidade.
+    * **FEATURE**: Implementação e validação da funcionalidade de geração automática de alertas quando uma meta de despesa é atingida (RF-006).
+    * **CHANGE**: Estabilização final e completa da suíte de testes automatizados (36/36 testes passando), incluindo a correção da formatação dos logs para remover códigos de cores.
+    * **FIX**: Correção da arquitetura de testes para garantir a persistência de dados manuais (`persistence.test.js`) e o encerramento limpo do processo do Jest, eliminando o aviso de "open handles".
 * 0.3.13
     * **CHANGE**: Correção final da suíte de testes. Adição de validação de `ObjectId` em todos os controllers para tratamento robusto de IDs inválidos, resolvendo a falha no teste de upload e garantindo que todos os 23 testes de funcionalidades passem com sucesso.
 * 0.3.13

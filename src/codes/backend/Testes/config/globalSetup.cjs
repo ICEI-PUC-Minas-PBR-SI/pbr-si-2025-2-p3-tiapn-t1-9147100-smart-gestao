@@ -40,18 +40,13 @@ module.exports = async () => {
   const conn = await mongoose.connect(mongoUri);
   global.__MONGO_CONNECTION__ = conn;
 
-  // Lógica de Limpeza Seletiva: Se o teste de persistência não estiver rodando,
-  // limpa todas as coleções para garantir um ambiente de teste limpo.
-  if (process.env.PERSISTENCE_TEST_RUN !== 'true') {
-    await Promise.all([
-      Company.deleteMany({}),
-      User.deleteMany({}),
-      Permission.deleteMany({}),
-      SessionToken.deleteMany({}),
-      Client.deleteMany({}),
-      Transaction.deleteMany({}),
-    ]);
-  }
+  // Inicia o servidor da API PRIMEIRO para descobrir a porta correta.
+  const serverModule = await import('../../server.js');
+  const server = await serverModule.startServer({ dbUri: mongoUri, port: process.env.PORT || 5000 });
+
+  // A lógica de limpeza foi removida daqui e centralizada no globalTeardown.
+  // O setup agora apenas CRIA dados temporários, sem nunca destruir dados existentes.
+  // Isso garante que os dados de desenvolvimento manual sejam preservados.
 
   // Garante que as permissões padrão existam no banco
   const cleanupIds = { companies: [], users: [], clients: [], transactions: [], permissions: [] };
@@ -125,7 +120,9 @@ module.exports = async () => {
   // Monta um objeto com todos os dados de setup, que será salvo em um arquivo JSON
   // para ser lido pelos arquivos de teste individuais.
   const setupData = {
-    apiUrl: `http://localhost:${process.env.PORT || 5000}/api`,
+    // Garante que a URL da API use a porta que foi efetivamente alocada pelo startServer,
+    // que pode ser 5000, 5001, etc.
+    apiUrl: `http://localhost:${process.env.PORT}/api`,
     companyA: {
       _id: companyA._id.toString(),
       name: companyA.name,
@@ -148,10 +145,6 @@ module.exports = async () => {
 
   // Salva os dados de setup em um arquivo para que os testes possam acessá-los.
   fs.writeFileSync(path.join(__dirname, '../test-setup.json'), JSON.stringify(setupData, null, 2));
-
-  // Inicia o servidor da API e armazena a instância em uma variável global
-  const serverModule = await import('../../server.js');
-  const server = await serverModule.startServer({ dbUri: mongoUri, port: process.env.PORT || 5000 });
 
   global.__TEST_CLEANUP_IDS__ = cleanupIds;
   global.__SERVER__ = server;

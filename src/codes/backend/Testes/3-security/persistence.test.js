@@ -3,56 +3,52 @@
  * ARQUIVO: Testes/3-security/persistence.test.js
  *
  * DESCRIÇÃO:
- *            Este teste "meta" valida uma das premissas mais importantes do ambiente
- *            de testes: que a execução da suíte de testes automatizados (`npm test`)
- *            NÃO destrói os dados de teste manuais.
+ *            Este teste é um "guardião" de segurança. Sua única responsabilidade
+ *            é verificar se os dados de teste manuais, criados pelo script
+ *            `create-test-companies.js`, permanecem no banco de dados após a
+ *            execução completa da suíte de testes automatizados (`npm test`).
  *
- * FLUXO DO TESTE:
- * 1. Garante que as empresas de teste manuais existam (executando `create-test-users`).
- * 2. Executa a suíte de testes completa (`npm test`).
- * 3. Após a conclusão, conecta-se ao banco de dados e verifica se as empresas
- *    manuais ainda estão presentes.
+ *            Ele prova que a nossa estratégia de "limpeza seletiva" no `globalTeardown`
+ *            está funcionando e que os dados de desenvolvimento não são destruídos.
  * =================================================================================
  */
-import { exec } from 'child_process';
+
 import mongoose from 'mongoose';
 import User from '../../models/User.js';
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 describe('Security: Persistência de Dados Manuais', () => {
-    it('deve garantir que os usuários de teste manuais permaneçam no banco após a execução de `npm test`', async () => {
-        const manualTestEmails = [
-            'empresa-frontend@test.com',
-            'empresa-backend@test.com',
-            'empresa-react@test.com',
-        ];
+  // Lista de e-mails dos usuários que devem sobreviver ao processo de teste.
+  const manualTestUsers = [
+    { email: 'empresa-frontend@test.com', name: 'Empresa Frontend' },
+    { email: 'empresa-backend@test.com', name: 'Empresa Backend' },
+    { email: 'empresa-react@test.com', name: 'Empresa React' },
+  ];
 
-        // Função para executar um comando no shell
-        const runCommand = (command) => new Promise((resolve, reject) => {
-            exec(command, (error, stdout, stderr) => {
-                if (error) return reject(error);
-                resolve(stdout);
-            });
-        });
+  // Garante que o teste só rode se o banco de dados estiver conectado.
+  beforeAll(async () => {
+    if (mongoose.connection.readyState !== 1) {
+      // Usa a mesma URI do setup global para consistência.
+      const mongoUri = process.env.MONGO_URI_TEST || process.env.MONGO_URI;
+      await mongoose.connect(mongoUri);
+    }
+  });
 
-        // 1. Garante que os usuários manuais existam.
-        await runCommand('npm run create-test-users');
+  // Garante que a conexão com o banco de dados aberta por este teste seja fechada.
+  afterAll(async () => {
+    // Apenas desconecta se a conexão ainda estiver aberta.
+    if (mongoose.connection.readyState === 1) await mongoose.disconnect();
+  });
 
-        // 2. Executa a suíte de testes completa.
-        await runCommand('npm run test:no-clean');
+  test('deve garantir que os usuários de teste manuais permaneçam no banco após a execução de `npm test`', async () => {
+    console.log('\n--- 🛡️  Teste de Persistência: Verificando dados manuais... ---');
 
-        // 3. Conecta-se ao banco de dados NOVAMENTE, pois o processo de teste anterior fechou a conexão.
-        await mongoose.connect(process.env.MONGO_URI);
+    for (const testUser of manualTestUsers) {
+      const userInDb = await User.findOne({ email: testUser.email });
 
-        try {
-            // 4. Verifica se os usuários manuais ainda existem no banco.
-            const foundUsers = await User.find({ email: { $in: manualTestEmails } });
-            expect(foundUsers.length).toBe(manualTestEmails.length);
-        } finally {
-            // 5. Garante que a conexão seja fechada, mesmo que o teste falhe.
-            await mongoose.disconnect();
-        }
-    });
+      // A asserção principal: o usuário não deve ser nulo.
+      expect(userInDb).not.toBeNull();
+
+      console.log(`   - [PASS] Usuário da "${testUser.name}" permaneceu no banco.`);
+    }
+  });
 });

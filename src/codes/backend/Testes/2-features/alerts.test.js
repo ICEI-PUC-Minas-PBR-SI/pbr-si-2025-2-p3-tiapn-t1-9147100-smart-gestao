@@ -2,10 +2,10 @@ import axios from 'axios';
 import fs from 'fs';
 import path from 'path';
 
-const API_URL = process.env.API_URL || 'http://localhost:5000/api';
 const SETUP_FILE = path.join('Testes', 'test-setup.json');
 
 let testData;
+let API_URL;
 
 describe('6. Módulo de Alertas de Metas', () => {
   beforeAll(() => {
@@ -13,6 +13,7 @@ describe('6. Módulo de Alertas de Metas', () => {
     if (fs.existsSync(SETUP_FILE)) {
       const rawData = fs.readFileSync(SETUP_FILE);
       testData = JSON.parse(rawData);
+      API_URL = testData.apiUrl;
     } else {
       throw new Error('Arquivo de setup de teste não encontrado. Execute o setup global.');
     }

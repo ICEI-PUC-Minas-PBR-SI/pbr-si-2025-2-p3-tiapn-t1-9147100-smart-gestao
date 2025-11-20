@@ -64,7 +64,7 @@ src/
 │   │   ├── initPermissions.js
 │   │   └── print-summary.js
 │   ├── services/
-│   │   └── pdfService.js
+│   │   ├── pdfService.js
 │   │   └── alertTriggerService.js
 │   ├── utils/
 │   │   ├── logger.js
@@ -166,7 +166,7 @@ Todos os modelos incluem o campo empresaId para isolar dados entre empresas e ga
 
 ### 🔔 Alert.js
 
-Armazena alertas financeiros, como metas de despesas atingidas. A criação é gerenciada automaticamente pelo `alertTriggerService.js` quando uma nova transação é registrada.
+Armazena alertas financeiros, como metas de despesas atingidas. Sua criação é gerenciada automaticamente pelo `alertTriggerService.js` quando uma nova transação de despesa ultrapassa o limite de uma meta.
 
 ### 📜 Logs.js
 
@@ -226,7 +226,7 @@ Campos: empresaId, uuid, nome, email, senha_hash, role.
 
 -   **`Scripts/initPermissions.js`**: Garante que as permissões de sistema (`ROOT`, `ADMIN_COMPANY`, etc.) existam no banco de dados. É executado automaticamente na inicialização do servidor para garantir a consistência do ambiente.
 -   **`Scripts/create-test-companies.js`**: Cria um conjunto de empresas de teste fixas para uso em validações manuais. É executado manualmente via `npm run create-test-users`.
--   **`Scripts/print-summary.js`**: Exibe um resumo formatado com os links de acesso de todos os serviços após a inicialização.
+-   **`Scripts/print-summary.js`**: Exibe um resumo formatado com os links de acesso de todos os serviços após a inicialização completa do ambiente (`npm start`).
 
 ---
 
@@ -234,8 +234,8 @@ Campos: empresaId, uuid, nome, email, senha_hash, role.
 
 -   **Autenticação**: Senhas são sempre armazenadas com hash `bcrypt`. O acesso é controlado por tokens JWT com tempo de expiração curto (access token) e um mecanismo de renovação (refresh token).
 -   **Isolamento de Dados (Multi-Tenant)**: O `companyScopeMiddleware` é um pilar da segurança, garantindo que um usuário de uma empresa não possa, sob nenhuma hipótese, acessar dados de outra.
--   **Encerramento Seguro**: A lógica de `gracefulShutdown` em `server.js` garante que as conexões com o banco de dados e o próprio servidor sejam encerradas de forma limpa, evitando corrupção de dados.
--   **Testes Seguros**: O ambiente de teste (`globalSetup.cjs` e `globalTeardown.cjs`) foi configurado para realizar uma **limpeza seletiva**, removendo apenas os dados que ele mesmo criou, garantindo que os dados de desenvolvimento manual permaneçam intactos.
+-   **Encerramento Seguro**: A lógica de `gracefulShutdown` em `server.js` garante que as conexões com o banco de dados e o próprio servidor sejam encerradas de forma limpa, evitando corrupção de dados e processos "zumbis".
+-   **Testes Seguros**: O ambiente de teste (`globalSetup.cjs` e `globalTeardown.cjs`) foi configurado para realizar uma **limpeza seletiva**, removendo apenas os dados temporários que ele mesmo criou. Isso garante que os dados de desenvolvimento manual (criados com `npm run create-test-users`) permaneçam intactos, o que é validado pelo teste `persistence.test.js`.
 
 ---
 

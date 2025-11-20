@@ -13,6 +13,7 @@ const SETUP_FILE = path.join('Testes', 'test-setup.json'); // Caminho relativo p
 
 describe('5. Módulo de Metas (CRUD)', () => {
     let userToken;
+    let userId;
     let API_URL;
     let createdGoalId;
 
@@ -21,6 +22,7 @@ describe('5. Módulo de Metas (CRUD)', () => {
         // Lê os dados de setup de forma síncrona. O ambiente de teste garante que este arquivo já existe.
         const setupData = JSON.parse(fs.readFileSync(SETUP_FILE, 'utf8'));
         userToken = setupData.companyA.token;
+        userId = setupData.companyA.userId;
         API_URL = setupData.apiUrl;
     });
 

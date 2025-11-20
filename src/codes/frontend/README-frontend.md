@@ -43,6 +43,10 @@ frontend/
 
 ## 4. Como Iniciar
 
-Para visualizar o frontend, o backend deve estar rodando. O comando `npm start` na pasta `src/codes/backend` iniciará ambos os servidores.
+Para visualizar o frontend, o backend deve estar rodando. O comando `npm start` na pasta `src/codes/backend` iniciará todos os serviços necessários (backend, frontend legado e a demo em React).
 
-Após iniciar, acesse `http://localhost:3000` no seu navegador.
+Após iniciar o ambiente completo, acesse `http://localhost:3000` no seu navegador.
+
+> **Nota de Segurança:** O ambiente de testes automatizados do backend (`npm test`) foi projetado para **não apagar** os dados de teste manuais que você possa criar, garantindo um ambiente de desenvolvimento estável.
+
+---

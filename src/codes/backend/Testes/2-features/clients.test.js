@@ -15,6 +15,7 @@ const SETUP_FILE = path.join('Testes', 'test-setup.json'); // Caminho relativo p
 describe('7. Módulo de Clientes/Fornecedores', () => {
   let userToken;
   let API_URL;
+  let userId;
   let createdClientId;
 
   beforeAll(async () => {
@@ -22,6 +23,7 @@ describe('7. Módulo de Clientes/Fornecedores', () => {
     // Lê os dados de setup de forma síncrona. O ambiente de teste garante que este arquivo já existe.
     const setupData = JSON.parse(fs.readFileSync(SETUP_FILE, 'utf8'));
     userToken = setupData.companyA.token;
+    userId = setupData.companyA.userId;
     API_URL = setupData.apiUrl;
   });
 
