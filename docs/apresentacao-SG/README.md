@@ -1,9 +1,8 @@
 
 # Apresentação
 
-<span style="color:red">Pré-requisitos: Todos os demais artefatos</span>
+[![Assista ao vídeo](https://img.youtube.com/vi/Um40aWo2Cac/0.jpg)](https://youtu.be/Um40aWo2Cac)
 
-> Conjunto de slides em um arquivo PowerPoint ou PDF com a apresentação do projeto contemplando todos os itens trabalhados nos demais artefatos. 
 
 ## Slides
 
