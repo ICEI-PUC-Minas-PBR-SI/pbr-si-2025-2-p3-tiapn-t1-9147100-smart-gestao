@@ -7,6 +7,10 @@ node_modules/
 # Arquivos de log
 *.log
 
+# Pastas de artefatos de teste
+Testes/PDFs/
+Testes/resultados/
+
 # Arquivos temporários de teste gerados pelo Jest
 .mongo-uri-test
 test-setup.json
