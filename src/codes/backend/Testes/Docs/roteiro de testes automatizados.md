@@ -148,13 +148,13 @@ O ambiente de testes automatizados agora é autossuficiente. No entanto, para fi
 
 ### Criação de Empresas de Teste Fixo
 
-- **Arquivo:** `Scripts/create-test-companies.js`
-- **Objetivo:** Criar um conjunto de três empresas de teste com dados previsíveis (`Empresa Frontend`, `Empresa Backend`, `Empresa React`) para serem usadas em validações manuais do frontend e exploração da API.
+- **Arquivo:** `Testes/populate-db.js`
+- **Objetivo:** Criar um ambiente de desenvolvimento rico e consistente, populando o banco de dados com 3 empresas de teste (`Empresa FrontEnd`, `Empresa BackEnd`, `Empresa React`), cada uma com seu administrador, usuários comuns e dados de exemplo (transações, metas, etc.).
 - **Importante:** Graças à implementação da limpeza seletiva, o ambiente de testes automatizados (`npm test`) **NÃO apaga mais** os dados criados por este script. Você pode rodar os testes com segurança.
 - **Como Usar:**
   1. Certifique-se de que o servidor do backend esteja rodando (`npm run start:backend`).
   2. Em outro terminal, na pasta `src/codes/backend`, execute:
      ```bash
-     node Scripts/create-test-companies.js
+     npm run db:populate
      ```
-- **Resultado:** O script cria as empresas (se não existirem) e gera/atualiza o arquivo `Testes/Docs/dados-empresas-teste.md` com as credenciais completas para fácil consulta.
+- **Resultado:** O script cria ou valida as empresas e seus usuários, popula o banco com dados aleatórios e, ao final, gera/atualiza o arquivo `Testes/Docs/dados-empresas-teste.md` com as credenciais completas e tokens de acesso para fácil consulta.

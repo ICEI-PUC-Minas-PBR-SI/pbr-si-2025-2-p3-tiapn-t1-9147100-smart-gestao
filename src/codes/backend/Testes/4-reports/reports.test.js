@@ -23,6 +23,7 @@ describe('8. Módulo de Relatórios', () => {
   test('deve gerar um PDF válido para o RELATÓRIO DE TRANSAÇÕES', async () => {
     const response = await axios.get(`${API_URL}/reports/export/transactions-pdf`, {
       headers: { Authorization: `Bearer ${companyA.token}` },
+      responseType: 'arraybuffer' // Importante para lidar com dados binários
     });
 
     expect(response.status).toBe(200);
@@ -32,6 +33,7 @@ describe('8. Módulo de Relatórios', () => {
   test('deve gerar um PDF válido para o RELATÓRIO DE CLIENTES', async () => {
     const response = await axios.get(`${API_URL}/reports/export/clients-pdf`, {
       headers: { Authorization: `Bearer ${companyA.token}` },
+      responseType: 'arraybuffer'
     });
 
     expect(response.status).toBe(200);
@@ -39,8 +41,11 @@ describe('8. Módulo de Relatórios', () => {
   });
 
   test('deve gerar um PDF válido para a FATURA', async () => {
+    // Garante que temos um ID de transação válido dos dados de setup
+    expect(companyA.testTransaction?._id).toBeDefined();
     const response = await axios.get(`${API_URL}/reports/export/invoice/${companyA.testTransaction._id}`, {
       headers: { Authorization: `Bearer ${companyA.token}` },
+      responseType: 'arraybuffer'
     });
 
     expect(response.status).toBe(200);

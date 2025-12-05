@@ -87,11 +87,11 @@ describe('3. Teste de Isolamento de Dados (Multi-Tenant)', () => {
             });
 
             expect(response.status).toBe(201);
-            expect(response.data.data.description).toBe(transactionData.description);
+            expect(response.data.data.description).toBe(transactionData.description); // Correção: Acessa a propriedade .data
 
             // Guarda a transação criada para usar nos testes seguintes
-            companies[i].transactions.push(response.data.data);
-            console.log(`Transação criada para ${company.companyName}. ID: ${response.data.data._id}`);
+            companies[i].transactions.push(response.data.data); // Correção: Acessa a propriedade .data
+            console.log(`Transação criada para ${company.companyName}. ID: ${response.data.data._id}`); // Correção: Acessa a propriedade .data
         }
     }, 20000);
 
@@ -138,9 +138,9 @@ describe('3. Teste de Isolamento de Dados (Multi-Tenant)', () => {
 
             expect(response.status).toBe(200);
             // A lista deve conter exatamente 1 transação
-            expect(response.data.data).toHaveLength(1);
+            expect(response.data.data).toHaveLength(1); // Correção: Acessa a propriedade .data
             // O ID da transação na lista deve ser o mesmo que criamos para essa empresa
-            expect(response.data.data[0]._id).toBe(company.transactions[0]._id);
+            expect(response.data.data[0]._id).toBe(company.transactions[0]._id); // Correção: Acessa a propriedade .data
             console.log(`- OK: ${company.companyName} listou apenas sua própria transação.`);
         }
     }, 20000);

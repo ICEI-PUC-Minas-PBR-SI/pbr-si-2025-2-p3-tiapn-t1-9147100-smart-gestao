@@ -110,6 +110,23 @@ Este documento serve como um registro cronológico e detalhado dos desafios, inv
 
 ---
 
+### 12. Estabilização Final do Script de População e Lógica de Permissões
+
+-   **Data:** Sessão final de depuração do ambiente de desenvolvimento.
+-   **Sintoma:** O script `npm run db:populate` falhava consistentemente com erro `403 Forbidden` (Acesso negado) ao tentar criar usuários comuns, mesmo após a limpeza do banco de dados.
+-   **Causa Raiz (Investigação Final):** A investigação revelou uma cascata de problemas na lógica de autorização:
+    1.  **`authController.js` (Registro):** A rota de registro, apesar das correções, ainda continha uma falha lógica que atribuía a permissão `USER_COMPANY` ao primeiro usuário de uma empresa, em vez de `ADMIN_COMPANY`.
+    2.  **`authController.js` (Login):** A rota de login não estava usando `.select('+passwordHash')` ao buscar o usuário, impedindo a comparação correta da senha.
+    3.  **`authMiddleware.js`:** O middleware validava o token, mas anexava apenas o `ObjectId` da permissão ao `req.user`, em vez do objeto de permissão completo.
+    4.  **`roleMiddleware.js`:** Este middleware tentava acessar `req.user.role.name`, o que falhava, pois `req.user.role` era apenas uma string de ID. Ele comparava um objeto com uma string, sempre negando o acesso.
+-   **Solução Definitiva (Revisão Completa):**
+    1.  **`authController.js` (Registro):** A lógica foi corrigida para garantir que a permissão `ADMIN_COMPANY` seja sempre atribuída ao primeiro usuário.
+    2.  **`authController.js` (Login):** A consulta foi ajustada para incluir `select('+passwordHash')`.
+    3.  **`authMiddleware.js`:** O middleware foi refatorado para usar `.populate('role')`, garantindo que `req.user.role` seja sempre um objeto completo com a propriedade `name`.
+    4.  **`roleMiddleware.js`:** O middleware foi ajustado para comparar `req.user.role.name` com a lista de permissões permitidas, corrigindo a falha de autorização.
+    5.  **`populate-db.js`:** O script foi tornado mais robusto, agindo como "ROOT" para validar e corrigir o estado do banco antes de usar a API, e passando a gerar a documentação `dados-empresas-teste.md` automaticamente.
+-   **Resultado:** O script `npm run db:populate` passou a ser executado com 100% de sucesso, criando todas as entidades (empresas, admins, usuários comuns, etc.) corretamente e documentando as credenciais geradas.
+
 ### 8. Estabilização dos Testes de Geração de Relatórios em PDF
 
 -   **Data:** Sessão final de estabilização.

@@ -1,8 +1,10 @@
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
+import Permission from "../models/Permission.js";
 import { createLog } from "../utils/logger.js";
 import mongoose from 'mongoose';
-import { successResponse, errorResponse } from '../utils/responseHelper.js';
+import { successResponse, errorResponse } from "../utils/responseHelper.js";
+import { USER_COMPANY, ADMIN_COMPANY, ROOT } from "../utils/constants.js";
 
 export const createUser = async (req, res) => {
   try {
@@ -16,6 +18,30 @@ export const createUser = async (req, res) => {
     const exists = await User.findOne({ companyId, email: email.toLowerCase() });
     if (exists) return errorResponse(res, { status: 409, message: "Email já cadastrado nesta empresa." });
 
+    // Lógica de segurança para atribuição de permissão (role)
+    let userRoleId = role;
+    const requesterRole = req.user.role.name; // A role do usuário que está fazendo a requisição
+
+    // Se nenhuma role for especificada no payload, atribui USER_COMPANY por padrão.
+    if (!userRoleId) { 
+      const defaultUserRole = await Permission.findOne({ name: USER_COMPANY });
+      if (!defaultUserRole) return errorResponse(res, { status: 500, message: "Permissão de usuário padrão (USER_COMPANY) não encontrada." });
+      userRoleId = defaultUserRole._id;
+    } else {
+      // Se uma role foi especificada, verifica se o requisitante tem permissão para atribuí-la.
+      const requestedRolePermission = await Permission.findById(userRoleId);
+      if (!requestedRolePermission) return errorResponse(res, { status: 400, message: "Permissão solicitada inválida." });
+
+      // Regra: ADMIN_COMPANY não pode atribuir ROOT. Apenas ROOT pode atribuir ROOT.
+      if (requestedRolePermission.name === ROOT && requesterRole !== ROOT) { // Usando constantes
+        return errorResponse(res, { status: 403, message: "Acesso negado. Você não tem permissão para atribuir a permissão ROOT." });
+      }
+      // Regra: ADMIN_COMPANY só pode atribuir ADMIN_COMPANY ou USER_COMPANY dentro da sua empresa.
+      if (requesterRole === ADMIN_COMPANY && ![ADMIN_COMPANY, USER_COMPANY].includes(requestedRolePermission.name)) { // Usando constantes
+        return errorResponse(res, { status: 403, message: `Acesso negado. Administradores de empresa só podem atribuir as permissões ${ADMIN_COMPANY} ou ${USER_COMPANY}.` });
+      }
+    }
+
     // Criptografa a senha antes de salvar no banco.
     const passwordHash = await bcrypt.hash(password, 10);
 
@@ -24,7 +50,7 @@ export const createUser = async (req, res) => {
       email: email.toLowerCase(),
       passwordHash,
       companyId,
-      role: role || "USER",
+      role: userRoleId,
     }); // role já é ObjectId
 
     // Registra a criação do usuário no log de auditoria.
@@ -70,7 +96,38 @@ export const updateUser = async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) return errorResponse(res, { status: 404, message: "Usuário não encontrado." });
 
     const companyId = req.user.companyId; // companyId já é ObjectId do authMiddleware
-    const updated = await User.findOneAndUpdate({ _id: req.params.id, companyId: companyId }, { $set: req.body }, { new: true }).select("-passwordHash");
+    const updateData = { ...req.body };
+
+    // --- Lógica de Segurança para Alteração de Role ---
+    // Verifica se a requisição está tentando alterar a permissão do usuário.
+    if (updateData.role) {
+      // Busca as permissões do usuário que está fazendo a requisição e da que está sendo atribuída.
+      const [requester, newRolePermission] = await Promise.all([
+        User.findById(req.user.userId).populate('role'),
+        Permission.findById(updateData.role)
+      ]);
+
+      const requesterRole = requester.role.name;
+
+      // REGRA 1: Apenas ROOT ou ADMIN_COMPANY podem alterar permissões.
+      if (requesterRole !== ROOT && requesterRole !== ADMIN_COMPANY) {
+        // Se um usuário comum tentar alterar a permissão, retorna erro de acesso negado.
+        return errorResponse(res, { status: 403, message: "Acesso negado. Você não tem permissão para alterar papéis de usuários." });
+      }
+
+      // REGRA 2: Um ADMIN_COMPANY não pode promover ninguém a ROOT.
+      if (requesterRole === ADMIN_COMPANY && newRolePermission.name === ROOT) {
+        return errorResponse(res, { status: 403, message: "Acesso negado. Administradores de empresa não podem atribuir a permissão ROOT." });
+      }
+    }
+
+    // Procede com a atualização no banco de dados.
+    const updated = await User.findOneAndUpdate(
+      { _id: req.params.id, companyId: companyId },
+      { $set: updateData },
+      { new: true }
+    ).select("-passwordHash");
+
     if (!updated) return errorResponse(res, { status: 404, message: "Usuário não encontrado." });
 
     await createLog({

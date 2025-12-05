@@ -1,0 +1,342 @@
+
+--- 🚀 [GLOBAL SETUP] Iniciando ambiente de teste ---
+⏳ Iniciando servidor Smart Gestão (startServer)...
+Conexão com o MongoDB estabelecida com sucesso.
+✅ [1/1] Conexão com o banco de dados estabelecida!
+✅ Servidor rodando na porta 5000
+Verificando permissões de sistema...
+Permissões de sistema já existem. Nenhuma ação necessária.
+--- ✅ [GLOBAL SETUP] Ambiente pronto e servidor iniciado ---
+(node:23596) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+POST /api/auth/login 200 710 - 119.369 ms
+[LOG] Ação: LOGIN_USER | Usuário: N/A
+POST /api/auth/login 500 589 - 111.066 ms
+FAIL Testes/1-auth/auth.test.js
+  6. Módulo de Autenticação e Sessão (Stateful)
+    √ deve criar um SessionToken no banco de dados após o login (161 ms)
+    × deve invalidar o SessionToken no banco de dados após o logout (121 ms)
+
+  ● 6. Módulo de Autenticação e Sessão (Stateful) › deve invalidar o SessionToken no banco de dados após o logout
+
+    AxiosError: Request failed with status code 500
+
+    [0m [90m 49 |[39m   test([32m'deve invalidar o SessionToken no banco de dados após o logout'[39m[33m,[39m [36masync[39m () [33m=>[39m {
+     [90m 50 |[39m     [90m// 1. Realiza o login para obter um refresh token válido[39m
+    [31m[1m>[22m[39m[90m 51 |[39m     [36mconst[39m loginResponse [33m=[39m [36mawait[39m axios[33m.[39mpost([32m`${API_URL}/auth/login`[39m[33m,[39m {
+     [90m    |[39m                           [31m[1m^[22m[39m
+     [90m 52 |[39m       email[33m:[39m userA[33m.[39memail[33m,[39m
+     [90m 53 |[39m       password[33m:[39m userA[33m.[39mpassword[33m,[39m
+     [90m 54 |[39m     })[33m;[39m[0m
+
+      at settle (node_modules/axios/lib/core/settle.js:19:12)
+      at IncomingMessage.handleStreamEnd (node_modules/axios/lib/adapters/http.js:793:11)
+      at Axios.request (node_modules/axios/lib/core/Axios.js:45:41)
+      at Object.<anonymous> (Testes/1-auth/auth.test.js:51:27)
+
+  console.log
+    
+    --- Teste: Solicitar reset para e-mail inválido ---
+
+      at Object.log (Testes/1-auth/password.test.js:33:13)
+
+[LOG] Ação: LOGIN_USER | Usuário: N/A
+POST /api/auth/forgot-password 404 69 - 13.773 ms
+  console.log
+    ✅ Falhou como esperado para e-mail inexistente (Status 404).
+
+      at Object.log (Testes/1-auth/password.test.js:42:15)
+
+  console.log
+    
+    --- Teste: Gerar token de reset com sucesso ---
+
+      at Object.log (Testes/1-auth/password.test.js:51:13)
+
+POST /api/auth/forgot-password 200 164 - 30.927 ms
+  console.log
+    ✅ Token de reset gerado e salvo no banco de dados.
+
+      at Object.log (Testes/1-auth/password.test.js:61:13)
+
+  console.log
+    
+    --- Teste: Resetar senha com token válido ---
+
+      at Object.log (Testes/1-auth/password.test.js:70:13)
+
+POST /api/auth/forgot-password 200 164 - 28.832 ms
+POST /api/auth/reset-password/64b95f272d27f9b075630fd30cd5fb18e2cd711d6acf3872b8fdff3feea301a5 200 68 - 103.935 ms
+  console.log
+    ✅ Senha resetada com sucesso via API.
+
+      at Object.log (Testes/1-auth/password.test.js:87:13)
+
+POST /api/auth/reset-password/64b95f272d27f9b075630fd30cd5fb18e2cd711d6acf3872b8fdff3feea301a5 400 72 - 12.621 ms
+  console.log
+    ✅ Token de reset foi invalidado no banco.
+
+      at Object.log (Testes/1-auth/password.test.js:91:13)
+
+POST /api/auth/login 200 710 - 105.542 ms
+  console.log
+    ✅ Login com a nova senha realizado com sucesso.
+
+      at Object.log (Testes/1-auth/password.test.js:101:13)
+
+PASS Testes/1-auth/password.test.js
+  9. Módulo de Recuperação de Senha
+    √ deve falhar ao solicitar reset para um e-mail inexistente (48 ms)
+    √ deve gerar e salvar um token de reset para um e-mail válido (36 ms)
+    √ deve resetar a senha com um token válido e permitir login com a nova senha (266 ms)
+
+[LOG] Ação: LOGIN_USER | Usuário: N/A
+[LOG] Ação: CREATE_GOAL | Usuário: 6932e8fecdd9e62cecd58df3
+POST /api/goals 201 455 - 60.017 ms
+[LOG] Ação: CREATE_GOAL | Usuário: 6932e8fecdd9e62cecd58df3
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6932e8fecdd9e62cecd58df3
+POST /api/transactions 201 448 - 86.548 ms
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6932e8fecdd9e62cecd58df3
+GET /api/alerts 200 72 - 39.018 ms
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6932e8fecdd9e62cecd58df3
+[LOG] Ação: AUTO_CREATE_ALERT | Usuário: 6932e8fecdd9e62cecd58df3
+POST /api/transactions 201 445 - 114.257 ms
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6932e8fecdd9e62cecd58df3
+GET /api/alerts 200 419 - 39.894 ms
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6932e8fecdd9e62cecd58df3
+POST /api/transactions 201 437 - 84.937 ms
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6932e8fecdd9e62cecd58df3
+GET /api/alerts 200 419 - 38.977 ms
+PASS Testes/2-features/alerts.test.js
+  6. Módulo de Alertas de Metas
+    √ RF-006: deve criar um alerta quando uma despesa ultrapassa a meta da categoria (496 ms)
+
+POST /api/clients 201 329 - 41.983 ms
+[LOG] Ação: CREATE_CLIENT | Usuário: 6932e8fecdd9e62cecd58df3
+GET /api/clients 200 569 - 70.169 ms
+PUT /api/clients/6932e900cdd9e62cecd58e4c 200 331 - 57.551 ms
+[LOG] Ação: UPDATE_CLIENT | Usuário: 6932e8fecdd9e62cecd58df3
+DELETE /api/clients/6932e900cdd9e62cecd58e4c 200 70 - 54.203 ms
+PASS Testes/2-features/clients.test.js
+  7. Módulo de Clientes/Fornecedores
+    √ deve CRIAR um novo cliente com sucesso (53 ms)
+    √ deve LISTAR os clientes da empresa (73 ms)
+    √ deve ATUALIZAR um cliente existente (61 ms)
+    √ deve EXCLUIR um cliente existente (57 ms)
+
+[LOG] Ação: DELETE_CLIENT | Usuário: 6932e8fecdd9e62cecd58df3
+[LOG] Ação: CREATE_GOAL | Usuário: 6932e8fecdd9e62cecd58df3
+POST /api/goals 201 404 - 58.401 ms
+[LOG] Ação: CREATE_GOAL | Usuário: 6932e8fecdd9e62cecd58df3
+GET /api/goals 200 792 - 39.302 ms
+[LOG] Ação: UPDATE_GOAL | Usuário: 6932e8fecdd9e62cecd58df3
+PUT /api/goals/6932e900cdd9e62cecd58e61 200 414 - 71.687 ms
+[LOG] Ação: UPDATE_GOAL | Usuário: 6932e8fecdd9e62cecd58df3
+[LOG] Ação: DELETE_GOAL | Usuário: 6932e8fecdd9e62cecd58df3
+DELETE /api/goals/6932e900cdd9e62cecd58e61 200 67 - 70.281 ms
+[LOG] Ação: DELETE_GOAL | Usuário: 6932e8fecdd9e62cecd58df3
+GET /api/goals/null 404 53 - 26.342 ms
+PASS Testes/2-features/goals.test.js
+  5. Módulo de Metas (CRUD)
+    √ deve CRIAR uma nova meta com sucesso (75 ms)
+    √ deve LISTAR as metas do usuário logado (42 ms)
+    √ deve ATUALIZAR uma meta existente (77 ms)
+    √ deve EXCLUIR uma meta existente (112 ms)
+
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6932e8fecdd9e62cecd58df3
+POST /api/transactions 201 468 - 60.724 ms
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6932e8fecdd9e62cecd58df3
+POST /api/transactions 400 277 - 30.226 ms
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6932e8fecdd9e62cecd58df3
+GET /api/transactions 200 1930 - 40.970 ms
+GET /api/transactions/6932e901cdd9e62cecd58e7e 200 452 - 51.395 ms
+[LOG] Ação: UPDATE_TRANSACTION | Usuário: 6932e8fecdd9e62cecd58df3
+PUT /api/transactions/6932e901cdd9e62cecd58e7e 200 452 - 71.376 ms
+[LOG] Ação: UPDATE_TRANSACTION | Usuário: 6932e8fecdd9e62cecd58df3
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 6932e8fecdd9e62cecd58df3
+DELETE /api/transactions/6932e901cdd9e62cecd58e7e 200 73 - 71.966 ms
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 6932e8fecdd9e62cecd58df3
+GET /api/transactions/6932e901cdd9e62cecd58e7e 404 71 - 51.534 ms
+PASS Testes/2-features/transactions.test.js
+  4. Módulo de Transações (CRUD)
+    √ deve CRIAR uma nova transação com sucesso (75 ms)
+    √ deve falhar ao tentar criar uma transação com dados inválidos (48 ms)
+    √ deve LISTAR as transações do usuário logado (45 ms)
+    √ deve OBTER uma transação específica pelo ID (54 ms)
+    √ deve ATUALIZAR uma transação existente (76 ms)
+    √ deve EXCLUIR uma transação existente (132 ms)
+
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6932e8fecdd9e62cecd58df3
+POST /api/transactions 201 446 - 56.532 ms
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6932e8fecdd9e62cecd58df3
+POST /api/transactions/6932e901cdd9e62cecd58ea6/upload 200 514 - 70.624 ms
+[LOG] Ação: UPLOAD_ATTACHMENT | Usuário: 6932e8fecdd9e62cecd58df3
+DELETE /api/transactions/6932e901cdd9e62cecd58ea6/upload 200 442 - 67.267 ms
+[LOG] Ação: DELETE_ATTACHMENT | Usuário: 6932e8fecdd9e62cecd58df3
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 6932e8fecdd9e62cecd58df3
+DELETE /api/transactions/6932e901cdd9e62cecd58ea6 200 73 - 75.737 ms
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 6932e8fecdd9e62cecd58df3
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6932e8fecdd9e62cecd58df3
+POST /api/transactions 201 444 - 77.891 ms
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6932e8fecdd9e62cecd58df3
+POST /api/transactions/6932e902cdd9e62cecd58ec4/upload 200 512 - 90.749 ms
+[LOG] Ação: UPLOAD_ATTACHMENT | Usuário: 6932e8fecdd9e62cecd58df3
+DELETE /api/transactions/6932e902cdd9e62cecd58ec4/upload 200 440 - 68.137 ms
+[LOG] Ação: DELETE_ATTACHMENT | Usuário: 6932e8fecdd9e62cecd58df3
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 6932e8fecdd9e62cecd58df3
+DELETE /api/transactions/6932e902cdd9e62cecd58ec4 200 73 - 71.119 ms
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 6932e8fecdd9e62cecd58df3
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6932e8fecdd9e62cecd58df3
+POST /api/transactions 201 444 - 67.616 ms
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6932e8fecdd9e62cecd58df3
+POST /api/transactions/6932e902cdd9e62cecd58ee3/upload 200 512 - 66.280 ms
+[LOG] Ação: UPLOAD_ATTACHMENT | Usuário: 6932e8fecdd9e62cecd58df3
+DELETE /api/transactions/6932e902cdd9e62cecd58ee3/upload 200 440 - 65.705 ms
+[LOG] Ação: DELETE_ATTACHMENT | Usuário: 6932e8fecdd9e62cecd58df3
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 6932e8fecdd9e62cecd58df3
+DELETE /api/transactions/6932e902cdd9e62cecd58ee3 200 73 - 75.205 ms
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 6932e8fecdd9e62cecd58df3
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6932e8fecdd9e62cecd58df3
+POST /api/transactions 201 445 - 72.177 ms
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6932e8fecdd9e62cecd58df3
+POST /api/transactions/6932e902cdd9e62cecd58f02/upload 200 514 - 73.242 ms
+[LOG] Ação: UPLOAD_ATTACHMENT | Usuário: 6932e8fecdd9e62cecd58df3
+DELETE /api/transactions/6932e902cdd9e62cecd58f02/upload 200 441 - 71.155 ms
+[LOG] Ação: DELETE_ATTACHMENT | Usuário: 6932e8fecdd9e62cecd58df3
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 6932e8fecdd9e62cecd58df3
+DELETE /api/transactions/6932e902cdd9e62cecd58f02 200 73 - 73.443 ms
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 6932e8fecdd9e62cecd58df3
+POST /api/transactions/60d5f1f77c3d4a001f5e8e1z/upload 404 53 - 27.143 ms
+PASS Testes/2-features/uploads.test.js
+  Feature: Uploads
+    Upload de PDF
+      √ Deve permitir o upload de um anexo (PDF) para uma transação (79 ms)
+      √ Deve permitir a exclusão de um anexo (PDF) de uma transação (73 ms)
+    Upload de Imagem (PNG)
+      √ Deve permitir o upload de um anexo de imagem (.png) para uma transação (103 ms)
+      √ Deve permitir a exclusão de um anexo de imagem (.png) (71 ms)
+    Upload de Imagem (JPG)
+      √ Deve permitir o upload de um anexo de imagem (.jpg) para uma transação (71 ms)
+      √ Deve permitir a exclusão de um anexo de imagem (.jpg) (68 ms)
+    Upload de Imagem (JPEG)
+      √ Deve permitir o upload de um anexo de imagem (.jpeg) para uma transação (81 ms)
+      √ Deve permitir a exclusão de um anexo de imagem (.jpeg) (79 ms)
+    Cenários de Erro e Estruturais
+      √ Deve retornar 404 ao tentar fazer upload para uma transação inexistente (54 ms)
+
+  console.log
+    
+    --- Configurando 3 empresas para o teste multi-tenant ---
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:36:17)
+
+POST /api/auth/register 500 420 - 139.267 ms
+  console.log
+    
+    --- Limpando dados de teste (Teardown) ---
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:150:17)
+
+FAIL Testes/3-security/multi-tenant.test.js
+  3. Teste de Isolamento de Dados (Multi-Tenant)
+    × deve criar uma transação para cada empresa
+    × deve impedir que uma empresa acesse a transação de outra
+    × deve garantir que cada empresa liste apenas suas próprias transações (1 ms)
+
+  ● 3. Teste de Isolamento de Dados (Multi-Tenant) › deve criar uma transação para cada empresa
+
+    AxiosError: Request failed with status code 500
+
+    [0m [90m 47 |[39m
+     [90m 48 |[39m             [90m// Cadastrar[39m
+    [31m[1m>[22m[39m[90m 49 |[39m             [36mawait[39m axios[33m.[39mpost([32m`${API_URL}/auth/register`[39m[33m,[39m companyData)[33m;[39m
+     [90m    |[39m             [31m[1m^[22m[39m
+     [90m 50 |[39m
+     [90m 51 |[39m             [90m// Logar para obter o token[39m
+     [90m 52 |[39m             [36mconst[39m loginResponse [33m=[39m [36mawait[39m axios[33m.[39mpost([32m`${API_URL}/auth/login`[39m[33m,[39m {[0m
+
+      at settle (node_modules/axios/lib/core/settle.js:19:12)
+      at IncomingMessage.handleStreamEnd (node_modules/axios/lib/adapters/http.js:793:11)
+      at Axios.request (node_modules/axios/lib/core/Axios.js:45:41)
+      at Object.<anonymous> (Testes/3-security/multi-tenant.test.js:49:13)
+
+  ● 3. Teste de Isolamento de Dados (Multi-Tenant) › deve impedir que uma empresa acesse a transação de outra
+
+    AxiosError: Request failed with status code 500
+
+    [0m [90m 47 |[39m
+     [90m 48 |[39m             [90m// Cadastrar[39m
+    [31m[1m>[22m[39m[90m 49 |[39m             [36mawait[39m axios[33m.[39mpost([32m`${API_URL}/auth/register`[39m[33m,[39m companyData)[33m;[39m
+     [90m    |[39m             [31m[1m^[22m[39m
+     [90m 50 |[39m
+     [90m 51 |[39m             [90m// Logar para obter o token[39m
+     [90m 52 |[39m             [36mconst[39m loginResponse [33m=[39m [36mawait[39m axios[33m.[39mpost([32m`${API_URL}/auth/login`[39m[33m,[39m {[0m
+
+      at settle (node_modules/axios/lib/core/settle.js:19:12)
+      at IncomingMessage.handleStreamEnd (node_modules/axios/lib/adapters/http.js:793:11)
+      at Axios.request (node_modules/axios/lib/core/Axios.js:45:41)
+      at Object.<anonymous> (Testes/3-security/multi-tenant.test.js:49:13)
+
+  ● 3. Teste de Isolamento de Dados (Multi-Tenant) › deve garantir que cada empresa liste apenas suas próprias transações
+
+    AxiosError: Request failed with status code 500
+
+    [0m [90m 47 |[39m
+     [90m 48 |[39m             [90m// Cadastrar[39m
+    [31m[1m>[22m[39m[90m 49 |[39m             [36mawait[39m axios[33m.[39mpost([32m`${API_URL}/auth/register`[39m[33m,[39m companyData)[33m;[39m
+     [90m    |[39m             [31m[1m^[22m[39m
+     [90m 50 |[39m
+     [90m 51 |[39m             [90m// Logar para obter o token[39m
+     [90m 52 |[39m             [36mconst[39m loginResponse [33m=[39m [36mawait[39m axios[33m.[39mpost([32m`${API_URL}/auth/login`[39m[33m,[39m {[0m
+
+      at settle (node_modules/axios/lib/core/settle.js:19:12)
+      at IncomingMessage.handleStreamEnd (node_modules/axios/lib/adapters/http.js:793:11)
+      at Axios.request (node_modules/axios/lib/core/Axios.js:45:41)
+      at Object.<anonymous> (Testes/3-security/multi-tenant.test.js:49:13)
+
+[LOG] Ação: REGISTER_COMPANY_USER | Usuário: N/A
+  console.log
+    
+    --- 🛡️  Teste de Persistência: Verificando dados manuais... ---
+
+      at Object.log (Testes/3-security/persistence.test.js:43:13)
+
+FAIL Testes/3-security/persistence.test.js
+  Security: Persistência de Dados Manuais
+    × deve garantir que os usuários de teste manuais permaneçam no banco após a execução de `npm test` (133 ms)
+
+  ● Security: Persistência de Dados Manuais › deve garantir que os usuários de teste manuais permaneçam no banco após a execução de `npm test`
+
+    expect(received).not.toBeNull()
+
+    Received: null
+
+    [0m [90m 47 |[39m
+     [90m 48 |[39m       [90m// A asserção principal: o usuário não deve ser nulo.[39m
+    [31m[1m>[22m[39m[90m 49 |[39m       expect(userInDb)[33m.[39mnot[33m.[39mtoBeNull()[33m;[39m
+     [90m    |[39m                            [31m[1m^[22m[39m
+     [90m 50 |[39m
+     [90m 51 |[39m       console[33m.[39mlog([32m`   - [PASS] Usuário da "${testUser.name}" permaneceu no banco.`[39m)[33m;[39m
+     [90m 52 |[39m     }[0m
+
+      at Object.toBeNull (Testes/3-security/persistence.test.js:49:28)
+
+GET /api/reports/export/transactions-pdf 200 - - 66.870 ms
+GET /api/reports/export/clients-pdf 200 - - 54.186 ms
+GET /api/reports/export/invoice/6932e8fecdd9e62cecd58dfb 200 - - 64.820 ms
+PASS Testes/4-reports/reports.test.js
+  8. Módulo de Relatórios
+    √ deve gerar um PDF válido para o RELATÓRIO DE TRANSAÇÕES (113 ms)
+    √ deve gerar um PDF válido para o RELATÓRIO DE CLIENTES (67 ms)
+    √ deve gerar um PDF válido para a FATURA (74 ms)
+
+Test Suites: 3 failed, 7 passed, 10 total
+Tests:       5 failed, 31 passed, 36 total
+Snapshots:   0 total
+Time:        6.483 s
+Ran all test suites.
+
+--- 🧹 [GLOBAL TEARDOWN] Finalizando ambiente de teste ---
+   - [OK] Dados de teste temporários foram removidos.
+✅ Servidor e conexão com MongoDB encerrados (stopServer).
+--- ✅ [GLOBAL TEARDOWN] Ambiente finalizado com sucesso ---

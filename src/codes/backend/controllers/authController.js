@@ -15,12 +15,16 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
+import Transaction from '../models/Transaction.js'; // Moved to top for explicit loading
 import User from '../models/User.js';
 import SessionToken from '../models/SessionToken.js';
 import Company from '../models/Company.js';
 import Permission from '../models/Permission.js';
-import Transaction from '../models/Transaction.js';
-import { USER_COMPANY } from '../utils/constants.js';
+import mongoose from 'mongoose';
+import Client from '../models/Client.js';
+import Goal from '../models/Goal.js';
+import Alert from '../models/Alert.js';
+import { ADMIN_COMPANY } from '../utils/constants.js';
 import { successResponse, errorResponse } from '../utils/responseHelper.js';
 
 /**
@@ -30,32 +34,50 @@ import { successResponse, errorResponse } from '../utils/responseHelper.js';
  */
 export const registerUser = async (req, res) => {
   const { name, email, password, companyName, cnpj } = req.body;
+  const session = await mongoose.startSession();
 
   try {
-    // 1. Validação - Verifica se o e-mail ou CNPJ já existem para evitar duplicidade.
-    if (await User.findOne({ email })) {
-      return errorResponse(res, { status: 409, message: "E-mail já cadastrado." });
+    session.startTransaction();
+
+    // 1. Validações
+    const existingUser = await User.findOne({ email }).session(session);
+    if (existingUser) {
+      throw new Error("E-mail já cadastrado.");
     }
-    if (await Company.findOne({ cnpj })) {
-      return errorResponse(res, { status: 409, message: "CNPJ já cadastrado." });
+    const existingCompanyCnpj = await Company.findOne({ cnpj }).session(session);
+    if (existingCompanyCnpj) {
+      throw new Error("CNPJ já cadastrado.");
+    }
+    const existingCompanyName = await Company.findOne({ name: companyName }).session(session);
+    if (existingCompanyName) {
+      throw new Error("Uma empresa com este nome já está cadastrada.");
     }
 
-    // 2. Permissão - Busca a permissão padrão de usuário ('USER_COMPANY') no banco.
-    // Isso garante que novos usuários tenham o nível de acesso correto.
-    const userPermission = await Permission.findOne({ name: USER_COMPANY });
-    if (!userPermission) {
-      return errorResponse(res, { status: 500, message: "Permissão de usuário padrão não encontrada." });
-    }
+    // 2. Permissão - Busca a permissão de administrador ('ADMIN_COMPANY') no banco.
+    // Isso garante que o primeiro usuário da empresa seja um administrador.
+    const adminRole = await Permission.findOne({ name: ADMIN_COMPANY }).session(session);
+    if (!adminRole) throw new Error("Permissão de administrador padrão (ADMIN_COMPANY) não encontrada. O sistema pode não ter sido inicializado corretamente.");
 
     // 3. Criação da Empresa: Salva a nova empresa no banco de dados.
-    const newCompany = await new Company({ name: companyName, cnpj, email: email }).save();
+    const newCompany = new Company({ name: companyName, cnpj, email: email });
+    await newCompany.save({ session });
 
     // 4. Criptografia da Senha - Gera um "sal" e cria um hash seguro da senha.
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(password, salt);
 
     // 5. Criação do Usuário: Salva o novo usuário com a senha criptografada e os IDs da empresa e permissão.
-    const newUser = await new User({ name, email, passwordHash, companyId: newCompany._id, role: userPermission._id }).save();
+    const newUser = new User({
+      name: name,
+      email,
+      passwordHash,
+      companyId: newCompany._id,
+      role: adminRole._id, // Garante que a role de ADMIN_COMPANY seja atribuída
+    });
+    await newUser.save({ session });
+
+    // 6. Confirma a transação
+    await session.commitTransaction();
 
     // Adicionado para retornar o ID do usuário, necessário para os testes
     const userResponse = newUser.toObject();
@@ -64,7 +86,14 @@ export const registerUser = async (req, res) => {
     return successResponse(res, { status: 201, data: { user: userResponse } });
 
   } catch (error) {
-    return errorResponse(res, { status: 500, message: "Erro interno ao cadastrar usuário.", errors: error });
+    await session.abortTransaction();
+    // Melhora o feedback de erro para o cliente
+    if (error.message.includes("cadastrado") || error.message.includes("cadastrada")) {
+      return errorResponse(res, { status: 409, message: error.message });
+    }
+    return errorResponse(res, { status: 500, message: error.message || "Erro interno ao cadastrar usuário.", errors: error });
+  } finally {
+    session.endSession();
   }
 };
 
@@ -76,8 +105,9 @@ export const registerUser = async (req, res) => {
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
   try {
-    // 1. Busca do Usuário - Procura o usuário pelo e-mail e inclui o campo 'passwordHash' na resposta.
-    const user = await User.findOne({ email }).select("+passwordHash");
+    // 1. Busca do Usuário - Procura o usuário pelo e-mail. O método .select('+passwordHash')
+    // é CRUCIAL para forçar a inclusão do campo de senha, que por padrão é oculto no Schema.
+    const user = await User.findOne({ email }).select("+passwordHash").populate('role');
     if (!user) { // Se o usuário não for encontrado, retorna erro 401.
       return errorResponse(res, { status: 401, message: "Credenciais inválidas." });
     }
@@ -91,14 +121,14 @@ export const loginUser = async (req, res) => {
     // --- Geração dos Tokens ---
     // 3. Geração do Access Token: um token de curta duração para autenticar as próximas requisições.
     const accessToken = jwt.sign(
-      { userId: user._id, role: user.role, companyId: user.companyId }, // Adicionado companyId ao payload
+      { userId: user._id, role: user.role._id, companyId: user.companyId }, // Enviamos o ID da role no token
       process.env.JWT_SECRET, // Chave secreta do .env
       { expiresIn: '15m' } // Expira em 15 minutos
     );
 
     // 4. Geração do Refresh Token: um token de longa duração usado para obter um novo Access Token sem precisar de um novo login.
     const refreshTokenValue = jwt.sign(
-     { userId: user._id },
+     { userId: user._id, companyId: user.companyId },
       process.env.JWT_REFRESH_SECRET, // Chave secreta diferente do .env
       { expiresIn: '7d' } // Expira em 7 dias
     );
@@ -110,19 +140,26 @@ export const loginUser = async (req, res) => {
     const expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + 7); // Adiciona 7 dias à data atual.
 
-    await SessionToken.create({
-      userId: user._id,
-      tokenHash: refreshTokenHash,
-      expiration: expirationDate,
-      originIp: req.ip,
-      device: req.headers['user-agent'],
-    });
+    // CORREÇÃO: Usa findOneAndUpdate com upsert para evitar erro de chave duplicada
+    // em logins rápidos e sucessivos, como ocorre nos testes.
+    // Se um token para este usuário já existe, ele é atualizado; senão, é criado.
+    await SessionToken.findOneAndUpdate(
+      { userId: user._id }, // Critério de busca
+      { // Dados para inserir ou atualizar
+        tokenHash: refreshTokenHash,
+        expiration: expirationDate,
+        originIp: req.ip,
+        device: req.headers['user-agent'],
+        active: true, // Garante que a sessão seja reativada no login
+      },
+      { upsert: true, new: true } // Opções: upsert cria se não existir, new retorna o doc atualizado
+    );
 
     // Padroniza a resposta usando o `responseHelper` para consistência em toda a API.
     return successResponse(res, { data: {
         token: accessToken,
         refreshToken: refreshTokenValue,
-        user: { id: user._id, name: user.name, email: user.email, companyId: user.companyId }
+        user: { id: user._id, name: user.name, email: user.email, companyId: user.companyId, role: user.role ? user.role.name : null } // Acesso seguro a user.role.name
       }
     });
   } catch (error) {
@@ -247,33 +284,43 @@ export const refreshToken = async (req, res) => {
  * @access  Private (usado principalmente para limpeza em testes)
  */
 export const deleteCurrentUser = async (req, res) => {
+  const session = await mongoose.startSession();
   try {
+    session.startTransaction();
     const userId = req.params.id;
-    const userToDelete = await User.findById(userId);
+    const userToDelete = await User.findById(userId).session(session);
 
     // Valida se o usuário a ser deletado realmente existe.
     if (!userToDelete) {
       return errorResponse(res, { status: 404, message: "Usuário a ser deletado não encontrado." });
     }
 
-    // NOTA SOBRE BOAS PRÁTICAS E LGPD:
-    // A exclusão permanente (hard delete) não é recomendada em produção. A abordagem
-    // ideal seria o "soft delete" (marcar como inativo), mantendo os dados por um
-    // período legal antes da exclusão definitiva por um processo automatizado.
-    // Esta implementação de exclusão direta serve para simplificar o escopo do projeto.
-    
     const companyId = userToDelete.companyId;
 
-    // Executa a exclusão em cascata de forma manual.
-    // Etapa 1: Exclui todas as transações associadas à empresa.
-    await Transaction.deleteMany({ companyId: companyId });
-    // Etapa 2: Exclui o próprio usuário.
-    await User.findOneAndDelete({ _id: userId });
-    // Etapa 3: Exclui a empresa associada.
-    await Company.findByIdAndDelete(companyId);
+    // CORREÇÃO: Executa a exclusão em cascata dentro de uma transação para garantir atomicidade.
+    // Etapa 1: Exclui todas as sessões do usuário.
+    await SessionToken.deleteMany({ userId }, { session });
+    // Etapa 2: Exclui todos os alertas da empresa para evitar conflitos de referência.
+    await Alert.deleteMany({ companyId }, { session });
+    // Etapa 3: Exclui todas as metas da empresa.
+    await Goal.deleteMany({ companyId: companyId }, { session });
+    // Etapa 4: Exclui todas as transações da empresa.
+    await Transaction.deleteMany({ companyId: companyId }, { session });
+    // Etapa 5: Exclui todos os clientes da empresa.
+    await Client.deleteMany({ companyId: companyId }, { session });
+    // Etapa 6: Exclui o próprio usuário.
+    await User.findByIdAndDelete(userId, { session });
+    // Etapa 7: Exclui a empresa associada.
+    await Company.findByIdAndDelete(companyId, { session });
+
+    await session.commitTransaction();
 
     return successResponse(res, { message: "Usuário e todos os dados associados foram excluídos com sucesso." });
   } catch (error) {
+    await session.abortTransaction();
+    console.error("Detailed error in deleteCurrentUser:", error.message, error.stack); // Log detalhado do erro
     return errorResponse(res, { status: 500, message: "Erro no servidor ao tentar excluir o usuário.", errors: error });
+  } finally {
+    session.endSession();
   }
 };

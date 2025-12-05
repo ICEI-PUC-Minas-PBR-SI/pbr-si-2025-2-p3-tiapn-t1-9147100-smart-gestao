@@ -1,20 +1,24 @@
 /**
  * =================================================================================
  * ARQUIVO: Testes/config/globalSetup.cjs
- *
- * DESCRIÇÃO:
- *            Este script é executado uma única vez ANTES de toda a suíte de testes.
- *            Sua responsabilidade é preparar o ambiente global para os testes,
- *            incluindo a conexão com o banco de dados, a criação de dados de teste
- *            (seeding) e a inicialização do servidor da API.
+ * DESCRIÇÃO: Script executado uma única vez ANTES de toda a suíte de testes.
+ *            Prepara o ambiente global: conecta ao banco, cria dados de teste (seeding)
+ *            e inicializa o servidor da API.
  * =================================================================================
  */
+// CORREÇÃO DEFINITIVA: Carrega as variáveis de ambiente no início do script.
+// Isso garante que `process.env.MONGO_URI` esteja disponível antes de qualquer outra operação.
+// Esta é a abordagem mais robusta, pois torna o script autossuficiente.
+const path = require('path');
+const dotenv = require('dotenv');
+dotenv.config({ path: path.resolve(process.cwd(), '.env') });
+
 const mongoose = require('mongoose');
 const fs = require('fs');
-const path = require('path');
 const { initPermissions } = require('../../Scripts/initPermissions.js');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+// CORREÇÃO: Usa .default para importar ES Modules em um arquivo CommonJS.
 const Company = require('../../models/Company.js').default;
 const User = require('../../models/User.js').default;
 const Permission = require('../../models/Permission.js').default;
@@ -22,13 +26,8 @@ const SessionToken = require('../../models/SessionToken.js').default;
 const Client = require('../../models/Client.js').default;
 const Transaction = require('../../models/Transaction.js').default;
 const { faker } = require('@faker-js/faker');
-const dotenv = require('dotenv');
-
 module.exports = async () => {
   console.log('\n--- 🚀 [GLOBAL SETUP] Iniciando ambiente de teste ---');
-
-  // Carrega as variáveis de ambiente do arquivo .env
-  dotenv.config({ path: path.resolve(process.cwd(), '.env') });
 
   // Valida a existência da string de conexão do MongoDB
   const mongoUri = process.env.MONGO_URI;
@@ -92,7 +91,7 @@ module.exports = async () => {
 
   // Função auxiliar para gerar tokens JWT
   const generateToken = (userId, companyId) => {
-    return jwt.sign({ userId, companyId }, process.env.JWT_SECRET || 'fallback_secret', { expiresIn: '1h' });
+    return jwt.sign({ userId, companyId, role: userPermission._id }, process.env.JWT_SECRET || 'fallback_secret', { expiresIn: '1h' });
   };
 
   // Cria dados específicos (cliente e transação) para o teste de geração de relatórios (PDF)
@@ -144,7 +143,9 @@ module.exports = async () => {
   };
 
   // Salva os dados de setup em um arquivo para que os testes possam acessá-los.
-  fs.writeFileSync(path.join(__dirname, '../test-setup.json'), JSON.stringify(setupData, null, 2));
+  // CORREÇÃO: Usa um caminho absoluto para garantir consistência.
+  const setupFilePath = path.join(process.cwd(), 'Testes', 'test-setup.json');
+  fs.writeFileSync(setupFilePath, JSON.stringify(setupData, null, 2));
 
   global.__TEST_CLEANUP_IDS__ = cleanupIds;
   global.__SERVER__ = server;

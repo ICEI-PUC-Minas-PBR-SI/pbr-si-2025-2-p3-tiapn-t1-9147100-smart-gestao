@@ -36,9 +36,9 @@ Este é o ponto de partida para qualquer novo usuário. O objetivo é criar um u
 *   **O que o Backend Faz (`authController.js`):**
     *   Recebe a requisição no endpoint de registro.
     *   Realiza uma validação de segurança: verifica no banco de dados se o e-mail ou o CNPJ já existem. Se sim, retorna um erro `409` (Conflict) com a mensagem "E-mail já cadastrado" ou similar.
+    *   Busca a permissão `ADMIN_COMPANY` no banco de dados.
     *   Criptografa a senha do usuário (gera um hash).
-    *   Cria um novo documento para a **Empresa** na coleção `companies` do MongoDB.
-    *   Cria um novo documento para o **Usuário** na coleção `users`, associando-o ao `empresaId` da empresa recém-criada.
+    *   Inicia uma transação atômica para criar a **Empresa** e o **Usuário** (com a permissão `ADMIN_COMPANY`) de forma segura. Se qualquer etapa falhar, a operação é revertida.
     *   Retorna uma resposta de sucesso (código `201 Created`).
 
 *   **Resultado Esperado (Frontend):**
@@ -65,9 +65,10 @@ Este fluxo valida a autenticação e o acesso a páginas protegidas.
     *   Busca o usuário no banco de dados pelo e-mail. Se não encontrar, retorna erro `401 Unauthorized`.
     *   Compara a senha enviada com a senha criptografada no banco. Se não bater, retorna erro `401`.
     *   Se as credenciais estiverem corretas, gera dois tokens JWT:
-        1.  **Access Token:** Curta duração (ex: 30 min). Contém `userId` e `empresaId`.
+        1.  **Access Token:** Curta duração (ex: 15 min). Contém `userId`, `companyId` e o `roleId` da permissão.
         2.  **Refresh Token:** Longa duração (ex: 7 dias).
-    *   Retorna uma resposta de sucesso (código `200 OK`) contendo os dois tokens e os dados do usuário.
+    *   Salva um hash do `refreshToken` no banco para invalidá-lo no logout, aumentando a segurança.
+    *   Retorna uma resposta de sucesso (código `200 OK`) contendo os dois tokens e os dados do usuário, incluindo o nome da sua permissão (ex: `ADMIN_COMPANY`).
 
 *   **Resultado Esperado (Frontend):**
     *   O `login.js` recebe a resposta com os tokens.
@@ -106,7 +107,7 @@ Este é o teste mais crítico. Ele garante que os dados de uma empresa não vaze
     *   Envia uma requisição `POST` para `/api/transactions`, incluindo o `token` de acesso no cabeçalho `Authorization`.
 
 *   **O que o Backend Faz:**
-    *   O `authMiddleware` valida o token, extrai o `userId` e o `empresaId` ("Empresa A").
+    *   O `authMiddleware` valida o token, extrai o `userId`, `companyId` ("Empresa A") e popula o objeto de permissão completo (`role`).
     *   O `transactionController` recebe os dados da nova transação.
     *   Ao salvar no banco, ele **adiciona o `empresaId` da "Empresa A"** ao novo documento da transação.
     *   Retorna sucesso.
@@ -122,7 +123,7 @@ Este é o teste mais crítico. Ele garante que os dados de uma empresa não vaze
     *   Envia uma requisição `GET` para `/api/transactions` para listar as transações, usando o `token` do usuário da "Empresa B".
 
 *   **O que o Backend Faz:**
-    *   O `authMiddleware` valida o token e extrai o `empresaId` ("Empresa B").
+    *   O `authMiddleware` valida o token e extrai o `companyId` ("Empresa B").
     *   O `transactionController` executa uma busca no banco de dados: `Transaction.find({ empresaId: "ID_DA_EMPRESA_B" })`.
     *   O banco de dados retorna **apenas** as transações que pertencem à "Empresa B". A transação "Venda Produto X" da "Empresa A" não é incluída no resultado.
     *   O backend retorna uma lista (potencialmente vazia) de transações para o frontend.
@@ -317,6 +318,35 @@ Este fluxo permite que um usuário que esqueceu sua senha possa redefini-la de f
 *   **Resultado Esperado (Frontend):**
     *   Exibe uma mensagem "Senha redefinida com sucesso!" e redireciona para a página de login, onde o usuário agora pode entrar com a nova senha.
 
+---
+
+## Fluxo 8: Login via Prova de Conceito (React)
+
+Este fluxo demonstra a capacidade do backend de servir a diferentes clientes e a interoperabilidade entre uma aplicação moderna (React) e o sistema legado.
+
+#### **Etapa 1: Acesso e Login na Aplicação React**
+
+*   **Ação do Usuário (Frontend):**
+    *   Acessa a URL da aplicação React: `http://localhost:3001`.
+    *   A página de login, construída em React, é exibida.
+    *   Insere as credenciais (e-mail e senha) de uma das empresas de teste.
+
+*   **O que o Frontend React Faz:**
+    *   Ao clicar em "Entrar", o componente React envia uma requisição `POST` para o mesmo endpoint de login da API: `http://localhost:5000/api/auth/login`.
+
+*   **O que o Backend Faz (`authController.js`):**
+    *   O processo é idêntico ao do Fluxo 2: o backend valida as credenciais e, se corretas, retorna os tokens de acesso (`token` e `refreshToken`).
+
+#### **Etapa 2: Redirecionamento e Continuidade da Sessão**
+
+*   **O que o Frontend React Faz:**
+    *   Recebe a resposta de sucesso da API.
+    *   Salva o `token` e o `refreshToken` no `localStorage` do navegador.
+    *   Salva também o objeto `user` no `localStorage` para garantir compatibilidade com o `authGuard.js` legado.
+    *   **Redireciona o navegador** para a página inicial do sistema legado: `http://localhost:3000/pages/startPage.html`.
+
+*   **O que o Frontend Legado Faz (`authGuard.js`):**
+    *   Ao carregar a `startPage.html`, o `authGuard.js` é executado. Ele encontra tanto o `token` quanto o objeto `user` salvos pelo React no `localStorage`, considera o usuário autenticado e permite o acesso direto à página. A sessão continua normalmente dentro do sistema legado.
 ---
 
 ## Fluxo 8: Login via Prova de Conceito (React)

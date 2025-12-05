@@ -15,15 +15,15 @@ export function roleMiddleware(allowedRoles = []) {
   return (req, res, next) => {
     try {
       // Pré-requisito: O `authMiddleware` deve ter sido executado antes,
-      // populando `req.user` com os dados do usuário, incluindo sua permissão.
-      const userRole = req.user?.role;
-      if (!userRole) {
+      // populando `req.user.role` com o objeto de permissão completo.
+      const userRoleName = req.user?.role?.name;
+      if (!userRoleName) {
         // Este erro indica um problema de configuração, pois o `authMiddleware` deveria ter falhado antes.
         return res.status(500).json({ message: "Permissão do usuário não identificada na requisição." });
       }
 
       // Verifica se a permissão do usuário está na lista de permissões autorizadas para esta rota.
-      if (!allowedRoles.includes(userRole)) {
+      if (!allowedRoles.includes(userRoleName)) {
         // Se a permissão do usuário não estiver na lista, o acesso é negado.
         return res.status(403).json({ message: "Acesso negado. Você não tem permissão para executar esta ação." });
       }

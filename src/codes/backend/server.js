@@ -124,17 +124,31 @@ const PORT = process.env.PORT || 5000;
 let server;
 
 /**
+ * Seleciona a URI do banco de dados com base no ambiente (NODE_ENV).
+ * @returns {string} A URI de conexão do MongoDB.
+ */
+const getDbUri = () => {
+  if (process.env.NODE_ENV === 'production') {
+    return process.env.MONGO_URI_PROD;
+  }
+  if (process.env.NODE_ENV === 'test') {
+    // Alinhado com o globalSetup.cjs, que espera MONGO_URI para os testes.
+    return process.env.MONGO_URI; 
+  }
+  return process.env.MONGO_URI_DEV;
+};
+/**
  * Inicia o servidor programaticamente (útil para testes in-process).
  * @param {object} options
  * @param {string} options.dbUri - URI do MongoDB a ser usado (opcional).
  * @param {number|string} options.port - Porta para o servidor (opcional).
  * @returns {Promise<import('http').Server>} A instância do servidor HTTP.
  */
-export async function startServer({ dbUri = process.env.MONGO_URI_TEST || process.env.MONGO_URI, port = PORT } = {}) {
+export async function startServer({ dbUri = getDbUri(), port = PORT } = {}) {
   try {
     console.log('⏳ Iniciando servidor Smart Gestão (startServer)...');
     
-    await connectDB(dbUri);
+    await connectDB(dbUri); // Passa a URI de conexão correta para a função connectDB
     console.log('✅ [1/1] Conexão com o banco de dados estabelecida!');
 
     // Lógica aprimorada para tentar portas alternativas se a padrão estiver em uso.

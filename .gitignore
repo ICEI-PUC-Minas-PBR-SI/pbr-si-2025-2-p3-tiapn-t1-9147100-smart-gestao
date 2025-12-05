@@ -7,8 +7,9 @@ node_modules/
 # Arquivos de log
 *.log
 
-# Arquivos temporários de teste
+# Arquivos temporários de teste gerados pelo Jest
 .mongo-uri-test
+test-setup.json
 
 # Arquivos gerados pelo sistema operacional
 .DS_Store

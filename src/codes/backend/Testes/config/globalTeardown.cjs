@@ -20,18 +20,20 @@ module.exports = async () => {
 
   // Etapa 1: Limpeza Seletiva do Banco de Dados.
   // Verifica se a variável global com os IDs dos documentos de teste foi definida.
-  // Isso garante que apenas os dados criados pelo `globalSetup` sejam removidos.
-  if (global.__TEST_CLEANUP_IDS__) {
+  // A flag `PERSISTENCE_TEST_RUN` impede a limpeza para que o teste de persistência possa ser validado.
+  if (global.__TEST_CLEANUP_IDS__ && !process.env.PERSISTENCE_TEST_RUN) {
     const { companies, users, clients, transactions } = global.__TEST_CLEANUP_IDS__;
 
-    await Promise.all([
-      Company.deleteMany({ _id: { $in: companies } }),
-      User.deleteMany({ _id: { $in: users } }),
-      Client.deleteMany({ _id: { $in: clients } }),
-      Transaction.deleteMany({ _id: { $in: transactions } }),
-      SessionToken.deleteMany({ userId: { $in: users } })
-    ]);
-    console.log('   - [OK] Dados de teste temporários foram removidos.');
+    if (companies.length > 0 || users.length > 0 || clients.length > 0 || transactions.length > 0) {
+      await Promise.all([
+        Company.deleteMany({ _id: { $in: companies } }),
+        User.deleteMany({ _id: { $in: users } }),
+        Client.deleteMany({ _id: { $in: clients } }),
+        Transaction.deleteMany({ _id: { $in: transactions } }),
+        SessionToken.deleteMany({ userId: { $in: users } })
+      ]);
+      console.log('   - [OK] Dados de teste temporários foram removidos.');
+    }
   }
 
   // Etapa 2: Encerrar o servidor da API de forma "graciosa".

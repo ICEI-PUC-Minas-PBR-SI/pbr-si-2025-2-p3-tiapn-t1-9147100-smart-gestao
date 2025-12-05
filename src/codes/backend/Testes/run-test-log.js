@@ -46,19 +46,20 @@ const logStream = fs.createWriteStream(logFilePath, { flags: 'a' });
 console.log(`--- INICIANDO TESTES AUTOMATIZADOS (Log em: ${logFilePath}) ---`);
 
 // Constrói o comando Jest completo, incluindo as flags necessárias para ES Modules
-const jestCommand = 'cross-env';
-const jestArgs = [
-  'FORCE_COLOR=0', // CORREÇÃO: Força a desativação da saída de cores para logs limpos.
-  'NODE_OPTIONS=--experimental-vm-modules', // Mantém a flag para módulos ES.
-  'jest',
+const jestCommand = 'jest';
+const jestArgs = [ // Pass NODE_OPTIONS to the child process
   '--config',
   './Testes/config/jest.config.cjs',
-  '--runInBand', // Garante que os arquivos de teste rodem em sequência, evitando condições de corrida.
-  testPath, // Adiciona o caminho específico do teste, se fornecido
-].filter(Boolean); // Remove argumentos vazios
+  '--runInBand', // Ensures test files run sequentially, preventing race conditions.
+  testPath, // Adds the specific test path, if provided
+].filter(Boolean); // Removes empty arguments
+
+// Ensure NODE_OPTIONS from parent process are passed to child process
+process.env.NODE_OPTIONS = process.env.NODE_OPTIONS || '';
+
 const options = {
   stdio: ['inherit', 'pipe', 'pipe'], // Herda stdin, mas captura stdout e stderr
-  shell: true, // Necessário para que `cross-env` funcione corretamente em diferentes OS
+  shell: true, // shell: true é necessário para que o Jest seja encontrado no path do sistema
 };
 // Inicia o processo de teste do Jest.
 const jestProcess = spawn(jestCommand, jestArgs, options);

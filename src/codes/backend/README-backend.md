@@ -69,10 +69,10 @@ Este arquivo é o manifesto do projeto Node.js. Ele define:
 -   **`devDependencies`**: Pacotes usados apenas durante o desenvolvimento e teste (Nodemon, Jest, etc.).
 -   **`scripts`**: Comandos de atalho para executar tarefas comuns:
     -   `"start"`: Inicia o ambiente de demonstração completo (backend, frontend legado e React). Este é o comando principal para executar o sistema.
-    -   `"start:backend"`: Inicia **apenas** o servidor do backend.
-    -   `"start:frontend"`: Inicia um servidor estático simples para o frontend legado na porta 3000.
+    -   `"start:backend"`: Inicia **apenas** o servidor do backend.    
+    -   `"start:frontend"`: Inicia um servidor estático simples para o frontend legado na porta 3000.    
     -   `"test"`: Executa a suíte completa de testes automatizados com Jest.
-    -   `"create-test-users"`: Cria um conjunto de empresas de teste fixas para uso em validações manuais, salvando as credenciais em um arquivo de documentação.
+    -   `"db:populate"`: Popula o banco de dados com um conjunto rico de dados de teste (empresas, usuários, transações) para desenvolvimento e validação manual.
 
 ### `.gitignore`
 
@@ -140,7 +140,7 @@ Após um ciclo completo de desenvolvimento, testes automatizados, refatoração 
 O backend demonstrou ser:
 - **Robusto**: Com uma suíte de testes cobrindo as principais funcionalidades.
 - **Seguro**: Implementando autenticação JWT, invalidação de sessão e isolamento de dados (multi-tenant).
-- **Flexível**: Capaz de servir diferentes clientes, como o frontend legado (HTML/JS) e a prova de conceito em React, provando a eficácia da arquitetura de API desacoplada.
+- **Flexível**: Capaz de servir diferentes clientes, como o frontend legado (HTML/JS) e a prova de conceito em React, provando a eficácia da arquitetura de API desacoplada. 
 
 A funcionalidade de **Alertas Automáticos** para metas de despesas foi implementada e validada, completando o escopo principal do backend. A base sólida agora suporta todas as funcionalidades críticas definidas na especificação do projeto.
 

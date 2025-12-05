@@ -22,12 +22,17 @@ dotenv.config();
  * Em caso de falha, exibe uma mensagem de erro detalhada e encerra o processo
  * da aplicação com um código de status 1 para evitar comportamentos inesperados.
  */
-export const connectDB = async () => {
+export const connectDB = async (dbUri) => {
   try {
+    // Validação para garantir que a URI de conexão foi fornecida.
+    if (!dbUri) {
+      throw new Error("A URI de conexão com o MongoDB não foi fornecida.");
+    }
+
     // Tenta estabelecer a conexão com o MongoDB usando a URI e as opções de configuração.
     // As opções `useNewUrlParser` e `useUnifiedTopology` são recomendadas pelo Mongoose
     // para garantir a compatibilidade com as versões mais recentes do driver do MongoDB.
-    await mongoose.connect(process.env.MONGO_URI, {
+    await mongoose.connect(dbUri, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
