@@ -1,8 +1,0 @@
-● Validation Error:
-
-  Module <rootDir>/src/codes/backend/Testes/config/setup-env.js in the setupFiles option was not found.
-         <rootDir> is: F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend
-
-  Configuration Documentation:
-  https://jestjs.io/docs/configuration
-

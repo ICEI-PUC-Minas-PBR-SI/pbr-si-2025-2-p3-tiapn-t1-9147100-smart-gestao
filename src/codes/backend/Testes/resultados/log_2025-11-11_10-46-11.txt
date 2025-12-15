@@ -1,6 +1,0 @@
-
---- 🚀 [SETUP] Conectando e populando o banco de dados de DESENVOLVIMENTO para os testes ---
-
---- FIM DOS TESTES AUTOMATIZADOS (COM FALHAS) ---
-Error: Jest: Got error running globalSetup - F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\Testes\test-setup.js, reason: querySrv ENOTFOUND _mongodb._tcp.cluster.mongodb.net
-    at QueryReqWrap.onresolve [as oncomplete] (node:internal/dns/promises:294:17)

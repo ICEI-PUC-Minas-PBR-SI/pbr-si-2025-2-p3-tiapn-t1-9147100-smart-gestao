@@ -1,8 +1,0 @@
-{
-  "description": "Compra de material de escritório",
-  "amount": 150.75,
-  "type": "expense",
-  "date": "2025-10-26T10:00:00.000Z",
-  "category": "Material de Escritório",
-  "status": "completed"
-}
