@@ -1,0 +1,15 @@
+{
+  "watch": [
+    "*.js",
+    "controllers/",
+    "models/",
+    "routes/",
+    "config/",
+    "middlewares/"
+  ],
+  "ignore": [
+    "Testes/",
+    "**/Testes/resultados/**",
+    "**/test-setup.json"
+  ]
+}

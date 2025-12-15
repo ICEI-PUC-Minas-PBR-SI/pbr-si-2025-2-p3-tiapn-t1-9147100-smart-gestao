@@ -1,0 +1,275 @@
+
+--- 🚀 [GLOBAL SETUP] Iniciando ambiente de teste ---
+⏳ Iniciando servidor Smart Gestão (startServer)...
+Conexão com o MongoDB estabelecida com sucesso.
+✅ [1/3] Conexão com o banco de dados estabelecida!
+Verificando permissões de sistema...
+Permissões de sistema já existem. Nenhuma ação necessária.
+✅ [2/3] Permissões do sistema validadas/inicializadas.
+✅ [3/3] Servidor rodando na porta 5000
+--- ✅ [GLOBAL SETUP] Ambiente pronto e servidor iniciado ---
+(node:9340) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+POST /api/clients 201 36.960 ms - 333
+[LOG] Ação: CREATE_CLIENT | Usuário: 691680045cc036971f69ad92
+GET /api/clients 200 28.718 ms - 568
+PUT /api/clients/691680055cc036971f69ada3 200 35.481 ms - 355
+[LOG] Ação: UPDATE_CLIENT | Usuário: 691680045cc036971f69ad92
+DELETE /api/clients/691680055cc036971f69ada3 200 30.887 ms - 70
+GET /api/clients/691680055cc036971f69ada3 404 1.141 ms - 175
+[LOG] Ação: DELETE_CLIENT | Usuário: 691680045cc036971f69ad92
+DELETE /api/clients/691680055cc036971f69ada3 404 26.911 ms - 68
+PASS Testes/2-features/clients.test.js
+  7. Módulo de Clientes/Fornecedores
+    √ deve CRIAR um novo cliente com sucesso (86 ms)
+    √ deve LISTAR os clientes da empresa (33 ms)
+    √ deve ATUALIZAR um cliente existente (41 ms)
+    √ deve EXCLUIR um cliente existente (48 ms)
+
+[LOG] Ação: DELETE_CLIENT | Usuário: 691680045cc036971f69ad92
+[LOG] Ação: CREATE_GOAL | Usuário: 691680045cc036971f69ad92
+POST /api/goals 201 46.310 ms - 404
+GET /api/goals 200 27.204 ms - 406
+[LOG] Ação: UPDATE_GOAL | Usuário: 691680045cc036971f69ad92
+PUT /api/goals/691680065cc036971f69adb6 200 45.574 ms - 414
+[LOG] Ação: DELETE_GOAL | Usuário: 691680045cc036971f69ad92
+DELETE /api/goals/691680065cc036971f69adb6 200 45.542 ms - 67
+GET /api/goals/691680065cc036971f69adb6 404 25.622 ms - 65
+DELETE /api/goals/691680065cc036971f69adb6 404 25.197 ms - 65
+PASS Testes/2-features/goals.test.js
+  5. Módulo de Metas (CRUD)
+    √ deve CRIAR uma nova meta com sucesso (60 ms)
+    √ deve LISTAR as metas do usuário logado (30 ms)
+    √ deve ATUALIZAR uma meta existente (49 ms)
+    √ deve EXCLUIR uma meta existente (88 ms)
+
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 691680045cc036971f69ad92
+POST /api/transactions 201 45.408 ms - 468
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 691680045cc036971f69ad92
+POST /api/transactions 400 14.348 ms - 277
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 691680045cc036971f69ad92
+GET /api/transactions 200 27.137 ms - 855
+GET /api/transactions/691680065cc036971f69adc9 200 33.893 ms - 452
+[LOG] Ação: UPDATE_TRANSACTION | Usuário: 691680045cc036971f69ad92
+PUT /api/transactions/691680065cc036971f69adc9 200 47.255 ms - 452
+[LOG] Ação: UPDATE_TRANSACTION | Usuário: 691680045cc036971f69ad92
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 691680045cc036971f69ad92
+DELETE /api/transactions/691680065cc036971f69adc9 200 45.742 ms - 73
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 691680045cc036971f69ad92
+GET /api/transactions/691680065cc036971f69adc9 404 25.346 ms - 71
+DELETE /api/transactions/691680065cc036971f69adc9 404 27.459 ms - 71
+PASS Testes/2-features/transactions.test.js
+  4. Módulo de Transações (CRUD)
+    √ deve CRIAR uma nova transação com sucesso (57 ms)
+    √ deve falhar ao tentar criar uma transação com dados inválidos (27 ms)
+    √ deve LISTAR as transações do usuário logado (30 ms)
+    √ deve OBTER uma transação específica pelo ID (37 ms)
+    √ deve ATUALIZAR uma transação existente (51 ms)
+    √ deve EXCLUIR uma transação existente (78 ms)
+
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 691680045cc036971f69ad92
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 691680045cc036971f69ad92
+POST /api/transactions 201 46.682 ms - 446
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 691680045cc036971f69ad92
+POST /api/transactions/691680075cc036971f69adea/upload 200 51.752 ms - 67
+[LOG] Ação: UPLOAD_ATTACHMENT | Usuário: 691680045cc036971f69ad92
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 691680045cc036971f69ad92
+DELETE /api/transactions/691680075cc036971f69adea 200 45.002 ms - 73
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 691680045cc036971f69ad92
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 691680045cc036971f69ad92
+POST /api/transactions 201 44.727 ms - 444
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 691680045cc036971f69ad92
+POST /api/transactions/691680075cc036971f69adfc/upload 200 42.534 ms - 67
+[LOG] Ação: UPLOAD_ATTACHMENT | Usuário: 691680045cc036971f69ad92
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 691680045cc036971f69ad92
+DELETE /api/transactions/691680075cc036971f69adfc 200 45.048 ms - 73
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 691680045cc036971f69ad92
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 691680045cc036971f69ad92
+POST /api/transactions 201 43.852 ms - 444
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 691680045cc036971f69ad92
+POST /api/transactions/691680075cc036971f69ae0e/upload 200 43.863 ms - 67
+[LOG] Ação: UPLOAD_ATTACHMENT | Usuário: 691680045cc036971f69ad92
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 691680045cc036971f69ad92
+DELETE /api/transactions/691680075cc036971f69ae0e 200 46.873 ms - 73
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 691680045cc036971f69ad92
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 691680045cc036971f69ad92
+POST /api/transactions 201 48.921 ms - 445
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 691680045cc036971f69ad92
+POST /api/transactions/691680075cc036971f69ae20/upload 200 48.704 ms - 67
+[LOG] Ação: UPLOAD_ATTACHMENT | Usuário: 691680045cc036971f69ad92
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 691680045cc036971f69ad92
+DELETE /api/transactions/691680075cc036971f69ae20 200 44.456 ms - 73
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 691680045cc036971f69ad92
+POST /api/transactions/60d5f1f77c3d4a001f5e8e1z/upload 500 16.349 ms - 368
+FAIL Testes/2-features/uploads.test.js
+  Feature: Uploads
+    Upload de PDF
+      × Deve permitir o upload de um anexo (PDF) para uma transação (61 ms)
+      × Deve permitir a exclusão de um anexo (PDF) de uma transação (1 ms)
+    Upload de Imagem (PNG)
+      × Deve permitir o upload de um anexo de imagem (.png) para uma transação (46 ms)
+      × Deve permitir a exclusão de um anexo de imagem (.png)
+    Upload de Imagem (JPG)
+      × Deve permitir o upload de um anexo de imagem (.jpg) para uma transação (49 ms)
+      × Deve permitir a exclusão de um anexo de imagem (.jpg)
+    Upload de Imagem (JPEG)
+      × Deve permitir o upload de um anexo de imagem (.jpeg) para uma transação (53 ms)
+      × Deve permitir a exclusão de um anexo de imagem (.jpeg) (1 ms)
+    Cenários de Erro e Estruturais
+      × Deve retornar 404 ao tentar fazer upload para uma transação inexistente (42 ms)
+
+  ● Feature: Uploads › Upload de PDF › Deve permitir o upload de um anexo (PDF) para uma transação
+
+    TypeError: Cannot read properties of undefined (reading 'attachment')
+
+      78 |             expect(response.status).toBe(200);
+      79 |             expect(response.data.message).toBe('Anexo enviado com sucesso.');
+    > 80 |             expect(response.data.transaction.attachment).toContain(companyA._id);
+         |                                              ^
+      81 |             expect(response.data.transaction.attachment).toContain('/pdf/'); // Valida a nova subpasta
+      82 |             expect(response.data.transaction.attachment).toContain('.pdf');
+      83 |
+
+      at Object.attachment (Testes/2-features/uploads.test.js:80:46)
+
+  ● Feature: Uploads › Upload de PDF › Deve permitir a exclusão de um anexo (PDF) de uma transação
+
+    expect(received).toBeDefined()
+
+    Received: undefined
+
+      87 |
+      88 |         it('Deve permitir a exclusão de um anexo (PDF) de uma transação', async () => {
+    > 89 |             expect(attachmentPath).toBeDefined();
+         |                                    ^
+      90 |
+      91 |             const response = await axios.delete(
+      92 |                 `${apiUrl}/transactions/${transactionId}/upload`,
+
+      at Object.toBeDefined (Testes/2-features/uploads.test.js:89:36)
+
+  ● Feature: Uploads › Upload de Imagem (PNG) › Deve permitir o upload de um anexo de imagem (.png) para uma transação
+
+    TypeError: Cannot read properties of undefined (reading 'attachment')
+
+      151 |
+      152 |             expect(response.status).toBe(200);
+    > 153 |             expect(response.data.transaction.attachment).toContain(companyA._id);
+          |                                              ^
+      154 |             expect(response.data.transaction.attachment).toContain('/img/'); // Valida a nova subpasta
+      155 |             expect(response.data.transaction.attachment).toMatch(new RegExp(`\\.${extension}$`));
+      156 |
+
+      at Object.attachment (Testes/2-features/uploads.test.js:153:46)
+
+  ● Feature: Uploads › Upload de Imagem (PNG) › Deve permitir a exclusão de um anexo de imagem (.png)
+
+    expect(received).toBeDefined()
+
+    Received: undefined
+
+      160 |
+      161 |         it(`Deve permitir a exclusão de um anexo de imagem (.${extension})`, async () => {
+    > 162 |             expect(attachmentPath).toBeDefined();
+          |                                    ^
+      163 |             const response = await axios.delete(
+      164 |                 `${apiUrl}/transactions/${transactionId}/upload`,
+      165 |                 { headers: { Authorization: `Bearer ${companyA.token}` } }
+
+      at Object.toBeDefined (Testes/2-features/uploads.test.js:162:36)
+
+  ● Feature: Uploads › Upload de Imagem (JPG) › Deve permitir o upload de um anexo de imagem (.jpg) para uma transação
+
+    TypeError: Cannot read properties of undefined (reading 'attachment')
+
+      151 |
+      152 |             expect(response.status).toBe(200);
+    > 153 |             expect(response.data.transaction.attachment).toContain(companyA._id);
+          |                                              ^
+      154 |             expect(response.data.transaction.attachment).toContain('/img/'); // Valida a nova subpasta
+      155 |             expect(response.data.transaction.attachment).toMatch(new RegExp(`\\.${extension}$`));
+      156 |
+
+      at Object.attachment (Testes/2-features/uploads.test.js:153:46)
+
+  ● Feature: Uploads › Upload de Imagem (JPG) › Deve permitir a exclusão de um anexo de imagem (.jpg)
+
+    expect(received).toBeDefined()
+
+    Received: undefined
+
+      160 |
+      161 |         it(`Deve permitir a exclusão de um anexo de imagem (.${extension})`, async () => {
+    > 162 |             expect(attachmentPath).toBeDefined();
+          |                                    ^
+      163 |             const response = await axios.delete(
+      164 |                 `${apiUrl}/transactions/${transactionId}/upload`,
+      165 |                 { headers: { Authorization: `Bearer ${companyA.token}` } }
+
+      at Object.toBeDefined (Testes/2-features/uploads.test.js:162:36)
+
+  ● Feature: Uploads › Upload de Imagem (JPEG) › Deve permitir o upload de um anexo de imagem (.jpeg) para uma transação
+
+    TypeError: Cannot read properties of undefined (reading 'attachment')
+
+      151 |
+      152 |             expect(response.status).toBe(200);
+    > 153 |             expect(response.data.transaction.attachment).toContain(companyA._id);
+          |                                              ^
+      154 |             expect(response.data.transaction.attachment).toContain('/img/'); // Valida a nova subpasta
+      155 |             expect(response.data.transaction.attachment).toMatch(new RegExp(`\\.${extension}$`));
+      156 |
+
+      at Object.attachment (Testes/2-features/uploads.test.js:153:46)
+
+  ● Feature: Uploads › Upload de Imagem (JPEG) › Deve permitir a exclusão de um anexo de imagem (.jpeg)
+
+    expect(received).toBeDefined()
+
+    Received: undefined
+
+      160 |
+      161 |         it(`Deve permitir a exclusão de um anexo de imagem (.${extension})`, async () => {
+    > 162 |             expect(attachmentPath).toBeDefined();
+          |                                    ^
+      163 |             const response = await axios.delete(
+      164 |                 `${apiUrl}/transactions/${transactionId}/upload`,
+      165 |                 { headers: { Authorization: `Bearer ${companyA.token}` } }
+
+      at Object.toBeDefined (Testes/2-features/uploads.test.js:162:36)
+
+  ● Feature: Uploads › Cenários de Erro e Estruturais › Deve retornar 404 ao tentar fazer upload para uma transação inexistente
+
+    expect(received).rejects.toThrow(expected)
+
+    Expected substring: "Request failed with status code 404"
+    Received message:   "Request failed with status code 500"
+
+          180 |             form.append('attachment', fs.createReadStream(filePath));
+          181 |
+        > 182 |             await expect(
+              |             ^
+          183 |                 axios.post(
+          184 |                     `${apiUrl}/transactions/${invalidId}/upload`,
+          185 |                     form,
+
+      at settle (node_modules/axios/lib/core/settle.js:19:12)
+      at IncomingMessage.handleStreamEnd (node_modules/axios/lib/adapters/http.js:793:11)
+      at Axios.request (node_modules/axios/lib/core/Axios.js:45:41)
+      at Object.<anonymous> (Testes/2-features/uploads.test.js:182:13)
+      at Object.toThrow (node_modules/expect/build/index.js:2155:20)
+      at Object.toThrow (Testes/2-features/uploads.test.js:188:23)
+
+Test Suites: 1 failed, 3 passed, 4 total
+Tests:       9 failed, 14 passed, 23 total
+Snapshots:   0 total
+Time:        2.838 s
+Ran all test suites matching Testes/2-features/.
+
+--- 🧹 [GLOBAL TEARDOWN] Finalizando ambiente de teste ---
+[LOG] Ação: UPLOAD_ATTACHMENT | Usuário: 691680045cc036971f69ad92
+   - [OK] Dados de teste temporários foram removidos.
+✅ Servidor e conexão com MongoDB encerrados (stopServer).
+--- ✅ [GLOBAL TEARDOWN] Ambiente finalizado com sucesso ---
+
+--- FIM DOS TESTES AUTOMATIZADOS (Status: Falha) ---

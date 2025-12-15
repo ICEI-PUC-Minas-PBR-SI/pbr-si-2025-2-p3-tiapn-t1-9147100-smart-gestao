@@ -1,0 +1,23 @@
+
+--- 🚀 [GLOBAL SETUP] Iniciando ambiente de teste ---
+Verificando permissões de sistema...
+Permissões não encontradas. Criando permissões padrão...
+Permissões padrão criadas com sucesso!
+┌─────────┬─────────────────┬──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ (index) │ Nome            │ Descrição                                                                                        │
+├─────────┼─────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ 0       │ 'ROOT'          │ 'Superusuário. Acesso irrestrito a todos os dados e configurações do sistema.'                   │
+│ 1       │ 'ADMIN_COMPANY' │ 'Administrador de uma empresa. Pode gerenciar usuários e todos os dados da sua própria empresa.' │
+│ 2       │ 'USER_COMPANY'  │ 'Usuário padrão. Pode criar e gerenciar seus próprios dados dentro da empresa.'                  │
+└─────────┴─────────────────┴──────────────────────────────────────────────────────────────────────────────────────────────────┘
+ReferenceError: Jest: Got error running globalSetup - F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\Testes\config\globalSetup.cjs, reason: l is not defined
+    at file:///F:/Programacao/GitHub/pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao/src/codes/backend/services/pdfService.js:298:2
+    at ModuleJob.run (node:internal/modules/esm/module_job:345:25)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:665:26)
+    at async module.exports (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\Testes\config\globalSetup.cjs:153:24)
+    at async F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\@jest\core\build\index.js:3166:11
+    at async waitForPromiseWithCleanup (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\@jest\transform\build\index.js:141:5)
+    at async ScriptTransformer.requireAndTranspileModule (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\@jest\transform\build\index.js:625:16)
+    at async runGlobalHook (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\@jest\core\build\index.js:3162:9)
+    at async runJest (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\@jest\core\build\index.js:3429:5)

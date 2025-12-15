@@ -1,0 +1,561 @@
+
+--- 🚀 [ETAPA 1 de 4] Iniciando Ambiente de Teste (Jest Environment) ---
+   - [PROCESSO] Lendo configuração do banco de dados de teste...
+   - [ATENÇÃO] Usando banco de dados de DESENVOLVIMENTO para os testes. As coleções serão limpas.
+
+--- 🚀 [ETAPA 2 de 4] Limpando e populando o banco de dados de TESTE ---
+   - [OK] Dados de teste (empresas e usuários) criados e salvos em test-setup.json.
+⏳ Iniciando servidor Smart Gestão (startServer)...
+Conexão com o MongoDB estabelecida com sucesso.
+Verificando permissões de sistema...
+Permissões de sistema já existem. Nenhuma ação necessária.
+✅ Conexão com o banco estabelecida!
+🚀 Servidor rodando na porta 5000
+📡 Verifique em: http://localhost:5000/api/health
+   - [OK] Servidor iniciado em-processo para execução dos testes.
+(node:30760) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+POST /api/auth/login 200 104.229 ms - 604
+[LOG] Ação: LOGIN_USER | Usuário: N/A
+POST /api/auth/login 200 97.021 ms - 604
+[LOG] Ação: LOGIN_USER | Usuário: N/A
+POST /api/auth/logout 200 21.320 ms - 81
+
+--- 🧹 [ENV] Desconectando do banco de dados ---
+Falha crítica ao gravar log de auditoria: MongoClientClosedError: Operation interrupted because client was closed
+    at ConnectionPool.closeCheckedOutConnections (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\mongodb\src\cmap\connection_pool.ts:495:20)
+    at Server.closeCheckedOutConnections (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\mongodb\src\sdam\server.ts:251:22)
+    at Topology.closeCheckedOutConnections (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\mongodb\src\sdam\topology.ts:496:21)
+    at MongoClient._close (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\mongodb\src\mongo_client.ts:782:20)
+    at MongoClient.close (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\mongodb\src\mongo_client.ts:764:29)
+    at NativeConnection.doClose (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\mongoose\lib\drivers\node-mongodb-native\connection.js:208:21)
+    at NativeConnection._close (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\mongoose\lib\connection.js:1264:18)
+    at NativeConnection.close (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\mongoose\lib\connection.js:1229:15)
+    at F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\mongoose\lib\mongoose.js:471:60
+    at Array.map (<anonymous>)
+    at Mongoose.disconnect (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\mongoose\lib\mongoose.js:471:43)
+    at Server.<anonymous> (file:///F:/Programacao/GitHub/pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao/src/codes/backend/server.js:157:24)
+    at Object.onceWrapper (node:events:633:28)
+    at Server.emit (node:events:519:28)
+    at emitCloseNT (node:net:2419:8)
+    at processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  errorLabelSet: Set(0) {}
+}
+✅ Servidor e conexão com MongoDB encerrados (stopServer).
+--- ✅ [ENV] Ambiente de teste finalizado ---
+PASS Testes/1-auth/auth.test.js
+  6. Módulo de Autenticação e Sessão (Stateful)
+    √ deve criar um SessionToken no banco de dados após o login (137 ms)
+    √ deve invalidar o SessionToken no banco de dados após o logout (128 ms)
+
+
+--- 🚀 [ETAPA 1 de 4] Iniciando Ambiente de Teste (Jest Environment) ---
+   - [PROCESSO] Lendo configuração do banco de dados de teste...
+   - [ATENÇÃO] Usando banco de dados de DESENVOLVIMENTO para os testes. As coleções serão limpas.
+
+--- 🚀 [ETAPA 2 de 4] Limpando e populando o banco de dados de TESTE ---
+   - [OK] Dados de teste (empresas e usuários) criados e salvos em test-setup.json.
+⏳ Iniciando servidor Smart Gestão (startServer)...
+Conexão com o MongoDB estabelecida com sucesso.
+Verificando permissões de sistema...
+Permissões de sistema já existem. Nenhuma ação necessária.
+✅ Conexão com o banco estabelecida!
+🚀 Servidor rodando na porta 5000
+📡 Verifique em: http://localhost:5000/api/health
+   - [OK] Servidor iniciado em-processo para execução dos testes.
+  console.log
+    
+    --- Teste: Solicitar reset para e-mail inválido ---
+
+      at Object.log (Testes/1-auth/password.test.js:25:13)
+
+POST /api/auth/forgot-password 404 14.112 ms - 39
+  console.log
+    ✅ Falhou como esperado para e-mail inexistente (Status 404).
+
+      at Object.log (Testes/1-auth/password.test.js:34:15)
+
+  console.log
+    
+    --- Teste: Gerar token de reset com sucesso ---
+
+      at Object.log (Testes/1-auth/password.test.js:39:13)
+
+POST /api/auth/forgot-password 200 33.038 ms - 140
+  console.log
+    ✅ Token de reset gerado e salvo no banco de dados.
+
+      at Object.log (Testes/1-auth/password.test.js:49:13)
+
+  console.log
+    
+    --- Teste: Resetar senha com token válido ---
+
+      at Object.log (Testes/1-auth/password.test.js:53:13)
+
+POST /api/auth/forgot-password 200 31.599 ms - 140
+POST /api/auth/reset-password/22e644a02365717d75cace802b3b32d860e2262ad971e41b4c563f11ae41444a 200 105.498 ms - 41
+  console.log
+    ✅ Senha resetada com sucesso via API.
+
+      at Object.log (Testes/1-auth/password.test.js:70:13)
+
+POST /api/auth/reset-password/22e644a02365717d75cace802b3b32d860e2262ad971e41b4c563f11ae41444a 400 13.970 ms - 42
+  console.log
+    ✅ Token de reset foi invalidado no banco.
+
+      at Object.log (Testes/1-auth/password.test.js:74:13)
+
+POST /api/auth/login 200 96.179 ms - 604
+  console.log
+    ✅ Login com a nova senha realizado com sucesso.
+
+      at Object.log (Testes/1-auth/password.test.js:84:13)
+
+
+--- 🧹 [ENV] Desconectando do banco de dados ---
+Falha crítica ao gravar log de auditoria: MongoClientClosedError: Operation interrupted because client was closed
+    at ConnectionPool.closeCheckedOutConnections (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\mongodb\src\cmap\connection_pool.ts:495:20)
+    at Server.closeCheckedOutConnections (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\mongodb\src\sdam\server.ts:251:22)
+    at Topology.closeCheckedOutConnections (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\mongodb\src\sdam\topology.ts:496:21)
+    at MongoClient._close (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\mongodb\src\mongo_client.ts:782:20)
+    at MongoClient.close (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\mongodb\src\mongo_client.ts:764:29)
+    at NativeConnection.doClose (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\mongoose\lib\drivers\node-mongodb-native\connection.js:208:21)
+    at NativeConnection._close (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\mongoose\lib\connection.js:1264:18)
+    at NativeConnection.close (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\mongoose\lib\connection.js:1229:15)
+    at F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\mongoose\lib\mongoose.js:471:60
+    at Array.map (<anonymous>)
+    at Mongoose.disconnect (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\mongoose\lib\mongoose.js:471:43)
+    at Server.<anonymous> (file:///F:/Programacao/GitHub/pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao/src/codes/backend/server.js:157:24)
+    at Object.onceWrapper (node:events:633:28)
+    at Server.emit (node:events:519:28)
+    at emitCloseNT (node:net:2419:8)
+    at processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  errorLabelSet: Set(0) {}
+}
+✅ Servidor e conexão com MongoDB encerrados (stopServer).
+--- ✅ [ENV] Ambiente de teste finalizado ---
+PASS Testes/1-auth/password.test.js
+  9. Módulo de Recuperação de Senha
+    √ deve falhar ao solicitar reset para um e-mail inexistente (48 ms)
+    √ deve gerar e salvar um token de reset para um e-mail válido (38 ms)
+    √ deve resetar a senha com um token válido e permitir login com a nova senha (262 ms)
+
+
+--- 🚀 [ETAPA 1 de 4] Iniciando Ambiente de Teste (Jest Environment) ---
+   - [PROCESSO] Lendo configuração do banco de dados de teste...
+   - [ATENÇÃO] Usando banco de dados de DESENVOLVIMENTO para os testes. As coleções serão limpas.
+
+--- 🚀 [ETAPA 2 de 4] Limpando e populando o banco de dados de TESTE ---
+   - [OK] Dados de teste (empresas e usuários) criados e salvos em test-setup.json.
+⏳ Iniciando servidor Smart Gestão (startServer)...
+Conexão com o MongoDB estabelecida com sucesso.
+Verificando permissões de sistema...
+Permissões de sistema já existem. Nenhuma ação necessária.
+✅ Conexão com o banco estabelecida!
+🚀 Servidor rodando na porta 5000
+📡 Verifique em: http://localhost:5000/api/health
+   - [OK] Servidor iniciado em-processo para execução dos testes.
+POST /api/clients 201 33.522 ms - 340
+[LOG] Ação: CREATE_CLIENT | Usuário: 6915462e289190d4f000a059
+GET /api/clients 200 29.166 ms - 583
+PUT /api/clients/6915462e289190d4f000a065 200 34.740 ms - 343
+[LOG] Ação: UPDATE_CLIENT | Usuário: 6915462e289190d4f000a059
+DELETE /api/clients/6915462e289190d4f000a065 200 33.498 ms - 70
+GET /api/clients/6915462e289190d4f000a065 404 1.029 ms - 175
+
+--- 🧹 [ENV] Desconectando do banco de dados ---
+✅ Servidor e conexão com MongoDB encerrados (stopServer).
+--- ✅ [ENV] Ambiente de teste finalizado ---
+PASS Testes/2-features/clients.test.js
+  7. Módulo de Clientes/Fornecedores
+    √ deve CRIAR um novo cliente com sucesso (47 ms)
+    √ deve LISTAR os clientes da empresa (32 ms)
+    √ deve ATUALIZAR um cliente existente (38 ms)
+    √ deve EXCLUIR um cliente existente (46 ms)
+
+
+--- 🚀 [ETAPA 1 de 4] Iniciando Ambiente de Teste (Jest Environment) ---
+   - [PROCESSO] Lendo configuração do banco de dados de teste...
+   - [ATENÇÃO] Usando banco de dados de DESENVOLVIMENTO para os testes. As coleções serão limpas.
+
+--- 🚀 [ETAPA 2 de 4] Limpando e populando o banco de dados de TESTE ---
+[LOG] Ação: DELETE_CLIENT | Usuário: 6915462e289190d4f000a059
+   - [OK] Dados de teste (empresas e usuários) criados e salvos em test-setup.json.
+⏳ Iniciando servidor Smart Gestão (startServer)...
+Conexão com o MongoDB estabelecida com sucesso.
+Verificando permissões de sistema...
+Permissões de sistema já existem. Nenhuma ação necessária.
+✅ Conexão com o banco estabelecida!
+🚀 Servidor rodando na porta 5000
+📡 Verifique em: http://localhost:5000/api/health
+   - [OK] Servidor iniciado em-processo para execução dos testes.
+[LOG] Ação: CREATE_GOAL | Usuário: 6915462f289190d4f000a08d
+POST /api/goals 201 49.720 ms - 404
+GET /api/goals 200 32.822 ms - 406
+[LOG] Ação: UPDATE_GOAL | Usuário: 6915462f289190d4f000a08d
+PUT /api/goals/69154630289190d4f000a099 200 57.151 ms - 414
+[LOG] Ação: DELETE_GOAL | Usuário: 6915462f289190d4f000a08d
+DELETE /api/goals/69154630289190d4f000a099 200 52.590 ms - 67
+GET /api/goals/69154630289190d4f000a099 404 29.981 ms - 65
+
+--- 🧹 [ENV] Desconectando do banco de dados ---
+✅ Servidor e conexão com MongoDB encerrados (stopServer).
+--- ✅ [ENV] Ambiente de teste finalizado ---
+PASS Testes/2-features/goals.test.js
+  5. Módulo de Metas (CRUD)
+    √ deve CRIAR uma nova meta com sucesso (65 ms)
+    √ deve LISTAR as metas do usuário logado (38 ms)
+    √ deve ATUALIZAR uma meta existente (63 ms)
+    √ deve EXCLUIR uma meta existente (101 ms)
+
+
+--- 🚀 [ETAPA 1 de 4] Iniciando Ambiente de Teste (Jest Environment) ---
+   - [PROCESSO] Lendo configuração do banco de dados de teste...
+   - [ATENÇÃO] Usando banco de dados de DESENVOLVIMENTO para os testes. As coleções serão limpas.
+
+--- 🚀 [ETAPA 2 de 4] Limpando e populando o banco de dados de TESTE ---
+   - [OK] Dados de teste (empresas e usuários) criados e salvos em test-setup.json.
+⏳ Iniciando servidor Smart Gestão (startServer)...
+Conexão com o MongoDB estabelecida com sucesso.
+Verificando permissões de sistema...
+Permissões de sistema já existem. Nenhuma ação necessária.
+✅ Conexão com o banco estabelecida!
+🚀 Servidor rodando na porta 5000
+📡 Verifique em: http://localhost:5000/api/health
+   - [OK] Servidor iniciado em-processo para execução dos testes.
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 69154631289190d4f000a0c3
+POST /api/transactions 201 55.592 ms - 452
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 69154631289190d4f000a0c3
+POST /api/transactions 400 15.018 ms - 277
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 69154631289190d4f000a0c3
+GET /api/transactions 200 28.202 ms - 855
+GET /api/transactions/69154631289190d4f000a0cf 200 30.267 ms - 452
+[LOG] Ação: UPDATE_TRANSACTION | Usuário: 69154631289190d4f000a0c3
+PUT /api/transactions/69154631289190d4f000a0cf 200 53.938 ms - 452
+[LOG] Ação: UPDATE_TRANSACTION | Usuário: 69154631289190d4f000a0c3
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 69154631289190d4f000a0c3
+DELETE /api/transactions/69154631289190d4f000a0cf 200 53.030 ms - 73
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 69154631289190d4f000a0c3
+GET /api/transactions/69154631289190d4f000a0cf 404 31.004 ms - 71
+
+--- 🧹 [ENV] Desconectando do banco de dados ---
+✅ Servidor e conexão com MongoDB encerrados (stopServer).
+--- ✅ [ENV] Ambiente de teste finalizado ---
+PASS Testes/2-features/transactions.test.js
+  4. Módulo de Transações (CRUD)
+    √ deve CRIAR uma nova transação com sucesso (70 ms)
+    √ deve falhar ao tentar criar uma transação com dados inválidos (28 ms)
+    √ deve LISTAR as transações do usuário logado (32 ms)
+    √ deve OBTER uma transação específica pelo ID (34 ms)
+    √ deve ATUALIZAR uma transação existente (60 ms)
+    √ deve EXCLUIR uma transação existente (92 ms)
+
+
+--- 🚀 [ETAPA 1 de 4] Iniciando Ambiente de Teste (Jest Environment) ---
+   - [PROCESSO] Lendo configuração do banco de dados de teste...
+   - [ATENÇÃO] Usando banco de dados de DESENVOLVIMENTO para os testes. As coleções serão limpas.
+
+--- 🚀 [ETAPA 2 de 4] Limpando e populando o banco de dados de TESTE ---
+   - [OK] Dados de teste (empresas e usuários) criados e salvos em test-setup.json.
+⏳ Iniciando servidor Smart Gestão (startServer)...
+Conexão com o MongoDB estabelecida com sucesso.
+Verificando permissões de sistema...
+Permissões de sistema já existem. Nenhuma ação necessária.
+✅ Conexão com o banco estabelecida!
+🚀 Servidor rodando na porta 5000
+📡 Verifique em: http://localhost:5000/api/health
+   - [OK] Servidor iniciado em-processo para execução dos testes.
+  console.log
+    
+    --- Configurando 3 empresas para o teste multi-tenant ---
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:19:17)
+
+POST /api/auth/register 201 138.413 ms - 82
+[LOG] Ação: REGISTER_COMPANY_USER | Usuário: N/A
+POST /api/auth/login 200 94.651 ms - 628
+  console.log
+    ✅ Empresa 1 (Empresa Teste 1763001906527) cadastrada e logada.
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:48:21)
+
+[LOG] Ação: LOGIN_USER | Usuário: N/A
+POST /api/auth/register 201 135.237 ms - 82
+[LOG] Ação: REGISTER_COMPANY_USER | Usuário: N/A
+POST /api/auth/login 200 93.542 ms - 628
+  console.log
+    ✅ Empresa 2 (Empresa Teste 1763001906774) cadastrada e logada.
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:48:21)
+
+[LOG] Ação: LOGIN_USER | Usuário: N/A
+POST /api/auth/register 201 177.417 ms - 82
+[LOG] Ação: REGISTER_COMPANY_USER | Usuário: N/A
+POST /api/auth/login 200 111.797 ms - 628
+  console.log
+    ✅ Empresa 3 (Empresa Teste 1763001907011) cadastrada e logada.
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:48:21)
+
+  console.log
+    --- Configuração multi-tenant concluída ---
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:50:17)
+
+  console.log
+    
+    --- Criando transações individuais para cada empresa ---
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:55:17)
+
+[LOG] Ação: LOGIN_USER | Usuário: N/A
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 69154632289190d4f000a115
+POST /api/transactions 201 47.614 ms - 421
+  console.log
+    Transação criada para Empresa Teste 1763001906527. ID: 69154633289190d4f000a13b
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:76:21)
+
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 69154632289190d4f000a115
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 69154632289190d4f000a123
+POST /api/transactions 201 50.693 ms - 420
+  console.log
+    Transação criada para Empresa Teste 1763001906774. ID: 69154633289190d4f000a142
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:76:21)
+
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 69154632289190d4f000a123
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 69154633289190d4f000a131
+POST /api/transactions 201 50.412 ms - 413
+  console.log
+    Transação criada para Empresa Teste 1763001907011. ID: 69154633289190d4f000a149
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:76:21)
+
+  console.log
+    
+    --- Validando isolamento de dados entre todas as empresas ---
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:82:17)
+
+  console.log
+    
+    Verificando a transação 69154633289190d4f000a13b da Empresa Teste 1763001906527
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:89:21)
+
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 69154633289190d4f000a131
+GET /api/transactions/69154633289190d4f000a13b 404 28.866 ms - 71
+  console.log
+    - OK: Empresa Teste 1763001906774 foi bloqueada (Status 404).
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:107:29)
+
+GET /api/transactions/69154633289190d4f000a13b 404 27.603 ms - 71
+  console.log
+    - OK: Empresa Teste 1763001907011 foi bloqueada (Status 404).
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:107:29)
+
+  console.log
+    
+    Verificando a transação 69154633289190d4f000a142 da Empresa Teste 1763001906774
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:89:21)
+
+GET /api/transactions/69154633289190d4f000a142 404 27.460 ms - 71
+  console.log
+    - OK: Empresa Teste 1763001906527 foi bloqueada (Status 404).
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:107:29)
+
+GET /api/transactions/69154633289190d4f000a142 404 26.486 ms - 71
+  console.log
+    - OK: Empresa Teste 1763001907011 foi bloqueada (Status 404).
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:107:29)
+
+  console.log
+    
+    Verificando a transação 69154633289190d4f000a149 da Empresa Teste 1763001907011
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:89:21)
+
+GET /api/transactions/69154633289190d4f000a149 404 26.375 ms - 71
+  console.log
+    - OK: Empresa Teste 1763001906527 foi bloqueada (Status 404).
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:107:29)
+
+GET /api/transactions/69154633289190d4f000a149 404 35.522 ms - 71
+  console.log
+    - OK: Empresa Teste 1763001906774 foi bloqueada (Status 404).
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:107:29)
+
+  console.log
+    
+    --- Validando listagem de transações ---
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:114:17)
+
+GET /api/transactions 200 26.941 ms - 423
+  console.log
+    - OK: Empresa Teste 1763001906527 listou apenas sua própria transação.
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:126:21)
+
+GET /api/transactions 200 26.829 ms - 422
+  console.log
+    - OK: Empresa Teste 1763001906774 listou apenas sua própria transação.
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:126:21)
+
+GET /api/transactions 200 27.347 ms - 415
+  console.log
+    - OK: Empresa Teste 1763001907011 listou apenas sua própria transação.
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:126:21)
+
+  console.log
+    
+    --- Limpando dados de teste (Teardown) ---
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:132:17)
+
+DELETE /api/auth/users/69154632289190d4f000a115 200 77.387 ms - 80
+  console.log
+    - ✅ Empresa Empresa Teste 1763001906527 e dados associados excluídos com sucesso.
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:139:25)
+
+[LOG] Ação: DELETE_USER_BY_ID | Usuário: 69154632289190d4f000a115
+DELETE /api/auth/users/69154632289190d4f000a123 200 75.667 ms - 80
+  console.log
+    - ✅ Empresa Empresa Teste 1763001906774 e dados associados excluídos com sucesso.
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:139:25)
+
+[LOG] Ação: DELETE_USER_BY_ID | Usuário: 69154632289190d4f000a123
+DELETE /api/auth/users/69154633289190d4f000a131 200 76.326 ms - 80
+  console.log
+    - ✅ Empresa Empresa Teste 1763001907011 e dados associados excluídos com sucesso.
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:139:25)
+
+
+--- 🧹 [ENV] Desconectando do banco de dados ---
+Falha crítica ao gravar log de auditoria: MongoClientClosedError: Operation interrupted because client was closed
+    at ConnectionPool.closeCheckedOutConnections (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\mongodb\src\cmap\connection_pool.ts:495:20)
+    at Server.closeCheckedOutConnections (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\mongodb\src\sdam\server.ts:251:22)
+    at Topology.closeCheckedOutConnections (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\mongodb\src\sdam\topology.ts:496:21)
+    at MongoClient._close (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\mongodb\src\mongo_client.ts:782:20)
+    at MongoClient.close (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\mongodb\src\mongo_client.ts:764:29)
+    at NativeConnection.doClose (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\mongoose\lib\drivers\node-mongodb-native\connection.js:208:21)
+    at NativeConnection._close (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\mongoose\lib\connection.js:1264:18)
+    at NativeConnection.close (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\mongoose\lib\connection.js:1229:15)
+    at F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\mongoose\lib\mongoose.js:471:60
+    at Array.map (<anonymous>)
+    at Mongoose.disconnect (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\mongoose\lib\mongoose.js:471:43)
+    at Server.<anonymous> (file:///F:/Programacao/GitHub/pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao/src/codes/backend/server.js:157:24)
+    at Object.onceWrapper (node:events:633:28)
+    at Server.emit (node:events:519:28)
+    at emitCloseNT (node:net:2419:8)
+    at processTicksAndRejections (node:internal/process/task_queues:89:21) {
+  errorLabelSet: Set(0) {}
+}
+✅ Servidor e conexão com MongoDB encerrados (stopServer).
+--- ✅ [ENV] Ambiente de teste finalizado ---
+PASS Testes/3-security/multi-tenant.test.js
+  3. Teste de Isolamento de Dados em Larga Escala (Multi-Tenant)
+    √ deve criar uma transação para cada empresa (172 ms)
+    √ deve impedir que uma empresa acesse a transação de outra (212 ms)
+    √ deve garantir que cada empresa liste apenas suas próprias transações (88 ms)
+
+
+--- 🚀 [ETAPA 1 de 4] Iniciando Ambiente de Teste (Jest Environment) ---
+   - [PROCESSO] Lendo configuração do banco de dados de teste...
+   - [ATENÇÃO] Usando banco de dados de DESENVOLVIMENTO para os testes. As coleções serão limpas.
+
+--- 🚀 [ETAPA 2 de 4] Limpando e populando o banco de dados de TESTE ---
+   - [OK] Dados de teste (empresas e usuários) criados e salvos em test-setup.json.
+⏳ Iniciando servidor Smart Gestão (startServer)...
+Conexão com o MongoDB estabelecida com sucesso.
+Verificando permissões de sistema...
+Permissões de sistema já existem. Nenhuma ação necessária.
+✅ Conexão com o banco estabelecida!
+🚀 Servidor rodando na porta 5000
+📡 Verifique em: http://localhost:5000/api/health
+   - [OK] Servidor iniciado em-processo para execução dos testes.
+GET /api/reports/export/transactions-pdf 200 302.450 ms - -
+GET /api/reports/export/clients-pdf 200 47.517 ms - -
+GET /api/reports/export/invoice/69154634289190d4f000a198 200 57.300 ms - -
+
+--- 🧹 [ENV] Desconectando do banco de dados ---
+✅ Servidor e conexão com MongoDB encerrados (stopServer).
+--- ✅ [ENV] Ambiente de teste finalizado ---
+FAIL Testes/4-reports/reports.test.js
+  8. Módulo de Relatórios
+    × deve chamar o serviço de PDF com os dados corretos para o RELATÓRIO DE TRANSAÇÕES (314 ms)
+    × deve chamar o serviço de PDF com os dados corretos para o RELATÓRIO DE CLIENTES (51 ms)
+    × deve chamar o serviço de PDF com os dados corretos para a FATURA (60 ms)
+
+  ● 8. Módulo de Relatórios › deve chamar o serviço de PDF com os dados corretos para o RELATÓRIO DE TRANSAÇÕES
+
+    expect(jest.fn()).toHaveBeenCalled()
+
+    Expected number of calls: >= 1
+    Received number of calls:    0
+
+      56 |     });
+      57 |
+    > 58 |     expect(generateFinancialReportPDF).toHaveBeenCalled();
+         |                                        ^
+      59 |     const capturedData = generateFinancialReportPDF.mock.calls[0][0];
+      60 |     expect(capturedData.company.name).toBe(companyA.name);
+      61 |     expect(capturedData.transactions).toBeInstanceOf(Array);
+
+      at Object.toHaveBeenCalled (Testes/4-reports/reports.test.js:58:40)
+
+  ● 8. Módulo de Relatórios › deve chamar o serviço de PDF com os dados corretos para o RELATÓRIO DE CLIENTES
+
+    expect(jest.fn()).toHaveBeenCalled()
+
+    Expected number of calls: >= 1
+    Received number of calls:    0
+
+      73 |     });
+      74 |
+    > 75 |     expect(generateClientsReportPDF).toHaveBeenCalled();
+         |                                      ^
+      76 |     const capturedData = generateClientsReportPDF.mock.calls[0][0];
+      77 |     expect(capturedData.company.name).toBe(companyA.name);
+      78 |     expect(capturedData.clients).toBeInstanceOf(Array);
+
+      at Object.toHaveBeenCalled (Testes/4-reports/reports.test.js:75:38)
+
+  ● 8. Módulo de Relatórios › deve chamar o serviço de PDF com os dados corretos para a FATURA
+
+    expect(jest.fn()).toHaveBeenCalled()
+
+    Expected number of calls: >= 1
+    Received number of calls:    0
+
+      90 |     });
+      91 |
+    > 92 |     expect(generateInvoicePDF).toHaveBeenCalled();
+         |                                ^
+      93 |     const capturedData = generateInvoicePDF.mock.calls[0][0];
+      94 |     expect(capturedData.company.name).toBe(companyA.name);
+      95 |     expect(capturedData.transaction.description).toBe(companyA.testTransaction.description);
+
+      at Object.toHaveBeenCalled (Testes/4-reports/reports.test.js:92:32)
+
+Test Suites: 1 failed, 6 passed, 7 total
+Tests:       3 failed, 22 passed, 25 total
+Snapshots:   0 total
+Time:        11.752 s
+Ran all test suites.
+
+--- FIM DOS TESTES AUTOMATIZADOS (Status: Falha) ---

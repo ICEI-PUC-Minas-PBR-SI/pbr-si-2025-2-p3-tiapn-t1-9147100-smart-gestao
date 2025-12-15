@@ -1,0 +1,52 @@
+Roteiro: Arquitetura de Dados Smart Gestão
+
+A arquitetura de dados do Smart Gestão. Nosso sistema roda em MongoDB, um banco NoSQL, e toda a nossa lógica de negócio depende diretamente de como essas informações estão estruturadas.
+
+O projeto está hospedado na nuvem através de um cluster do próprio MongoDB. Toda a segurança de acesso é garantida via tokens e usuários específicos.
+
+Separamos dois ambientes: um banco de testes - que usamos apenas para validar chamadas e aprender a estrutura - e o banco de produção.
+
+O banco de testes, possui alguns dados que foram apenas para os testes iniciais do uso do MongoDB.
+
+Para esta demonstração, vamos começar com o ambiente de produção totalmente limpo.
+
+Rodando nosso script de população com o comando npm run db:populate. Esse script é essencial pois simula um cenário real: ele cadastra empresas, cria usuários, gera transações e define metas automaticamente.
+
+Com o script finalizado, vemos que os logs no terminal agora correspondem aos dados reais salvos nas coleções.
+
+Parte 1: O Pilar da Arquitetura
+Antes de explorar as coleções, precisamos entender o conceito mais importante do sistema: o isolamento de dados.
+
+O Smart Gestão é multi-tenant. A regra de ouro aqui é: os dados da 'Empresa A' jamais podem ser vistos pela 'Empresa B'. Para garantir isso, usamos uma etiqueta de segurança: o campo companyId. Ele está presente em praticamente todos os documentos e funciona como uma chave que tranca o dado no 'cofre' da respectiva empresa. Toda a nossa API respeita essa regra."
+
+Parte 2: Explorando as Coleções
+Seguindo pelas coleções em ordem alfabética para entender o papel de cada uma.
+
+1. Alerts (Alertas) Começando pela alerts. Ela armazena as notificações automáticas, como quando uma meta de despesa é atingida. Graças ao companyId, o sistema garante que o alerta apareça apenas para os usuários da empresa correta, mantendo a comunicação proativa e segura.
+
+2. Clients (Clientes e Fornecedores) Na coleção clients, são gerenciados tanto clientes quanto fornecedores. O campo type é quem define se é um 'client' ou 'supplier'. Aqui, o isolamento garante que a carteira de clientes de uma empresa seja exclusiva dela.
+
+3. Companies (Empresas) Esta é a coleção central: companies. Cada documento aqui é uma empresa cadastrada. O detalhe importante é que o _id desta coleção é justamente o companyId que usamos para etiquetar todo o resto do sistema.
+
+4. Goals (Metas) Em goals, são guardadas as metas financeiras, como 'Faturar 10 mil' ou 'Gastar menos de 500 em alimentação'. Essa coleção alimenta a lógica de negócio que, por sua vez, pode disparar os gatilhos lá na coleção de alertas que vimos antes.
+
+5. Logs (Auditoria) Segurança exige rastreabilidade. A coleção logs é nosso diário de auditoria. Ações críticas, como criar usuários ou excluir transações, são registradas aqui com: quem fez (userId), onde fez (companyId) e quando fez. Essencial para segurança.
+
+6. Permissions (Permissões) A permissions é pequena, mas vital para o nosso controle de acesso (RBAC - Role-Based Access Control). Ela padroniza os níveis como 'ROOT', 'ADMIN' ou 'USER'. Ao invés de deixar strings soltas no código, centralizamos aqui para facilitar a manutenção."
+
+7. SessionTokens (Segurança de Sessão) Para o login, temos a sessiontokens. Quando o usuário entra, é gerado um 'refresh token' e guardado uma versão criptografada (hash) aqui. Ao fazer logout, invalidamos esse registro. Isso impede que tokens antigos ou roubados sejam reutilizados.
+
+8. Transactions (Transações) A coleção mais movimentada: transactions. É o coração financeiro. Cada documento é uma receita ou despesa. Além de valor e descrição, ela carrega o companyId e pode ter um anexo (attachment) vinculado, como um comprovante.
+
+9. Users (Usuários) Por fim, a coleção users. Aqui ficam as contas de acesso. Cada usuário é amarrado a uma empresa e a uma função (role). E um detalhe crucial: o campo passwordHash garante que a senha nunca seja salva em texto puro, protegendo as credenciais.
+
+Parte 3: Conclusão
+Resumindo: nossa estrutura no MongoDB se apoia em três pilares.
+
+Segurança, através do isolamento via companyId e criptografia.
+
+Relacionamento, conectando usuários, empresas e permissões de forma eficiente.
+
+Rastreabilidade, com logs detalhados de auditoria.
+
+Essa organização garante que o Smart Gestão seja robusto, seguro e escalável.

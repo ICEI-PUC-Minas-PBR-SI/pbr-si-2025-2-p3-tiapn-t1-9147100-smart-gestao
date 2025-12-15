@@ -1,0 +1,22 @@
+
+--- 🚀 [GLOBAL SETUP] Iniciando ambiente de teste ---
+Verificando permissões de sistema...
+Permissões não encontradas. Criando permissões padrão...
+Permissões padrão criadas com sucesso!
+┌─────────┬─────────────────┬──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ (index) │ Nome            │ Descrição                                                                                        │
+├─────────┼─────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ 0       │ 'ROOT'          │ 'Superusuário. Acesso irrestrito a todos os dados e configurações do sistema.'                   │
+│ 1       │ 'ADMIN_COMPANY' │ 'Administrador de uma empresa. Pode gerenciar usuários e todos os dados da sua própria empresa.' │
+│ 2       │ 'USER_COMPANY'  │ 'Usuário padrão. Pode criar e gerenciar seus próprios dados dentro da empresa.'                  │
+└─────────┴─────────────────┴──────────────────────────────────────────────────────────────────────────────────────────────────┘
+SyntaxError: Jest: Got error running globalSetup - F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\Testes\config\globalSetup.cjs, reason: Unexpected token ')'
+    at compileSourceTextModule (node:internal/modules/esm/utils:346:16)
+    at ModuleLoader.moduleStrategy (node:internal/modules/esm/translators:107:18)
+    at #translate (node:internal/modules/esm/loader:546:20)
+    at afterLoad (node:internal/modules/esm/loader:596:29)
+    at ModuleLoader.loadAndTranslate (node:internal/modules/esm/loader:601:12)
+    at #createModuleJob (node:internal/modules/esm/loader:624:36)
+    at #getJobFromResolveResult (node:internal/modules/esm/loader:343:34)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:311:41)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)

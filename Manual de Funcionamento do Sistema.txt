@@ -1,0 +1,101 @@
+Manual de Funcionamento do Sistema Smart Gestão (Frontend + Backend)
+Este documento descreve o fluxo de uso do sistema Smart Gestão, detalhando as ações do usuário e o comportamento correspondente do backend para cada funcionalidade.
+
+Passo 1: Primeiro Acesso e Registro da Empresa
+Um novo microempreendedor descobre o Smart Gestão e decide criar uma conta.
+
+Ação do Usuário (Visão do Frontend):
+
+Acessa a página inicial e clica em "Cadastre-se".
+Preenche o formulário de registro com seus dados pessoais (nome, e-mail, senha) e os dados da sua empresa (Nome da Empresa, CNPJ).
+Clica no botão "Registrar".
+Comportamento do Backend (O que acontece "por baixo dos panos"):
+
+O frontend envia uma requisição POST para o endpoint /api/auth/register.
+O controlador registerUser no backend inicia uma transação de banco de dados. Isso garante que todas as operações seguintes aconteçam com sucesso, ou nenhuma delas acontece.
+Validação: O sistema verifica se o e-mail, o CNPJ e o nome da empresa já existem no banco para evitar duplicidade. Se algum já existir, a transação é abortada e um erro 409 (Conflito) é retornado.
+Criação da Empresa: Uma nova Company é criada na coleção de empresas.
+Criação do Usuário: A senha do usuário é criptografada com bcrypt. Um novo User é criado, associado ao companyId da empresa recém-criada e com a permissão de ADMIN_COMPANY.
+Sucesso: Se tudo ocorrer bem, a transação é confirmada (commit) e o backend retorna uma resposta de sucesso (status 201) com os dados do usuário criado.
+Passo 2: Login e Início da Sessão
+Com a conta criada, o usuário agora pode acessar o sistema.
+
+Ação do Usuário (Visão do Frontend):
+
+Na página de login, insere seu e-mail e senha.
+Clica em "Entrar".
+O frontend armazena os tokens recebidos (geralmente no localStorage) e redireciona o usuário para o painel principal (dashboard).
+Comportamento do Backend (O que acontece "por baixo dos panos"):
+
+O frontend envia uma requisição POST para /api/auth/login.
+O controlador loginUser busca o usuário pelo e-mail. Se não encontra, retorna um erro 401 (Não Autorizado).
+Verificação de Senha: O backend compara a senha enviada com o hash seguro armazenado no banco usando bcrypt.compare(). Se não corresponder, retorna erro 401.
+Geração de Tokens: Se as credenciais estiverem corretas, o backend gera dois tokens JWT:
+accessToken: Válido por 15 minutos, usado para autenticar as próximas requisições.
+refreshToken: Válido por 7 dias, usado para obter um novo accessToken sem precisar de um novo login.
+Gestão da Sessão: O refreshToken é "hasheado" e salvo (ou atualizado) na coleção sessiontokens. Isso vincula a sessão a um dispositivo e permite que ela seja invalidada remotamente no logout.
+O backend retorna os dois tokens e os dados do usuário para o frontend.
+Passo 3: Lançamento de uma Despesa (Ação do Dia a Dia)
+O usuário fez uma compra para a empresa e quer registrá-la.
+
+Ação do Usuário (Visão do Frontend):
+
+No painel, navega para a seção "Transações" e clica em "Nova Transação".
+Preenche o formulário: Descrição ("Compra de material de escritório"), Valor (R$ 150,00), Tipo ("Despesa"), Data, etc.
+Clica em "Salvar". A nova despesa aparece na lista.
+Comportamento do Backend (O que acontece "por baixo dos panos"):
+
+O frontend envia uma requisição POST para /api/transactions, incluindo o accessToken no cabeçalho Authorization.
+Middleware de Autenticação (authMiddleware): Antes de chegar ao controlador, o middleware valida o accessToken. Ele extrai o userId e o companyId do token e os anexa ao objeto da requisição (req.user). Se o token for inválido ou expirado, a requisição é bloqueada com um erro 401.
+Controlador createTransaction: O controlador recebe os dados da transação. Ele adiciona automaticamente o userId e o companyId (obtidos do token pelo middleware) ao objeto da transação.
+Inserção no Banco: O novo documento de transação é salvo na coleção transactions. O companyId garante que esta transação pertence exclusivamente à empresa do usuário logado.
+Gatilho de Alerta (ver Passo 4): Após salvar, o sistema verifica se essa nova despesa ultrapassou alguma meta.
+Passo 4: Definindo Metas e Recebendo Alertas Automáticos
+O usuário quer controlar melhor seus gastos com marketing.
+
+Ação do Usuário (Visão do Frontend):
+
+Navega para a seção "Metas" e cria uma nova meta: Título ("Gastos com Marketing"), Tipo ("Despesa"), Valor Alvo (R$ 500,00).
+Semanas depois, ele lança várias despesas de marketing que, somadas, totalizam R$ 550,00.
+Ao acessar o painel, ele vê uma notificação de novo alerta: "Atenção: você ultrapassou sua meta de gastos com Marketing".
+Comportamento do Backend (O que acontece "por baixo dos panos"):
+
+Criação da Meta: A criação da meta é um CRUD simples, similar ao da transação, que salva um documento na coleção goals, sempre vinculado ao companyId.
+Gatilho na Criação da Despesa: O ponto chave acontece no final do controlador createTransaction.
+Lógica do Alerta:
+O sistema identifica que a nova transação é do tipo expense.
+Ele busca no banco por uma Goal do tipo expense para a mesma empresa e categoria.
+Ele então executa uma consulta de agregação (aggregate) no banco para somar ($sum) o valor de todas as transações de despesa daquele mês e categoria.
+Condição: Se a soma ($550) for maior que o targetAmount da meta ($500), o sistema cria um novo documento na coleção alerts com a mensagem apropriada, vinculado ao companyId.
+Consulta de Alertas: Quando o frontend faz uma requisição GET para /api/alerts, o backend retorna a lista de alertas não lidos para aquela empresa.
+Passo 5: Gerando um Relatório em PDF
+No final do mês, o usuário quer um resumo de suas movimentações.
+
+Ação do Usuário (Visão do Frontend):
+
+Vai à página de "Relatórios" e clica em "Exportar Relatório de Transações (PDF)".
+O navegador inicia o download de um arquivo relatorio-financeiro.pdf.
+Comportamento do Backend (O que acontece "por baixo dos panos"):
+
+O frontend faz uma requisição GET para /api/reports/export/transactions-pdf.
+Middleware de Escopo (companyScopeMiddleware): Garante que a busca de dados será restrita à empresa do usuário.
+Controlador exportTransactionsPdf:
+Busca todas as transações no banco de dados que correspondem ao companyId do usuário.
+Utiliza a biblioteca pdfkit para criar um documento PDF em memória.
+Ele formata os dados em um layout de relatório, com cabeçalho, tabelas e rodapé.
+Em vez de retornar um JSON, o controlador ajusta os cabeçalhos da resposta HTTP para Content-Type: application/pdf e transmite (pipe) o conteúdo do PDF diretamente para a resposta.
+O navegador do usuário recebe esse fluxo de dados e, por causa do Content-Type, o interpreta como um arquivo para download.
+Passo 6: Logout Seguro
+O usuário termina seu trabalho e decide sair do sistema.
+
+Ação do Usuário (Visão do Frontend):
+
+Clica no seu nome de perfil e seleciona "Sair".
+O frontend apaga os tokens armazenados localmente e redireciona para a página de login.
+Comportamento do Backend (O que acontece "por baixo dos panos"):
+
+O frontend envia uma requisição POST para /api/auth/logout, enviando o refreshToken no corpo.
+O controlador logoutUser "hasheia" o refreshToken recebido.
+Ele busca na coleção sessiontokens pelo documento que contém esse hash.
+Invalidação: Ao encontrar, ele atualiza o campo active para false.
+Resultado: Mesmo que o refreshToken tenha sido interceptado, ele não poderá mais ser usado para gerar novos accessTokens, pois o backend agora o considera inválido. A sessão foi encerrada de forma segura no lado do servidor.

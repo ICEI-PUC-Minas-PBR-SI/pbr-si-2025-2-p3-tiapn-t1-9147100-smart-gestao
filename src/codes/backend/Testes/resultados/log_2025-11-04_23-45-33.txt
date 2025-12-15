@@ -1,0 +1,71 @@
+(node:19692) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL Testes/api.test.js
+  1. Módulo de Autenticação
+    × RF-001: deve cadastrar um novo usuário e empresa (Empresa A) (81 ms)
+    × deve barrar o cadastro de um usuário com e-mail já existente (13 ms)
+    √ deve falhar o login com senha incorreta (24 ms)
+    × deve realizar o login com sucesso para a Empresa A (19 ms)
+    √ deve proteger rotas, barrando acesso sem token (9 ms)
+
+  ● 1. Módulo de Autenticação › RF-001: deve cadastrar um novo usuário e empresa (Empresa A)
+
+    AxiosError: Request failed with status code 500
+
+      40 |
+      41 |     it('RF-001: deve cadastrar um novo usuário e empresa (Empresa A)', async () => {
+    > 42 |         const response = await axios.post(`${API_URL}/auth/register`, {
+         |                          ^
+      43 |             name: empresaA.name,
+      44 |             email: empresaA.email,
+      45 |             password: empresaA.password,
+
+      at settle (node_modules/axios/lib/core/settle.js:19:12)
+      at IncomingMessage.handleStreamEnd (node_modules/axios/lib/adapters/http.js:793:11)
+      at Axios.request (node_modules/axios/lib/core/Axios.js:45:41)
+      at Object.<anonymous> (Testes/api.test.js:42:26)
+
+  ● 1. Módulo de Autenticação › deve barrar o cadastro de um usuário com e-mail já existente
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 409
+    Received: 500
+
+      65 |         } catch (error) {
+      66 |             // Espera-se um erro 409 (Conflict)
+    > 67 |             expect(error.response.status).toBe(409);
+         |                                           ^
+      68 |             expect(error.response.data.message).toContain('E-mail já cadastrado');
+      69 |         }
+      70 |     });
+
+      at Object.toBe (Testes/api.test.js:67:43)
+
+  ● 1. Módulo de Autenticação › deve realizar o login com sucesso para a Empresa A
+
+    AxiosError: Request failed with status code 401
+
+      84 |
+      85 |     it('deve realizar o login com sucesso para a Empresa A', async () => {
+    > 86 |         const response = await axios.post(`${API_URL}/auth/login`, {
+         |                          ^
+      87 |             email: empresaA.email,
+      88 |             password: empresaA.password
+      89 |         });
+
+      at settle (node_modules/axios/lib/core/settle.js:19:12)
+      at IncomingMessage.handleStreamEnd (node_modules/axios/lib/adapters/http.js:793:11)
+      at Axios.request (node_modules/axios/lib/core/Axios.js:45:41)
+      at Object.<anonymous> (Testes/api.test.js:86:26)
+
+----------|---------|----------|---------|---------|-------------------
+File      | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+----------|---------|----------|---------|---------|-------------------
+All files |       0 |        0 |       0 |       0 |                   
+----------|---------|----------|---------|---------|-------------------
+Test Suites: 1 failed, 1 total
+Tests:       3 failed, 2 passed, 5 total
+Snapshots:   0 total
+Time:        0.781 s, estimated 1 s
+Ran all test suites.

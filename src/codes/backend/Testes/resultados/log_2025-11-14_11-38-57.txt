@@ -1,0 +1,247 @@
+
+--- 🚀 [GLOBAL SETUP] Iniciando ambiente de teste ---
+Verificando permissões de sistema...
+Permissões não encontradas. Criando permissões padrão...
+Permissões padrão criadas com sucesso!
+┌─────────┬─────────────────┬──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ (index) │ Nome            │ Descrição                                                                                        │
+├─────────┼─────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ 0       │ 'ROOT'          │ 'Superusuário. Acesso irrestrito a todos os dados e configurações do sistema.'                   │
+│ 1       │ 'ADMIN_COMPANY' │ 'Administrador de uma empresa. Pode gerenciar usuários e todos os dados da sua própria empresa.' │
+│ 2       │ 'USER_COMPANY'  │ 'Usuário padrão. Pode criar e gerenciar seus próprios dados dentro da empresa.'                  │
+└─────────┴─────────────────┴──────────────────────────────────────────────────────────────────────────────────────────────────┘
+⏳ Iniciando servidor Smart Gestão (startServer)...
+Conexão com o MongoDB estabelecida com sucesso.
+✅ [1/1] Conexão com o banco de dados estabelecida!
+✅ Servidor rodando na porta 5000
+--- ✅ [GLOBAL SETUP] Ambiente pronto e servidor iniciado ---
+(node:4052) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+  console.log
+    
+    --- Configurando 3 empresas para o teste multi-tenant ---
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:35:17)
+
+[0mPOST /api/auth/register [32m201[0m 169.121 ms - 355[0m
+[LOG] Ação: REGISTER_COMPANY_USER | Usuário: N/A
+[0mPOST /api/auth/login [32m200[0m 99.538 ms - 698[0m
+  console.log
+    ✅ Empresa 1 (Empresa Teste 1763131140866) cadastrada e logada.
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:64:21)
+
+[LOG] Ação: LOGIN_USER | Usuário: N/A
+[0mPOST /api/auth/register [32m201[0m 148.580 ms - 355[0m
+[LOG] Ação: REGISTER_COMPANY_USER | Usuário: N/A
+[0mPOST /api/auth/login [32m200[0m 104.397 ms - 698[0m
+  console.log
+    ✅ Empresa 2 (Empresa Teste 1763131141209) cadastrada e logada.
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:64:21)
+
+[LOG] Ação: LOGIN_USER | Usuário: N/A
+[0mPOST /api/auth/register [32m201[0m 152.866 ms - 355[0m
+[LOG] Ação: REGISTER_COMPANY_USER | Usuário: N/A
+[0mPOST /api/auth/login [32m200[0m 111.608 ms - 698[0m
+  console.log
+    ✅ Empresa 3 (Empresa Teste 1763131141471) cadastrada e logada.
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:64:21)
+
+  console.log
+    --- Configuração multi-tenant concluída ---
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:66:17)
+
+  console.log
+    
+    --- Criando transações individuais para cada empresa ---
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:71:17)
+
+[LOG] Ação: LOGIN_USER | Usuário: N/A
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 69173f0518dfecb399d7a827
+[0mPOST /api/transactions [32m201[0m 49.863 ms - 437[0m
+  console.log
+    Transação criada para Empresa Teste 1763131140866. ID: 69173f0518dfecb399d7a84d
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:92:21)
+
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 69173f0518dfecb399d7a827
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 69173f0518dfecb399d7a835
+[0mPOST /api/transactions [32m201[0m 44.414 ms - 436[0m
+  console.log
+    Transação criada para Empresa Teste 1763131141209. ID: 69173f0518dfecb399d7a854
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:92:21)
+
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 69173f0518dfecb399d7a835
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 69173f0518dfecb399d7a843
+[0mPOST /api/transactions [32m201[0m 45.058 ms - 429[0m
+  console.log
+    Transação criada para Empresa Teste 1763131141471. ID: 69173f0518dfecb399d7a85b
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:92:21)
+
+  console.log
+    
+    --- Validando isolamento de dados entre todas as empresas ---
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:98:17)
+
+  console.log
+    
+    Verificando a transação 69173f0518dfecb399d7a84d da Empresa Teste 1763131140866
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:105:21)
+
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 69173f0518dfecb399d7a843
+[0mGET /api/transactions/69173f0518dfecb399d7a84d [33m404[0m 26.565 ms - 38[0m
+  console.log
+    - OK: Empresa Teste 1763131141209 foi bloqueada (Status 404).
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:123:29)
+
+[0mGET /api/transactions/69173f0518dfecb399d7a84d [33m404[0m 25.632 ms - 38[0m
+  console.log
+    - OK: Empresa Teste 1763131141471 foi bloqueada (Status 404).
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:123:29)
+
+  console.log
+    
+    Verificando a transação 69173f0518dfecb399d7a854 da Empresa Teste 1763131141209
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:105:21)
+
+[0mGET /api/transactions/69173f0518dfecb399d7a854 [33m404[0m 24.854 ms - 38[0m
+  console.log
+    - OK: Empresa Teste 1763131140866 foi bloqueada (Status 404).
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:123:29)
+
+[0mGET /api/transactions/69173f0518dfecb399d7a854 [33m404[0m 25.243 ms - 38[0m
+  console.log
+    - OK: Empresa Teste 1763131141471 foi bloqueada (Status 404).
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:123:29)
+
+  console.log
+    
+    Verificando a transação 69173f0518dfecb399d7a85b da Empresa Teste 1763131141471
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:105:21)
+
+[0mGET /api/transactions/69173f0518dfecb399d7a85b [33m404[0m 25.064 ms - 38[0m
+  console.log
+    - OK: Empresa Teste 1763131140866 foi bloqueada (Status 404).
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:123:29)
+
+[0mGET /api/transactions/69173f0518dfecb399d7a85b [33m404[0m 25.280 ms - 38[0m
+  console.log
+    - OK: Empresa Teste 1763131141209 foi bloqueada (Status 404).
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:123:29)
+
+  console.log
+    
+    --- Validando listagem de transações ---
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:130:17)
+
+[0mGET /api/transactions [32m200[0m 27.185 ms - 423[0m
+  console.log
+    - OK: Empresa Teste 1763131140866 listou apenas sua própria transação.
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:142:21)
+
+[0mGET /api/transactions [32m200[0m 25.848 ms - 422[0m
+  console.log
+    - OK: Empresa Teste 1763131141209 listou apenas sua própria transação.
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:142:21)
+
+[0mGET /api/transactions [32m200[0m 25.315 ms - 415[0m
+  console.log
+    - OK: Empresa Teste 1763131141471 listou apenas sua própria transação.
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:142:21)
+
+  console.log
+    
+    --- Limpando dados de teste (Teardown) ---
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:148:17)
+
+[0mDELETE /api/auth/users/69173f0518dfecb399d7a827 [32m200[0m 72.745 ms - 107[0m
+  console.log
+    - ✅ Empresa Empresa Teste 1763131140866 e dados associados excluídos com sucesso.
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:155:25)
+
+[LOG] Ação: DELETE_USER_BY_ID | Usuário: 69173f0518dfecb399d7a827
+[0mDELETE /api/auth/users/69173f0518dfecb399d7a835 [32m200[0m 72.189 ms - 107[0m
+  console.log
+    - ✅ Empresa Empresa Teste 1763131141209 e dados associados excluídos com sucesso.
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:155:25)
+
+[LOG] Ação: DELETE_USER_BY_ID | Usuário: 69173f0518dfecb399d7a835
+[0mDELETE /api/auth/users/69173f0518dfecb399d7a843 [32m200[0m 73.230 ms - 107[0m
+  console.log
+    - ✅ Empresa Empresa Teste 1763131141471 e dados associados excluídos com sucesso.
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:155:25)
+
+PASS Testes/3-security/multi-tenant.test.js
+  3. Teste de Isolamento de Dados (Multi-Tenant)
+    √ deve criar uma transação para cada empresa (158 ms)
+    √ deve impedir que uma empresa acesse a transação de outra (184 ms)
+    √ deve garantir que cada empresa liste apenas suas próprias transações (88 ms)
+
+[LOG] Ação: DELETE_USER_BY_ID | Usuário: 69173f0518dfecb399d7a843
+[0mPOST /api/auth/register [32m201[0m 139.325 ms - 357[0m
+[LOG] Ação: REGISTER_COMPANY_USER | Usuário: N/A
+[0mPOST /api/auth/login [32m200[0m 105.751 ms - 700[0m
+[LOG] Ação: LOGIN_USER | Usuário: N/A
+[0mPOST /api/auth/register [32m201[0m 132.982 ms - 355[0m
+[LOG] Ação: REGISTER_COMPANY_USER | Usuário: N/A
+[0mPOST /api/auth/login [32m200[0m 95.426 ms - 698[0m
+[LOG] Ação: LOGIN_USER | Usuário: N/A
+[0mPOST /api/auth/register [32m201[0m 132.523 ms - 351[0m
+[LOG] Ação: REGISTER_COMPANY_USER | Usuário: N/A
+[0mPOST /api/auth/login [32m200[0m 93.187 ms - 694[0m
+[LOG] Ação: LOGIN_USER | Usuário: N/A
+FAIL Testes/3-security/persistence.test.js (5.51 s)
+  Security: Persistência de Dados Manuais
+    × deve garantir que os usuários de teste manuais permaneçam no banco após a execução de `npm test` (4847 ms)
+
+  ● Security: Persistência de Dados Manuais › deve garantir que os usuários de teste manuais permaneçam no banco após a execução de `npm test`
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 3
+    Received: 0
+
+    [0m [90m 50 |[39m             [90m// 4. Verifica se os usuários manuais ainda existem no banco.[39m
+     [90m 51 |[39m             [36mconst[39m foundUsers [33m=[39m [36mawait[39m [33mUser[39m[33m.[39mfind({ email[33m:[39m { $in[33m:[39m manualTestEmails } })[33m;[39m
+    [31m[1m>[22m[39m[90m 52 |[39m             expect(foundUsers[33m.[39mlength)[33m.[39mtoBe(manualTestEmails[33m.[39mlength)[33m;[39m
+     [90m    |[39m                                       [31m[1m^[22m[39m
+     [90m 53 |[39m         } [36mfinally[39m {
+     [90m 54 |[39m             [90m// 5. Garante que a conexão seja fechada, mesmo que o teste falhe.[39m
+     [90m 55 |[39m             [36mawait[39m mongoose[33m.[39mdisconnect()[33m;[39m[0m
+
+      at Object.toBe (Testes/3-security/persistence.test.js:52:39)
+
+Test Suites: 1 failed, 1 passed, 2 total
+Tests:       1 failed, 3 passed, 4 total
+Snapshots:   0 total
+Time:        7.493 s
+Ran all test suites matching Testes/3-security.
+
+--- 🧹 [GLOBAL TEARDOWN] Finalizando ambiente de teste ---
+   - [OK] Dados de teste temporários foram removidos.
+✅ Servidor e conexão com MongoDB encerrados (stopServer).
+--- ✅ [GLOBAL TEARDOWN] Ambiente finalizado com sucesso ---

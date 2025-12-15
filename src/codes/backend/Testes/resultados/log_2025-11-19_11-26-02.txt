@@ -1,0 +1,84 @@
+
+--- 🚀 [GLOBAL SETUP] Iniciando ambiente de teste ---
+Verificando permissões de sistema...
+Permissões não encontradas. Criando permissões padrão...
+Permissões padrão criadas com sucesso!
+┌─────────┬─────────────────┬──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ (index) │ Nome            │ Descrição                                                                                        │
+├─────────┼─────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ 0       │ 'ROOT'          │ 'Superusuário. Acesso irrestrito a todos os dados e configurações do sistema.'                   │
+│ 1       │ 'ADMIN_COMPANY' │ 'Administrador de uma empresa. Pode gerenciar usuários e todos os dados da sua própria empresa.' │
+│ 2       │ 'USER_COMPANY'  │ 'Usuário padrão. Pode criar e gerenciar seus próprios dados dentro da empresa.'                  │
+└─────────┴─────────────────┴──────────────────────────────────────────────────────────────────────────────────────────────────┘
+⏳ Iniciando servidor Smart Gestão (startServer)...
+Conexão com o MongoDB estabelecida com sucesso.
+✅ [1/1] Conexão com o banco de dados estabelecida!
+✅ Servidor rodando na porta 5000
+--- ✅ [GLOBAL SETUP] Ambiente pronto e servidor iniciado ---
+(node:38952) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+[LOG] Ação: CREATE_GOAL | Usuário: 691dd37fd0534f10aebb1ccf
+[0mPOST /api/goals [32m201[0m 54.005 ms - 455[0m
+[LOG] Ação: CREATE_GOAL | Usuário: 691dd37fd0534f10aebb1ccf
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 691dd37fd0534f10aebb1ccf
+[DEBUG] checkGoalOnTransactionCreate chamado. ID: 691dd380d0534f10aebb1ce9, Type: expense
+[DEBUG] Buscando meta. CompanyId: 691dd37fd0534f10aebb1ccd (object), Category: Alimentação, Date: Wed Nov 19 2025 11:26:08 GMT-0300 (Brasilia Standard Time)
+[DEBUG] Metas encontradas no banco para esta empresa: 1
+   - Goal ID: 691dd380d0534f10aebb1cdd
+     Category: Alimentação (Match? true)
+     Type: expense (Match? true)
+     Start: Sat Nov 01 2025 00:00:00 GMT-0300 (Brasilia Standard Time) (Match? true)
+     End: Sun Nov 30 2025 00:00:00 GMT-0300 (Brasilia Standard Time) (Match? true)
+[DEBUG] Verificando meta para transação: 691dd380d0534f10aebb1ce9, Valor: 80, Categoria: Alimentação
+[DEBUG] Meta encontrada: 691dd380d0534f10aebb1cdd, Alvo: 100
+[DEBUG] Total Anterior: 0, Novo Total: 80, Meta: 100
+[0mPOST /api/transactions [32m201[0m 90.117 ms - 448[0m
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 691dd37fd0534f10aebb1ccf
+[0mGET /api/alerts [32m200[0m 30.246 ms - 72[0m
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 691dd37fd0534f10aebb1ccf
+[DEBUG] checkGoalOnTransactionCreate chamado. ID: 691dd380d0534f10aebb1cf5, Type: expense
+[DEBUG] Buscando meta. CompanyId: 691dd37fd0534f10aebb1ccd (object), Category: Alimentação, Date: Wed Nov 19 2025 11:26:08 GMT-0300 (Brasilia Standard Time)
+[DEBUG] Metas encontradas no banco para esta empresa: 1
+   - Goal ID: 691dd380d0534f10aebb1cdd
+     Category: Alimentação (Match? true)
+     Type: expense (Match? true)
+     Start: Sat Nov 01 2025 00:00:00 GMT-0300 (Brasilia Standard Time) (Match? true)
+     End: Sun Nov 30 2025 00:00:00 GMT-0300 (Brasilia Standard Time) (Match? true)
+[DEBUG] Verificando meta para transação: 691dd380d0534f10aebb1cf5, Valor: 30, Categoria: Alimentação
+[DEBUG] Meta encontrada: 691dd380d0534f10aebb1cdd, Alvo: 100
+[DEBUG] Total Anterior: 80, Novo Total: 110, Meta: 100
+[LOG] Ação: AUTO_CREATE_ALERT | Usuário: 691dd37fd0534f10aebb1ccf
+[0mPOST /api/transactions [32m201[0m 145.833 ms - 445[0m
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 691dd37fd0534f10aebb1ccf
+[0mGET /api/alerts [32m200[0m 28.179 ms - 419[0m
+FAIL Testes/2-features/alerts.test.js
+  6. Módulo de Alertas de Metas
+    × RF-006: deve criar um alerta quando uma despesa ultrapassa a meta da categoria (406 ms)
+
+  ● 6. Módulo de Alertas de Metas › RF-006: deve criar um alerta quando uma despesa ultrapassa a meta da categoria
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: undefined
+    Received: "691dd380d0534f10aebb1cdd"
+
+    [0m [90m 68 |[39m     expect(alertsResponse[33m.[39mdata[33m.[39mdata)[33m.[39mtoHaveLength([35m1[39m)[33m;[39m
+     [90m 69 |[39m     [36mconst[39m alert [33m=[39m alertsResponse[33m.[39mdata[33m.[39mdata[[35m0[39m][33m;[39m
+    [31m[1m>[22m[39m[90m 70 |[39m     expect(alert[33m.[39mgoalId)[33m.[39mtoBe(goalId)[33m;[39m
+     [90m    |[39m                          [31m[1m^[22m[39m
+     [90m 71 |[39m     expect(alert[33m.[39mmessage)[33m.[39mtoContain([32m'Sua meta de gastos para a categoria "Alimentação" foi atingida!'[39m)[33m;[39m
+     [90m 72 |[39m     expect(alert[33m.[39mtype)[33m.[39mtoBe([32m'limit_reached'[39m)[33m;[39m
+     [90m 73 |[39m[0m
+
+      at Object.<anonymous> (Testes/2-features/alerts.test.js:70:26)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 1 total
+Snapshots:   0 total
+Time:        0.813 s
+Ran all test suites matching Testes/2-features/alerts.test.js.
+
+--- 🧹 [GLOBAL TEARDOWN] Finalizando ambiente de teste ---
+   - [OK] Dados de teste temporários foram removidos.
+✅ Servidor e conexão com MongoDB encerrados (stopServer).
+--- ✅ [GLOBAL TEARDOWN] Ambiente finalizado com sucesso ---

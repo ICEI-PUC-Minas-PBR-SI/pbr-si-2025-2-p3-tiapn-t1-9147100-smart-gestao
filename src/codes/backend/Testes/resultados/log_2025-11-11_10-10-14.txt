@@ -1,0 +1,13 @@
+
+--- 🚀 [SETUP] Conectando e populando o banco de dados de TESTE online ---
+
+--- FIM DOS TESTES AUTOMATIZADOS (COM FALHAS) ---
+Error: Jest: Got error running globalSetup - F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\Testes\test-setup.js, reason: ERRO FATAL: A variável MONGO_URI_TEST não está definida no seu arquivo .env
+    at setup (file:///F:/Programacao/GitHub/pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao/src/codes/backend/Testes/test-setup.js:25:44)
+    at F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\@jest\core\build\index.js:3166:17
+    at ScriptTransformer.requireAndTranspileModule (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\@jest\transform\build\index.js:623:24)
+    at async runGlobalHook (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\@jest\core\build\index.js:3162:9)
+    at async runJest (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\@jest\core\build\index.js:3429:5)
+    at async _run10000 (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\@jest\core\build\index.js:1543:5)
+    at async runCLI (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\@jest\core\build\index.js:1444:3)
+    at async Object.run (F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\jest-cli\build\index.js:656:9)

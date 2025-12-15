@@ -1,0 +1,240 @@
+  console.log
+    
+    --- Configurando Empresa A ---
+
+      at Object.log (Testes/isolamento.test.js:42:17)
+
+(node:22440) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+  console.log
+    Empresa A configurada e logada.
+
+      at Object.log (Testes/isolamento.test.js:55:17)
+
+  console.log
+    
+    --- Configurando Empresa B ---
+
+      at Object.log (Testes/isolamento.test.js:58:17)
+
+  console.log
+    Empresa B - Cadastro (Status): 201
+
+      at Object.log (Testes/isolamento.test.js:67:17)
+
+  console.log
+    Empresa B - Cadastro (Corpo): {
+      "message": "Usuário cadastrado com sucesso!"
+    }
+
+      at Object.log (Testes/isolamento.test.js:68:17)
+
+  console.log
+    Empresa B configurada e logada.
+
+      at Object.log (Testes/isolamento.test.js:78:17)
+
+  console.log
+    
+    --- Criando transação para Empresa A ---
+
+      at Object.log (Testes/isolamento.test.js:84:17)
+
+  console.log
+    
+    --- Tentando listar transações com token da Empresa B ---
+
+      at Object.log (Testes/isolamento.test.js:161:17)
+
+  console.log
+    Enviando: GET para http://localhost:5000/api/transactions com token da Empresa B
+
+      at Object.log (Testes/isolamento.test.js:162:17)
+
+  console.log
+    Empresa B - Listar Transações (Status): 200
+
+      at Object.log (Testes/isolamento.test.js:170:17)
+
+  console.log
+    Empresa B - Listar Transações (Corpo): []
+
+      at Object.log (Testes/isolamento.test.js:171:17)
+
+FAIL Testes/isolamento.test.js
+  2. Teste de Isolamento de Dados (Transações)
+    × deve impedir o acesso, modificação e exclusão de transações entre empresas (63 ms)
+    √ deve impedir que a Empresa B liste todas as transações da Empresa A (192 ms)
+
+  ● 2. Teste de Isolamento de Dados (Transações) › deve impedir o acesso, modificação e exclusão de transações entre empresas
+
+    AxiosError: Request failed with status code 500
+
+      84 |         console.log('\n--- Criando transação para Empresa A ---');
+      85 |
+    > 86 |         const createTransaction = await axios.post(`${API_URL}/transactions`, {
+         |                                   ^
+      87 |             description: 'Transação de Teste Empresa A',
+      88 |             amount: 100,
+      89 |             type: 'expense', // Campo obrigatório
+
+      at settle (node_modules/axios/lib/core/settle.js:19:12)
+      at IncomingMessage.handleStreamEnd (node_modules/axios/lib/adapters/http.js:793:11)
+      at Axios.request (node_modules/axios/lib/core/Axios.js:45:41)
+      at Object.<anonymous> (Testes/isolamento.test.js:86:35)
+
+  console.log
+    
+    --- Teste: Cadastrar novo usuário ---
+
+      at Object.log (Testes/api.test.js:50:17)
+
+  console.log
+    Enviando: {
+      "name": "Usuário A",
+      "email": "empresaA_1762381596771@test.com",
+      "password": "password123",
+      "companyName": "Empresa A Teste 1762381596771",
+      "cnpj": "01762381596771"
+    }
+
+      at Object.log (Testes/api.test.js:51:17)
+
+  console.log
+    Recebido (Status): 201
+
+      at Object.log (Testes/api.test.js:56:21)
+
+  console.log
+    Recebido (Corpo): {
+      "message": "Usuário cadastrado com sucesso!"
+    }
+
+      at Object.log (Testes/api.test.js:57:21)
+
+  console.log
+    
+    --- Teste: Barrar e-mail duplicado ---
+
+      at Object.log (Testes/api.test.js:79:17)
+
+  console.log
+    Enviando: {
+      "name": "Usuário A",
+      "email": "empresaA_1762381596771@test.com",
+      "password": "password123",
+      "companyName": "Nome Duplicado",
+      "cnpj": "11223344556677"
+    }
+
+      at Object.log (Testes/api.test.js:80:17)
+
+  console.log
+    Recebido (Status): 409
+
+      at Object.log (Testes/api.test.js:86:21)
+
+  console.log
+    Recebido (Corpo): {
+      "message": "E-mail já cadastrado."
+    }
+
+      at Object.log (Testes/api.test.js:87:21)
+
+  console.log
+    
+    --- Teste: Login com senha incorreta ---
+
+      at Object.log (Testes/api.test.js:101:17)
+
+  console.log
+    Enviando: {
+      "email": "empresaA_1762381596771@test.com",
+      "password": "senha-errada"
+    }
+
+      at Object.log (Testes/api.test.js:102:17)
+
+  console.log
+    Recebido (Status): 401
+
+      at Object.log (Testes/api.test.js:107:21)
+
+  console.log
+    Recebido (Corpo): {
+      "message": "Credenciais inválidas."
+    }
+
+      at Object.log (Testes/api.test.js:108:21)
+
+  console.log
+    
+    --- Teste: Login com sucesso ---
+
+      at Object.log (Testes/api.test.js:122:17)
+
+  console.log
+    Enviando: {
+      "email": "empresaA_1762381596771@test.com",
+      "password": "password123"
+    }
+
+      at Object.log (Testes/api.test.js:123:17)
+
+  console.log
+    Recebido (Status): 200
+
+      at Object.log (Testes/api.test.js:127:17)
+
+  console.log
+    Recebido (Corpo): {
+      "user": {
+        "name": "Usuário A",
+        "email": "empresaa_1762381596771@test.com"
+      },
+      "message": "Tokens recebidos"
+    }
+
+      at Object.log (Testes/api.test.js:128:17)
+
+  console.log
+    
+    --- Teste: Acesso a rota protegida sem token ---
+
+      at Object.log (Testes/api.test.js:141:17)
+
+  console.log
+    Enviando: GET para http://localhost:5000/api/transactions
+
+      at Object.log (Testes/api.test.js:142:17)
+
+  console.log
+    Recebido (Status): 401
+
+      at Object.log (Testes/api.test.js:148:21)
+
+  console.log
+    Recebido (Corpo): {
+      "message": "Token ausente ou formato inválido"
+    }
+
+      at Object.log (Testes/api.test.js:149:21)
+
+PASS Testes/api.test.js
+  1. Módulo de Autenticação
+    √ RF-001: deve cadastrar um novo usuário e empresa (Empresa A) (273 ms)
+    √ deve barrar o cadastro de um usuário com e-mail já existente (74 ms)
+    √ deve falhar o login com senha incorreta (160 ms)
+    √ deve realizar o login com sucesso para a Empresa A (110 ms)
+    √ deve proteger rotas, barrando acesso sem token (12 ms)
+
+----------|---------|----------|---------|---------|-------------------
+File      | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+----------|---------|----------|---------|---------|-------------------
+All files |       0 |        0 |       0 |       0 |                   
+----------|---------|----------|---------|---------|-------------------
+Test Suites: 1 failed, 1 passed, 2 total
+Tests:       1 failed, 6 passed, 7 total
+Snapshots:   0 total
+Time:        3.571 s
+Ran all test suites.

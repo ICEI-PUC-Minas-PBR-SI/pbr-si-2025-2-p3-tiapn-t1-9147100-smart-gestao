@@ -1,0 +1,19 @@
+# Ignorar dependências do Node.js
+node_modules/
+
+# Ignorar arquivos de ambiente (contêm segredos)
+.env
+
+# Arquivos de log
+*.log
+
+# Pastas de artefatos de teste
+Testes/PDFs/
+Testes/resultados/
+
+# Arquivos temporários de teste gerados pelo Jest
+.mongo-uri-test
+test-setup.json
+
+# Arquivos gerados pelo sistema operacional
+.DS_Store

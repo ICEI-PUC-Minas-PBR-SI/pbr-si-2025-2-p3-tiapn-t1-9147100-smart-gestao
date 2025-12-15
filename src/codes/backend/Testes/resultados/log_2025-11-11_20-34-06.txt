@@ -1,0 +1,73 @@
+
+--- FIM DOS TESTES AUTOMATIZADOS (COM FALHAS) ---
+ FAIL  Testes/auth.test.js
+  ● Test suite failed to run
+
+    Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'mongodb-memory-server' imported from F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\Testes\mongo-test-environment.js
+
+
+ FAIL  Testes/multi-tenant.test.js
+  ● Test suite failed to run
+
+    Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'mongodb-memory-server' imported from F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\Testes\mongo-test-environment.js
+
+
+ FAIL  Testes/transactions.test.js
+  ● Test suite failed to run
+
+    Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'mongodb-memory-server' imported from F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\Testes\mongo-test-environment.js
+
+
+ FAIL  Testes/api.test.js
+  ● Test suite failed to run
+
+    Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'mongodb-memory-server' imported from F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\Testes\mongo-test-environment.js
+
+
+ FAIL  Testes/metas.test.js
+  ● Test suite failed to run
+
+    Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'mongodb-memory-server' imported from F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\Testes\mongo-test-environment.js
+
+
+ FAIL  Testes/auth.legacy.test.js
+  ● Test suite failed to run
+
+    Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'mongodb-memory-server' imported from F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\Testes\mongo-test-environment.js
+
+
+ FAIL  Testes/isolamento.test.js
+  ● Test suite failed to run
+
+    Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'mongodb-memory-server' imported from F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\Testes\mongo-test-environment.js
+
+
+ FAIL  Testes/isolamento.legacy.test.js
+  ● Test suite failed to run
+
+    Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'mongodb-memory-server' imported from F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\Testes\mongo-test-environment.js
+
+
+ FAIL  Testes/isolamento-simples.test.js
+  ● Test suite failed to run
+
+    Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'mongodb-memory-server' imported from F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\Testes\mongo-test-environment.js
+
+
+ FAIL  Testes/reports.test.js
+  ● Test suite failed to run
+
+    Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'mongodb-memory-server' imported from F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\Testes\mongo-test-environment.js
+
+
+ FAIL  Testes/clients.test.js
+  ● Test suite failed to run
+
+    Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'mongodb-memory-server' imported from F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\Testes\mongo-test-environment.js
+
+
+Test Suites: 11 failed, 11 total
+Tests:       0 total
+Snapshots:   0 total
+Time:        0.074 s, estimated 15 s
+Ran all test suites.

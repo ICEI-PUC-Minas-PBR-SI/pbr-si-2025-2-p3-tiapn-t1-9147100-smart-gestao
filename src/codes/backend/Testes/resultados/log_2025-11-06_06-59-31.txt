@@ -1,0 +1,562 @@
+
+--- 🚀 Iniciando Setup Global de Testes ---
+✅ Empresa Padrão 1 criada para os testes.
+✅ Empresa Padrão 2 criada para os testes.
+--- ✅ Setup Global Concluído. Dados salvos em Testes\test-setup.json ---
+
+  console.log
+    
+    --- Criando transação para Empresa A ---
+
+      at Object.log (isolamento.test.js:27:17)
+
+  console.log
+    Empresa A - Criar Transação (Status): 201
+
+      at Object.log (isolamento.test.js:40:17)
+
+  console.log
+    Empresa A - Criar Transação (Corpo): {
+      "companyId": "690c718463efe172c46d53e9",
+      "userId": "690c718463efe172c46d53eb",
+      "type": "expense",
+      "description": "Transação de Teste Empresa A",
+      "amount": 100,
+      "date": "2025-11-06T09:59:33.655Z",
+      "paymentMethod": "other",
+      "status": "pending",
+      "_id": "690c718563efe172c46d53ff",
+      "createdAt": "2025-11-06T09:59:33.685Z",
+      "updatedAt": "2025-11-06T09:59:33.685Z",
+      "__v": 0
+    }
+
+      at Object.log (isolamento.test.js:41:17)
+
+  console.log
+    Empresa A - ID da Transação Criada: 690c718563efe172c46d53ff
+
+      at Object.log (isolamento.test.js:45:17)
+
+  console.log
+    
+    --- Tentando acessar transação da Empresa A com token da Empresa B ---
+
+      at Object.log (isolamento.test.js:48:17)
+
+  console.log
+    Enviando: GET para http://localhost:5000/api/transactions/690c718563efe172c46d53ff com token da Empresa B
+
+      at Object.log (isolamento.test.js:49:17)
+
+  console.log
+    Empresa B - Acessar Transação (Status): 404
+
+      at Object.log (isolamento.test.js:57:21)
+
+  console.log
+    Empresa B - Acessar Transação (Corpo): "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot GET /api/transactions/690c718563efe172c46d53ff</pre>\n</body>\n</html>\n"
+
+      at Object.log (isolamento.test.js:58:21)
+
+  console.log
+    
+    --- Tentando modificar transação da Empresa A com token da Empresa B ---
+
+      at Object.log (isolamento.test.js:68:17)
+
+  console.log
+    Enviando: PUT para http://localhost:5000/api/transactions/690c718563efe172c46d53ff com token da Empresa B
+
+      at Object.log (isolamento.test.js:70:17)
+
+  console.log
+    Dados da atualização: {
+      "description": "Tentativa de Modificação pela Empresa B",
+      "amount": 999
+    }
+
+      at Object.log (isolamento.test.js:71:17)
+
+  console.log
+    Empresa B - Modificar Transação (Status): 404
+
+      at Object.log (isolamento.test.js:79:21)
+
+  console.log
+    Empresa B - Modificar Transação (Corpo): {
+      "message": "Transaction não encontrada"
+    }
+
+      at Object.log (isolamento.test.js:80:21)
+
+  console.log
+    
+    --- Tentando excluir transação da Empresa A com token da Empresa B ---
+
+      at Object.log (isolamento.test.js:86:17)
+
+  console.log
+    Enviando: DELETE para http://localhost:5000/api/transactions/690c718563efe172c46d53ff com token da Empresa B
+
+      at Object.log (isolamento.test.js:87:17)
+
+  console.log
+    Empresa B - Excluir Transação (Status): 404
+
+      at Object.log (isolamento.test.js:95:21)
+
+  console.log
+    Empresa B - Excluir Transação (Corpo): {
+      "message": "Transaction não encontrada"
+    }
+
+      at Object.log (isolamento.test.js:96:21)
+
+  console.log
+    
+    --- Tentando listar transações com token da Empresa B ---
+
+      at Object.log (isolamento.test.js:104:17)
+
+  console.log
+    Enviando: GET para http://localhost:5000/api/transactions com token da Empresa B
+
+      at Object.log (isolamento.test.js:105:17)
+
+  console.log
+    Empresa B - Listar Transações (Status): 200
+
+      at Object.log (isolamento.test.js:113:17)
+
+  console.log
+    Empresa B - Listar Transações (Corpo): []
+
+      at Object.log (isolamento.test.js:114:17)
+
+  console.log
+    
+    --- Configurando 5 empresas para o teste multi-tenant ---
+
+      at Object.log (multi-tenant.test.js:12:17)
+
+  console.log
+    ✅ Empresa 1 (Empresa Teste 1762423174108) cadastrada e logada.
+
+      at Object.log (multi-tenant.test.js:40:21)
+
+  console.log
+    ✅ Empresa 2 (Empresa Teste 1762423174367) cadastrada e logada.
+
+      at Object.log (multi-tenant.test.js:40:21)
+
+  console.log
+    ✅ Empresa 3 (Empresa Teste 1762423174613) cadastrada e logada.
+
+      at Object.log (multi-tenant.test.js:40:21)
+
+  console.log
+    ✅ Empresa 4 (Empresa Teste 1762423174894) cadastrada e logada.
+
+      at Object.log (multi-tenant.test.js:40:21)
+
+  console.log
+    ✅ Empresa 5 (Empresa Teste 1762423175149) cadastrada e logada.
+
+      at Object.log (multi-tenant.test.js:40:21)
+
+  console.log
+    --- Configuração multi-tenant concluída ---
+
+      at Object.log (multi-tenant.test.js:42:17)
+
+  console.log
+    
+    --- Criando transações individuais para cada empresa ---
+
+      at Object.log (multi-tenant.test.js:47:17)
+
+  console.log
+    Transação criada para Empresa Teste 1762423174108. ID: 690c718763efe172c46d544c
+
+      at Object.log (multi-tenant.test.js:68:21)
+
+  console.log
+    Transação criada para Empresa Teste 1762423174367. ID: 690c718763efe172c46d5453
+
+      at Object.log (multi-tenant.test.js:68:21)
+
+  console.log
+    Transação criada para Empresa Teste 1762423174613. ID: 690c718763efe172c46d545a
+
+      at Object.log (multi-tenant.test.js:68:21)
+
+  console.log
+    Transação criada para Empresa Teste 1762423174894. ID: 690c718763efe172c46d5461
+
+      at Object.log (multi-tenant.test.js:68:21)
+
+  console.log
+    Transação criada para Empresa Teste 1762423175149. ID: 690c718763efe172c46d5468
+
+      at Object.log (multi-tenant.test.js:68:21)
+
+  console.log
+    
+    --- Validando isolamento de dados entre todas as empresas ---
+
+      at Object.log (multi-tenant.test.js:74:17)
+
+  console.log
+    
+    Verificando a transação 690c718763efe172c46d544c da Empresa Teste 1762423174108
+
+      at Object.log (multi-tenant.test.js:81:21)
+
+  console.log
+    - OK: Empresa Teste 1762423174367 foi bloqueada (Status 404).
+
+      at Object.log (multi-tenant.test.js:99:29)
+
+  console.log
+    - OK: Empresa Teste 1762423174613 foi bloqueada (Status 404).
+
+      at Object.log (multi-tenant.test.js:99:29)
+
+  console.log
+    - OK: Empresa Teste 1762423174894 foi bloqueada (Status 404).
+
+      at Object.log (multi-tenant.test.js:99:29)
+
+  console.log
+    - OK: Empresa Teste 1762423175149 foi bloqueada (Status 404).
+
+      at Object.log (multi-tenant.test.js:99:29)
+
+  console.log
+    
+    Verificando a transação 690c718763efe172c46d5453 da Empresa Teste 1762423174367
+
+      at Object.log (multi-tenant.test.js:81:21)
+
+  console.log
+    - OK: Empresa Teste 1762423174108 foi bloqueada (Status 404).
+
+      at Object.log (multi-tenant.test.js:99:29)
+
+  console.log
+    - OK: Empresa Teste 1762423174613 foi bloqueada (Status 404).
+
+      at Object.log (multi-tenant.test.js:99:29)
+
+  console.log
+    - OK: Empresa Teste 1762423174894 foi bloqueada (Status 404).
+
+      at Object.log (multi-tenant.test.js:99:29)
+
+  console.log
+    - OK: Empresa Teste 1762423175149 foi bloqueada (Status 404).
+
+      at Object.log (multi-tenant.test.js:99:29)
+
+  console.log
+    
+    Verificando a transação 690c718763efe172c46d545a da Empresa Teste 1762423174613
+
+      at Object.log (multi-tenant.test.js:81:21)
+
+  console.log
+    - OK: Empresa Teste 1762423174108 foi bloqueada (Status 404).
+
+      at Object.log (multi-tenant.test.js:99:29)
+
+  console.log
+    - OK: Empresa Teste 1762423174367 foi bloqueada (Status 404).
+
+      at Object.log (multi-tenant.test.js:99:29)
+
+  console.log
+    - OK: Empresa Teste 1762423174894 foi bloqueada (Status 404).
+
+      at Object.log (multi-tenant.test.js:99:29)
+
+  console.log
+    - OK: Empresa Teste 1762423175149 foi bloqueada (Status 404).
+
+      at Object.log (multi-tenant.test.js:99:29)
+
+  console.log
+    
+    Verificando a transação 690c718763efe172c46d5461 da Empresa Teste 1762423174894
+
+      at Object.log (multi-tenant.test.js:81:21)
+
+  console.log
+    - OK: Empresa Teste 1762423174108 foi bloqueada (Status 404).
+
+      at Object.log (multi-tenant.test.js:99:29)
+
+  console.log
+    - OK: Empresa Teste 1762423174367 foi bloqueada (Status 404).
+
+      at Object.log (multi-tenant.test.js:99:29)
+
+  console.log
+    - OK: Empresa Teste 1762423174613 foi bloqueada (Status 404).
+
+      at Object.log (multi-tenant.test.js:99:29)
+
+  console.log
+    - OK: Empresa Teste 1762423175149 foi bloqueada (Status 404).
+
+      at Object.log (multi-tenant.test.js:99:29)
+
+  console.log
+    
+    Verificando a transação 690c718763efe172c46d5468 da Empresa Teste 1762423175149
+
+      at Object.log (multi-tenant.test.js:81:21)
+
+  console.log
+    - OK: Empresa Teste 1762423174108 foi bloqueada (Status 404).
+
+      at Object.log (multi-tenant.test.js:99:29)
+
+  console.log
+    - OK: Empresa Teste 1762423174367 foi bloqueada (Status 404).
+
+      at Object.log (multi-tenant.test.js:99:29)
+
+  console.log
+    - OK: Empresa Teste 1762423174613 foi bloqueada (Status 404).
+
+      at Object.log (multi-tenant.test.js:99:29)
+
+  console.log
+    - OK: Empresa Teste 1762423174894 foi bloqueada (Status 404).
+
+      at Object.log (multi-tenant.test.js:99:29)
+
+  console.log
+    
+    --- Validando listagem de transações ---
+
+      at Object.log (multi-tenant.test.js:106:17)
+
+  console.log
+    - OK: Empresa Teste 1762423174108 listou apenas sua própria transação.
+
+      at Object.log (multi-tenant.test.js:118:21)
+
+  console.log
+    - OK: Empresa Teste 1762423174367 listou apenas sua própria transação.
+
+      at Object.log (multi-tenant.test.js:118:21)
+
+  console.log
+    - OK: Empresa Teste 1762423174613 listou apenas sua própria transação.
+
+      at Object.log (multi-tenant.test.js:118:21)
+
+  console.log
+    - OK: Empresa Teste 1762423174894 listou apenas sua própria transação.
+
+      at Object.log (multi-tenant.test.js:118:21)
+
+  console.log
+    - OK: Empresa Teste 1762423175149 listou apenas sua própria transação.
+
+      at Object.log (multi-tenant.test.js:118:21)
+
+  console.log
+    
+    --- Limpando dados de teste (Teardown) ---
+
+      at Object.log (multi-tenant.test.js:124:17)
+
+  console.error
+    - ❌ Falha ao excluir a empresa Empresa Teste 1762423174108: {
+      message: 'Erro ao remover user',
+      error: 'Cast to ObjectId failed for value "me" (type string) at path "_id" for model "User"'
+    }
+
+      131 |                 console.log(`- ✅ Empresa ${company.companyName} excluída com sucesso.`);
+      132 |             } catch (error) {
+    > 133 |                 console.error(`- ❌ Falha ao excluir a empresa ${company.companyName}:`, error.response?.data || error.message);
+          |                         ^
+      134 |             }
+      135 |         }
+      136 |     });
+
+      at Object.error (multi-tenant.test.js:133:25)
+
+  console.error
+    - ❌ Falha ao excluir a empresa Empresa Teste 1762423174367: {
+      message: 'Erro ao remover user',
+      error: 'Cast to ObjectId failed for value "me" (type string) at path "_id" for model "User"'
+    }
+
+      131 |                 console.log(`- ✅ Empresa ${company.companyName} excluída com sucesso.`);
+      132 |             } catch (error) {
+    > 133 |                 console.error(`- ❌ Falha ao excluir a empresa ${company.companyName}:`, error.response?.data || error.message);
+          |                         ^
+      134 |             }
+      135 |         }
+      136 |     });
+
+      at Object.error (multi-tenant.test.js:133:25)
+
+  console.error
+    - ❌ Falha ao excluir a empresa Empresa Teste 1762423174613: {
+      message: 'Erro ao remover user',
+      error: 'Cast to ObjectId failed for value "me" (type string) at path "_id" for model "User"'
+    }
+
+      131 |                 console.log(`- ✅ Empresa ${company.companyName} excluída com sucesso.`);
+      132 |             } catch (error) {
+    > 133 |                 console.error(`- ❌ Falha ao excluir a empresa ${company.companyName}:`, error.response?.data || error.message);
+          |                         ^
+      134 |             }
+      135 |         }
+      136 |     });
+
+      at Object.error (multi-tenant.test.js:133:25)
+
+  console.error
+    - ❌ Falha ao excluir a empresa Empresa Teste 1762423174894: {
+      message: 'Erro ao remover user',
+      error: 'Cast to ObjectId failed for value "me" (type string) at path "_id" for model "User"'
+    }
+
+      131 |                 console.log(`- ✅ Empresa ${company.companyName} excluída com sucesso.`);
+      132 |             } catch (error) {
+    > 133 |                 console.error(`- ❌ Falha ao excluir a empresa ${company.companyName}:`, error.response?.data || error.message);
+          |                         ^
+      134 |             }
+      135 |         }
+      136 |     });
+
+      at Object.error (multi-tenant.test.js:133:25)
+
+  console.error
+    - ❌ Falha ao excluir a empresa Empresa Teste 1762423175149: {
+      message: 'Erro ao remover user',
+      error: 'Cast to ObjectId failed for value "me" (type string) at path "_id" for model "User"'
+    }
+
+      131 |                 console.log(`- ✅ Empresa ${company.companyName} excluída com sucesso.`);
+      132 |             } catch (error) {
+    > 133 |                 console.error(`- ❌ Falha ao excluir a empresa ${company.companyName}:`, error.response?.data || error.message);
+          |                         ^
+      134 |             }
+      135 |         }
+      136 |     });
+
+      at Object.error (multi-tenant.test.js:133:25)
+
+  console.log
+    
+    --- Teste: Validar setup do usuário ---
+
+      at Object.log (api.test.js:28:17)
+
+  console.log
+    ✅ Usuário da Empresa A carregado do setup.
+
+      at Object.log (api.test.js:31:17)
+
+  console.log
+    
+    --- Teste: Barrar e-mail duplicado ---
+
+      at Object.log (api.test.js:43:17)
+
+  console.log
+    ✅ E-mail duplicado barrado com sucesso (Status 409).
+
+      at Object.log (api.test.js:54:21)
+
+  console.log
+    
+    --- Teste: Login com senha incorreta ---
+
+      at Object.log (api.test.js:63:17)
+
+  console.log
+    ✅ Login com senha incorreta falhou como esperado (Status 401).
+
+      at Object.log (api.test.js:72:21)
+
+  console.log
+    
+    --- Teste: Login com sucesso ---
+
+      at Object.log (api.test.js:81:17)
+
+  console.log
+    ✅ Login realizado com sucesso.
+
+      at Object.log (api.test.js:90:17)
+
+  console.log
+    
+    --- Teste: Acesso a rota protegida sem token ---
+
+      at Object.log (api.test.js:94:17)
+
+  console.log
+    ✅ Acesso sem token foi barrado como esperado (Status 401).
+
+      at Object.log (api.test.js:104:21)
+
+(node:2736) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+ PASS  Testes/isolamento.test.js
+  2. Teste de Isolamento de Dados (Transações)
+    √ deve impedir o acesso, modificação e exclusão de transações entre empresas (207 ms)
+    √ deve impedir que a Empresa B liste todas as transações da Empresa A (42 ms)
+
+ PASS  Testes/multi-tenant.test.js
+  3. Teste de Isolamento de Dados em Larga Escala (Multi-Tenant)
+    √ deve criar uma transação para cada empresa (301 ms)
+    √ deve impedir que uma empresa acesse a transação de outra (61 ms)
+    √ deve garantir que cada empresa liste apenas suas próprias transações (178 ms)
+
+ PASS  Testes/api.test.js
+  1. Módulo de Autenticação
+    √ RF-001: deve ter cadastrado a Empresa A com sucesso no setup global (7 ms)
+    √ deve barrar o cadastro de um usuário com e-mail já existente (37 ms)
+    √ deve falhar o login com senha incorreta (85 ms)
+    √ deve realizar o login com sucesso para a Empresa A (84 ms)
+    √ deve proteger rotas, barrando acesso sem token (4 ms)
+
+ FAIL  Testes/transactions.test.js
+  4. Módulo de Transações (CRUD)
+    √ RF-002: deve CRIAR uma nova transação com sucesso (71 ms)
+    √ RF-003: deve LISTAR as transações do usuário logado (44 ms)
+    × RF-004: deve OBTER uma transação específica pelo ID (20 ms)
+    √ RF-005: deve ATUALIZAR uma transação existente (71 ms)
+    √ RF-006: deve EXCLUIR uma transação existente (60 ms)
+
+  ● 4. Módulo de Transações (CRUD) › RF-004: deve OBTER uma transação específica pelo ID
+
+    AxiosError: Request failed with status code 404
+
+      61 |         expect(createdTransactionId).toBeDefined();
+      62 |
+    > 63 |         const response = await axios.get(`${API_URL}/transactions/${createdTransactionId}`, {
+         |                          ^
+      64 |             headers: { Authorization: `Bearer ${userToken}` }
+      65 |         });
+      66 |
+
+      at settle (../node_modules/axios/lib/core/settle.js:19:12)
+      at IncomingMessage.handleStreamEnd (../node_modules/axios/lib/adapters/http.js:793:11)
+      at Axios.request (../node_modules/axios/lib/core/Axios.js:45:41)
+      at Object.<anonymous> (transactions.test.js:63:26)
+
+Test Suites: 1 failed, 3 passed, 4 total
+Tests:       1 failed, 14 passed, 15 total
+Snapshots:   0 total
+Time:        3.603 s
+Ran all test suites.

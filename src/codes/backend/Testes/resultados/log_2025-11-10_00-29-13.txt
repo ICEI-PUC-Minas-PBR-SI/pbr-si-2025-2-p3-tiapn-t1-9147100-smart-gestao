@@ -1,0 +1,16 @@
+
+--- 🚀 Conectando ao Banco de Teste e Populando Dados ---
+
+--- FIM DOS TESTES AUTOMATIZADOS (COM FALHAS) ---
+MongooseError: Jest: Got error running globalSetup - C:\Users\HERON-ACER\Documents\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\Testes\test-setup.js, reason: The `uri` parameter to `openUri()` must be a string, got "undefined". Make sure the first parameter to `mongoose.connect()` or `mongoose.createConnection()` is a string.
+    at NativeConnection.createClient (C:\Users\HERON-ACER\Documents\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\mongoose\lib\drivers\node-mongodb-native\connection.js:206:11)
+    at NativeConnection.openUri (C:\Users\HERON-ACER\Documents\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\mongoose\lib\connection.js:766:34)
+    at Mongoose.connect (C:\Users\HERON-ACER\Documents\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\mongoose\lib\index.js:416:15)
+    at default (file:///C:/Users/HERON-ACER/Documents/GitHub/pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao/src/codes/backend/Testes/test-setup.js:21:18)
+    at C:\Users\HERON-ACER\Documents\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\@jest\core\build\index.js:3166:17
+    at ScriptTransformer.requireAndTranspileModule (C:\Users\HERON-ACER\Documents\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\@jest\transform\build\index.js:623:24)
+    at async runGlobalHook (C:\Users\HERON-ACER\Documents\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\@jest\core\build\index.js:3162:9)
+    at async runJest (C:\Users\HERON-ACER\Documents\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\@jest\core\build\index.js:3429:5)
+    at async _run10000 (C:\Users\HERON-ACER\Documents\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\@jest\core\build\index.js:1543:5)
+    at async runCLI (C:\Users\HERON-ACER\Documents\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\@jest\core\build\index.js:1444:3)
+    at async Object.run (C:\Users\HERON-ACER\Documents\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\node_modules\jest-cli\build\index.js:656:9)

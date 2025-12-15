@@ -1,0 +1,20 @@
+(node:10948) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+PASS Testes/api.test.js
+  1. Módulo de Autenticação
+    √ RF-001: deve cadastrar um novo usuário e empresa (Empresa A) (309 ms)
+    √ deve barrar o cadastro de um usuário com e-mail já existente (32 ms)
+    √ deve falhar o login com senha incorreta (86 ms)
+    √ deve realizar o login com sucesso para a Empresa A (167 ms)
+    √ deve proteger rotas, barrando acesso sem token (8 ms)
+
+----------|---------|----------|---------|---------|-------------------
+File      | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+----------|---------|----------|---------|---------|-------------------
+All files |       0 |        0 |       0 |       0 |                   
+----------|---------|----------|---------|---------|-------------------
+Test Suites: 1 passed, 1 total
+Tests:       5 passed, 5 total
+Snapshots:   0 total
+Time:        1.314 s, estimated 2 s
+Ran all test suites.

@@ -1,0 +1,25 @@
+[
+  {
+    "companyId": "ObjectId('66f9a7f7d15e4d1b4b8e1123')",
+    "userId": "ObjectId('66f9a7f7d15e4d1b4b8e2123')",
+    "clientId": "ObjectId('66f9a7f7d15e4d1b4b8e4123')",
+    "type": "revenue",
+    "description": "Receita mensal - Serviços prestados",
+    "category": "Serviços",
+    "amount": 8500.00,
+    "date": "2025-10-10T00:00:00Z",
+    "paymentMethod": "pix",
+    "status": "completed"
+  },
+  {
+    "companyId": "ObjectId('66f9a7f7d15e4d1b4b8e1123')",
+    "userId": "ObjectId('66f9a7f7d15e4d1b4b8e2123')",
+    "type": "expense",
+    "description": "Compra de materiais de escritório",
+    "category": "Operacional",
+    "amount": 480.00,
+    "date": "2025-10-12T00:00:00Z",
+    "paymentMethod": "credit_card",
+    "status": "completed"
+  }
+]

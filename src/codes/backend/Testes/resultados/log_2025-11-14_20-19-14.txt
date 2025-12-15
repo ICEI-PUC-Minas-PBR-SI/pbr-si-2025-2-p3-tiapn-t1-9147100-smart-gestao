@@ -1,0 +1,77 @@
+
+--- 🚀 [GLOBAL SETUP] Iniciando ambiente de teste ---
+Verificando permissões de sistema...
+Permissões não encontradas. Criando permissões padrão...
+Permissões padrão criadas com sucesso!
+┌─────────┬─────────────────┬──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ (index) │ Nome            │ Descrição                                                                                        │
+├─────────┼─────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ 0       │ 'ROOT'          │ 'Superusuário. Acesso irrestrito a todos os dados e configurações do sistema.'                   │
+│ 1       │ 'ADMIN_COMPANY' │ 'Administrador de uma empresa. Pode gerenciar usuários e todos os dados da sua própria empresa.' │
+│ 2       │ 'USER_COMPANY'  │ 'Usuário padrão. Pode criar e gerenciar seus próprios dados dentro da empresa.'                  │
+└─────────┴─────────────────┴──────────────────────────────────────────────────────────────────────────────────────────────────┘
+⏳ Iniciando servidor Smart Gestão (startServer)...
+Conexão com o MongoDB estabelecida com sucesso.
+✅ [1/1] Conexão com o banco de dados estabelecida!
+✅ Servidor rodando na porta 5000
+--- ✅ [GLOBAL SETUP] Ambiente pronto e servidor iniciado ---
+(node:27704) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+FAIL Testes/4-reports/reports.test.js
+  8. Módulo de Relatórios
+    × deve chamar o serviço de PDF com os dados corretos para o RELATÓRIO DE TRANSAÇÕES (2 ms)
+    × deve chamar o serviço de PDF com os dados corretos para o RELATÓRIO DE CLIENTES (1 ms)
+    × deve chamar o serviço de PDF com os dados corretos para a FATURA (1 ms)
+
+  ● 8. Módulo de Relatórios › deve chamar o serviço de PDF com os dados corretos para o RELATÓRIO DE TRANSAÇÕES
+
+    ReferenceError: pdfService is not defined
+
+    [0m [90m 46 |[39m     [90m// Registra o mock importado em nível global para que o servidor (handlers)[39m
+     [90m 47 |[39m     [90m// possam delegar chamadas ao mock durante os testes (veja pdfService).[39m
+    [31m[1m>[22m[39m[90m 48 |[39m     globalThis[33m.[39m__pdfServiceMock__ [33m=[39m pdfService[33m;[39m
+     [90m    |[39m                                     [31m[1m^[22m[39m
+     [90m 49 |[39m   })[33m;[39m
+     [90m 50 |[39m
+     [90m 51 |[39m   [90m// O bloco `afterEach` é executado após cada teste (`test`).[39m[0m
+
+      at Object.<anonymous> (Testes/4-reports/reports.test.js:48:37)
+
+  ● 8. Módulo de Relatórios › deve chamar o serviço de PDF com os dados corretos para o RELATÓRIO DE CLIENTES
+
+    ReferenceError: pdfService is not defined
+
+    [0m [90m 46 |[39m     [90m// Registra o mock importado em nível global para que o servidor (handlers)[39m
+     [90m 47 |[39m     [90m// possam delegar chamadas ao mock durante os testes (veja pdfService).[39m
+    [31m[1m>[22m[39m[90m 48 |[39m     globalThis[33m.[39m__pdfServiceMock__ [33m=[39m pdfService[33m;[39m
+     [90m    |[39m                                     [31m[1m^[22m[39m
+     [90m 49 |[39m   })[33m;[39m
+     [90m 50 |[39m
+     [90m 51 |[39m   [90m// O bloco `afterEach` é executado após cada teste (`test`).[39m[0m
+
+      at Object.<anonymous> (Testes/4-reports/reports.test.js:48:37)
+
+  ● 8. Módulo de Relatórios › deve chamar o serviço de PDF com os dados corretos para a FATURA
+
+    ReferenceError: pdfService is not defined
+
+    [0m [90m 46 |[39m     [90m// Registra o mock importado em nível global para que o servidor (handlers)[39m
+     [90m 47 |[39m     [90m// possam delegar chamadas ao mock durante os testes (veja pdfService).[39m
+    [31m[1m>[22m[39m[90m 48 |[39m     globalThis[33m.[39m__pdfServiceMock__ [33m=[39m pdfService[33m;[39m
+     [90m    |[39m                                     [31m[1m^[22m[39m
+     [90m 49 |[39m   })[33m;[39m
+     [90m 50 |[39m
+     [90m 51 |[39m   [90m// O bloco `afterEach` é executado após cada teste (`test`).[39m[0m
+
+      at Object.<anonymous> (Testes/4-reports/reports.test.js:48:37)
+
+Test Suites: 1 failed, 1 total
+Tests:       3 failed, 3 total
+Snapshots:   0 total
+Time:        0.83 s
+Ran all test suites matching Testes/4-reports.
+
+--- 🧹 [GLOBAL TEARDOWN] Finalizando ambiente de teste ---
+   - [OK] Dados de teste temporários foram removidos.
+✅ Servidor e conexão com MongoDB encerrados (stopServer).
+--- ✅ [GLOBAL TEARDOWN] Ambiente finalizado com sucesso ---

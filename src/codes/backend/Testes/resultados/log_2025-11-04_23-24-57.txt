@@ -1,0 +1,75 @@
+
+> smart-gestao-backend@1.0.0 test:console
+> node --experimental-vm-modules node_modules/jest/bin/jest.js --config Testes/jest.config.js --detectOpenHandles --coverage --no-color
+
+(node:1732) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+[0m[7m[1m[31m FAIL [39m[22m[27m[0m [2mTestes/[22m[1mapi.test.js[22m
+  1. Módulo de Autenticação
+    [31m×[39m [2mRF-001: deve cadastrar um novo usuário e empresa (Empresa A) (73 ms)[22m
+    [31m×[39m [2mdeve barrar o cadastro de um usuário com e-mail já existente (15 ms)[22m
+    [32m√[39m [2mdeve falhar o login com senha incorreta (20 ms)[22m
+    [31m×[39m [2mdeve realizar o login com sucesso para a Empresa A (22 ms)[22m
+    [32m√[39m [2mdeve proteger rotas, barrando acesso sem token (9 ms)[22m
+
+[1m[31m  [1m● [22m[1m1. Módulo de Autenticação › RF-001: deve cadastrar um novo usuário e empresa (Empresa A)[39m[22m
+
+    AxiosError: Request failed with status code 500
+[2m[22m
+[2m      40 |[22m
+[2m      41 |     it('RF-001: deve cadastrar um novo usuário e empresa (Empresa A)', async () => {[22m
+[2m    > 42 |         const response = await axios.post(`${API_URL}/auth/register`, {[22m
+[2m         |                          ^[22m
+[2m      43 |             name: empresaA.name,[22m
+[2m      44 |             email: empresaA.email,[22m
+[2m      45 |             password: empresaA.password,[22m
+[2m[22m
+[2m      [2mat settle ([22m[2mnode_modules/axios/lib/core/settle.js[2m:19:12)[22m[2m[22m
+[2m      [2mat IncomingMessage.handleStreamEnd ([22m[2mnode_modules/axios/lib/adapters/http.js[2m:793:11)[22m[2m[22m
+[2m      [2mat Axios.request ([22m[2mnode_modules/axios/lib/core/Axios.js[2m:45:41)[22m[2m[22m
+[2m      [2mat Object.<anonymous> ([22m[2m[0m[36mTestes/api.test.js[39m[0m[2m:42:26)[22m[2m[22m
+
+[1m[31m  [1m● [22m[1m1. Módulo de Autenticação › deve barrar o cadastro de um usuário com e-mail já existente[39m[22m
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+    Expected: [32m409[39m
+    Received: [31m500[39m
+[2m[22m
+[2m      65 |         } catch (error) {[22m
+[2m      66 |             // Espera-se um erro 409 (Conflict)[22m
+[2m    > 67 |             expect(error.response.status).toBe(409);[22m
+[2m         |                                           ^[22m
+[2m      68 |             expect(error.response.data.message).toContain('E-mail já cadastrado');[22m
+[2m      69 |         }[22m
+[2m      70 |     });[22m
+[2m[22m
+[2m      [2mat Object.toBe ([22m[2m[0m[36mTestes/api.test.js[39m[0m[2m:67:43)[22m[2m[22m
+
+[1m[31m  [1m● [22m[1m1. Módulo de Autenticação › deve realizar o login com sucesso para a Empresa A[39m[22m
+
+    AxiosError: Request failed with status code 401
+[2m[22m
+[2m      84 |[22m
+[2m      85 |     it('deve realizar o login com sucesso para a Empresa A', async () => {[22m
+[2m    > 86 |         const response = await axios.post(`${API_URL}/auth/login`, {[22m
+[2m         |                          ^[22m
+[2m      87 |             email: empresaA.email,[22m
+[2m      88 |             password: empresaA.password[22m
+[2m      89 |         });[22m
+[2m[22m
+[2m      [2mat settle ([22m[2mnode_modules/axios/lib/core/settle.js[2m:19:12)[22m[2m[22m
+[2m      [2mat IncomingMessage.handleStreamEnd ([22m[2mnode_modules/axios/lib/adapters/http.js[2m:793:11)[22m[2m[22m
+[2m      [2mat Axios.request ([22m[2mnode_modules/axios/lib/core/Axios.js[2m:45:41)[22m[2m[22m
+[2m      [2mat Object.<anonymous> ([22m[2m[0m[36mTestes/api.test.js[39m[0m[2m:86:26)[22m[2m[22m
+
+----------|---------|----------|---------|---------|-------------------
+File      | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+----------|---------|----------|---------|---------|-------------------
+All files |       0 |        0 |       0 |       0 | [31;1m                 [0m 
+----------|---------|----------|---------|---------|-------------------
+[1mTest Suites: [22m[1m[31m1 failed[39m[22m, 1 total
+[1mTests:       [22m[1m[31m3 failed[39m[22m, [1m[32m2 passed[39m[22m, 5 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        0.766 s, estimated 1 s
+[2mRan all test suites[22m[2m.[22m

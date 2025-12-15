@@ -1,0 +1,197 @@
+# OpenAPI (Swagger) — especificação dos endpoints do Smart Gestão (escopo Auth)
+#
+# O que é este arquivo?
+# - É uma especificação OpenAPI 3.0 em YAML que descreve as rotas da API.
+# - Pode ser carregado no Swagger Editor (https://editor.swagger.io) para visualizar e testar.
+# - Escopo atual: apenas endpoints de autenticação (login, refresh, logout).
+#
+# Como visualizar (Windows):
+# 1) Abra https://editor.swagger.io
+# 2) Menu File > Import File e selecione este arquivo (docs/api/openapi.yaml)
+# 3) Ajuste o servidor para http://localhost:5000 quando estiver rodando localmente.
+#
+# Convenções:
+# - Bearer token (JWT) no header Authorization: Bearer <token>
+# - Corpo de requisição em JSON quando aplicável
+# - Respostas documentadas com exemplos
+openapi: 3.0.3
+info:
+  title: Smart Gestão API - Autenticação
+  version: 1.0.0
+  description: |
+    Especificação dos endpoints de autenticação do backend Smart Gestão.
+
+    A API foi projetada para ser agnóstica à tecnologia do cliente. Como prova de conceito dessa flexibilidade, foi criada uma página de login em **React** que consome estes mesmos endpoints, demonstrando a viabilidade de uma modernização futura do frontend.
+    Para mais detalhes, consulte a documentação na pasta `src/codes/react/`.
+
+    Ambiente padrão local em Windows.
+servers:
+  - url: http://localhost:5000
+    description: Ambiente local (Windows)
+paths:
+  /api/auth/login:
+    post:
+      summary: Login do usuário
+      tags: [Auth]
+      # Envia email e password e recebe access token + refresh token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Autenticação bem-sucedida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          description: Credenciais inválidas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Usuário não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Erro interno no servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/auth/refresh:
+    post:
+      summary: Renovação do access token usando refresh token
+      tags: [Auth]
+      # Envia o refresh token e recebe um novo access token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshRequest'
+      responses:
+        '200':
+          description: Novo token emitido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefreshResponse'
+        '401':
+          description: Refresh token inválido ou expirado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          description: Requisição inválida (token ausente)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/auth/logout:
+    post:
+      summary: Logout do usuário autenticado
+      security:
+        - bearerAuth: []
+      tags: [Auth]
+      # No estado atual, apenas retorna sucesso. Em evolução, pode invalidar refresh tokens.
+      responses:
+        '200':
+          description: Logout efetuado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogoutResponse'
+        '401':
+          description: Token inválido ou ausente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    # Schemas de request/response para Auth
+    LoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          example: usuario@empresa.com
+        password:
+          type: string
+          example: Senha123
+    LoginUser:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 665c2c1f2d3e4a0012ab34cd
+        name:
+          type: string
+          example: João Silva
+        email:
+          type: string
+          example: usuario@empresa.com
+        role:
+          type: string
+          example: USER_COMPANY
+    LoginResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Login realizado com sucesso!
+        token:
+          type: string
+          description: Access token JWT
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        refreshToken:
+          type: string
+          description: Refresh token JWT
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        user:
+          $ref: '#/components/schemas/LoginUser'
+    RefreshRequest:
+      type: object
+      required: [token]
+      properties:
+        token:
+          type: string
+          description: Refresh token válido
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+    RefreshResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Novo access token JWT
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+    LogoutResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Logout realizado com sucesso.
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Erro ao realizar operação.
+        errors:
+          type: object
+          nullable: true
+          additionalProperties: true

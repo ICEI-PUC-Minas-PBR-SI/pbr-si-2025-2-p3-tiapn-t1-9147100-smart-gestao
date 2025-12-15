@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Smart Gestão</title>
+    <!-- Previne a requisição automática do favicon.ico pelo navegador -->
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="auth-page">
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <i class="fas fa-money-bill-wave logo-icon"></i>
+                <h1>Criar Conta</h1>
+                <p>Comece a organizar suas finanças</p>
+            </div>
+
+            <form id="register-form" class="auth-form">
+                <div class="form-group">
+                    <label for="name">Nome Completo</label>
+                    <input type="text" id="name" class="form-control" placeholder="Seu nome" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" class="form-control" placeholder="seu@email.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" class="form-control" placeholder="Mínimo 6 caracteres" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm-password">Confirmar Senha</label>
+                    <input type="password" id="confirm-password" class="form-control" placeholder="Digite novamente" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="business">Tipo de Negócio</label>
+                    <select id="business" class="form-control">
+                        <option value="">Selecione seu negócio</option>
+                        <option value="mei">MEI</option>
+                        <option value="autonomo">Autônomo</option>
+                        <option value="outro">Outro</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-auth">Criar Conta</button>
+
+                <div id="error-message" class="error-message" style="display: none;">
+                    <!-- Mensagens de erro aparecerão aqui -->
+                </div>
+            </form>
+
+            <div class="auth-footer">
+                <p>Já tem uma conta? <a href="login.html">Fazer login</a></p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>PUC Minas - ICEI - Sistema de Controle de Despesas para MEIs - 2025</p>
+            <p>Desenvolvido por: Júlia Fernanda, Izadora Helena, Hugo Ferreira, Heron Silva e Maria Clara</p>
+        </div>
+    </footer>
+
+    <!-- Conecta o script modularizado da página de cadastro -->
+    <script type="module" src="/js/pages/cadastro.js"></script>
+</body>
+</html>

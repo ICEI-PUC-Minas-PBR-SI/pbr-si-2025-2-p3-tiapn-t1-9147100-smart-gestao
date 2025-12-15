@@ -1,0 +1,492 @@
+
+--- 🚀 [GLOBAL SETUP] Iniciando ambiente de teste ---
+⏳ Iniciando servidor Smart Gestão (startServer)...
+Conexão com o MongoDB estabelecida com sucesso.
+✅ [1/1] Conexão com o banco de dados estabelecida!
+✅ Servidor rodando na porta 5000
+Verificando permissões de sistema...
+Permissões de sistema já existem. Nenhuma ação necessária.
+--- ✅ [GLOBAL SETUP] Ambiente pronto e servidor iniciado ---
+(node:8000) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+POST /api/auth/login 200 762 - 123.599 ms
+[LOG] Ação: LOGIN_USER | Usuário: N/A
+POST /api/auth/login 500 589 - 108.252 ms
+FAIL Testes/1-auth/auth.test.js
+  6. Módulo de Autenticação e Sessão (Stateful)
+    √ deve criar um SessionToken no banco de dados após o login (160 ms)
+    × deve invalidar o SessionToken no banco de dados após o logout (126 ms)
+
+  ● 6. Módulo de Autenticação e Sessão (Stateful) › deve invalidar o SessionToken no banco de dados após o logout
+
+    AxiosError: Request failed with status code 500
+
+    [0m [90m 49 |[39m   test([32m'deve invalidar o SessionToken no banco de dados após o logout'[39m[33m,[39m [36masync[39m () [33m=>[39m {
+     [90m 50 |[39m     [90m// 1. Realiza o login para obter um refresh token válido[39m
+    [31m[1m>[22m[39m[90m 51 |[39m     [36mconst[39m loginResponse [33m=[39m [36mawait[39m axios[33m.[39mpost([32m`${API_URL}/auth/login`[39m[33m,[39m {
+     [90m    |[39m                           [31m[1m^[22m[39m
+     [90m 52 |[39m       email[33m:[39m userA[33m.[39memail[33m,[39m
+     [90m 53 |[39m       password[33m:[39m userA[33m.[39mpassword[33m,[39m
+     [90m 54 |[39m     })[33m;[39m[0m
+
+      at settle (node_modules/axios/lib/core/settle.js:19:12)
+      at IncomingMessage.handleStreamEnd (node_modules/axios/lib/adapters/http.js:793:11)
+      at Axios.request (node_modules/axios/lib/core/Axios.js:45:41)
+      at Object.<anonymous> (Testes/1-auth/auth.test.js:51:27)
+
+  console.log
+    
+    --- Teste: Solicitar reset para e-mail inválido ---
+
+      at Object.log (Testes/1-auth/password.test.js:33:13)
+
+[LOG] Ação: LOGIN_USER | Usuário: N/A
+POST /api/auth/forgot-password 404 69 - 13.395 ms
+  console.log
+    ✅ Falhou como esperado para e-mail inexistente (Status 404).
+
+      at Object.log (Testes/1-auth/password.test.js:42:15)
+
+  console.log
+    
+    --- Teste: Gerar token de reset com sucesso ---
+
+      at Object.log (Testes/1-auth/password.test.js:51:13)
+
+POST /api/auth/forgot-password 200 164 - 29.784 ms
+  console.log
+    ✅ Token de reset gerado e salvo no banco de dados.
+
+      at Object.log (Testes/1-auth/password.test.js:61:13)
+
+  console.log
+    
+    --- Teste: Resetar senha com token válido ---
+
+      at Object.log (Testes/1-auth/password.test.js:70:13)
+
+POST /api/auth/forgot-password 200 164 - 27.963 ms
+POST /api/auth/reset-password/afa2842d5ed251111d291f74aa7400a3296fc51a9bd39d4b7057302f2c80543f 200 68 - 97.707 ms
+  console.log
+    ✅ Senha resetada com sucesso via API.
+
+      at Object.log (Testes/1-auth/password.test.js:87:13)
+
+POST /api/auth/reset-password/afa2842d5ed251111d291f74aa7400a3296fc51a9bd39d4b7057302f2c80543f 400 72 - 13.147 ms
+  console.log
+    ✅ Token de reset foi invalidado no banco.
+
+      at Object.log (Testes/1-auth/password.test.js:91:13)
+
+POST /api/auth/login 200 762 - 139.557 ms
+  console.log
+    ✅ Login com a nova senha realizado com sucesso.
+
+      at Object.log (Testes/1-auth/password.test.js:101:13)
+
+PASS Testes/1-auth/password.test.js
+  9. Módulo de Recuperação de Senha
+    √ deve falhar ao solicitar reset para um e-mail inexistente (54 ms)
+    √ deve gerar e salvar um token de reset para um e-mail válido (37 ms)
+    √ deve resetar a senha com um token válido e permitir login com a nova senha (297 ms)
+
+[LOG] Ação: LOGIN_USER | Usuário: N/A
+[LOG] Ação: CREATE_GOAL | Usuário: 6932ecd43252d93db47a45ca
+POST /api/goals 201 455 - 59.789 ms
+[LOG] Ação: CREATE_GOAL | Usuário: 6932ecd43252d93db47a45ca
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6932ecd43252d93db47a45ca
+POST /api/transactions 201 448 - 85.858 ms
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6932ecd43252d93db47a45ca
+GET /api/alerts 200 72 - 40.326 ms
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6932ecd43252d93db47a45ca
+[LOG] Ação: AUTO_CREATE_ALERT | Usuário: 6932ecd43252d93db47a45ca
+POST /api/transactions 201 445 - 114.148 ms
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6932ecd43252d93db47a45ca
+GET /api/alerts 200 419 - 38.896 ms
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6932ecd43252d93db47a45ca
+POST /api/transactions 201 437 - 85.161 ms
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6932ecd43252d93db47a45ca
+GET /api/alerts 200 419 - 38.924 ms
+PASS Testes/2-features/alerts.test.js
+  6. Módulo de Alertas de Metas
+    √ RF-006: deve criar um alerta quando uma despesa ultrapassa a meta da categoria (495 ms)
+
+POST /api/clients 201 329 - 41.573 ms
+[LOG] Ação: CREATE_CLIENT | Usuário: 6932ecd43252d93db47a45ca
+GET /api/clients 200 573 - 38.011 ms
+PUT /api/clients/6932ecd73252d93db47a4624 200 331 - 56.655 ms
+[LOG] Ação: UPDATE_CLIENT | Usuário: 6932ecd43252d93db47a45ca
+DELETE /api/clients/6932ecd73252d93db47a4624 200 70 - 53.041 ms
+PASS Testes/2-features/clients.test.js
+  7. Módulo de Clientes/Fornecedores
+    √ deve CRIAR um novo cliente com sucesso (52 ms)
+    √ deve LISTAR os clientes da empresa (40 ms)
+    √ deve ATUALIZAR um cliente existente (59 ms)
+    √ deve EXCLUIR um cliente existente (58 ms)
+
+[LOG] Ação: DELETE_CLIENT | Usuário: 6932ecd43252d93db47a45ca
+[LOG] Ação: CREATE_GOAL | Usuário: 6932ecd43252d93db47a45ca
+POST /api/goals 201 404 - 56.739 ms
+[LOG] Ação: CREATE_GOAL | Usuário: 6932ecd43252d93db47a45ca
+GET /api/goals 200 792 - 38.229 ms
+[LOG] Ação: UPDATE_GOAL | Usuário: 6932ecd43252d93db47a45ca
+PUT /api/goals/6932ecd73252d93db47a4639 200 414 - 69.474 ms
+[LOG] Ação: UPDATE_GOAL | Usuário: 6932ecd43252d93db47a45ca
+[LOG] Ação: DELETE_GOAL | Usuário: 6932ecd43252d93db47a45ca
+DELETE /api/goals/6932ecd73252d93db47a4639 200 67 - 68.064 ms
+[LOG] Ação: DELETE_GOAL | Usuário: 6932ecd43252d93db47a45ca
+GET /api/goals/null 404 53 - 25.864 ms
+PASS Testes/2-features/goals.test.js
+  5. Módulo de Metas (CRUD)
+    √ deve CRIAR uma nova meta com sucesso (74 ms)
+    √ deve LISTAR as metas do usuário logado (41 ms)
+    √ deve ATUALIZAR uma meta existente (72 ms)
+    √ deve EXCLUIR uma meta existente (104 ms)
+
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6932ecd43252d93db47a45ca
+POST /api/transactions 201 468 - 56.480 ms
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6932ecd43252d93db47a45ca
+POST /api/transactions 400 277 - 27.646 ms
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6932ecd43252d93db47a45ca
+GET /api/transactions 200 1930 - 38.728 ms
+GET /api/transactions/6932ecd73252d93db47a4656 200 452 - 53.155 ms
+[LOG] Ação: UPDATE_TRANSACTION | Usuário: 6932ecd43252d93db47a45ca
+PUT /api/transactions/6932ecd73252d93db47a4656 200 452 - 69.829 ms
+[LOG] Ação: UPDATE_TRANSACTION | Usuário: 6932ecd43252d93db47a45ca
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 6932ecd43252d93db47a45ca
+DELETE /api/transactions/6932ecd73252d93db47a4656 200 73 - 69.790 ms
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 6932ecd43252d93db47a45ca
+GET /api/transactions/6932ecd73252d93db47a4656 404 71 - 49.275 ms
+PASS Testes/2-features/transactions.test.js
+  4. Módulo de Transações (CRUD)
+    √ deve CRIAR uma nova transação com sucesso (70 ms)
+    √ deve falhar ao tentar criar uma transação com dados inválidos (42 ms)
+    √ deve LISTAR as transações do usuário logado (42 ms)
+    √ deve OBTER uma transação específica pelo ID (56 ms)
+    √ deve ATUALIZAR uma transação existente (74 ms)
+    √ deve EXCLUIR uma transação existente (125 ms)
+
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6932ecd43252d93db47a45ca
+POST /api/transactions 201 446 - 60.780 ms
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6932ecd43252d93db47a45ca
+POST /api/transactions/6932ecd83252d93db47a467e/upload 200 514 - 83.306 ms
+[LOG] Ação: UPLOAD_ATTACHMENT | Usuário: 6932ecd43252d93db47a45ca
+DELETE /api/transactions/6932ecd83252d93db47a467e/upload 200 442 - 71.746 ms
+[LOG] Ação: DELETE_ATTACHMENT | Usuário: 6932ecd43252d93db47a45ca
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 6932ecd43252d93db47a45ca
+DELETE /api/transactions/6932ecd83252d93db47a467e 200 73 - 69.881 ms
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 6932ecd43252d93db47a45ca
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6932ecd43252d93db47a45ca
+POST /api/transactions 201 444 - 69.945 ms
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6932ecd43252d93db47a45ca
+POST /api/transactions/6932ecd83252d93db47a469c/upload 200 512 - 70.251 ms
+[LOG] Ação: UPLOAD_ATTACHMENT | Usuário: 6932ecd43252d93db47a45ca
+DELETE /api/transactions/6932ecd83252d93db47a469c/upload 200 440 - 66.844 ms
+[LOG] Ação: DELETE_ATTACHMENT | Usuário: 6932ecd43252d93db47a45ca
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 6932ecd43252d93db47a45ca
+DELETE /api/transactions/6932ecd83252d93db47a469c 200 73 - 72.778 ms
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 6932ecd43252d93db47a45ca
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6932ecd43252d93db47a45ca
+POST /api/transactions 201 444 - 73.085 ms
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6932ecd43252d93db47a45ca
+POST /api/transactions/6932ecd93252d93db47a46bb/upload 200 512 - 69.247 ms
+[LOG] Ação: UPLOAD_ATTACHMENT | Usuário: 6932ecd43252d93db47a45ca
+DELETE /api/transactions/6932ecd93252d93db47a46bb/upload 200 440 - 65.253 ms
+[LOG] Ação: DELETE_ATTACHMENT | Usuário: 6932ecd43252d93db47a45ca
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 6932ecd43252d93db47a45ca
+DELETE /api/transactions/6932ecd93252d93db47a46bb 200 73 - 70.050 ms
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 6932ecd43252d93db47a45ca
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6932ecd43252d93db47a45ca
+POST /api/transactions 201 445 - 69.668 ms
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6932ecd43252d93db47a45ca
+POST /api/transactions/6932ecd93252d93db47a46da/upload 200 514 - 68.815 ms
+[LOG] Ação: UPLOAD_ATTACHMENT | Usuário: 6932ecd43252d93db47a45ca
+DELETE /api/transactions/6932ecd93252d93db47a46da/upload 200 441 - 66.739 ms
+[LOG] Ação: DELETE_ATTACHMENT | Usuário: 6932ecd43252d93db47a45ca
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 6932ecd43252d93db47a45ca
+DELETE /api/transactions/6932ecd93252d93db47a46da 200 73 - 68.895 ms
+[LOG] Ação: DELETE_TRANSACTION | Usuário: 6932ecd43252d93db47a45ca
+POST /api/transactions/60d5f1f77c3d4a001f5e8e1z/upload 404 53 - 25.284 ms
+PASS Testes/2-features/uploads.test.js
+  Feature: Uploads
+    Upload de PDF
+      √ Deve permitir o upload de um anexo (PDF) para uma transação (95 ms)
+      √ Deve permitir a exclusão de um anexo (PDF) de uma transação (80 ms)
+    Upload de Imagem (PNG)
+      √ Deve permitir o upload de um anexo de imagem (.png) para uma transação (75 ms)
+      √ Deve permitir a exclusão de um anexo de imagem (.png) (70 ms)
+    Upload de Imagem (JPG)
+      √ Deve permitir o upload de um anexo de imagem (.jpg) para uma transação (75 ms)
+      √ Deve permitir a exclusão de um anexo de imagem (.jpg) (68 ms)
+    Upload de Imagem (JPEG)
+      √ Deve permitir o upload de um anexo de imagem (.jpeg) para uma transação (72 ms)
+      √ Deve permitir a exclusão de um anexo de imagem (.jpeg) (72 ms)
+    Cenários de Erro e Estruturais
+      √ Deve retornar 404 ao tentar fazer upload para uma transação inexistente (37 ms)
+
+  console.log
+    
+    --- Configurando 3 empresas para o teste multi-tenant ---
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:36:17)
+
+POST /api/auth/register 201 356 - 198.864 ms
+[LOG] Ação: REGISTER_COMPANY_USER | Usuário: N/A
+POST /api/auth/login 200 774 - 128.450 ms
+  console.log
+    ✅ Empresa 1 (Empresa Teste 17649451137941) cadastrada e logada.
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:65:21)
+
+[LOG] Ação: LOGIN_USER | Usuário: N/A
+POST /api/auth/register 201 356 - 182.131 ms
+[LOG] Ação: REGISTER_COMPANY_USER | Usuário: N/A
+POST /api/auth/login 200 774 - 131.810 ms
+  console.log
+    ✅ Empresa 2 (Empresa Teste 17649451141372) cadastrada e logada.
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:65:21)
+
+[LOG] Ação: LOGIN_USER | Usuário: N/A
+POST /api/auth/register 201 356 - 150.389 ms
+[LOG] Ação: REGISTER_COMPANY_USER | Usuário: N/A
+POST /api/auth/login 200 774 - 104.043 ms
+  console.log
+    ✅ Empresa 3 (Empresa Teste 17649451144563) cadastrada e logada.
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:65:21)
+
+  console.log
+    --- Configuração multi-tenant concluída ---
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:67:17)
+
+  console.log
+    
+    --- Criando transações individuais para cada empresa ---
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:72:17)
+
+[LOG] Ação: LOGIN_USER | Usuário: N/A
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6932ecd93252d93db47a46ff
+POST /api/transactions 201 437 - 56.832 ms
+  console.log
+    Transação criada para Empresa Teste 17649451137941. ID: 6932ecda3252d93db47a472b
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:94:21)
+
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6932ecd93252d93db47a46ff
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6932ecda3252d93db47a470f
+POST /api/transactions 201 436 - 61.775 ms
+  console.log
+    Transação criada para Empresa Teste 17649451141372. ID: 6932ecda3252d93db47a4733
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:94:21)
+
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6932ecda3252d93db47a470f
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6932ecda3252d93db47a471f
+POST /api/transactions 201 429 - 57.283 ms
+  console.log
+    Transação criada para Empresa Teste 17649451144563. ID: 6932ecda3252d93db47a473b
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:94:21)
+
+  console.log
+    
+    --- Validando isolamento de dados entre todas as empresas ---
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:100:17)
+
+  console.log
+    
+    Verificando a transação 6932ecda3252d93db47a472b da Empresa Teste 17649451137941
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:107:21)
+
+[LOG] Ação: CREATE_TRANSACTION | Usuário: 6932ecda3252d93db47a471f
+GET /api/transactions/6932ecda3252d93db47a472b 404 38 - 37.035 ms
+  console.log
+    - OK: Empresa Teste 17649451141372 foi bloqueada (Status 404).
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:125:29)
+
+GET /api/transactions/6932ecda3252d93db47a472b 404 38 - 37.386 ms
+  console.log
+    - OK: Empresa Teste 17649451144563 foi bloqueada (Status 404).
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:125:29)
+
+  console.log
+    
+    Verificando a transação 6932ecda3252d93db47a4733 da Empresa Teste 17649451141372
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:107:21)
+
+GET /api/transactions/6932ecda3252d93db47a4733 404 38 - 37.281 ms
+  console.log
+    - OK: Empresa Teste 17649451137941 foi bloqueada (Status 404).
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:125:29)
+
+GET /api/transactions/6932ecda3252d93db47a4733 404 38 - 36.673 ms
+  console.log
+    - OK: Empresa Teste 17649451144563 foi bloqueada (Status 404).
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:125:29)
+
+  console.log
+    
+    Verificando a transação 6932ecda3252d93db47a473b da Empresa Teste 17649451144563
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:107:21)
+
+GET /api/transactions/6932ecda3252d93db47a473b 404 38 - 37.102 ms
+  console.log
+    - OK: Empresa Teste 17649451137941 foi bloqueada (Status 404).
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:125:29)
+
+GET /api/transactions/6932ecda3252d93db47a473b 404 38 - 36.782 ms
+  console.log
+    - OK: Empresa Teste 17649451141372 foi bloqueada (Status 404).
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:125:29)
+
+  console.log
+    
+    --- Validando listagem de transações ---
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:132:17)
+
+GET /api/transactions 200 423 - 37.950 ms
+  console.log
+    - OK: Empresa Teste 17649451137941 listou apenas sua própria transação.
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:144:21)
+
+GET /api/transactions 200 422 - 37.868 ms
+  console.log
+    - OK: Empresa Teste 17649451141372 listou apenas sua própria transação.
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:144:21)
+
+GET /api/transactions 200 415 - 37.292 ms
+  console.log
+    - OK: Empresa Teste 17649451144563 listou apenas sua própria transação.
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:144:21)
+
+  console.log
+    
+    --- Limpando dados de teste (Teardown) ---
+
+      at Object.log (Testes/3-security/multi-tenant.test.js:150:17)
+
+DELETE /api/auth/users/6932ecd93252d93db47a46ff 500 88 - 37.829 ms
+  console.error
+    - ❌ Falha ao excluir a empresa Empresa Teste 17649451137941: {
+      success: false,
+      message: 'Erro no servidor ao tentar excluir o usuário.',
+      errors: {}
+    }
+
+    [0m [90m 157 |[39m                 console[33m.[39mlog([32m`- ✅ Empresa ${company.companyName} e dados associados excluídos com sucesso.`[39m)[33m;[39m
+     [90m 158 |[39m             } [36mcatch[39m (error) {
+    [31m[1m>[22m[39m[90m 159 |[39m                 console[33m.[39merror([32m`- ❌ Falha ao excluir a empresa ${company.companyName}:`[39m[33m,[39m error[33m.[39mresponse[33m?[39m[33m.[39mdata [33m||[39m error[33m.[39mmessage)[33m;[39m
+     [90m     |[39m                         [31m[1m^[22m[39m
+     [90m 160 |[39m             }
+     [90m 161 |[39m         }
+     [90m 162 |[39m     })[33m;[39m[0m
+
+      at Object.error (Testes/3-security/multi-tenant.test.js:159:25)
+
+[LOG] Ação: DELETE_USER_BY_ID | Usuário: 6932ecd93252d93db47a46ff
+DELETE /api/auth/users/6932ecda3252d93db47a470f 500 88 - 37.466 ms
+  console.error
+    - ❌ Falha ao excluir a empresa Empresa Teste 17649451141372: {
+      success: false,
+      message: 'Erro no servidor ao tentar excluir o usuário.',
+      errors: {}
+    }
+
+    [0m [90m 157 |[39m                 console[33m.[39mlog([32m`- ✅ Empresa ${company.companyName} e dados associados excluídos com sucesso.`[39m)[33m;[39m
+     [90m 158 |[39m             } [36mcatch[39m (error) {
+    [31m[1m>[22m[39m[90m 159 |[39m                 console[33m.[39merror([32m`- ❌ Falha ao excluir a empresa ${company.companyName}:`[39m[33m,[39m error[33m.[39mresponse[33m?[39m[33m.[39mdata [33m||[39m error[33m.[39mmessage)[33m;[39m
+     [90m     |[39m                         [31m[1m^[22m[39m
+     [90m 160 |[39m             }
+     [90m 161 |[39m         }
+     [90m 162 |[39m     })[33m;[39m[0m
+
+      at Object.error (Testes/3-security/multi-tenant.test.js:159:25)
+
+[LOG] Ação: DELETE_USER_BY_ID | Usuário: 6932ecda3252d93db47a470f
+DELETE /api/auth/users/6932ecda3252d93db47a471f 500 88 - 43.499 ms
+  console.error
+    - ❌ Falha ao excluir a empresa Empresa Teste 17649451144563: {
+      success: false,
+      message: 'Erro no servidor ao tentar excluir o usuário.',
+      errors: {}
+    }
+
+    [0m [90m 157 |[39m                 console[33m.[39mlog([32m`- ✅ Empresa ${company.companyName} e dados associados excluídos com sucesso.`[39m)[33m;[39m
+     [90m 158 |[39m             } [36mcatch[39m (error) {
+    [31m[1m>[22m[39m[90m 159 |[39m                 console[33m.[39merror([32m`- ❌ Falha ao excluir a empresa ${company.companyName}:`[39m[33m,[39m error[33m.[39mresponse[33m?[39m[33m.[39mdata [33m||[39m error[33m.[39mmessage)[33m;[39m
+     [90m     |[39m                         [31m[1m^[22m[39m
+     [90m 160 |[39m             }
+     [90m 161 |[39m         }
+     [90m 162 |[39m     })[33m;[39m[0m
+
+      at Object.error (Testes/3-security/multi-tenant.test.js:159:25)
+
+PASS Testes/3-security/multi-tenant.test.js
+  3. Teste de Isolamento de Dados (Multi-Tenant)
+    √ deve criar uma transação para cada empresa (201 ms)
+    √ deve impedir que uma empresa acesse a transação de outra (251 ms)
+    √ deve garantir que cada empresa liste apenas suas próprias transações (121 ms)
+
+[LOG] Ação: DELETE_USER_BY_ID | Usuário: 6932ecda3252d93db47a471f
+  console.log
+    
+    --- 🛡️  Teste de Persistência: Verificando dados manuais... ---
+
+      at Object.log (Testes/3-security/persistence.test.js:43:13)
+
+FAIL Testes/3-security/persistence.test.js
+  Security: Persistência de Dados Manuais
+    × deve garantir que os usuários de teste manuais permaneçam no banco após a execução de `npm test` (134 ms)
+
+  ● Security: Persistência de Dados Manuais › deve garantir que os usuários de teste manuais permaneçam no banco após a execução de `npm test`
+
+    expect(received).not.toBeNull()
+
+    Received: null
+
+    [0m [90m 47 |[39m
+     [90m 48 |[39m       [90m// A asserção principal: o usuário não deve ser nulo.[39m
+    [31m[1m>[22m[39m[90m 49 |[39m       expect(userInDb)[33m.[39mnot[33m.[39mtoBeNull()[33m;[39m
+     [90m    |[39m                            [31m[1m^[22m[39m
+     [90m 50 |[39m
+     [90m 51 |[39m       console[33m.[39mlog([32m`   - [PASS] Usuário da "${testUser.name}" permaneceu no banco.`[39m)[33m;[39m
+     [90m 52 |[39m     }[0m
+
+      at Object.toBeNull (Testes/3-security/persistence.test.js:49:28)
+
+GET /api/reports/export/transactions-pdf 200 - - 68.784 ms
+GET /api/reports/export/clients-pdf 200 - - 52.861 ms
+GET /api/reports/export/invoice/6932ecd43252d93db47a45d3 200 - - 65.055 ms
+PASS Testes/4-reports/reports.test.js
+  8. Módulo de Relatórios
+    √ deve gerar um PDF válido para o RELATÓRIO DE TRANSAÇÕES (105 ms)
+    √ deve gerar um PDF válido para o RELATÓRIO DE CLIENTES (61 ms)
+    √ deve gerar um PDF válido para a FATURA (78 ms)
+
+Test Suites: 2 failed, 8 passed, 10 total
+Tests:       2 failed, 34 passed, 36 total
+Snapshots:   0 total
+Time:        7.647 s
+Ran all test suites.
+
+--- 🧹 [GLOBAL TEARDOWN] Finalizando ambiente de teste ---
+   - [OK] Dados de teste temporários foram removidos.
+✅ Servidor e conexão com MongoDB encerrados (stopServer).
+--- ✅ [GLOBAL TEARDOWN] Ambiente finalizado com sucesso ---

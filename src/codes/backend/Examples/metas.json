@@ -1,0 +1,20 @@
+[
+  {
+    "companyId": "ObjectId('66f9a7f7d15e4d1b4b8e1123')",
+    "userId": "ObjectId('66f9a7f7d15e4d1b4b8e2123')",
+    "title": "Reduzir Despesas Operacionais",
+    "type": "expense",
+    "targetAmount": 2000.00,
+    "currentAmount": 1800.00,
+    "deadline": "2025-10-31T00:00:00Z"
+  },
+  {
+    "companyId": "ObjectId('66f9a7f7d15e4d1b4b8e1124')",
+    "userId": "ObjectId('66f9a7f7d15e4d1b4b8e2124')",
+    "title": "Aumentar Receita de Serviços",
+    "type": "revenue",
+    "targetAmount": 15000.00,
+    "currentAmount": 12500.00,
+    "deadline": "2025-10-31T00:00:00Z"
+  }
+]

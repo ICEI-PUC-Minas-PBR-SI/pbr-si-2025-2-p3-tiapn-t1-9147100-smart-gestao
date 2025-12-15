@@ -1,0 +1,49 @@
+ FAIL  Testes/1-auth/password.test.js
+  ● Test suite failed to run
+
+    Error [ERR_MODULE_NOT_FOUND]: Cannot find package '@faker-js/faker' imported from F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\Testes\config\mongo-test-environment.js
+
+
+ FAIL  Testes/1-auth/auth.test.js
+  ● Test suite failed to run
+
+    Error [ERR_MODULE_NOT_FOUND]: Cannot find package '@faker-js/faker' imported from F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\Testes\config\mongo-test-environment.js
+
+
+ FAIL  Testes/2-features/goals.test.js
+  ● Test suite failed to run
+
+    Error [ERR_MODULE_NOT_FOUND]: Cannot find package '@faker-js/faker' imported from F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\Testes\config\mongo-test-environment.js
+
+
+ FAIL  Testes/3-security/multi-tenant.test.js
+  ● Test suite failed to run
+
+    Error [ERR_MODULE_NOT_FOUND]: Cannot find package '@faker-js/faker' imported from F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\Testes\config\mongo-test-environment.js
+
+
+ FAIL  Testes/2-features/transactions.test.js
+  ● Test suite failed to run
+
+    Error [ERR_MODULE_NOT_FOUND]: Cannot find package '@faker-js/faker' imported from F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\Testes\config\mongo-test-environment.js
+
+
+ FAIL  Testes/4-reports/reports.test.js
+  ● Test suite failed to run
+
+    Error [ERR_MODULE_NOT_FOUND]: Cannot find package '@faker-js/faker' imported from F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\Testes\config\mongo-test-environment.js
+
+
+ FAIL  Testes/2-features/clients.test.js
+  ● Test suite failed to run
+
+    Error [ERR_MODULE_NOT_FOUND]: Cannot find package '@faker-js/faker' imported from F:\Programacao\GitHub\pbr-si-2025-2-p3-tiapn-t1-9147100-smart-gestao\src\codes\backend\Testes\config\mongo-test-environment.js
+
+
+Test Suites: 7 failed, 7 total
+Tests:       0 total
+Snapshots:   0 total
+Time:        0.069 s, estimated 58 s
+Ran all test suites.
+
+--- FIM DOS TESTES AUTOMATIZADOS (Status: Falha) ---
